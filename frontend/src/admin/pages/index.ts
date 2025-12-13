@@ -1,0 +1,11 @@
+export { default as Dashboard } from './Dashboard';
+export { default as LoginPage } from './Login';
+export * from './projects';
+export * from './blog';
+export * from './leads';
+export * from './team';
+export * from './testimonials';
+export * from './technologies';
+export * from './hosting';
+export * from './faqs';
+
