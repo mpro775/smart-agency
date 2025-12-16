@@ -34,5 +34,13 @@ export class CreateTechnologyDto {
   @IsOptional()
   @IsString()
   description?: string;
+
+  @ApiPropertyOptional({
+    description: 'Technology tooltip for non-technical users',
+    example: 'نستخدمها لسرعة استجابة البيانات (Caching)',
+  })
+  @IsOptional()
+  @IsString()
+  tooltip?: string;
 }
 

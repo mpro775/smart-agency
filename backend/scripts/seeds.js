@@ -4,8 +4,7 @@ const bcrypt = require('bcrypt');
 // MongoDB connection string
 const MONGODB_URI =
   process.env.MONGODB_URI ||
-  'mongodb+srv://smartagencyyem_db_user:P93OOGZBO9gSaXBL@cluster0.sma4e8a.mongodb.net/smart-agency?retryWrites=true&w=majority';
-
+  'mongodb+srv://smartagencyyem_db_user:IazzxQxHifWrtv1p@cluster0.sma4e8a.mongodb.net/smart-agency?retryWrites=true&w=majority';
 // ==================== SCHEMAS ====================
 
 // User Schema
@@ -169,6 +168,7 @@ const technologySchema = new mongoose.Schema(
       default: 'Other',
     },
     description: String,
+    tooltip: String,
   },
   { timestamps: true },
 );
@@ -252,6 +252,7 @@ const teamMemberSchema = new mongoose.Schema(
     },
     photo: String,
     bio: String,
+    funFact: String,
     email: String,
     linkedinUrl: String,
     githubUrl: String,
@@ -286,6 +287,36 @@ const testimonialSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
+// Service Schema
+const serviceSchema = new mongoose.Schema(
+  {
+    title: { type: String, required: true },
+    description: String,
+    icon: String,
+    iconType: String,
+    gradient: { type: String, default: 'from-teal-500 to-teal-600' },
+    features: [String],
+    isActive: { type: Boolean, default: true },
+    sortOrder: { type: Number, default: 0 },
+    slug: String,
+    shortDescription: String,
+  },
+  { timestamps: true },
+);
+
+// Project Category Schema
+const projectCategorySchema = new mongoose.Schema(
+  {
+    value: { type: String, required: true, unique: true },
+    label: { type: String, required: true },
+    description: String,
+    isActive: { type: Boolean, default: true },
+    sortOrder: { type: Number, default: 0 },
+    icon: String,
+  },
+  { timestamps: true },
+);
+
 // ==================== MODELS ====================
 const User = mongoose.model('User', userSchema);
 const Blog = mongoose.model('Blog', blogSchema);
@@ -296,6 +327,11 @@ const Technology = mongoose.model('Technology', technologySchema);
 const Project = mongoose.model('Project', projectSchema);
 const TeamMember = mongoose.model('TeamMember', teamMemberSchema);
 const Testimonial = mongoose.model('Testimonial', testimonialSchema);
+const Service = mongoose.model('Service', serviceSchema);
+const ProjectCategory = mongoose.model(
+  'ProjectCategory',
+  projectCategorySchema,
+);
 
 // ==================== SEED FUNCTIONS ====================
 
@@ -351,63 +387,85 @@ async function seedTechnologies() {
       name: 'NestJS',
       category: 'Backend',
       description: 'إطار عمل Node.js قوي وقابل للتوسع',
+      tooltip: 'إطار عمل قوي لبناء واجهات برمجية سريعة وآمنة',
     },
     {
       name: 'React',
       category: 'Frontend',
       description: 'مكتبة JavaScript لبناء واجهات المستخدم',
+      tooltip: 'مكتبة لبناء واجهات مستخدم تفاعلية وسريعة',
     },
     {
       name: 'Vue.js',
       category: 'Frontend',
       description: 'إطار عمل JavaScript تقدمي',
+      tooltip: 'إطار عمل مرن لبناء واجهات مستخدم حديثة',
     },
     {
       name: 'Angular',
       category: 'Frontend',
       description: 'إطار عمل TypeScript من Google',
+      tooltip: 'إطار عمل قوي من Google للتطبيقات المعقدة',
     },
     {
       name: 'Node.js',
       category: 'Backend',
       description: 'بيئة تشغيل JavaScript من جانب الخادم',
+      tooltip: 'بيئة سريعة لبناء خدمات الويب المقاسة',
     },
     {
       name: 'MongoDB',
       category: 'Database',
       description: 'قاعدة بيانات NoSQL',
+      tooltip: 'قاعدة بيانات مرنة وسريعة لتخزين البيانات',
     },
     {
       name: 'PostgreSQL',
       category: 'Database',
       description: 'قاعدة بيانات علائقية متقدمة',
+      tooltip: 'قاعدة بيانات قوية وموثوقة للبيانات المعقدة',
     },
-    { name: 'Docker', category: 'DevOps', description: 'منصة للحاويات' },
-    { name: 'AWS', category: 'DevOps', description: 'خدمات سحابية من Amazon' },
+    {
+      name: 'Docker',
+      category: 'DevOps',
+      description: 'منصة للحاويات',
+      tooltip: 'نستخدمها لتسهيل نشر التطبيقات وإدارتها',
+    },
+    {
+      name: 'AWS',
+      category: 'DevOps',
+      description: 'خدمات سحابية من Amazon',
+      tooltip: 'خدمات سحابية موثوقة لتشغيل التطبيقات',
+    },
     {
       name: 'React Native',
       category: 'Mobile',
       description: 'إطار عمل لتطوير تطبيقات الجوال',
+      tooltip: 'لبناء تطبيقات جوال أصلية بتقنية واحدة',
     },
     {
       name: 'Flutter',
       category: 'Mobile',
       description: 'إطار عمل Google لتطوير التطبيقات',
+      tooltip: 'إطار عمل Google لبناء تطبيقات جوال جميلة',
     },
     {
       name: 'TypeScript',
       category: 'Frontend',
       description: 'JavaScript مع أنواع البيانات',
+      tooltip: 'يجعل الكود أكثر أماناً وسهولة في الصيانة',
     },
     {
       name: 'GraphQL',
       category: 'Backend',
       description: 'لغة استعلام للواجهات البرمجية',
+      tooltip: 'لطلب البيانات بدقة وكفاءة عالية',
     },
     {
       name: 'Redis',
       category: 'Database',
       description: 'مخزن بيانات في الذاكرة',
+      tooltip: 'نستخدمها لسرعة استجابة البيانات (Caching)',
     },
   ];
 
@@ -635,6 +693,13 @@ async function seedHostingPackages() {
       cpu: '1 vCPU',
       domains: 'نطاق واحد',
       discountPercentage: 28,
+      yearlyPrice: Math.round(50 * 12 * 0.8), // 480 SAR (20% discount)
+      benefitHints: {
+        storage: '10GB (مناسب للمواقع الصغيرة والمدونات الشخصية)',
+        ram: '512MB (كافي لمواقع WordPress بسيطة)',
+        cpu: '1 vCPU (أداء مناسب لعدد محدود من الزوار)',
+        domains: 'نطاق واحد (مثالي للمبتدئين)',
+      },
     },
     {
       name: 'الخطة المتوسطة',
@@ -662,6 +727,14 @@ async function seedHostingPackages() {
       cpu: '2 vCPU',
       domains: '5 نطاقات',
       discountPercentage: 20,
+      yearlyPrice: Math.round(120 * 12 * 0.8), // 1152 SAR (20% discount)
+      basePackageId: null, // Will be set after creating packages (reference to basic plan)
+      benefitHints: {
+        storage: '50GB (تكفي لحوالي 10,000 زائر شهرياً)',
+        ram: '2GB (مناسب للمواقع متوسطة الحجم والمتاجر الصغيرة)',
+        cpu: '2 vCPU (أداء سريع للعمليات المعقدة)',
+        domains: '5 نطاقات (مناسب للشركات الناشئة)',
+      },
     },
     {
       name: 'الخطة المتقدمة',
@@ -690,6 +763,14 @@ async function seedHostingPackages() {
       cpu: '4 vCPU',
       domains: 'غير محدود',
       discountPercentage: 16,
+      yearlyPrice: Math.round(250 * 12 * 0.8), // 2400 SAR (20% discount)
+      basePackageId: null, // Will be set after creating packages (reference to medium plan)
+      benefitHints: {
+        storage: '100GB (تكفي لحوالي 50,000 زائر شهرياً)',
+        ram: '4GB (مناسب للتطبيقات عالية الأداء والمواقع الكبيرة)',
+        cpu: '4 vCPU (أداء فائق للتطبيقات المعقدة)',
+        domains: 'غير محدود (مثالي للشركات الكبرى)',
+      },
     },
     {
       name: 'استضافة WordPress',
@@ -717,9 +798,17 @@ async function seedHostingPackages() {
       cpu: '1.5 vCPU',
       domains: '3 نطاقات',
       discountPercentage: 20,
+      yearlyPrice: Math.round(80 * 12 * 0.8), // 768 SAR (20% discount)
+      benefitHints: {
+        storage: '30GB (كافي لمعظم مواقع WordPress متوسطة الحجم)',
+        ram: '1GB (محسن خصيصاً لأداء WordPress)',
+        cpu: '1.5 vCPU (أداء ممتاز لمواقع WordPress)',
+        domains: '3 نطاقات (مناسب لمواقع WordPress متعددة)',
+      },
     },
   ];
 
+  const createdPackages = [];
   for (const packageData of packagesData) {
     const existingPackage = await HostingPackage.findOne({
       name: packageData.name,
@@ -727,10 +816,39 @@ async function seedHostingPackages() {
     if (!existingPackage) {
       const pkg = new HostingPackage(packageData);
       await pkg.save();
+      createdPackages.push(pkg);
       console.log(`✅ تم إنشاء الباقة: ${packageData.name}`);
     } else {
+      createdPackages.push(existingPackage);
       console.log(`ℹ️  الباقة موجودة بالفعل: ${packageData.name}`);
     }
+  }
+
+  // Set basePackageId references for feature stacking
+  const basicPackage = createdPackages.find(
+    (pkg) => pkg.name === 'الخطة الأساسية',
+  );
+  const mediumPackage = createdPackages.find(
+    (pkg) => pkg.name === 'الخطة المتوسطة',
+  );
+
+  if (basicPackage && mediumPackage) {
+    // Update medium package to reference basic package
+    await HostingPackage.findByIdAndUpdate(mediumPackage._id, {
+      basePackageId: basicPackage._id,
+    });
+
+    // Update advanced package to reference medium package
+    const advancedPackage = createdPackages.find(
+      (pkg) => pkg.name === 'الخطة المتقدمة',
+    );
+    if (advancedPackage) {
+      await HostingPackage.findByIdAndUpdate(advancedPackage._id, {
+        basePackageId: mediumPackage._id,
+      });
+    }
+
+    console.log('✅ تم تحديث مراجع الباقات الأساسية للـ feature stacking');
   }
 }
 
@@ -947,6 +1065,7 @@ async function seedTeamMembers() {
       department: 'Management',
       photo: 'https://i.pravatar.cc/150?img=1',
       bio: 'خبرة أكثر من 10 سنوات في إدارة المشاريع التقنية والفرق البرمجية',
+      funFact: 'مدمن قهوة ☕',
       email: 'ahmed@smartagency.com',
       linkedinUrl: 'https://linkedin.com/in/ahmed',
       githubUrl: 'https://github.com/ahmed',
@@ -964,6 +1083,7 @@ async function seedTeamMembers() {
       department: 'Backend',
       photo: 'https://i.pravatar.cc/150?img=5',
       bio: 'متخصصة في تطوير واجهات برمجية قوية وآمنة باستخدام NestJS و Node.js',
+      funFact: 'تحب حل الألغاز 🧩',
       email: 'fatima@smartagency.com',
       linkedinUrl: 'https://linkedin.com/in/fatima',
       githubUrl: 'https://github.com/fatima',
@@ -987,6 +1107,7 @@ async function seedTeamMembers() {
       department: 'Frontend',
       photo: 'https://i.pravatar.cc/150?img=12',
       bio: 'خبير في بناء واجهات مستخدم حديثة وجذابة باستخدام React و Vue.js',
+      funFact: 'يعشق التصوير الفوتوغرافي 📸',
       email: 'khalid@smartagency.com',
       linkedinUrl: 'https://linkedin.com/in/khalid',
       githubUrl: 'https://github.com/khalid',
@@ -1004,6 +1125,7 @@ async function seedTeamMembers() {
       department: 'Design',
       photo: 'https://i.pravatar.cc/150?img=9',
       bio: 'مصممة محترفة متخصصة في تصميم واجهات المستخدم وتجربة المستخدم',
+      funFact: 'عاشقة للفن والرسم 🎨',
       email: 'sara@smartagency.com',
       linkedinUrl: 'https://linkedin.com/in/sara',
       specializations: ['UI/UX Design', 'Figma', 'Adobe XD', 'Prototyping'],
@@ -1020,6 +1142,7 @@ async function seedTeamMembers() {
       department: 'DevOps',
       photo: 'https://i.pravatar.cc/150?img=15',
       bio: 'متخصص في البنية التحتية السحابية والتحسين المستمر للنشر',
+      funFact: 'لاعب شطرنج محترف ♟️',
       email: 'youssef@smartagency.com',
       linkedinUrl: 'https://linkedin.com/in/youssef',
       githubUrl: 'https://github.com/youssef',
@@ -1042,7 +1165,10 @@ async function seedTeamMembers() {
       await member.save();
       console.log(`✅ تم إنشاء عضو الفريق: ${memberData.fullName}`);
     } else {
-      console.log(`ℹ️  عضو الفريق موجود بالفعل: ${memberData.fullName}`);
+      // تحديث العضو الموجود لضمان وجود جميع الحقول الجديدة
+      Object.assign(existingMember, memberData);
+      await existingMember.save();
+      console.log(`🔄 تم تحديث عضو الفريق: ${memberData.fullName}`);
     }
   }
 }
@@ -1102,6 +1228,7 @@ async function seedTestimonials(projects) {
       content:
         'المتجر الإلكتروني الذي طوروه لنا جميل وسهل الاستخدام. المبيعات زادت بشكل كبير منذ إطلاقه. الفريق كان محترفاً ومتابعاً لكل التفاصيل.',
       rating: 5,
+      linkedProject: projects[0]._id, // ربط بمشروع E-Commerce
       isActive: true,
       isFeatured: true,
       sortOrder: 4,
@@ -1119,6 +1246,215 @@ async function seedTestimonials(projects) {
       console.log(`✅ تم إنشاء الشهادة: ${testimonialData.clientName}`);
     } else {
       console.log(`ℹ️  الشهادة موجودة بالفعل: ${testimonialData.clientName}`);
+    }
+  }
+}
+
+async function seedProjectCategories() {
+  console.log('🌱 جاري زرع بيانات فئات المشاريع...');
+
+  const categoriesData = [
+    {
+      value: 'Web App',
+      label: 'مواقع إلكترونية',
+      description: 'تطبيقات ومواقع ويب متكاملة',
+      isActive: true,
+      sortOrder: 1,
+    },
+    {
+      value: 'Mobile App',
+      label: 'تطبيقات الجوال',
+      description: 'تطبيقات iOS و Android',
+      isActive: true,
+      sortOrder: 2,
+    },
+    {
+      value: 'E-Commerce',
+      label: 'متاجر إلكترونية',
+      description: 'منصات تجارة إلكترونية متكاملة',
+      isActive: true,
+      sortOrder: 3,
+    },
+    {
+      value: 'Automation',
+      label: 'أتمتة',
+      description: 'أنظمة أتمتة العمليات',
+      isActive: true,
+      sortOrder: 4,
+    },
+    {
+      value: 'ERP',
+      label: 'أنظمة ERP',
+      description: 'أنظمة تخطيط موارد المؤسسات',
+      isActive: true,
+      sortOrder: 5,
+    },
+    {
+      value: 'Other',
+      label: 'أخرى',
+      description: 'مشاريع أخرى',
+      isActive: true,
+      sortOrder: 6,
+    },
+  ];
+
+  for (const categoryData of categoriesData) {
+    const existingCategory = await ProjectCategory.findOne({
+      value: categoryData.value,
+    });
+    if (!existingCategory) {
+      const category = new ProjectCategory(categoryData);
+      await category.save();
+      console.log(`✅ تم إنشاء الفئة: ${categoryData.label}`);
+    } else {
+      console.log(`ℹ️  الفئة موجودة بالفعل: ${categoryData.label}`);
+    }
+  }
+}
+
+async function seedServices() {
+  console.log('🌱 جاري زرع بيانات الخدمات...');
+
+  const servicesData = [
+    {
+      title: 'تصميم وتطوير مواقع الويب',
+      description:
+        'حلول ويب متكاملة بدءًا من المواقع البسيطة وحتى الأنظمة المعقدة، بأحدث التقنيات مثل Next.js وReact.',
+      icon: 'FaCode',
+      iconType: 'react-icon',
+      gradient: 'from-teal-500 to-teal-600',
+      features: [
+        'تصميم متجاوب',
+        'SEO محسّن',
+        'أداء عالي',
+        'أمان متقدم',
+        'سهولة الصيانة',
+      ],
+      isActive: true,
+      sortOrder: 1,
+      slug: 'web-development',
+      shortDescription: 'حلول ويب متكاملة بأحدث التقنيات مثل Next.js وReact',
+    },
+    {
+      title: 'تطوير تطبيقات الجوال',
+      description:
+        'تطبيقات جوال عالية الأداء لنظامي iOS وAndroid بتجربة مستخدم متميزة.',
+      icon: 'FaMobileAlt',
+      iconType: 'react-icon',
+      gradient: 'from-teal-500 to-teal-600',
+      features: [
+        'تطبيقات iOS و Android',
+        'أداء عالي',
+        'واجهة مستخدم جذابة',
+        'تكامل مع الخدمات السحابية',
+      ],
+      isActive: true,
+      sortOrder: 2,
+      slug: 'mobile-app-development',
+      shortDescription: 'تطبيقات جوال عالية الأداء لنظامي iOS وAndroid',
+    },
+    {
+      title: 'تصميم الهوية البصرية',
+      description:
+        'بناء هوية بصرية متكاملة تعبر عن قيم علامتك التجارية وتجذب جمهورك المستهدف.',
+      icon: 'FaPaintBrush',
+      iconType: 'react-icon',
+      gradient: 'from-teal-500 to-teal-600',
+      features: [
+        'تصميم شعار احترافي',
+        'دليل الهوية البصرية',
+        'تصميم بطاقات العمل',
+        'تصميم المطبوعات',
+      ],
+      isActive: true,
+      sortOrder: 3,
+      slug: 'brand-identity-design',
+      shortDescription: 'بناء هوية بصرية متكاملة تعبر عن قيم علامتك التجارية',
+    },
+    {
+      title: 'التسويق الرقمي',
+      description:
+        'حملات تسويقية مدروسة تعتمد على البيانات لتحقيق أعلى عائد على الاستثمار.',
+      icon: 'FaBullhorn',
+      iconType: 'react-icon',
+      gradient: 'from-teal-500 to-teal-600',
+      features: [
+        'إدارة وسائل التواصل الاجتماعي',
+        'إعلانات مدفوعة',
+        'تحسين محركات البحث (SEO)',
+        'تحليل الأداء',
+      ],
+      isActive: true,
+      sortOrder: 4,
+      slug: 'digital-marketing',
+      shortDescription: 'حملات تسويقية مدروسة لتحقيق أعلى عائد على الاستثمار',
+    },
+    {
+      title: 'حلول SaaS مخصصة',
+      description:
+        'تصميم وتطوير أنظمة SaaS قابلة للتوسع مع إدارة كاملة للسحابة والبنية التحتية.',
+      icon: 'FaCogs',
+      iconType: 'react-icon',
+      gradient: 'from-teal-500 to-teal-600',
+      features: [
+        'معمارية قابلة للتوسع',
+        'إدارة السحابة',
+        'أمان متقدم',
+        'تكامل مع APIs',
+      ],
+      isActive: true,
+      sortOrder: 5,
+      slug: 'saas-solutions',
+      shortDescription: 'تصميم وتطوير أنظمة SaaS قابلة للتوسع',
+    },
+    {
+      title: 'تحليل البيانات',
+      description:
+        'تحويل بياناتك إلى رؤى قابلة للتنفيذ لاتخاذ قرارات أعمال أكثر ذكاءً.',
+      icon: 'FaChartLine',
+      iconType: 'react-icon',
+      gradient: 'from-teal-500 to-teal-600',
+      features: [
+        'تحليل البيانات',
+        'تقارير تفاعلية',
+        'لوحات تحكم',
+        'تنبؤات ذكية',
+      ],
+      isActive: true,
+      sortOrder: 6,
+      slug: 'data-analytics',
+      shortDescription: 'تحويل بياناتك إلى رؤى قابلة للتنفيذ',
+    },
+    {
+      title: 'استضافة وإدارة السحابة',
+      description:
+        'حلول استضافة متقدمة مع إدارة كاملة للخوادم والسحابة لتضمن أداءً مثاليًا.',
+      icon: 'FaServer',
+      iconType: 'react-icon',
+      gradient: 'from-teal-500 to-teal-600',
+      features: [
+        'استضافة موثوقة',
+        'إدارة السحابة',
+        'نسخ احتياطي تلقائي',
+        'دعم فني 24/7',
+      ],
+      isActive: true,
+      sortOrder: 7,
+      slug: 'cloud-hosting',
+      shortDescription: 'حلول استضافة متقدمة مع إدارة كاملة للخوادم والسحابة',
+    },
+  ];
+
+  for (const serviceData of servicesData) {
+    const existingService = await Service.findOne({
+      slug: serviceData.slug,
+    });
+    if (!existingService) {
+      const service = new Service(serviceData);
+      await service.save();
+      console.log(`✅ تم إنشاء الخدمة: ${serviceData.title}`);
+    } else {
+      console.log(`ℹ️  الخدمة موجودة بالفعل: ${serviceData.title}`);
     }
   }
 }
@@ -1149,6 +1485,10 @@ async function seedAll() {
     await seedTeamMembers();
     console.log('');
     await seedTestimonials(projects);
+    console.log('');
+    await seedProjectCategories();
+    console.log('');
+    await seedServices();
     console.log('');
 
     console.log('✅ تم زرع جميع البيانات التجريبية بنجاح!');

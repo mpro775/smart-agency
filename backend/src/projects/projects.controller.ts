@@ -61,6 +61,18 @@ export class ProjectsController {
     return this.projectsService.findFeatured();
   }
 
+  @Get('categories')
+  @Public()
+  @ApiOperation({ summary: 'Get available project categories with counts' })
+  @ApiResponse({
+    status: 200,
+    description: 'Categories fetched successfully',
+  })
+  @ResponseMessage('Categories fetched successfully')
+  getCategories() {
+    return this.projectsService.getCategories();
+  }
+
   @Get('slug/:slug')
   @Public()
   @ApiOperation({ summary: 'Get a project by slug' })
@@ -106,4 +118,3 @@ export class ProjectsController {
     return this.projectsService.remove(id);
   }
 }
-

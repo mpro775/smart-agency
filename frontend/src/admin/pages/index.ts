@@ -8,4 +8,6 @@ export * from './testimonials';
 export * from './technologies';
 export * from './hosting';
 export * from './faqs';
+export * from './services';
+export * from './project-categories';
 

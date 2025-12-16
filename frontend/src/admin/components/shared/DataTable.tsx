@@ -5,11 +5,16 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import { Button } from '@/components/ui/button';
-import { Skeleton } from '@/components/ui/skeleton';
-import { ChevronRight, ChevronLeft, ChevronsRight, ChevronsLeft } from 'lucide-react';
-import type { PaginationMeta } from '../../types';
+} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  ChevronRight,
+  ChevronLeft,
+  ChevronsRight,
+  ChevronsLeft,
+} from "lucide-react";
+import type { PaginationMeta } from "../../types";
 
 export interface Column<T> {
   key: string;
@@ -33,18 +38,21 @@ export function DataTable<T extends { _id: string }>({
   isLoading,
   pagination,
   onPageChange,
-  emptyMessage = 'لا توجد بيانات',
+  emptyMessage = "لا توجد بيانات",
 }: DataTableProps<T>) {
   if (isLoading) {
     return (
       <div className="rounded-xl border border-slate-800 overflow-hidden">
-        <Table>
+        <Table dir="rtl">
           <TableHeader>
             <TableRow className="border-slate-800 hover:bg-transparent">
               {columns.map((column) => (
                 <TableHead
                   key={column.key}
-                  className={`text-slate-400 font-medium ${column.className || ''}`}
+                  className={`text-slate-400 font-medium text-right ${
+                    column.className || ""
+                  }`}
+                  dir="rtl"
                 >
                   {column.header}
                 </TableHead>
@@ -78,13 +86,16 @@ export function DataTable<T extends { _id: string }>({
   return (
     <div className="space-y-4">
       <div className="rounded-xl border border-slate-800 overflow-hidden">
-        <Table>
+        <Table dir="rtl">
           <TableHeader>
             <TableRow className="border-slate-800 bg-slate-800/50 hover:bg-slate-800/50">
               {columns.map((column) => (
                 <TableHead
                   key={column.key}
-                  className={`text-slate-400 font-medium ${column.className || ''}`}
+                  className={`text-slate-400 font-medium text-right ${
+                    column.className || ""
+                  }`}
+                  dir="rtl"
                 >
                   {column.header}
                 </TableHead>
@@ -100,7 +111,8 @@ export function DataTable<T extends { _id: string }>({
                 {columns.map((column) => (
                   <TableCell
                     key={column.key}
-                    className={`text-white ${column.className || ''}`}
+                    className={`text-white ${column.className || ""}`}
+                    dir="rtl"
                   >
                     {column.cell(item)}
                   </TableCell>
@@ -113,13 +125,13 @@ export function DataTable<T extends { _id: string }>({
 
       {/* Pagination */}
       {pagination && pagination.totalPages > 1 && (
-        <div className="flex items-center justify-between">
-          <p className="text-sm text-slate-400">
-            عرض {((pagination.page - 1) * pagination.limit) + 1} -{' '}
-            {Math.min(pagination.page * pagination.limit, pagination.total)} من{' '}
+        <div className="flex items-center justify-between" dir="rtl">
+          <p className="text-sm text-slate-400" dir="rtl">
+            عرض {(pagination.page - 1) * pagination.limit + 1} -{" "}
+            {Math.min(pagination.page * pagination.limit, pagination.total)} من{" "}
             {pagination.total}
           </p>
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1" dir="rtl">
             <Button
               variant="outline"
               size="icon"
@@ -138,7 +150,7 @@ export function DataTable<T extends { _id: string }>({
             >
               <ChevronRight className="h-4 w-4" />
             </Button>
-            <span className="px-3 text-sm text-slate-400">
+            <span className="px-3 text-sm text-slate-400" dir="rtl">
               {pagination.page} / {pagination.totalPages}
             </span>
             <Button
@@ -165,4 +177,3 @@ export function DataTable<T extends { _id: string }>({
     </div>
   );
 }
-

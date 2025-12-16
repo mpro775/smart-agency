@@ -7,23 +7,49 @@ import { Link } from "react-router-dom";
 import { publicProjectsService } from "../services/projects.service";
 import type { Project } from "../admin/types";
 
-const categories = [
-  { value: "all", label: "الكل" },
-  { value: "Web App", label: "مواقع إلكترونية" },
-  { value: "E-Commerce", label: "متاجر إلكترونية" },
-  { value: "Mobile App", label: "تطبيقات الجوال" },
-  { value: "Automation", label: "أتمتة" },
-  { value: "ERP", label: "أنظمة ERP" },
-  { value: "Other", label: "أخرى" },
-];
-
 export default function Projects() {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [showAll, setShowAll] = useState(false);
   const [projects, setProjects] = useState<Project[]>([]);
+  const [categories, setCategories] = useState<
+    { value: string; label: string; count: number }[]
+  >([]);
   const [loading, setLoading] = useState(true);
+  const [categoriesLoading, setCategoriesLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Fetch categories on component mount
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        setCategoriesLoading(true);
+        const categoriesData = await publicProjectsService.getCategories();
+        // Add "all" option at the beginning
+        setCategories([
+          { value: "all", label: "الكل", count: 0 },
+          ...categoriesData,
+        ]);
+      } catch (err) {
+        console.error("Error fetching categories:", err);
+        // Fallback to default categories if API fails
+        setCategories([
+          { value: "all", label: "الكل", count: 0 },
+          { value: "Web App", label: "مواقع إلكترونية", count: 0 },
+          { value: "E-Commerce", label: "متاجر إلكترونية", count: 0 },
+          { value: "Mobile App", label: "تطبيقات الجوال", count: 0 },
+          { value: "Automation", label: "أتمتة", count: 0 },
+          { value: "ERP", label: "أنظمة ERP", count: 0 },
+          { value: "Other", label: "أخرى", count: 0 },
+        ]);
+      } finally {
+        setCategoriesLoading(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+  // Fetch projects when category changes
   useEffect(() => {
     const fetchProjects = async () => {
       try {
@@ -73,31 +99,38 @@ export default function Projects() {
         </motion.div>
 
         {/* الفلاتر */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          className="flex flex-wrap justify-center gap-3 mb-12 px-2"
-        >
-          {categories.map((cat) => (
-            <motion.button
-              key={cat.value}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => {
-                setSelectedCategory(cat.value);
-                setShowAll(false);
-              }}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                selectedCategory === cat.value
-                  ? " bg-[linear-gradient(to_right,var(--color-primary),var(--color-primary-dark))] text-white shadow-lg"
-                  : "bg-white text-gray-700 hover:bg-gray-100 shadow-md"
-              }`}
-            >
-              {cat.label}
-            </motion.button>
-          ))}
-        </motion.div>
+        {!categoriesLoading && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            className="flex flex-wrap justify-center gap-3 mb-12 px-2"
+          >
+            {categories.map((cat) => (
+              <motion.button
+                key={cat.value}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => {
+                  setSelectedCategory(cat.value);
+                  setShowAll(false);
+                }}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                  selectedCategory === cat.value
+                    ? " bg-[linear-gradient(to_right,var(--color-primary),var(--color-primary-dark))] text-white shadow-lg"
+                    : "bg-white text-gray-700 hover:bg-gray-100 shadow-md"
+                }`}
+              >
+                {cat.label}
+                {cat.count > 0 && cat.value !== "all" && (
+                  <span className="ms-1 text-xs opacity-75" dir="rtl">
+                    ({cat.count})
+                  </span>
+                )}
+              </motion.button>
+            ))}
+          </motion.div>
+        )}
 
         {/* حالة التحميل */}
         {loading && (
@@ -123,8 +156,10 @@ export default function Projects() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                     {displayedProjects.map((project) => {
                       const techNames = Array.isArray(project.technologies)
-                        ? project.technologies.map((t: any) =>
-                            typeof t === "string" ? t : t.name
+                        ? project.technologies.map((t) =>
+                            typeof t === "string"
+                              ? t
+                              : (t as { name: string }).name
                           )
                         : [];
                       const projectImage =
@@ -157,7 +192,10 @@ export default function Projects() {
                             </div>
 
                             {/* أيقونات الروابط */}
-                            <div className="absolute top-4 right-4 flex gap-2">
+                            <div
+                              className="absolute top-4 right-4 flex gap-2"
+                              dir="rtl"
+                            >
                               {project.projectUrl && (
                                 <a
                                   href={project.projectUrl}
@@ -178,20 +216,32 @@ export default function Projects() {
                           </div>
 
                           {/* تفاصيل المشروع */}
-                          <div className="p-6">
-                            <div className="flex items-start justify-between">
+                          <div className="p-6" dir="rtl">
+                            <div
+                              className="flex items-start justify-between"
+                              dir="rtl"
+                            >
                               <div>
                                 <Link to={`/projects/${project.slug}`}>
-                                  <h3 className="text-xl font-bold text-gray-900 hover:text-primary transition-colors">
+                                  <h3
+                                    className="text-xl font-bold text-gray-900 hover:text-primary transition-colors"
+                                    dir="rtl"
+                                  >
                                     {project.title}
                                   </h3>
                                 </Link>
-                                <span className="inline-block mt-1 px-3 py-1 bg-primary/10 text-primary text-xs font-medium rounded-full">
+                                <span
+                                  className="inline-block mt-1 px-3 py-1 bg-primary/10 text-primary text-xs font-medium rounded-full"
+                                  dir="rtl"
+                                >
                                   {project.category}
                                 </span>
                               </div>
                               {project.isFeatured && (
-                                <span className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-medium rounded">
+                                <span
+                                  className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-medium rounded"
+                                  dir="rtl"
+                                >
                                   مميز
                                 </span>
                               )}
@@ -199,7 +249,10 @@ export default function Projects() {
 
                             {/* تاغات التقنيات */}
                             {techNames.length > 0 && (
-                              <div className="mt-4 flex flex-wrap gap-2">
+                              <div
+                                className="mt-4 flex flex-wrap gap-2"
+                                dir="rtl"
+                              >
                                 {techNames.slice(0, 4).map((tag, i) => (
                                   <span
                                     key={i}
@@ -232,6 +285,7 @@ export default function Projects() {
                       <button
                         onClick={() => setShowAll(true)}
                         className="px-8 py-3 rounded-xl  bg-[linear-gradient(to_right,var(--color-primary),var(--color-primary-dark))] text-white font-medium shadow-lg hover:shadow-xl transition-all flex items-center gap-2 mx-auto"
+                        dir="rtl"
                       >
                         عرض المزيد من المشاريع
                         <FiChevronDown className="animate-bounce" />
@@ -251,6 +305,7 @@ export default function Projects() {
                   <button
                     onClick={() => setSelectedCategory("all")}
                     className="px-6 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors"
+                    dir="rtl"
                   >
                     عرض جميع المشاريع
                   </button>

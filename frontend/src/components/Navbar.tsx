@@ -18,14 +18,8 @@ export default function Navbar() {
 
   const navLinks = [
     { label: "الرئيسية", href: "/" },
-        { label: "من نحن", href: "/about" },
-
+    { label: "من نحن", href: "/about" },
     { label: "أعمالنا", href: "/projects" },
-  ];
-
-  const ctaLinks = [
-    { label: "طلب عرض سعر", href: "/quote", primary: true },
-    { label: "تواصل معنا", href: "#contact", primary: false },
   ];
 
   return (
@@ -33,130 +27,129 @@ export default function Navbar() {
       initial={{ y: -50, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6 }}
-      className={`fixed w-full top-0 z-50 transition-all duration-300 ${
-        scrolled ? "bg-white shadow-lg" : "bg-white/90 backdrop-blur-sm"
-      }`}
+      className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-full max-w-5xl px-4 sm:px-6"
+      dir="rtl"
     >
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 ">
-        <div className="flex items-center justify-between h-16 md:h-20">
-          {/* شعار الوكالة */}
-          <Link 
-            to="/" 
-            className="flex items-center gap-2 text-xl font-bold text-gray-900 group"
-          >
+      {/* الكبسولة العائمة */}
+      <motion.div
+        className={`relative rounded-full transition-all duration-500 ${
+          scrolled
+            ? "bg-white/80 backdrop-blur-xl shadow-2xl border border-white/20"
+            : "bg-white/60 backdrop-blur-md shadow-lg border border-white/30"
+        }`}
+        whileHover={{ scale: 1.02 }}
+        transition={{ duration: 0.3 }}
+      >
+        <div className="flex items-center justify-between h-16 md:h-18 px-4 md:px-8">
+          {/* اللوجو على اليمين (في RTL) */}
+          <Link to="/" className="flex items-center group">
             <motion.div
-              whileHover={{ rotate: -15 }}
+              whileHover={{ scale: 1.1, rotate: -5 }}
               transition={{ duration: 0.3 }}
-              className="text-primary"
+              className="flex items-center"
             >
-<img
-  src="/logo2.png" // مسار الصورة داخل مجلد public
-  alt="Launch Icon"
-  width={200}
-  height={50}
-/>            </motion.div>
-          
+              <img
+                src="/logo2.png"
+                alt="Smart Agency Logo"
+                className="h-8 md:h-10 w-auto object-contain"
+              />
+            </motion.div>
           </Link>
 
-          {/* قائمة سطح المكتب */}
-          <div className="hidden lg:flex items-center gap-8">
-            <ul className="flex items-center gap-6">
-              {navLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    to={link.href}
-                    className="relative text-gray-700 hover:text-primary transition-colors font-medium text-md after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-primary after:transition-all hover:after:w-full"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-
-            <div className="flex items-center gap-4 ml-6">
-              {ctaLinks.map((link) => (
+          {/* الروابط في الوسط */}
+          <div className="hidden lg:flex items-center gap-1 flex-1 justify-center">
+            {navLinks.map((link, index) => (
+              <motion.div
+                key={link.href}
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+              >
                 <Link
-                  key={link.href}
                   to={link.href}
-                  className={`px-4 py-2 rounded-lg text-md font-medium transition-all ${
-                    link.primary
-                      ? "bg-[linear-gradient(to_right,var(--color-primary),var(--color-primary-dark))] text-white shadow hover:shadow-md"
-                      : "text-primary hover:bg-primary/10"
-                  }`}
+                  className="relative px-4 py-2 text-sm font-medium text-gray-700 hover:text-primary transition-colors rounded-full hover:bg-white/50"
                 >
                   {link.label}
                 </Link>
-              ))}
-            </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* زر "ابدأ مشروعك" على اليسار (في RTL) */}
+          <div className="hidden lg:flex items-center">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.3 }}
+            >
+              <Link
+                to="/quote"
+                className="px-5 py-2 rounded-full text-sm font-semibold text-white bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-dark)] shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+              >
+                ابدأ مشروعك
+              </Link>
+            </motion.div>
           </div>
 
           {/* زر القائمة للجوال */}
           <button
             onClick={() => setOpen(!open)}
-            className="lg:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors"
+            className="lg:hidden p-2 rounded-full text-gray-700 hover:bg-white/50 transition-colors"
             aria-label="فتح القائمة"
           >
-            {open ? <FiX size={24} /> : <FiMenu size={24} />}
+            {open ? <FiX size={20} /> : <FiMenu size={20} />}
           </button>
         </div>
-      </div>
 
-      {/* قائمة الجوال */}
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
-            className="lg:hidden overflow-hidden"
-          >
-            <div className="px-4 pb-4 bg-white shadow-lg">
-              <ul className="space-y-2 py-3 border-t border-gray-100">
-                {navLinks.map((link) => (
-                  <motion.li
-                    key={link.href}
-                    initial={{ x: 20, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <Link
-                      to={link.href}
-                      className="block py-3 px-4 rounded-lg hover:bg-gray-50 text-gray-700 font-medium transition-colors"
-                      onClick={() => setOpen(false)}
+        {/* قائمة الجوال */}
+        <AnimatePresence>
+          {open && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3 }}
+              className="lg:hidden overflow-hidden"
+            >
+              <div className="px-4 pb-4 pt-2 border-t border-white/20">
+                <ul className="space-y-1 py-2">
+                  {navLinks.map((link, index) => (
+                    <motion.li
+                      key={link.href}
+                      initial={{ x: 20, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      transition={{ duration: 0.3, delay: index * 0.05 }}
                     >
-                      {link.label}
-                    </Link>
-                  </motion.li>
-                ))}
-              </ul>
+                      <Link
+                        to={link.href}
+                        className="block py-2.5 px-4 rounded-full hover:bg-white/50 text-gray-700 font-medium transition-colors text-sm"
+                        onClick={() => setOpen(false)}
+                      >
+                        {link.label}
+                      </Link>
+                    </motion.li>
+                  ))}
+                </ul>
 
-              <div className="flex flex-col gap-3 mt-4 pt-4 border-t border-gray-100">
-                {ctaLinks.map((link) => (
-                  <motion.div
-                    key={link.href}
-                    initial={{ x: 20, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    transition={{ duration: 0.3, delay: 0.1 }}
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: 0.2 }}
+                  className="mt-3 pt-3 border-t border-white/20"
+                >
+                  <Link
+                    to="/quote"
+                    className="block text-center py-2.5 px-4 rounded-full font-semibold text-white bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-dark)] shadow-lg hover:shadow-xl transition-all text-sm"
+                    onClick={() => setOpen(false)}
                   >
-                    <Link
-                      to={link.href}
-                      className={`block text-center py-3 px-4 rounded-lg font-medium transition-colors ${
-                        link.primary
-                          ? "bg-[linear-gradient(to_right,var(--color-primary),var(--color-primary-dark))] text-white shadow hover:shadow-md"
-                          : "text-primary border border-primary hover:bg-primary/10"
-                      }`}
-                      onClick={() => setOpen(false)}
-                    >
-                      {link.label}
-                    </Link>
-                  </motion.div>
-                ))}
+                    ابدأ مشروعك
+                  </Link>
+                </motion.div>
               </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
     </motion.nav>
   );
 }

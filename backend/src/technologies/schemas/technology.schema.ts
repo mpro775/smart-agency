@@ -31,6 +31,9 @@ export class Technology {
   @Prop()
   description: string;
 
+  @Prop()
+  tooltip?: string;
+
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -40,4 +43,3 @@ export const TechnologySchema = SchemaFactory.createForClass(Technology);
 // Indexes
 TechnologySchema.index({ name: 1 });
 TechnologySchema.index({ category: 1 });
-

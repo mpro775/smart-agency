@@ -3,7 +3,7 @@ export interface User {
   _id: string;
   email: string;
   fullName: string;
-  role: 'admin' | 'user';
+  role: "admin" | "user";
   createdAt: string;
   updatedAt: string;
 }
@@ -40,12 +40,12 @@ export interface ApiResponse<T> {
 
 // Project Types
 export enum ProjectCategory {
-  WEB_APP = 'Web App',
-  MOBILE_APP = 'Mobile App',
-  AUTOMATION = 'Automation',
-  ERP = 'ERP',
-  ECOMMERCE = 'E-Commerce',
-  OTHER = 'Other',
+  WEB_APP = "Web App",
+  MOBILE_APP = "Mobile App",
+  AUTOMATION = "Automation",
+  ERP = "ERP",
+  ECOMMERCE = "E-Commerce",
+  OTHER = "Other",
 }
 
 export interface ProjectResult {
@@ -110,30 +110,30 @@ export interface Blog {
 
 // Lead Types
 export enum ServiceType {
-  WEB_APP = 'Web App',
-  MOBILE_APP = 'Mobile App',
-  AUTOMATION = 'Automation',
-  ERP = 'ERP',
-  ECOMMERCE = 'E-Commerce',
-  CONSULTATION = 'Consultation',
-  OTHER = 'Other',
+  WEB_APP = "Web App",
+  MOBILE_APP = "Mobile App",
+  AUTOMATION = "Automation",
+  ERP = "ERP",
+  ECOMMERCE = "E-Commerce",
+  CONSULTATION = "Consultation",
+  OTHER = "Other",
 }
 
 export enum LeadStatus {
-  NEW = 'New',
-  CONTACTED = 'Contacted',
-  PROPOSAL_SENT = 'Proposal Sent',
-  NEGOTIATION = 'Negotiation',
-  CLOSED_WON = 'Closed-Won',
-  CLOSED_LOST = 'Closed-Lost',
+  NEW = "New",
+  CONTACTED = "Contacted",
+  PROPOSAL_SENT = "Proposal Sent",
+  NEGOTIATION = "Negotiation",
+  CLOSED_WON = "Closed-Won",
+  CLOSED_LOST = "Closed-Lost",
 }
 
 export enum BudgetRange {
-  SMALL = '< $1,000',
-  MEDIUM = '$1,000 - $5,000',
-  LARGE = '$5,000 - $15,000',
-  ENTERPRISE = '$15,000+',
-  NOT_SPECIFIED = 'Not Specified',
+  SMALL = "< $1,000",
+  MEDIUM = "$1,000 - $5,000",
+  LARGE = "$5,000 - $15,000",
+  ENTERPRISE = "$15,000+",
+  NOT_SPECIFIED = "Not Specified",
 }
 
 export interface Lead {
@@ -154,15 +154,15 @@ export interface Lead {
 
 // Team Member Types
 export enum Department {
-  MANAGEMENT = 'Management',
-  BACKEND = 'Backend',
-  FRONTEND = 'Frontend',
-  MOBILE = 'Mobile',
-  DEVOPS = 'DevOps',
-  DESIGN = 'Design',
-  QA = 'Quality Assurance',
-  MARKETING = 'Marketing',
-  SUPPORT = 'Support',
+  MANAGEMENT = "Management",
+  BACKEND = "Backend",
+  FRONTEND = "Frontend",
+  MOBILE = "Mobile",
+  DEVOPS = "DevOps",
+  DESIGN = "Design",
+  QA = "Quality Assurance",
+  MARKETING = "Marketing",
+  SUPPORT = "Support",
 }
 
 export interface TeamMember {
@@ -172,6 +172,7 @@ export interface TeamMember {
   department: Department;
   photo?: string;
   bio?: string;
+  funFact?: string;
   email?: string;
   linkedinUrl?: string;
   githubUrl?: string;
@@ -208,13 +209,13 @@ export interface Testimonial {
 
 // Technology Types
 export enum TechnologyCategory {
-  BACKEND = 'Backend',
-  FRONTEND = 'Frontend',
-  MOBILE = 'Mobile',
-  DEVOPS = 'DevOps',
-  AUTOMATION = 'Automation',
-  DATABASE = 'Database',
-  OTHER = 'Other',
+  BACKEND = "Backend",
+  FRONTEND = "Frontend",
+  MOBILE = "Mobile",
+  DEVOPS = "DevOps",
+  AUTOMATION = "Automation",
+  DATABASE = "Database",
+  OTHER = "Other",
 }
 
 export interface Technology {
@@ -223,25 +224,26 @@ export interface Technology {
   icon?: string;
   category: TechnologyCategory;
   description?: string;
+  tooltip?: string;
   createdAt: string;
   updatedAt: string;
 }
 
 // Hosting Package Types
 export enum BillingCycle {
-  MONTHLY = 'Monthly',
-  QUARTERLY = 'Quarterly',
-  SEMI_ANNUALLY = 'Semi-Annually',
-  YEARLY = 'Yearly',
+  MONTHLY = "Monthly",
+  QUARTERLY = "Quarterly",
+  SEMI_ANNUALLY = "Semi-Annually",
+  YEARLY = "Yearly",
 }
 
 export enum PackageCategory {
-  SHARED_HOSTING = 'Shared Hosting',
-  VPS = 'VPS',
-  DEDICATED = 'Dedicated Server',
-  CLOUD = 'Cloud Hosting',
-  WORDPRESS = 'WordPress Hosting',
-  RESELLER = 'Reseller Hosting',
+  SHARED_HOSTING = "Shared Hosting",
+  VPS = "VPS",
+  DEDICATED = "Dedicated Server",
+  CLOUD = "Cloud Hosting",
+  WORDPRESS = "WordPress Hosting",
+  RESELLER = "Reseller Hosting",
 }
 
 export interface HostingPackage {
@@ -291,4 +293,3 @@ export interface DashboardStats {
   publishedProjectsCount: number;
   publishedBlogsCount: number;
 }
-

@@ -6,12 +6,14 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Loader2, Star } from 'lucide-react';
 import { testimonialsService } from '../../services/testimonials.service';
+import { projectsService } from '../../services/projects.service';
 import { PageHeader, ImageUpload } from '../../components/shared';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
 
@@ -23,6 +25,7 @@ const testimonialSchema = z.object({
   clientPhoto: z.string().optional(),
   content: z.string().min(1, 'المحتوى مطلوب'),
   rating: z.number().min(1).max(5),
+  linkedProject: z.string().optional(),
   isActive: z.boolean(),
   isFeatured: z.boolean(),
   sortOrder: z.number(),
@@ -42,9 +45,14 @@ export default function TestimonialForm() {
     enabled: isEdit,
   });
 
+  const { data: projects } = useQuery({
+    queryKey: ['projects-for-testimonials'],
+    queryFn: () => projectsService.getAll({ limit: 100, isPublished: true }),
+  });
+
   const { register, control, handleSubmit, watch, setValue, reset, formState: { errors } } = useForm<TestimonialFormData>({
     resolver: zodResolver(testimonialSchema),
-    defaultValues: { clientName: '', position: '', companyName: '', companyLogo: '', clientPhoto: '', content: '', rating: 5, isActive: true, isFeatured: false, sortOrder: 0 },
+    defaultValues: { clientName: '', position: '', companyName: '', companyLogo: '', clientPhoto: '', content: '', rating: 5, linkedProject: '', isActive: true, isFeatured: false, sortOrder: 0 },
   });
 
   useEffect(() => {
@@ -57,6 +65,7 @@ export default function TestimonialForm() {
         clientPhoto: testimonial.clientPhoto || '',
         content: testimonial.content,
         rating: testimonial.rating,
+        linkedProject: typeof testimonial.linkedProject === 'string' ? testimonial.linkedProject : testimonial.linkedProject?._id || '',
         isActive: testimonial.isActive,
         isFeatured: testimonial.isFeatured,
         sortOrder: testimonial.sortOrder,
@@ -132,6 +141,28 @@ export default function TestimonialForm() {
             <Card className="bg-slate-800/50 border-slate-700">
               <CardHeader><CardTitle className="text-white">الإعدادات</CardTitle></CardHeader>
               <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label className="text-slate-200">المشروع المرتبط (اختياري)</Label>
+                  <Controller
+                    name="linkedProject"
+                    control={control}
+                    render={({ field }) => (
+                      <Select value={field.value} onValueChange={field.onChange}>
+                        <SelectTrigger className="bg-slate-700/50 border-slate-600 text-white">
+                          <SelectValue placeholder="اختر مشروع..." />
+                        </SelectTrigger>
+                        <SelectContent className="bg-slate-800 border-slate-600">
+                          <SelectItem value="">غير مربوط</SelectItem>
+                          {projects?.data.map((project) => (
+                            <SelectItem key={project._id} value={project._id} className="text-white">
+                              {project.title}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    )}
+                  />
+                </div>
                 <Controller name="isActive" control={control} render={({ field }) => <div className="flex items-center justify-between"><Label className="text-slate-200">نشط</Label><Switch checked={field.value} onCheckedChange={field.onChange} /></div>} />
                 <Controller name="isFeatured" control={control} render={({ field }) => <div className="flex items-center justify-between"><Label className="text-slate-200">مميز</Label><Switch checked={field.value} onCheckedChange={field.onChange} /></div>} />
                 <div className="space-y-2">

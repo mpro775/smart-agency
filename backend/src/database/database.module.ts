@@ -22,6 +22,11 @@ import {
   Testimonial,
   TestimonialSchema,
 } from '../testimonials/schemas/testimonial.schema';
+import { Service, ServiceSchema } from '../services/schemas/service.schema';
+import {
+  ProjectCategory,
+  ProjectCategorySchema,
+} from '../project-categories/schemas/project-category.schema';
 
 @Module({
   imports: [
@@ -35,6 +40,8 @@ import {
       { name: TeamMember.name, schema: TeamMemberSchema },
       { name: Technology.name, schema: TechnologySchema },
       { name: Testimonial.name, schema: TestimonialSchema },
+      { name: Service.name, schema: ServiceSchema },
+      { name: ProjectCategory.name, schema: ProjectCategorySchema },
     ]),
   ],
   providers: [SeederService],

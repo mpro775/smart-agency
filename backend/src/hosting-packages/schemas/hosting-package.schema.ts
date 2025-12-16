@@ -88,6 +88,16 @@ export class HostingPackage {
   @Prop()
   promotionEndsAt: Date;
 
+  // New fields for enhanced package management
+  @Prop()
+  yearlyPrice?: number; // Optional yearly price (calculated if not provided)
+
+  @Prop({ type: 'ObjectId', ref: 'HostingPackage' })
+  basePackageId?: string; // Reference to base package for feature stacking
+
+  @Prop({ type: Object })
+  benefitHints?: { [key: string]: string }; // Tooltips for technical specs
+
   createdAt?: Date;
   updatedAt?: Date;
 }

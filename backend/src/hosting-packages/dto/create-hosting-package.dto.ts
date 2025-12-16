@@ -171,5 +171,35 @@ export class CreateHostingPackageDto {
   @Type(() => Date)
   @IsDate()
   promotionEndsAt?: Date;
+
+  // New fields for enhanced package management
+  @ApiPropertyOptional({
+    description: 'Yearly price (optional, calculated if not provided)',
+    example: 480,
+  })
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  yearlyPrice?: number;
+
+  @ApiPropertyOptional({
+    description: 'Reference to base package ID for feature stacking',
+    example: '60d5ecb74b24c72b8c8b4567',
+  })
+  @IsOptional()
+  @IsString()
+  basePackageId?: string;
+
+  @ApiPropertyOptional({
+    description: 'Benefit hints for technical specs',
+    type: 'object',
+    example: {
+      storage: '50GB (تكفي لحوالي 10,000 زائر شهرياً)',
+      ram: '2GB (مناسب للمواقع متوسطة الحجم)',
+      cpu: '2 vCPU (أداء سريع للعمليات المعقدة)',
+    },
+  })
+  @IsOptional()
+  benefitHints?: { [key: string]: string };
 }
 

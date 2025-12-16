@@ -19,6 +19,7 @@ import { HostingPackagesService } from './hosting-packages.service';
 import { CreateHostingPackageDto } from './dto/create-hosting-package.dto';
 import { UpdateHostingPackageDto } from './dto/update-hosting-package.dto';
 import { FilterHostingPackageDto } from './dto/filter-hosting-package.dto';
+import { CreatePackageSelectionDto } from './dto/create-package-selection.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { Public } from '../auth/decorators/public.decorator';
 import { ResponseMessage } from '../common/decorators';
@@ -113,6 +114,20 @@ export class HostingPackagesController {
   @ResponseMessage('Sort order updated successfully')
   updateSortOrder(@Body() packages: { id: string; sortOrder: number }[]) {
     return this.hostingPackagesService.updateSortOrder(packages);
+  }
+
+  @Post(':id/select')
+  @Public()
+  @ApiOperation({ summary: 'Select a hosting package and submit contact information' })
+  @ApiResponse({ status: 201, description: 'Package selection submitted successfully' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 404, description: 'Package not found' })
+  @ResponseMessage('Thank you for your interest! We will contact you soon.')
+  selectPackage(
+    @Param('id') packageId: string,
+    @Body() createPackageSelectionDto: CreatePackageSelectionDto,
+  ) {
+    return this.hostingPackagesService.handlePackageSelection(packageId, createPackageSelectionDto);
   }
 }
 

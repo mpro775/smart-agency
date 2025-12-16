@@ -1,5 +1,10 @@
-import api from './api';
-import type { TeamMember, ApiResponse, PaginatedResponse, Department } from '../types';
+import api from "./api";
+import type {
+  TeamMember,
+  ApiResponse,
+  PaginatedResponse,
+  Department,
+} from "../types";
 
 export interface TeamFilters {
   page?: number;
@@ -15,6 +20,7 @@ export interface CreateTeamMemberDto {
   department?: Department;
   photo?: string;
   bio?: string;
+  funFact?: string;
   email?: string;
   linkedinUrl?: string;
   githubUrl?: string;
@@ -31,15 +37,21 @@ export interface CreateTeamMemberDto {
 export type UpdateTeamMemberDto = Partial<CreateTeamMemberDto>;
 
 export const teamService = {
-  getAll: async (filters?: TeamFilters): Promise<PaginatedResponse<TeamMember>> => {
+  getAll: async (
+    filters?: TeamFilters
+  ): Promise<PaginatedResponse<TeamMember>> => {
     const params = new URLSearchParams();
-    if (filters?.page) params.append('page', String(filters.page));
-    if (filters?.limit) params.append('limit', String(filters.limit));
-    if (filters?.department) params.append('department', filters.department);
-    if (filters?.isActive !== undefined) params.append('isActive', String(filters.isActive));
-    if (filters?.showOnHome !== undefined) params.append('showOnHome', String(filters.showOnHome));
+    if (filters?.page) params.append("page", String(filters.page));
+    if (filters?.limit) params.append("limit", String(filters.limit));
+    if (filters?.department) params.append("department", filters.department);
+    if (filters?.isActive !== undefined)
+      params.append("isActive", String(filters.isActive));
+    if (filters?.showOnHome !== undefined)
+      params.append("showOnHome", String(filters.showOnHome));
 
-    const response = await api.get<ApiResponse<TeamMember[]>>(`/team?${params.toString()}`);
+    const response = await api.get<ApiResponse<TeamMember[]>>(
+      `/team?${params.toString()}`
+    );
     return {
       data: response.data.data,
       meta: response.data.meta!,
@@ -52,12 +64,18 @@ export const teamService = {
   },
 
   create: async (data: CreateTeamMemberDto): Promise<TeamMember> => {
-    const response = await api.post<ApiResponse<TeamMember>>('/team', data);
+    const response = await api.post<ApiResponse<TeamMember>>("/team", data);
     return response.data.data;
   },
 
-  update: async (id: string, data: UpdateTeamMemberDto): Promise<TeamMember> => {
-    const response = await api.patch<ApiResponse<TeamMember>>(`/team/${id}`, data);
+  update: async (
+    id: string,
+    data: UpdateTeamMemberDto
+  ): Promise<TeamMember> => {
+    const response = await api.patch<ApiResponse<TeamMember>>(
+      `/team/${id}`,
+      data
+    );
     return response.data.data;
   },
 
@@ -65,4 +83,3 @@ export const teamService = {
     await api.delete(`/team/${id}`);
   },
 };
-

@@ -37,6 +37,9 @@ export class TeamMember {
   bio: string; // Short bio
 
   @Prop()
+  funFact: string; // Personal touch / fun fact about the member
+
+  @Prop()
   email: string;
 
   // Social Links
@@ -87,4 +90,3 @@ TeamMemberSchema.index({ isActive: 1 });
 TeamMemberSchema.index({ showOnHome: 1 });
 TeamMemberSchema.index({ department: 1 });
 TeamMemberSchema.index({ sortOrder: 1 });
-

@@ -54,4 +54,14 @@ export const publicProjectsService = {
     );
     return response.data.data;
   },
+
+  // Get available categories with counts
+  getCategories: async (): Promise<
+    { value: string; label: string; count: number }[]
+  > => {
+    const response = await publicApi.get<
+      ApiResponse<{ value: string; label: string; count: number }[]>
+    >("/projects/categories");
+    return response.data.data;
+  },
 };

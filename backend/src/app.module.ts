@@ -18,6 +18,8 @@ import { TestimonialsModule } from './testimonials/testimonials.module';
 import { TeamModule } from './team/team.module';
 import { FaqsModule } from './faqs/faqs.module';
 import { ServicesModule } from './services/services.module';
+import { ProjectCategoriesModule } from './project-categories/project-categories.module';
+import { NewsletterModule } from './newsletter/newsletter.module';
 
 @Module({
   imports: [
@@ -37,10 +39,12 @@ import { ServicesModule } from './services/services.module';
     }),
 
     // Rate Limiting
-    ThrottlerModule.forRoot([{
-      ttl: 60000, // 1 minute
-      limit: 100, // 100 requests per minute
-    }]),
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60000, // 1 minute
+        limit: 100, // 100 requests per minute
+      },
+    ]),
 
     // Common Module (Interceptors, Filters)
     CommonModule,
@@ -61,9 +65,10 @@ import { ServicesModule } from './services/services.module';
     TeamModule,
     FaqsModule,
     ServicesModule,
+    ProjectCategoriesModule,
+    NewsletterModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}
-

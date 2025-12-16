@@ -56,6 +56,14 @@ export class CreateTeamMemberDto {
   bio?: string;
 
   @ApiPropertyOptional({
+    description: 'Fun fact or personal touch about the member',
+    example: 'مدمن قهوة ☕',
+  })
+  @IsOptional()
+  @IsString()
+  funFact?: string;
+
+  @ApiPropertyOptional({
     description: 'Email address',
     example: 'ahmed@smartagency.com',
   })
@@ -154,4 +162,3 @@ export class CreateTeamMemberDto {
   @IsDate()
   joinedAt?: Date;
 }
-

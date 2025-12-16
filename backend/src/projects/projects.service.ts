@@ -1,7 +1,15 @@
-import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Project, ProjectDocument } from './schemas/project.schema';
+import {
+  Project,
+  ProjectDocument,
+  ProjectCategory,
+} from './schemas/project.schema';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { FilterProjectsDto } from './dto/filter-projects.dto';
@@ -33,7 +41,14 @@ export class ProjectsService {
   async findAll(
     filterDto: FilterProjectsDto,
   ): Promise<PaginatedResponseDto<ProjectDocument>> {
-    const { page = 1, limit = 10, tech, category, featured, search } = filterDto;
+    const {
+      page = 1,
+      limit = 10,
+      tech,
+      category,
+      featured,
+      search,
+    } = filterDto;
 
     // Build query
     const query: any = { isPublished: true };
@@ -144,5 +159,43 @@ export class ProjectsService {
       throw new NotFoundException('Project not found');
     }
   }
-}
 
+  async getCategories(): Promise<
+    { value: string; label: string; count: number }[]
+  > {
+    // Get all categories from enum
+    const allCategories = Object.values(ProjectCategory);
+
+    // Get count of projects for each category
+    const categoriesWithCount = await Promise.all(
+      allCategories.map(async (category) => {
+        const count = await this.projectModel
+          .countDocuments({
+            category,
+            isPublished: true,
+          })
+          .exec();
+        return {
+          value: category,
+          label: this.getCategoryLabel(category),
+          count,
+        };
+      }),
+    );
+
+    // Return only categories that have at least one published project
+    return categoriesWithCount.filter((cat) => cat.count > 0);
+  }
+
+  private getCategoryLabel(category: ProjectCategory): string {
+    const labels: Record<ProjectCategory, string> = {
+      [ProjectCategory.WEB_APP]: 'مواقع إلكترونية',
+      [ProjectCategory.MOBILE_APP]: 'تطبيقات الجوال',
+      [ProjectCategory.AUTOMATION]: 'أتمتة',
+      [ProjectCategory.ERP]: 'أنظمة ERP',
+      [ProjectCategory.ECOMMERCE]: 'متاجر إلكترونية',
+      [ProjectCategory.OTHER]: 'أخرى',
+    };
+    return labels[category] || category;
+  }
+}

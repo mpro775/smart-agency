@@ -1,0 +1,13 @@
+# SSL Certificates (لا ترفع الشهادات إلى Git!)
+ssl/
+*.pem
+*.key
+*.crt
+*.cert
+
+# Logs
+logs/
+*.log
+
+# Certbot
+certbot/

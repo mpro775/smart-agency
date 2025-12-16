@@ -70,6 +70,22 @@ export default function TestimonialsList() {
       ),
     },
     {
+      key: 'linkedProject',
+      header: 'المشروع المرتبط',
+      cell: (item) => {
+        const project = typeof item.linkedProject === 'object' ? item.linkedProject : null;
+        return (
+          <div className="text-sm">
+            {project ? (
+              <span className="text-slate-300">{project.title}</span>
+            ) : (
+              <span className="text-slate-500">غير مربوط</span>
+            )}
+          </div>
+        );
+      },
+    },
+    {
       key: 'status',
       header: 'الحالة',
       cell: (item) => (

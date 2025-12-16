@@ -8,4 +8,6 @@ export { testimonialsService } from './testimonials.service';
 export { technologiesService } from './technologies.service';
 export { hostingService } from './hosting.service';
 export { faqsService } from './faqs.service';
+export { servicesService } from './services.service';
+export { projectCategoriesService } from './project-categories.service';
 
