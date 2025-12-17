@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import {
-  FiArrowLeft,
   FiSearch,
   FiEye,
   FiUser,
@@ -11,7 +10,7 @@ import {
 } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { publicBlogService } from "../services/blog.service";
-import type { Blog } from "../admin/types";
+import type { Blog, User } from "../admin/types";
 
 export default function BlogPage() {
   const [blogs, setBlogs] = useState<Blog[]>([]);
@@ -83,10 +82,10 @@ export default function BlogPage() {
     });
   };
 
-  const getAuthorName = (author?: any) => {
+  const getAuthorName = (author?: User | string) => {
     if (!author) return "الإدارة";
     if (typeof author === "string") return author;
-    return author.name || "الإدارة";
+    return author.fullName || "الإدارة";
   };
 
   const renderPagination = () => {
@@ -95,7 +94,7 @@ export default function BlogPage() {
     const pages = [];
     const maxVisiblePages = 5;
     let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+    const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
 
     if (endPage - startPage + 1 < maxVisiblePages) {
       startPage = Math.max(1, endPage - maxVisiblePages + 1);

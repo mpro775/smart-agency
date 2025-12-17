@@ -2,7 +2,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FiUsers, FiGlobe, FiTrendingUp, FiCheckCircle } from "react-icons/fi";
 import { FaHandshake } from "react-icons/fa";
 import { RiTeamLine, RiLightbulbFlashLine } from "react-icons/ri";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type ComponentType } from "react";
 import {
   aboutService,
   type About as AboutType,
@@ -15,7 +15,11 @@ import * as RiIcons from "react-icons/ri";
 
 const getIconComponent = (iconName: string, size: number = 24) => {
   if (!iconName) return null;
-  const icons: Record<string, any> = { ...FiIcons, ...FaIcons, ...RiIcons };
+  const icons: Record<string, ComponentType<{ size?: number }>> = {
+    ...FiIcons,
+    ...FaIcons,
+    ...RiIcons,
+  };
   const Icon = icons[iconName];
   return Icon ? <Icon size={size} /> : null;
 };

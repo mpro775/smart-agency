@@ -1,26 +1,26 @@
-import { useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useForm, Controller } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { Loader2 } from 'lucide-react';
-import { projectCategoriesService } from '../../services/project-categories.service';
-import { PageHeader } from '../../components/shared';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Switch } from '@/components/ui/switch';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { toast } from 'sonner';
+import { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Loader2 } from "lucide-react";
+import { projectCategoriesService } from "../../services/project-categories.service";
+import { PageHeader } from "../../components/shared";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { toast } from "sonner";
 
 const categorySchema = z.object({
-  value: z.string().min(1, 'القيمة مطلوبة'),
-  label: z.string().min(1, 'التسمية مطلوبة'),
+  value: z.string().min(1, "القيمة مطلوبة"),
+  label: z.string().min(1, "التسمية مطلوبة"),
   description: z.string().optional(),
   isActive: z.boolean(),
-  sortOrder: z.number().default(0),
+  sortOrder: z.number().min(0),
   icon: z.string().optional(),
 });
 
@@ -33,7 +33,7 @@ export default function ProjectCategoryForm() {
   const isEdit = !!id;
 
   const { data: category, isLoading: categoryLoading } = useQuery({
-    queryKey: ['project-category', id],
+    queryKey: ["project-category", id],
     queryFn: () => projectCategoriesService.getById(id!),
     enabled: isEdit,
   });
@@ -47,12 +47,12 @@ export default function ProjectCategoryForm() {
   } = useForm<CategoryFormData>({
     resolver: zodResolver(categorySchema),
     defaultValues: {
-      value: '',
-      label: '',
-      description: '',
+      value: "",
+      label: "",
+      description: "",
       isActive: true,
       sortOrder: 0,
-      icon: '',
+      icon: "",
     },
   });
 
@@ -61,10 +61,10 @@ export default function ProjectCategoryForm() {
       reset({
         value: category.value,
         label: category.label,
-        description: category.description || '',
+        description: category.description || "",
         isActive: category.isActive,
         sortOrder: category.sortOrder || 0,
-        icon: category.icon || '',
+        icon: category.icon || "",
       });
     }
   }, [category, reset]);
@@ -75,12 +75,12 @@ export default function ProjectCategoryForm() {
         ? projectCategoriesService.update(id!, data)
         : projectCategoriesService.create(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['project-categories'] });
-      queryClient.invalidateQueries({ queryKey: ['projects'] });
-      toast.success(isEdit ? 'تم تحديث الفئة' : 'تم إضافة الفئة');
-      navigate('/admin/project-categories');
+      queryClient.invalidateQueries({ queryKey: ["project-categories"] });
+      queryClient.invalidateQueries({ queryKey: ["projects"] });
+      toast.success(isEdit ? "تم تحديث الفئة" : "تم إضافة الفئة");
+      navigate("/admin/project-categories");
     },
-    onError: () => toast.error(isEdit ? 'فشل التحديث' : 'فشل الإضافة'),
+    onError: () => toast.error(isEdit ? "فشل التحديث" : "فشل الإضافة"),
   });
 
   if (isEdit && categoryLoading)
@@ -93,7 +93,7 @@ export default function ProjectCategoryForm() {
   return (
     <div>
       <PageHeader
-        title={isEdit ? 'تعديل الفئة' : 'إضافة فئة جديدة'}
+        title={isEdit ? "تعديل الفئة" : "إضافة فئة جديدة"}
         backLink="/admin/project-categories"
       />
       <form
@@ -109,7 +109,7 @@ export default function ProjectCategoryForm() {
               <div className="space-y-2">
                 <Label className="text-slate-200">القيمة (Value) *</Label>
                 <Input
-                  {...register('value')}
+                  {...register("value")}
                   className="bg-slate-700/50 border-slate-600 text-white"
                   placeholder="مثال: Web App"
                   disabled={isEdit}
@@ -126,7 +126,7 @@ export default function ProjectCategoryForm() {
               <div className="space-y-2">
                 <Label className="text-slate-200">التسمية (Label) *</Label>
                 <Input
-                  {...register('label')}
+                  {...register("label")}
                   className="bg-slate-700/50 border-slate-600 text-white"
                   placeholder="مثال: مواقع إلكترونية"
                 />
@@ -139,7 +139,7 @@ export default function ProjectCategoryForm() {
             <div className="space-y-2">
               <Label className="text-slate-200">الوصف</Label>
               <Textarea
-                {...register('description')}
+                {...register("description")}
                 rows={3}
                 className="bg-slate-700/50 border-slate-600 text-white"
                 placeholder="وصف الفئة..."
@@ -151,14 +151,14 @@ export default function ProjectCategoryForm() {
                 <Label className="text-slate-200">ترتيب العرض</Label>
                 <Input
                   type="number"
-                  {...register('sortOrder', { valueAsNumber: true })}
+                  {...register("sortOrder", { valueAsNumber: true })}
                   className="bg-slate-700/50 border-slate-600 text-white"
                 />
               </div>
               <div className="space-y-2">
                 <Label className="text-slate-200">الأيقونة</Label>
                 <Input
-                  {...register('icon')}
+                  {...register("icon")}
                   className="bg-slate-700/50 border-slate-600 text-white"
                   placeholder="اسم الأيقونة أو URL"
                 />
@@ -185,7 +185,7 @@ export default function ProjectCategoryForm() {
             type="button"
             variant="outline"
             className="border-slate-700"
-            onClick={() => navigate('/admin/project-categories')}
+            onClick={() => navigate("/admin/project-categories")}
           >
             إلغاء
           </Button>
@@ -200,9 +200,9 @@ export default function ProjectCategoryForm() {
                 جاري الحفظ...
               </>
             ) : isEdit ? (
-              'تحديث'
+              "تحديث"
             ) : (
-              'إضافة'
+              "إضافة"
             )}
           </Button>
         </div>

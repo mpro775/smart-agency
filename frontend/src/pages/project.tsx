@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
-import { FiArrowLeft, FiExternalLink } from "react-icons/fi";
+import { FiArrowLeft } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { publicProjectsService } from "../services/projects.service";
-import type { Project } from "../admin/types";
+import type { Project, Technology } from "../admin/types";
 
 export default function ProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -127,7 +127,7 @@ export default function ProjectsPage() {
           ) : (
             projects.map((project, index) => {
               const techNames = Array.isArray(project.technologies)
-                ? project.technologies.map((t: any) =>
+                ? project.technologies.map((t: string | Technology) =>
                     typeof t === "string" ? t : t.name
                   )
                 : [];
