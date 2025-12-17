@@ -1,20 +1,22 @@
-import axios from 'axios';
-import type { AxiosError, InternalAxiosRequestConfig } from 'axios';
+import axios from "axios";
+import type { AxiosError, InternalAxiosRequestConfig } from "axios";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+// const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL || "http://api.smartagency-ye.com/api";
 
 // Create axios instance
 export const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
 // Request interceptor to add auth token
 api.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem("accessToken");
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -31,9 +33,9 @@ api.interceptors.response.use(
   (error: AxiosError) => {
     if (error.response?.status === 401) {
       // Clear token and redirect to login
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('user');
-      window.location.href = '/admin/login';
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("user");
+      window.location.href = "/admin/login";
     }
     return Promise.reject(error);
   }
@@ -42,11 +44,11 @@ api.interceptors.response.use(
 // Upload file helper
 export const uploadFile = async (file: File): Promise<string> => {
   const formData = new FormData();
-  formData.append('file', file);
+  formData.append("file", file);
 
-  const response = await api.post('/uploads/image', formData, {
+  const response = await api.post("/uploads/image", formData, {
     headers: {
-      'Content-Type': 'multipart/form-data',
+      "Content-Type": "multipart/form-data",
     },
   });
 
@@ -57,12 +59,12 @@ export const uploadFile = async (file: File): Promise<string> => {
 export const uploadFiles = async (files: File[]): Promise<string[]> => {
   const formData = new FormData();
   files.forEach((file) => {
-    formData.append('files', file);
+    formData.append("files", file);
   });
 
-  const response = await api.post('/uploads/images', formData, {
+  const response = await api.post("/uploads/images", formData, {
     headers: {
-      'Content-Type': 'multipart/form-data',
+      "Content-Type": "multipart/form-data",
     },
   });
 
@@ -70,4 +72,3 @@ export const uploadFiles = async (files: File[]): Promise<string[]> => {
 };
 
 export default api;
-
