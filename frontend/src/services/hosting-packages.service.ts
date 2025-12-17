@@ -43,7 +43,7 @@ export interface PackageSelectionRequest {
   phone: string;
   companyName?: string;
   message?: string;
-  billingCycle: 'Monthly' | 'Yearly';
+  billingCycle: "Monthly" | "Yearly";
 }
 
 export const publicHostingPackagesService = {
@@ -78,11 +78,13 @@ export const publicHostingPackagesService = {
   },
 
   // Select a package and submit contact information
-  selectPackage: async (selectionData: PackageSelectionRequest): Promise<{ message: string }> => {
-    const { packageId, ...data } = selectionData;
+  selectPackage: async (
+    selectionData: PackageSelectionRequest
+  ): Promise<{ message: string }> => {
+    const { packageId } = selectionData;
     const response = await publicApi.post<{ message: string }>(
       `/hosting-packages/${packageId}/select`,
-      data
+      selectionData
     );
     return response.data;
   },

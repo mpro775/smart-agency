@@ -1,13 +1,14 @@
-export { api, uploadFile, uploadFiles } from './api';
-export { authService } from './auth.service';
-export { projectsService } from './projects.service';
-export { blogService } from './blog.service';
-export { leadsService } from './leads.service';
-export { teamService } from './team.service';
-export { testimonialsService } from './testimonials.service';
-export { technologiesService } from './technologies.service';
-export { hostingService } from './hosting.service';
-export { faqsService } from './faqs.service';
-export { servicesService } from './services.service';
-export { projectCategoriesService } from './project-categories.service';
-
+export { api, uploadFile, uploadFiles } from "./api";
+export { authService } from "./auth.service";
+export { projectsService } from "./projects.service";
+export { blogService } from "./blog.service";
+export { leadsService } from "./leads.service";
+export { teamService } from "./team.service";
+export { testimonialsService } from "./testimonials.service";
+export { technologiesService } from "./technologies.service";
+export { hostingService } from "./hosting.service";
+export { faqsService } from "./faqs.service";
+export { servicesService } from "./services.service";
+export { projectCategoriesService } from "./project-categories.service";
+export { companyInfoService } from "./company-info.service";
+export type { CompanyInfo, UpdateCompanyInfoDto } from "./company-info.service";

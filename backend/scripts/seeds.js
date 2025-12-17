@@ -317,6 +317,60 @@ const projectCategorySchema = new mongoose.Schema(
   { timestamps: true },
 );
 
+// Company Info Schema
+const companyInfoSchema = new mongoose.Schema(
+  {
+    address: { type: String, required: true },
+    googleMapsUrl: { type: String, required: true },
+    workingHours: { type: String, required: true },
+    email: { type: String, required: true },
+    phone: { type: String, required: true },
+    whatsappUrl: { type: String, required: true },
+    socialLinks: {
+      twitter: { type: String, default: '' },
+      instagram: { type: String, default: '' },
+      linkedin: { type: String, default: '' },
+      facebook: { type: String, default: '' },
+    },
+  },
+  { timestamps: true },
+);
+
+// About Schema
+const aboutSchema = new mongoose.Schema(
+  {
+    hero: {
+      title: { type: String, required: true },
+      subtitle: { type: String, required: true },
+      image: { type: String, default: '' },
+    },
+    vision: { type: String, required: true },
+    mission: { type: String, required: true },
+    approach: { type: String, required: true },
+    values: [
+      {
+        icon: { type: String, required: true },
+        title: { type: String, required: true },
+        description: { type: String, required: true },
+      },
+    ],
+    stats: [
+      {
+        icon: { type: String, required: true },
+        value: { type: Number, required: true },
+        label: { type: String, required: true },
+      },
+    ],
+    cta: {
+      title: { type: String, required: true },
+      description: { type: String, required: true },
+      buttonText: { type: String, required: true },
+    },
+    isActive: { type: Boolean, default: true },
+  },
+  { timestamps: true },
+);
+
 // ==================== MODELS ====================
 const User = mongoose.model('User', userSchema);
 const Blog = mongoose.model('Blog', blogSchema);
@@ -332,6 +386,8 @@ const ProjectCategory = mongoose.model(
   'ProjectCategory',
   projectCategorySchema,
 );
+const CompanyInfo = mongoose.model('CompanyInfo', companyInfoSchema);
+const About = mongoose.model('About', aboutSchema);
 
 // ==================== SEED FUNCTIONS ====================
 
@@ -1459,6 +1515,120 @@ async function seedServices() {
   }
 }
 
+async function seedCompanyInfo() {
+  console.log('🌱 جاري زرع بيانات المعلومات الرئيسية للشركة...');
+
+  const companyInfoData = {
+    address: 'صنعاء, اليمن',
+    googleMapsUrl: 'https://maps.google.com/?q=15.3694,44.1910',
+    workingHours: 'الأحد - الخميس: 8 ص - 5 م',
+    email: 'info@smartagency.com',
+    phone: '+967 778 032 532',
+    whatsappUrl: 'https://wa.me/967778032532',
+    socialLinks: {
+      twitter: 'https://twitter.com/smartagency',
+      instagram: 'https://instagram.com/smartagency',
+      linkedin: 'https://linkedin.com/company/smartagency',
+      facebook: 'https://facebook.com/smartagency',
+    },
+  };
+
+  // Check if company info already exists (singleton pattern)
+  const existingCompanyInfo = await CompanyInfo.findOne();
+  if (!existingCompanyInfo) {
+    const companyInfo = new CompanyInfo(companyInfoData);
+    await companyInfo.save();
+    console.log('✅ تم إنشاء المعلومات الرئيسية للشركة');
+  } else {
+    // Update existing record with seed data
+    Object.assign(existingCompanyInfo, companyInfoData);
+    await existingCompanyInfo.save();
+    console.log('🔄 تم تحديث المعلومات الرئيسية للشركة');
+  }
+}
+
+async function seedAbout() {
+  console.log('🌱 جاري زرع بيانات صفحة من نحن...');
+
+  const aboutData = {
+    hero: {
+      title: 'نحن فريق من المبدعين والمطورين',
+      subtitle: 'نحول الأفكار إلى حلول رقمية مبتكرة',
+      image:
+        'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200',
+    },
+    vision:
+      'أن نكون الشريك الرقمي الأول للشركات الناشئة والمؤسسات في المنطقة، من خلال تقديم حلول تقنية متقدمة تساعدهم على النمو والازدهار في العصر الرقمي.',
+    mission:
+      'نمكّن المشاريع من النمو والازدهار من خلال مزيج احترافي من التصميم والتطوير والتسويق الرقمي، مع التركيز على الجودة والابتكار ورضا العملاء.',
+    approach:
+      'نتبع منهجية عمل مرنة تجمع بين التخطيط الاستراتيجي والتنفيذ السريع. نبدأ بفهم عميق لاحتياجات العميل، ثم نطور حلولاً مخصصة باستخدام أحدث التقنيات وأفضل الممارسات في الصناعة.',
+    values: [
+      {
+        icon: 'FiUsers',
+        title: 'العمل الجماعي',
+        description: 'نؤمن بقوة العمل الجماعي والتعاون لتحقيق أفضل النتائج',
+      },
+      {
+        icon: 'FiTrendingUp',
+        title: 'الابتكار',
+        description: 'نسعى دائماً لاستخدام أحدث التقنيات والأساليب المبتكرة',
+      },
+      {
+        icon: 'FaHandshake',
+        title: 'الشفافية',
+        description: 'نحافظ على شفافية كاملة في جميع مراحل المشروع',
+      },
+      {
+        icon: 'FiGlobe',
+        title: 'الجودة',
+        description: 'نلتزم بأعلى معايير الجودة في كل ما نقدمه',
+      },
+    ],
+    stats: [
+      {
+        icon: 'FiUsers',
+        value: 50,
+        label: 'مشروع منجز',
+      },
+      {
+        icon: 'RiTeamLine',
+        value: 15,
+        label: 'عضو فريق',
+      },
+      {
+        icon: 'FiGlobe',
+        value: 30,
+        label: 'عميل راضٍ',
+      },
+      {
+        icon: 'FiTrendingUp',
+        value: 5,
+        label: 'سنوات خبرة',
+      },
+    ],
+    cta: {
+      title: 'هل أنت مستعد لبدء مشروعك القادم؟',
+      description: 'تواصل معنا اليوم واحصل على استشارة مجانية حول مشروعك',
+      buttonText: 'تواصل معنا',
+    },
+    isActive: true,
+  };
+
+  // Check if about data already exists (singleton pattern)
+  const existingAbout = await About.findOne();
+  if (!existingAbout) {
+    const about = new About(aboutData);
+    await about.save();
+    console.log('✅ تم إنشاء بيانات صفحة من نحن');
+  } else {
+    // Update existing record with seed data
+    Object.assign(existingAbout, aboutData);
+    await existingAbout.save();
+    console.log('🔄 تم تحديث بيانات صفحة من نحن');
+  }
+}
+
 // ==================== MAIN FUNCTION ====================
 
 async function seedAll() {
@@ -1489,6 +1659,10 @@ async function seedAll() {
     await seedProjectCategories();
     console.log('');
     await seedServices();
+    console.log('');
+    await seedCompanyInfo();
+    console.log('');
+    await seedAbout();
     console.log('');
 
     console.log('✅ تم زرع جميع البيانات التجريبية بنجاح!');

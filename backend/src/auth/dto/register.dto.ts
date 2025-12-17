@@ -7,11 +7,9 @@ import {
   IsEnum,
   IsOptional,
 } from 'class-validator';
+import { UserRole } from '../../users/schemas/user.schema';
 
-export enum UserRole {
-  ADMIN = 'admin',
-  EDITOR = 'editor',
-}
+export { UserRole };
 
 export class RegisterDto {
   @ApiProperty({
@@ -49,4 +47,3 @@ export class RegisterDto {
   @IsEnum(UserRole, { message: 'Role must be either admin or editor' })
   role?: UserRole;
 }
-

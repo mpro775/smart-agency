@@ -1,20 +1,16 @@
 "use client";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import {
-  FiLinkedin,
-  FiGithub,
-  FiTwitter,
-  FiGlobe,
-  FiMail,
-} from "react-icons/fi";
 import { publicTeamService } from "../services/team.service";
 import type { TeamMember } from "../services/team.service";
+import TeamMemberDialog from "./TeamMemberDialog";
 
 export default function Team() {
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useEffect(() => {
     const fetchTeamMembers = async () => {
@@ -34,13 +30,48 @@ export default function Team() {
     fetchTeamMembers();
   }, []);
 
+  const handleMemberClick = (member: TeamMember) => {
+    setSelectedMember(member);
+    setIsDialogOpen(true);
+  };
+
   if (loading) {
     return (
       <section
-        className="relative py-28 bg-gradient-to-br from-[#0a0e27] via-[#0f1629] to-[#0a0e27] overflow-hidden"
+        className="relative py-28 bg-gradient-to-b from-gray-900 via-gray-900 to-black text-white overflow-hidden"
         id="team"
       >
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-5">
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `radial-gradient(circle at 2px 2px, rgba(255,255,255,0.15) 1px, transparent 0)`,
+              backgroundSize: "40px 40px",
+            }}
+          />
+        </div>
+
+        {/* Gradient Overlays */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-0 left-0 w-full h-1/3 bg-gradient-to-b from-primary/10 to-transparent" />
+          <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-gradient-to-t from-primary/5 to-transparent" />
+          <motion.div
+            className="absolute top-1/4 right-1/4 w-96 h-96 rounded-full bg-primary/10 blur-3xl"
+            animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
+            transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.div
+            className="absolute bottom-1/4 left-1/4 w-80 h-80 rounded-full bg-primary/8 blur-3xl"
+            animate={{ scale: [1.2, 1, 1.2], opacity: [0.2, 0.4, 0.2] }}
+            transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+          />
+        </div>
+
+        {/* Top Border Accent */}
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
+
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center">
             <motion.div
               animate={{ rotate: 360 }}
@@ -57,10 +88,40 @@ export default function Team() {
   if (error) {
     return (
       <section
-        className="relative py-28 bg-gradient-to-br from-[#0a0e27] via-[#0f1629] to-[#0a0e27] overflow-hidden"
+        className="relative py-28 bg-gradient-to-b from-gray-900 via-gray-900 to-black text-white overflow-hidden"
         id="team"
       >
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-5">
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `radial-gradient(circle at 2px 2px, rgba(255,255,255,0.15) 1px, transparent 0)`,
+              backgroundSize: "40px 40px",
+            }}
+          />
+        </div>
+
+        {/* Gradient Overlays */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-0 left-0 w-full h-1/3 bg-gradient-to-b from-primary/10 to-transparent" />
+          <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-gradient-to-t from-primary/5 to-transparent" />
+          <motion.div
+            className="absolute top-1/4 right-1/4 w-96 h-96 rounded-full bg-primary/10 blur-3xl"
+            animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
+            transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.div
+            className="absolute bottom-1/4 left-1/4 w-80 h-80 rounded-full bg-primary/8 blur-3xl"
+            animate={{ scale: [1.2, 1, 1.2], opacity: [0.2, 0.4, 0.2] }}
+            transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+          />
+        </div>
+
+        {/* Top Border Accent */}
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
+
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center">
             <p className="text-red-400">{error}</p>
           </div>
@@ -75,39 +136,38 @@ export default function Team() {
 
   return (
     <section
-      className="relative py-28 bg-gradient-to-br from-[#0a0e27] via-[#0f1629] to-[#0a0e27] overflow-hidden"
+      className="relative py-28 bg-gradient-to-b from-gray-900 via-gray-900 to-black text-white overflow-hidden"
       id="team"
     >
-      {/* تأثيرات الخلفية الداكنة */}
-      <div className="absolute inset-0 overflow-hidden -z-10">
-        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-[#0a0e27]/80 via-[#0f1629]/50 to-[#0a0e27]/80" />
-        <motion.div
-          className="absolute top-20 right-1/4 w-[500px] h-[500px] rounded-full bg-gradient-to-br from-[#008080]/20 to-[#00b3b3]/10 blur-3xl"
-          animate={{
-            scale: [1, 1.2, 1],
-            x: [0, -30, 0],
-            y: [0, 20, 0],
+      {/* Background Pattern */}
+      <div className="absolute inset-0 opacity-5">
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `radial-gradient(circle at 2px 2px, rgba(255,255,255,0.15) 1px, transparent 0)`,
+            backgroundSize: "40px 40px",
           }}
+        />
+      </div>
+
+      {/* Gradient Overlays */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 left-0 w-full h-1/3 bg-gradient-to-b from-primary/10 to-transparent" />
+        <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-gradient-to-t from-primary/5 to-transparent" />
+        <motion.div
+          className="absolute top-1/4 right-1/4 w-96 h-96 rounded-full bg-primary/10 blur-3xl"
+          animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
           transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
-          className="absolute bottom-20 left-1/4 w-[450px] h-[450px] rounded-full bg-gradient-to-tr from-[#008080]/15 to-[#00cccc]/8 blur-3xl"
-          animate={{
-            scale: [1, 1.15, 1],
-            x: [0, 30, 0],
-            y: [0, -20, 0],
-          }}
-          transition={{
-            duration: 15,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 2,
-          }}
+          className="absolute bottom-1/4 left-1/4 w-80 h-80 rounded-full bg-primary/8 blur-3xl"
+          animate={{ scale: [1.2, 1, 1.2], opacity: [0.2, 0.4, 0.2] }}
+          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
         />
-        {/* خطوط متوهجة */}
-        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#008080]/30 to-transparent" />
-        <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#008080]/20 to-transparent" />
       </div>
+
+      {/* Top Border Accent */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
@@ -168,6 +228,7 @@ export default function Team() {
               transition={{ delay: index * 0.1, duration: 0.6 }}
               viewport={{ once: true, margin: "-50px" }}
               className="group relative aspect-[3/4] rounded-2xl shadow-2xl hover:shadow-[0_20px_60px_rgba(0,128,128,0.3)] transition-all duration-500 overflow-hidden border border-[#008080]/20 hover:border-[#008080]/50 cursor-pointer"
+              onClick={() => handleMemberClick(member)}
             >
               {/* صورة العضو - تأخذ المساحة الكاملة */}
               <div className="absolute inset-0 overflow-hidden bg-gradient-to-br from-[#008080]/20 to-[#008080]/10">
@@ -175,7 +236,7 @@ export default function Team() {
                   <img
                     src={member.photo}
                     alt={member.fullName}
-                    className="w-full h-full object-cover transition-all duration-500 ease-out grayscale group-hover:grayscale-0 group-hover:scale-110 group-hover:brightness-110"
+                    className="w-full h-full object-cover transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-110 grayscale group-hover:grayscale-0"
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center transition-all duration-500 ease-out group-hover:scale-110">
@@ -186,166 +247,49 @@ export default function Team() {
                 )}
               </div>
 
-              {/* Overlay داكن - يظهر عند الـ Hover */}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0a0e27]/95 via-[#0a0e27]/80 to-[#0a0e27]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-              {/* خط علوي متوهج */}
-              <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[#008080] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-              {/* Fun Fact - يظهر في الأعلى بشكل بارز ومميز */}
-              {member.funFact && (
-                <div className="absolute top-4 left-4 right-4 z-20 opacity-0 group-hover:opacity-100 transform translate-y-[-30px] group-hover:translate-y-0 transition-all duration-700 delay-100 ease-out">
-                  <div className="relative bg-gradient-to-br from-[#00cccc] via-[#008080] to-[#00cccc] backdrop-blur-xl rounded-2xl px-5 py-4 shadow-[0_10px_40px_rgba(0,204,204,0.4)] border-2 border-[#00e6e6]/60 overflow-hidden">
-                    {/* تأثير متوهج متحرك */}
-                    <motion.div
-                      animate={{
-                        background: [
-                          "linear-gradient(90deg, rgba(0,204,204,0.3) 0%, rgba(0,128,128,0.4) 50%, rgba(0,204,204,0.3) 100%)",
-                          "linear-gradient(90deg, rgba(0,128,128,0.4) 0%, rgba(0,204,204,0.3) 50%, rgba(0,128,128,0.4) 100%)",
-                          "linear-gradient(90deg, rgba(0,204,204,0.3) 0%, rgba(0,128,128,0.4) 50%, rgba(0,204,204,0.3) 100%)",
-                        ],
-                      }}
-                      transition={{
-                        duration: 3,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                      }}
-                      className="absolute inset-0 rounded-2xl"
-                    />
-
-                    {/* محتوى */}
-                    <div className="relative flex items-center gap-3">
-                      {/* أيقونة متوهجة */}
-                      <motion.div
-                        animate={{
-                          rotate: [0, 10, -10, 0],
-                          scale: [1, 1.1, 1],
-                        }}
-                        transition={{
-                          duration: 2,
-                          repeat: Infinity,
-                          ease: "easeInOut",
-                        }}
-                        className="w-10 h-10 rounded-full bg-white/30 flex items-center justify-center backdrop-blur-sm border-2 border-white/40 shadow-lg flex-shrink-0"
-                      >
-                        <span className="text-2xl">✨</span>
-                      </motion.div>
-
-                      {/* النص */}
-                      <p className="text-white font-bold text-base flex-1 text-center leading-relaxed drop-shadow-lg">
-                        {member.funFact}
-                      </p>
-                    </div>
-
-                    {/* خطوط متوهجة في الخلفية */}
-                    <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/50 to-transparent" />
-                    <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
-                  </div>
-                </div>
-              )}
+              {/* Overlay خفيف - يظهر عند الـ Hover */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#1d1d1d]/30 via-[#1d1d1d]/20 to-[#1d1d1d]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
               {/* معلومات العضو - Overlay */}
               <div className="absolute inset-0 flex flex-col justify-end p-6 opacity-0 group-hover:opacity-100 transition-all duration-500 z-10">
                 {/* الاسم والدور */}
                 <div className="mb-4 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 delay-75">
-                  <h3 className="text-xl font-bold text-white mb-1 group-hover:text-[#00cccc] transition-colors duration-300">
+                  <h3 className="text-xl font-bold text-white mb-2 transition-colors duration-300">
                     {member.fullName}
                   </h3>
-                  <p className="text-[#00cccc] font-medium group-hover:text-[#00e6e6] transition-colors duration-300">
+                  <p className="text-white font-medium transition-colors duration-300 text-left mb-3">
                     {member.role}
                   </p>
-                </div>
 
-                {/* روابط التواصل */}
-                {(member.linkedinUrl ||
-                  member.githubUrl ||
-                  member.twitterUrl ||
-                  member.websiteUrl ||
-                  member.email) && (
-                  <div className="flex items-center justify-center gap-3 mb-4 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 delay-100">
-                    {member.linkedinUrl && (
-                      <a
-                        href={member.linkedinUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md hover:bg-[#008080] hover:text-white flex items-center justify-center transition-all duration-300 text-white transform hover:scale-110 hover:shadow-lg hover:shadow-[#008080]/50 border border-white/20 hover:border-[#008080]"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <FiLinkedin className="text-lg" />
-                      </a>
-                    )}
-                    {member.githubUrl && (
-                      <a
-                        href={member.githubUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md hover:bg-gray-800 hover:text-white flex items-center justify-center transition-all duration-300 text-white transform hover:scale-110 hover:shadow-lg border border-white/20 hover:border-gray-600"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <FiGithub className="text-lg" />
-                      </a>
-                    )}
-                    {member.twitterUrl && (
-                      <a
-                        href={member.twitterUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md hover:bg-blue-500 hover:text-white flex items-center justify-center transition-all duration-300 text-white transform hover:scale-110 hover:shadow-lg hover:shadow-blue-500/50 border border-white/20 hover:border-blue-500"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <FiTwitter className="text-lg" />
-                      </a>
-                    )}
-                    {member.websiteUrl && (
-                      <a
-                        href={member.websiteUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md hover:bg-[#008080] hover:text-white flex items-center justify-center transition-all duration-300 text-white transform hover:scale-110 hover:shadow-lg hover:shadow-[#008080]/50 border border-white/20 hover:border-[#008080]"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <FiGlobe className="text-lg" />
-                      </a>
-                    )}
-                    {member.email && (
-                      <a
-                        href={`mailto:${member.email}`}
-                        className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md hover:bg-[#008080] hover:text-white flex items-center justify-center transition-all duration-300 text-white transform hover:scale-110 hover:shadow-lg hover:shadow-[#008080]/50 border border-white/20 hover:border-[#008080]"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <FiMail className="text-lg" />
-                      </a>
-                    )}
-                  </div>
-                )}
-
-                {/* التخصصات */}
-                {member.specializations &&
-                  member.specializations.length > 0 && (
-                    <div className="flex flex-wrap gap-2 justify-center transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 delay-125">
-                      {member.specializations.slice(0, 4).map((spec, i) => (
-                        <span
-                          key={i}
-                          className="inline-block px-3 py-1 bg-white/10 backdrop-blur-md text-white text-xs font-medium rounded-full border border-white/20"
-                        >
-                          {spec}
-                        </span>
-                      ))}
-                      {member.specializations.length > 4 && (
-                        <span className="inline-block px-3 py-1 bg-white/10 backdrop-blur-md text-white text-xs font-medium rounded-full border border-white/20">
-                          +{member.specializations.length - 4}
-                        </span>
-                      )}
+                  {/* Fun Fact - في الأسفل مع الاسم والوظيفة */}
+                  {member.funFact && (
+                    <div className="bg-gradient-to-r from-[#00cccc]/20 to-[#008080]/20 backdrop-blur-sm rounded-xl px-4 py-3 border border-[#00cccc]/30">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xl">✨</span>
+                        <p className="text-white font-medium text-sm leading-relaxed">
+                          {member.funFact}
+                        </p>
+                      </div>
                     </div>
                   )}
+                </div>
               </div>
-
-              {/* تأثير متوهج عند الـ Hover */}
-              <div className="absolute inset-0 bg-gradient-to-br from-[#008080]/0 via-[#008080]/0 to-[#008080]/0 group-hover:from-[#008080]/10 group-hover:via-[#008080]/5 group-hover:to-[#008080]/10 transition-all duration-500 rounded-2xl pointer-events-none" />
             </motion.div>
           ))}
         </div>
       </div>
+
+      {/* Dialog لتفاصيل العضو */}
+      {selectedMember && (
+        <TeamMemberDialog
+          member={selectedMember}
+          isOpen={isDialogOpen}
+          onClose={() => {
+            setIsDialogOpen(false);
+            setSelectedMember(null);
+          }}
+        />
+      )}
     </section>
   );
 }

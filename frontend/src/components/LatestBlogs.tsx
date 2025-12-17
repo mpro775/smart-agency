@@ -29,13 +29,83 @@ export default function LatestBlogs() {
     fetchBlogs();
   }, []);
 
-  const formatDate = (dateString?: string) => {
+  const getRelativeTime = (dateString?: string) => {
     if (!dateString) return "";
-    return new Date(dateString).toLocaleDateString("ar-SA", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
+
+    const now = new Date();
+    const date = new Date(dateString);
+    const diffInMs = now.getTime() - date.getTime();
+    const diffInSeconds = Math.floor(diffInMs / 1000);
+    const diffInMinutes = Math.floor(diffInSeconds / 60);
+    const diffInHours = Math.floor(diffInMinutes / 60);
+    const diffInDays = Math.floor(diffInHours / 24);
+    const diffInWeeks = Math.floor(diffInDays / 7);
+    const diffInMonths = Math.floor(diffInDays / 30);
+    const diffInYears = Math.floor(diffInDays / 365);
+
+    if (diffInSeconds < 60) {
+      return "منذ لحظات";
+    } else if (diffInMinutes < 60) {
+      if (diffInMinutes === 1) {
+        return "منذ دقيقة";
+      } else if (diffInMinutes === 2) {
+        return "منذ دقيقتين";
+      } else if (diffInMinutes <= 10) {
+        return `منذ ${diffInMinutes} دقائق`;
+      } else {
+        return `منذ ${diffInMinutes} دقيقة`;
+      }
+    } else if (diffInHours < 24) {
+      if (diffInHours === 1) {
+        return "منذ ساعة";
+      } else if (diffInHours === 2) {
+        return "منذ ساعتين";
+      } else if (diffInHours <= 10) {
+        return `منذ ${diffInHours} ساعات`;
+      } else {
+        return `منذ ${diffInHours} ساعة`;
+      }
+    } else if (diffInDays < 7) {
+      if (diffInDays === 1) {
+        return "منذ يوم";
+      } else if (diffInDays === 2) {
+        return "منذ يومين";
+      } else if (diffInDays <= 10) {
+        return `منذ ${diffInDays} أيام`;
+      } else {
+        return `منذ ${diffInDays} يوم`;
+      }
+    } else if (diffInWeeks < 4) {
+      if (diffInWeeks === 1) {
+        return "منذ أسبوع";
+      } else if (diffInWeeks === 2) {
+        return "منذ أسبوعين";
+      } else if (diffInWeeks <= 10) {
+        return `منذ ${diffInWeeks} أسابيع`;
+      } else {
+        return `منذ ${diffInWeeks} أسبوع`;
+      }
+    } else if (diffInMonths < 12) {
+      if (diffInMonths === 1) {
+        return "منذ شهر";
+      } else if (diffInMonths === 2) {
+        return "منذ شهرين";
+      } else if (diffInMonths <= 10) {
+        return `منذ ${diffInMonths} أشهر`;
+      } else {
+        return `منذ ${diffInMonths} شهر`;
+      }
+    } else {
+      if (diffInYears === 1) {
+        return "منذ سنة";
+      } else if (diffInYears === 2) {
+        return "منذ سنتين";
+      } else if (diffInYears <= 10) {
+        return `منذ ${diffInYears} سنوات`;
+      } else {
+        return `منذ ${diffInYears} سنة`;
+      }
+    }
   };
 
   const getAuthorName = (author?: any) => {
@@ -137,7 +207,9 @@ export default function LatestBlogs() {
                               {blog.publishedAt && (
                                 <div className="flex items-center gap-1">
                                   <FiCalendar className="w-4 h-4" />
-                                  <span>{formatDate(blog.publishedAt)}</span>
+                                  <span>
+                                    {getRelativeTime(blog.publishedAt)}
+                                  </span>
                                 </div>
                               )}
                               <div className="flex items-center gap-1">

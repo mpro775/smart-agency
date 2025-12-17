@@ -14,6 +14,8 @@ import {
   LogOut,
   ChevronRight,
   X,
+  Building2,
+  Info,
 } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 import { cn } from "@/lib/utils";
@@ -42,6 +44,8 @@ const menuItems = [
   { path: "/admin/hosting", label: "باقات الاستضافة", icon: Server },
   { path: "/admin/faqs", label: "الأسئلة الشائعة", icon: HelpCircle },
   { path: "/admin/services", label: "الخدمات", icon: Settings },
+  { path: "/admin/company-info", label: "المعلومات الرئيسية", icon: Building2 },
+  { path: "/admin/about", label: "حولنا", icon: Info },
 ];
 
 export function Sidebar({ isOpen, onClose }: SidebarProps) {

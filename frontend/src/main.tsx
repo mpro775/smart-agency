@@ -38,6 +38,8 @@ import {
   ServiceForm,
   ProjectCategoriesList,
   ProjectCategoryForm,
+  CompanyInfoForm,
+  AboutForm,
 } from "./admin/pages";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
@@ -149,6 +151,12 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                 path="project-categories/:id/edit"
                 element={<ProjectCategoryForm />}
               />
+
+              {/* Company Info */}
+              <Route path="company-info" element={<CompanyInfoForm />} />
+
+              {/* About */}
+              <Route path="about" element={<AboutForm />} />
             </Route>
           </Routes>
         </BrowserRouter>

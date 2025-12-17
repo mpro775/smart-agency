@@ -20,6 +20,8 @@ import { FaqsModule } from './faqs/faqs.module';
 import { ServicesModule } from './services/services.module';
 import { ProjectCategoriesModule } from './project-categories/project-categories.module';
 import { NewsletterModule } from './newsletter/newsletter.module';
+import { CompanyInfoModule } from './company-info/company-info.module';
+import { AboutModule } from './about/about.module';
 
 @Module({
   imports: [
@@ -67,6 +69,8 @@ import { NewsletterModule } from './newsletter/newsletter.module';
     ServicesModule,
     ProjectCategoriesModule,
     NewsletterModule,
+    CompanyInfoModule,
+    AboutModule,
   ],
   controllers: [AppController],
   providers: [AppService],

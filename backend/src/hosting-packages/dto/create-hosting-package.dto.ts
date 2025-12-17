@@ -193,6 +193,7 @@ export class CreateHostingPackageDto {
   @ApiPropertyOptional({
     description: 'Benefit hints for technical specs',
     type: 'object',
+    additionalProperties: { type: 'string' },
     example: {
       storage: '50GB (تكفي لحوالي 10,000 زائر شهرياً)',
       ram: '2GB (مناسب للمواقع متوسطة الحجم)',

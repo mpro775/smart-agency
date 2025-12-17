@@ -5,8 +5,8 @@ import { SubscribeNewsletterDto, NewsletterResponseDto } from './dto/subscribe-n
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
-import { UserRole } from '../auth/schemas/user.schema';
-import { Public } from '../common/decorators/public.decorator';
+import { UserRole } from '../users/schemas/user.schema';
+import { Public } from '../auth/decorators/public.decorator';
 import { ResponseMessage } from '../common/decorators/response-message.decorator';
 
 @ApiTags('Newsletter')

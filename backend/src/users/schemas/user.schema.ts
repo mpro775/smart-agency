@@ -1,6 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { UserRole } from '../../auth/dto/register.dto';
+
+export enum UserRole {
+  ADMIN = 'admin',
+  EDITOR = 'editor',
+}
 
 export type UserDocument = User & Document;
 
@@ -30,4 +34,3 @@ export const UserSchema = SchemaFactory.createForClass(User);
 // Index for faster queries
 UserSchema.index({ email: 1 });
 UserSchema.index({ role: 1 });
-

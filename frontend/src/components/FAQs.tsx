@@ -270,13 +270,13 @@ export default function FAQs() {
           )}
         </motion.div>
 
-        {/* الفلاتر */}
+        {/* الفلاتر - تظهر فقط على الشاشات الصغيرة */}
         {categories.length > 0 && (
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="flex flex-wrap justify-center gap-3 mb-12"
+            className="flex flex-wrap justify-center gap-3 mb-12 lg:hidden"
           >
             <motion.button
               whileHover={{ scale: 1.05 }}
@@ -310,6 +310,64 @@ export default function FAQs() {
 
         {/* تخطيط القائمة مع الشريط الجانبي على الشاشات الكبيرة */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          {/* الشريط الجانبي للفئات - مخفي على الشاشات الصغيرة */}
+          {categories.length > 0 && (
+            <div className="hidden lg:block lg:col-span-4">
+              <div className="sticky top-20">
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.3, duration: 0.6 }}
+                  viewport={{ once: true }}
+                  className="bg-white rounded-xl shadow-lg border border-gray-100 p-6"
+                >
+                  <h3 className="text-lg font-bold text-gray-900 mb-4 text-right">
+                    الفئات
+                  </h3>
+                  <div className="space-y-2">
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() => setSelectedCategory("all")}
+                      className={`w-full text-right px-3 py-2 rounded-lg transition-all duration-300 ${
+                        selectedCategory === "all"
+                          ? "bg-primary text-white shadow-md"
+                          : "text-gray-700 hover:bg-gray-100"
+                      }`}
+                    >
+                      الكل
+                    </motion.button>
+                    {categories.map((category) => (
+                      <motion.button
+                        key={category}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={() => setSelectedCategory(category)}
+                        className={`w-full text-right px-3 py-2 rounded-lg transition-all duration-300 ${
+                          selectedCategory === category
+                            ? "bg-primary text-white shadow-md"
+                            : "text-gray-700 hover:bg-gray-100"
+                        }`}
+                      >
+                        {category}
+                      </motion.button>
+                    ))}
+                  </div>
+                  {searchQuery && (
+                    <div className="mt-4 pt-4 border-t border-gray-200">
+                      <p className="text-sm text-gray-600">
+                        تم العثور على {filteredFaqs.length} نتيجة
+                        {searchQuery && searchQuery.length > 0
+                          ? ` لـ "${searchQuery}"`
+                          : ""}
+                      </p>
+                    </div>
+                  )}
+                </motion.div>
+              </div>
+            </div>
+          )}
+
           {/* قائمة الأسئلة */}
           <div className="lg:col-span-8 space-y-4">
             <AnimatePresence>
@@ -341,14 +399,16 @@ export default function FAQs() {
                     </div>
                     <div className="flex items-center gap-4 flex-1">
                       <div className="flex-1">
-                        <h3 className="font-semibold text-gray-900 text-lg mb-1">
-                          {faq.question}
-                        </h3>
-                        {faq.category && (
-                          <span className="text-xs text-gray-500">
-                            {faq.category}
-                          </span>
-                        )}
+                        <div className="flex items-center gap-3 flex-wrap">
+                          <h3 className="font-semibold text-gray-900 text-lg">
+                            {faq.question}
+                          </h3>
+                          {faq.category && (
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
+                              {faq.category}
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </div>
                     <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0 mr-4">
@@ -429,64 +489,6 @@ export default function FAQs() {
               </div>
             )}
           </div>
-
-          {/* الشريط الجانبي للفئات - مخفي على الشاشات الصغيرة */}
-          {categories.length > 0 && (
-            <div className="hidden lg:block lg:col-span-4">
-              <div className="sticky top-20">
-                <motion.div
-                  initial={{ opacity: 0, x: 20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.3, duration: 0.6 }}
-                  viewport={{ once: true }}
-                  className="bg-white rounded-xl shadow-lg border border-gray-100 p-6"
-                >
-                  <h3 className="text-lg font-bold text-gray-900 mb-4">
-                    الفئات
-                  </h3>
-                  <div className="space-y-2">
-                    <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      onClick={() => setSelectedCategory("all")}
-                      className={`w-full text-left px-3 py-2 rounded-lg transition-all duration-300 ${
-                        selectedCategory === "all"
-                          ? "bg-primary text-white shadow-md"
-                          : "text-gray-700 hover:bg-gray-100"
-                      }`}
-                    >
-                      الكل
-                    </motion.button>
-                    {categories.map((category) => (
-                      <motion.button
-                        key={category}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                        onClick={() => setSelectedCategory(category)}
-                        className={`w-full text-left px-3 py-2 rounded-lg transition-all duration-300 ${
-                          selectedCategory === category
-                            ? "bg-primary text-white shadow-md"
-                            : "text-gray-700 hover:bg-gray-100"
-                        }`}
-                      >
-                        {category}
-                      </motion.button>
-                    ))}
-                  </div>
-                  {searchQuery && (
-                    <div className="mt-4 pt-4 border-t border-gray-200">
-                      <p className="text-sm text-gray-600">
-                        تم العثور على {filteredFaqs.length} نتيجة
-                        {searchQuery && searchQuery.length > 0
-                          ? ` لـ "${searchQuery}"`
-                          : ""}
-                      </p>
-                    </div>
-                  )}
-                </motion.div>
-              </div>
-            </div>
-          )}
         </div>
       </div>
     </section>
