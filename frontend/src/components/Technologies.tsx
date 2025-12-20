@@ -50,17 +50,9 @@ export default function Technologies() {
     if (allTechnologies.length === 0) return { row1: [], row2: [] };
     const shuffled = [...allTechnologies].sort(() => Math.random() - 0.5);
     const mid = Math.ceil(shuffled.length / 2);
-    // تكرار العناصر 3 مرات للحركة اللانهائية السلسة
-    const row1 = [
-      ...shuffled.slice(0, mid),
-      ...shuffled.slice(0, mid),
-      ...shuffled.slice(0, mid),
-    ];
-    const row2 = [
-      ...shuffled.slice(mid),
-      ...shuffled.slice(mid),
-      ...shuffled.slice(mid),
-    ];
+    // تقسيم العناصر فقط - المضاعفة تحدث في الـ render
+    const row1 = shuffled.slice(0, mid);
+    const row2 = shuffled.slice(mid);
     return { row1, row2 };
   }, [allTechnologies]);
 
@@ -270,122 +262,195 @@ export default function Technologies() {
 
           {/* عرض التقنيات - Marquee أو Grid */}
           <AnimatePresence mode="wait">
-            {viewMode === "marquee" ? (
+              {viewMode === "marquee" ? (
               <motion.div
                 key="marquee"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.4 }}
-                className="space-y-6"
+                className="space-y-8"
               >
-                {/* الصف الأول - يتحرك لليمين */}
-                <div className="relative overflow-hidden py-4">
-                  <div className="absolute inset-0 bg-gradient-to-r from-white via-transparent to-white z-10 pointer-events-none" />
-                  <motion.div
-                    className="flex gap-8"
-                    animate={{
-                      x:
-                        marqueeRows.row1.length > 0
-                          ? [0, -(marqueeRows.row1.length / 3) * 128]
-                          : 0,
-                    }}
-                    transition={{
-                      x: {
-                        repeat: Infinity,
-                        repeatType: "loop",
-                        duration:
-                          marqueeRows.row1.length > 0
-                            ? (marqueeRows.row1.length / 3) * 2
-                            : 50,
-                        ease: "linear",
-                      },
-                    }}
-                  >
-                    {marqueeRows.row1.map((tech, index) => (
-                      <Tooltip key={`row1-${tech._id}-${index}`}>
-                        <TooltipTrigger asChild>
-                          <motion.div
-                            whileHover={{ scale: 1.1, y: -5 }}
-                            className="flex-shrink-0 w-24 h-24 bg-white/80 backdrop-blur-xl rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 p-4 flex items-center justify-center border border-white/50 hover:border-[#008080]/30 cursor-pointer group"
-                            dir="rtl"
-                          >
-                            {tech.icon ? (
-                              <img
-                                src={tech.icon}
-                                alt={tech.name}
-                                className="w-full h-full object-contain"
-                              />
-                            ) : (
-                              <div className="w-full h-full rounded-xl bg-gradient-to-br from-[#008080]/10 to-[#008080]/5 flex items-center justify-center">
-                                <Cpu className="w-10 h-10 text-[#008080]" />
-                              </div>
-                            )}
-                          </motion.div>
-                        </TooltipTrigger>
-                        {tech.tooltip && (
-                          <TooltipContent dir="rtl">
-                            <p className="text-white">{tech.tooltip}</p>
-                          </TooltipContent>
-                        )}
-                      </Tooltip>
-                    ))}
-                  </motion.div>
+                {/* الصف الأول - يتحرك لليسار */}
+                <div className="relative overflow-hidden py-4" dir="ltr">
+                  {/* تدرجات لونية على الجوانب للإخفاء الجمالي */}
+                  <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-[#f9fafb] to-transparent z-10 pointer-events-none" />
+                  <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-[#f9fafb] to-transparent z-10 pointer-events-none" />
+                  
+                  {/* الحاوية الداخلية للشريطين */}
+                  <div className="flex animate-scroll-left shrink-0">
+                    {/* الشريط الأول (الأصلي) */}
+                    <div className="flex shrink-0 gap-6 py-4">
+                      {marqueeRows.row1.map((tech, index) => (
+                        <Tooltip key={`row1-original-${tech._id}-${index}`}>
+                          <TooltipTrigger asChild>
+                            <motion.div
+                              whileHover={{ scale: 1.1, y: -5 }}
+                              className="flex-shrink-0 w-24 h-24 bg-white/80 backdrop-blur-xl rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 p-4 flex items-center justify-center border border-white/50 hover:border-[#008080]/30 cursor-pointer group"
+                              dir="rtl"
+                            >
+                              {tech.icon ? (
+                                <img
+                                  src={tech.icon}
+                                  alt={tech.name}
+                                  className="w-full h-full object-contain"
+                                />
+                              ) : (
+                                <div className="w-full h-full rounded-xl bg-gradient-to-br from-[#008080]/10 to-[#008080]/5 flex items-center justify-center">
+                                  <Cpu className="w-10 h-10 text-[#008080]" />
+                                </div>
+                              )}
+                            </motion.div>
+                          </TooltipTrigger>
+                          {tech.tooltip && (
+                            <TooltipContent dir="rtl">
+                              <p className="text-white">{tech.tooltip}</p>
+                            </TooltipContent>
+                          )}
+                        </Tooltip>
+                      ))}
+                    </div>
+                    
+                    {/* الشريط الثاني (التوأم - لملء الفراغ فوراً) */}
+                    <div className="flex shrink-0 gap-6 py-4" aria-hidden="true">
+                      {marqueeRows.row1.map((tech, index) => (
+                        <Tooltip key={`row1-duplicate-${tech._id}-${index}`}>
+                          <TooltipTrigger asChild>
+                            <motion.div
+                              whileHover={{ scale: 1.1, y: -5 }}
+                              className="flex-shrink-0 w-24 h-24 bg-white/80 backdrop-blur-xl rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 p-4 flex items-center justify-center border border-white/50 hover:border-[#008080]/30 cursor-pointer group"
+                              dir="rtl"
+                            >
+                              {tech.icon ? (
+                                <img
+                                  src={tech.icon}
+                                  alt={tech.name}
+                                  className="w-full h-full object-contain"
+                                />
+                              ) : (
+                                <div className="w-full h-full rounded-xl bg-gradient-to-br from-[#008080]/10 to-[#008080]/5 flex items-center justify-center">
+                                  <Cpu className="w-10 h-10 text-[#008080]" />
+                                </div>
+                              )}
+                            </motion.div>
+                          </TooltipTrigger>
+                          {tech.tooltip && (
+                            <TooltipContent dir="rtl">
+                              <p className="text-white">{tech.tooltip}</p>
+                            </TooltipContent>
+                          )}
+                        </Tooltip>
+                      ))}
+                    </div>
+                  </div>
                 </div>
 
-                {/* الصف الثاني - يتحرك لليسار */}
-                <div className="relative overflow-hidden py-4">
-                  <div className="absolute inset-0 bg-gradient-to-l from-white via-transparent to-white z-10 pointer-events-none" />
-                  <motion.div
-                    className="flex gap-8"
-                    animate={{
-                      x:
-                        marqueeRows.row2.length > 0
-                          ? [0, (marqueeRows.row2.length / 3) * 128]
-                          : 0,
-                    }}
-                    transition={{
-                      x: {
-                        repeat: Infinity,
-                        repeatType: "loop",
-                        duration:
-                          marqueeRows.row2.length > 0
-                            ? (marqueeRows.row2.length / 3) * 2
-                            : 50,
-                        ease: "linear",
-                      },
-                    }}
-                  >
-                    {marqueeRows.row2.map((tech, index) => (
-                      <Tooltip key={`row2-${tech._id}-${index}`}>
-                        <TooltipTrigger asChild>
-                          <motion.div
-                            whileHover={{ scale: 1.1, y: -5 }}
-                            className="flex-shrink-0 w-24 h-24 bg-white/80 backdrop-blur-xl rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 p-4 flex items-center justify-center border border-white/50 hover:border-[#008080]/30 cursor-pointer group"
-                            dir="rtl"
-                          >
-                            {tech.icon ? (
-                              <img
-                                src={tech.icon}
-                                alt={tech.name}
-                                className="w-full h-full object-contain"
-                              />
-                            ) : (
-                              <div className="w-full h-full rounded-xl bg-gradient-to-br from-[#008080]/10 to-[#008080]/5 flex items-center justify-center">
-                                <Cpu className="w-10 h-10 text-[#008080]" />
-                              </div>
-                            )}
-                          </motion.div>
-                        </TooltipTrigger>
-                        {tech.tooltip && (
-                          <TooltipContent dir="rtl">
-                            <p className="text-white">{tech.tooltip}</p>
-                          </TooltipContent>
-                        )}
-                      </Tooltip>
-                    ))}
-                  </motion.div>
+                {/* الصف الثاني - يتحرك لليمين */}
+                <div className="relative overflow-hidden py-4" dir="ltr">
+                  {/* تدرجات لونية على الجوانب للإخفاء الجمالي */}
+                  <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-[#f9fafb] to-transparent z-10 pointer-events-none" />
+                  <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-[#f9fafb] to-transparent z-10 pointer-events-none" />
+                  
+                  {/* الحاوية الداخلية للشريطين */}
+                  <div className="flex animate-scroll-right shrink-0">
+                    {/* الشريط الأول (الأصلي) */}
+                    <div className="flex shrink-0 gap-6 py-4">
+                      {marqueeRows.row2.map((tech, index) => (
+                        <Tooltip key={`row2-original-${tech._id}-${index}`}>
+                          <TooltipTrigger asChild>
+                            <motion.div
+                              whileHover={{ scale: 1.1, y: -5 }}
+                              className="flex-shrink-0 w-24 h-24 bg-white/80 backdrop-blur-xl rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 p-4 flex items-center justify-center border border-white/50 hover:border-[#008080]/30 cursor-pointer group"
+                              dir="rtl"
+                            >
+                              {tech.icon ? (
+                                <img
+                                  src={tech.icon}
+                                  alt={tech.name}
+                                  className="w-full h-full object-contain"
+                                />
+                              ) : (
+                                <div className="w-full h-full rounded-xl bg-gradient-to-br from-[#008080]/10 to-[#008080]/5 flex items-center justify-center">
+                                  <Cpu className="w-10 h-10 text-[#008080]" />
+                                </div>
+                              )}
+                            </motion.div>
+                          </TooltipTrigger>
+                          {tech.tooltip && (
+                            <TooltipContent dir="rtl">
+                              <p className="text-white">{tech.tooltip}</p>
+                            </TooltipContent>
+                          )}
+                        </Tooltip>
+                      ))}
+                    </div>
+                    
+                    {/* الشريط الثاني (التوأم - لملء الفراغ فوراً) */}
+                    <div className="flex shrink-0 gap-6 py-4" aria-hidden="true">
+                      {marqueeRows.row2.map((tech, index) => (
+                        <Tooltip key={`row2-duplicate-${tech._id}-${index}`}>
+                          <TooltipTrigger asChild>
+                            <motion.div
+                              whileHover={{ scale: 1.1, y: -5 }}
+                              className="flex-shrink-0 w-24 h-24 bg-white/80 backdrop-blur-xl rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 p-4 flex items-center justify-center border border-white/50 hover:border-[#008080]/30 cursor-pointer group"
+                              dir="rtl"
+                            >
+                              {tech.icon ? (
+                                <img
+                                  src={tech.icon}
+                                  alt={tech.name}
+                                  className="w-full h-full object-contain"
+                                />
+                              ) : (
+                                <div className="w-full h-full rounded-xl bg-gradient-to-br from-[#008080]/10 to-[#008080]/5 flex items-center justify-center">
+                                  <Cpu className="w-10 h-10 text-[#008080]" />
+                                </div>
+                              )}
+                            </motion.div>
+                          </TooltipTrigger>
+                          {tech.tooltip && (
+                            <TooltipContent dir="rtl">
+                              <p className="text-white">{tech.tooltip}</p>
+                            </TooltipContent>
+                          )}
+                        </Tooltip>
+                      ))}
+                    </div>
+                  </div>
                 </div>
+
+                {/* CSS Keyframes للحركة اللانهائية السلسة */}
+                <style>{`
+                  @keyframes scroll-left {
+                    0% {
+                      transform: translateX(0);
+                    }
+                    100% {
+                      transform: translateX(-50%);
+                    }
+                  }
+                  
+                  @keyframes scroll-right {
+                    0% {
+                      transform: translateX(-50%);
+                    }
+                    100% {
+                      transform: translateX(0);
+                    }
+                  }
+                  
+                  .animate-scroll-left {
+                    animation: scroll-left 40s linear infinite;
+                    display: flex;
+                    flex-shrink: 0;
+                  }
+                  
+                  .animate-scroll-right {
+                    animation: scroll-right 45s linear infinite;
+                    display: flex;
+                    flex-shrink: 0;
+                  }
+                `}</style>
               </motion.div>
             ) : (
               <motion.div

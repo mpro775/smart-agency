@@ -10,6 +10,7 @@ import BlogPage from "./pages/blog";
 import BlogDetailsPage from "./pages/blogDetails";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import CustomCursor from "./components/CustomCursor";
 import ScrollToTop from "./components/ScrollToTop";
 import BotLanding from "./pages/bot";
 
@@ -47,6 +48,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <QueryProvider>
       <AuthProvider>
         <BrowserRouter>
+          {/* Custom Cursor - Global for all pages */}
+          <CustomCursor />
+          
           <ScrollToTop />
           <Routes>
             {/* Public Routes */}

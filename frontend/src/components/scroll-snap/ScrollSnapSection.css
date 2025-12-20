@@ -1,0 +1,126 @@
+/* 
+ * Professional Scroll Snap Section Styles
+ * Allows internal scrolling with beautiful custom scrollbar
+ */
+
+.scroll-snap-section {
+  /* Core Layout */
+  min-height: 100vh;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  
+  /* Allow internal scrolling with smooth behavior */
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  
+  /* Padding for content spacing */
+  box-sizing: border-box;
+  
+  /* Ensure proper stacking */
+  position: relative;
+  
+  /* Smooth transitions */
+  transition: all 0.3s ease;
+}
+
+/* Custom Scrollbar - Professional & Minimal */
+.scroll-snap-section::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scroll-snap-section::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scroll-snap-section::-webkit-scrollbar-thumb {
+  background: rgba(0, 128, 128, 0.3);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.scroll-snap-section::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 128, 128, 0.6);
+}
+
+/* Firefox Scrollbar */
+.scroll-snap-section {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 128, 128, 0.3) transparent;
+}
+
+/* Fade effect at top and bottom to indicate scrollable content */
+.scroll-snap-section::before,
+.scroll-snap-section::after {
+  content: '';
+  position: sticky;
+  left: 0;
+  right: 0;
+  height: 60px;
+  pointer-events: none;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.scroll-snap-section::before {
+  top: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(26, 32, 44, 1) 0%,
+    rgba(26, 32, 44, 0.8) 50%,
+    rgba(26, 32, 44, 0) 100%
+  );
+}
+
+.scroll-snap-section::after {
+  bottom: 0;
+  background: linear-gradient(
+    to top,
+    rgba(26, 32, 44, 1) 0%,
+    rgba(26, 32, 44, 0.8) 50%,
+    rgba(26, 32, 44, 0) 100%
+  );
+}
+
+/* Show fade indicators when section is scrollable and being scrolled */
+.scroll-snap-section.has-scroll::before,
+.scroll-snap-section.has-scroll::after {
+  opacity: 1;
+}
+
+/* Responsive padding adjustments */
+@media (max-width: 1024px) {
+  .scroll-snap-section {
+    padding: 2rem 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .scroll-snap-section {
+    padding: 1.5rem 1rem;
+    /* Remove scroll snap on mobile for better UX */
+    scroll-snap-align: none;
+    scroll-snap-stop: normal;
+  }
+  
+  /* Hide scrollbar on mobile for cleaner look */
+  .scroll-snap-section::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .scroll-snap-section {
+    scrollbar-width: none;
+  }
+}
+
+/* Smooth scroll animation for programmatic scrolling */
+.scroll-snap-section.scrolling {
+  scroll-behavior: smooth;
+}
+
+/* Accessibility: Focus visible styles */
+.scroll-snap-section:focus-visible {
+  outline: 2px solid rgba(0, 128, 128, 0.5);
+  outline-offset: -2px;
+}

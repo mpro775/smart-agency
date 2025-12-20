@@ -46,3 +46,115 @@ body {
 .border-muted {
   border-color: var(--color-muted);
 }
+
+/* =====================================================
+   SCROLL SNAPPING - Full Page Scroll Effect
+   ===================================================== */
+
+/* Main scroll container - Desktop only */
+@media (min-width: 1024px) {
+  .scroll-snap-container {
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
+    overscroll-behavior-y: contain;
+  }
+
+  .scroll-snap-section {
+    min-height: 100vh;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    position: relative;
+  }
+
+  /* Hide default scrollbar on scroll snap container */
+  .scroll-snap-container::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scroll-snap-container {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* Mobile fallback - normal scrolling */
+@media (max-width: 1023px) {
+  .scroll-snap-container {
+    height: auto;
+    overflow: visible;
+    scroll-snap-type: none;
+  }
+
+  .scroll-snap-section {
+    min-height: auto;
+    scroll-snap-align: none;
+  }
+}
+
+/* Smooth reveal animations for scroll snap sections */
+.scroll-snap-section > * {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Staggered animation delays for child elements */
+.scroll-snap-section > *:nth-child(1) { animation-delay: 0.1s; }
+.scroll-snap-section > *:nth-child(2) { animation-delay: 0.2s; }
+.scroll-snap-section > *:nth-child(3) { animation-delay: 0.3s; }
+.scroll-snap-section > *:nth-child(4) { animation-delay: 0.4s; }
+.scroll-snap-section > *:nth-child(5) { animation-delay: 0.5s; }
+
+/* Premium Gradient Animation */
+@keyframes gradient-x {
+  0%, 100% {
+    background-size: 200% 200%;
+    background-position: left center;
+  }
+  50% {
+    background-size: 200% 200%;
+    background-position: right center;
+  }
+}
+
+.animate-gradient-x {
+  animation: gradient-x 3s ease infinite;
+}
+
+/* Blob Animation for Background */
+@keyframes blob {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+}
+
+.animate-blob {
+  animation: blob 7s infinite;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
+

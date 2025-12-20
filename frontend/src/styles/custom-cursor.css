@@ -1,0 +1,133 @@
+/*
+ * Custom Cursor with Brand Colors
+ * Arrow cursor with company identity colors using SVG
+ */
+
+/* Default cursor with brand colors */
+* {
+  cursor: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5 3L5 21L12 16L16.5 21L19 19L14 13L21 13L5 3Z' fill='%23008080' stroke='%23006666' stroke-width='1'/%3E%3C/svg%3E") 5 5, default;
+}
+
+/* Pointer cursor for interactive elements */
+a, button, .cursor-pointer,
+a *, button *,
+[role="button"],
+input[type="submit"],
+input[type="button"],
+select {
+  cursor: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M8 3L8 13L11 11L14 18L17 17L14 10L18 10L8 3Z' fill='%23008080' stroke='%23006666' stroke-width='1.5'/%3E%3Cpath d='M8 3L8 13L11 11L14 18L17 17L14 10L18 10L8 3Z' fill='%2300b3b3' opacity='0.5'/%3E%3C/svg%3E") 8 3, pointer !important;
+}
+
+/* Text cursor */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+input[type="tel"],
+input[type="url"],
+input[type="number"],
+textarea,
+[contenteditable="true"] {
+  cursor: url("data:image/svg+xml,%3Csvg width='20' height='24' viewBox='0 0 20 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 2L10 22M7 2H13M7 22H13' stroke='%23008080' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") 10 12, text !important;
+}
+
+/* Disabled cursor */
+:disabled,
+[disabled],
+[aria-disabled="true"] {
+  cursor: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5 3L5 21L12 16L16.5 21L19 19L14 13L21 13L5 3Z' fill='%23999999' stroke='%23666666' stroke-width='1'/%3E%3Ccircle cx='12' cy='12' r='10' stroke='%23ff0000' stroke-width='2' fill='none'/%3E%3Cpath d='M6 6L18 18' stroke='%23ff0000' stroke-width='2'/%3E%3C/svg%3E") 5 5, not-allowed !important;
+}
+
+/* Grab cursor */
+[draggable="true"] {
+  cursor: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M9 5V11M12 3V11M15 5V11M9 14C9 14 9 21 12 21C15 21 15 14 15 14V11H9V14Z' stroke='%23008080' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' fill='%2300b3b3' fill-opacity='0.3'/%3E%3C/svg%3E") 12 12, grab !important;
+}
+
+[draggable="true"]:active {
+  cursor: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M9 5V11M12 3V11M15 5V11M9 14C9 14 9 21 12 21C15 21 15 14 15 14V11H9V14Z' stroke='%23006666' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round' fill='%23008080' fill-opacity='0.5'/%3E%3C/svg%3E") 12 12, grabbing !important;
+}
+
+/* Custom styled cursor dot for extra visual feedback */
+.custom-cursor {
+  width: 8px;
+  height: 8px;
+  background: var(--color-primary);
+  border-radius: 50%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  transition: width 0.2s ease, height 0.2s ease, opacity 0.2s ease;
+  opacity: 0.5;
+  box-shadow: 0 0 8px rgba(0, 128, 128, 0.6);
+}
+
+/* Cursor follower - subtle ring */
+.custom-cursor-follower {
+  width: 30px;
+  height: 30px;
+  border: 2px solid var(--color-primary);
+  border-radius: 50%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 99998;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s ease, height 0.3s ease, opacity 0.3s ease;
+  opacity: 0.3;
+}
+
+/* Hover state */
+body.cursor-hover .custom-cursor {
+  width: 10px;
+  height: 10px;
+  opacity: 0.7;
+  background: var(--color-primary-dark);
+}
+
+body.cursor-hover .custom-cursor-follower {
+  width: 40px;
+  height: 40px;
+  opacity: 0.5;
+  border-color: var(--color-primary-dark);
+}
+
+/* Click state */
+body.cursor-click .custom-cursor {
+  width: 6px;
+  height: 6px;
+  opacity: 0.9;
+}
+
+body.cursor-click .custom-cursor-follower {
+  width: 25px;
+  height: 25px;
+  opacity: 0.6;
+}
+
+/* Text selection state */
+body.cursor-text .custom-cursor {
+  opacity: 0.3;
+}
+
+body.cursor-text .custom-cursor-follower {
+  opacity: 0.15;
+}
+
+/* Hide on touch devices */
+@media (hover: none) and (pointer: coarse) {
+  .custom-cursor,
+  .custom-cursor-follower {
+    display: none !important;
+  }
+}
+
+/* Performance */
+.custom-cursor,
+.custom-cursor-follower {
+  will-change: transform;
+  backface-visibility: hidden;
+}

@@ -259,13 +259,122 @@ export default function Footer() {
 
         {/* المحتوى الرئيسي */}
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 mb-16">
-            {/* النشرة البريدية */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-10 mb-16">
+            {/* النبذة التعريفية + السوشيال ميديا - أكبر عمود */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7 }}
               viewport={{ once: true }}
+              className="lg:col-span-4"
+            >
+              <Link
+                to="/"
+                className="inline-flex items-center gap-3 mb-6 group"
+              >
+                <div className="relative">
+                  <motion.div
+                    className="absolute inset-0 bg-primary/20 rounded-xl blur-lg group-hover:blur-xl transition-all duration-300"
+                    animate={{ scale: [1, 1.1, 1] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  />
+                  <div className="relative px-4 py-2 rounded-xl bg-gradient-to-r from-primary to-primary-dark">
+                    <span className="text-xl font-black text-white">SMART</span>
+                  </div>
+                </div>
+                <span className="text-xl font-bold text-white group-hover:text-primary transition-colors duration-300">
+                  AGENCY
+                </span>
+              </Link>
+
+              <p className="text-gray-300 leading-relaxed text-sm mb-6">
+                نقدم حلولاً رقمية متكاملة تساعد عملك على النمو والازدهار في
+                العصر الرقمي، من خلال فريق من الخبراء المبدعين والمحترفين.
+              </p>
+
+              {/* السوشيال ميديا - تحت النبذة مباشرة */}
+              <div>
+                <h4 className="text-sm font-semibold text-gray-400 mb-4 uppercase tracking-wider">
+                  تابعنا على
+                </h4>
+                <div className="flex flex-wrap gap-3">
+                  {socialLinks.map((social, index) => (
+                    <motion.a
+                      key={index}
+                      href={social.href}
+                      aria-label={social.label}
+                      className="group relative w-12 h-12 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 flex items-center justify-center text-gray-400 transition-all duration-300 hover:border-white/30 overflow-hidden"
+                      whileHover={{ y: -3, scale: 1.1 }}
+                      whileTap={{ scale: 0.95 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      {/* Background color on hover */}
+                      <motion.div
+                        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                        style={{ backgroundColor: social.color }}
+                      />
+                      {/* Icon */}
+                      <span className="relative z-10 text-base group-hover:text-white transition-colors duration-300">
+                        {social.icon}
+                      </span>
+                      {/* Shine effect */}
+                      <motion.div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+                    </motion.a>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+
+            {/* معلومات التواصل */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.1 }}
+              viewport={{ once: true }}
+              className="lg:col-span-3"
+            >
+              <h3 className="text-lg font-bold mb-6 text-white relative inline-block">
+                تواصل معنا
+                <motion.span
+                  className="absolute bottom-0 right-0 w-full h-0.5 bg-primary origin-right"
+                  initial={{ scaleX: 0 }}
+                  whileInView={{ scaleX: 1 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                  viewport={{ once: true }}
+                />
+              </h3>
+              <div className="space-y-3">
+                {contactInfo.map((info, index) => (
+                  <motion.a
+                    key={index}
+                    href={info.link}
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
+                    viewport={{ once: true }}
+                    whileHover={{ x: -5 }}
+                    className="group flex items-start gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-primary/30 transition-all duration-300"
+                  >
+                    <div className="p-2 rounded-lg bg-primary/20 group-hover:bg-primary/30 border border-primary/30 group-hover:border-primary/50 transition-all duration-300 flex-shrink-0">
+                      <span className="text-primary text-base">
+                        {info.icon}
+                      </span>
+                    </div>
+                    <span className="text-gray-300 group-hover:text-white transition-colors duration-300 text-sm pt-1" dir={index === 1 ? "ltr" : "auto"}>
+                      {info.text}
+                    </span>
+                  </motion.a>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* النشرة البريدية */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.2 }}
+              viewport={{ once: true }}
+              className="lg:col-span-5"
             >
               <div className="flex items-center gap-3 mb-6">
                 <div className="p-2 rounded-xl bg-primary/20 border border-primary/30">
@@ -300,7 +409,7 @@ export default function Footer() {
                 </motion.div>
               ) : (
                 <>
-                  <p className="text-gray-300 mb-6 leading-relaxed text-sm max-w-md">
+                  <p className="text-gray-300 mb-6 leading-relaxed text-sm">
                     اشترك في نشرتنا البريدية ليصلك جديد التقنية وعروضنا الخاصة
                     مباشرة إلى بريدك الإلكتروني
                   </p>
@@ -361,124 +470,13 @@ export default function Footer() {
                 </>
               )}
             </motion.div>
-
-            {/* النبذة التعريفية */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.1 }}
-              viewport={{ once: true }}
-            >
-              <Link
-                to="/"
-                className="inline-flex items-center gap-3 mb-6 group"
-              >
-                <div className="relative">
-                  <motion.div
-                    className="absolute inset-0 bg-primary/20 rounded-xl blur-lg group-hover:blur-xl transition-all duration-300"
-                    animate={{ scale: [1, 1.1, 1] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                  />
-                  <div className="relative px-4 py-2 rounded-xl bg-gradient-to-r from-primary to-primary-dark">
-                    <span className="text-xl font-black text-white">SMART</span>
-                  </div>
-                </div>
-                <span className="text-xl font-bold text-white group-hover:text-primary transition-colors duration-300">
-                  AGENCY
-                </span>
-              </Link>
-
-              <p className="text-gray-300 leading-relaxed text-sm">
-                نقدم حلولاً رقمية متكاملة تساعد عملك على النمو والازدهار في
-                العصر الرقمي، من خلال فريق من الخبراء المبدعين والمحترفين.
-              </p>
-            </motion.div>
-
-            {/* السوشيال ميديا */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.2 }}
-              viewport={{ once: true }}
-            >
-              <h4 className="text-sm font-semibold text-gray-400 mb-4 uppercase tracking-wider">
-                تابعنا على
-              </h4>
-              <div className="flex flex-wrap gap-3">
-                {socialLinks.map((social, index) => (
-                  <motion.a
-                    key={index}
-                    href={social.href}
-                    aria-label={social.label}
-                    className="group relative w-12 h-12 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 flex items-center justify-center text-gray-400 transition-all duration-300 hover:border-white/30 overflow-hidden"
-                    whileHover={{ y: -3, scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    {/* Background color on hover */}
-                    <motion.div
-                      className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                      style={{ backgroundColor: social.color }}
-                    />
-                    {/* Icon */}
-                    <span className="relative z-10 text-base group-hover:text-white transition-colors duration-300">
-                      {social.icon}
-                    </span>
-                    {/* Shine effect */}
-                    <motion.div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
-                  </motion.a>
-                ))}
-              </div>
-            </motion.div>
-
-            {/* معلومات التواصل */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.3 }}
-              viewport={{ once: true }}
-            >
-              <h3 className="text-lg font-bold mb-6 text-white relative inline-block">
-                تواصل معنا
-                <motion.span
-                  className="absolute bottom-0 right-0 w-full h-0.5 bg-primary origin-right"
-                  initial={{ scaleX: 0 }}
-                  whileInView={{ scaleX: 1 }}
-                  transition={{ duration: 0.5, delay: 0.2 }}
-                  viewport={{ once: true }}
-                />
-              </h3>
-              <div className="space-y-3">
-                {contactInfo.map((info, index) => (
-                  <motion.a
-                    key={index}
-                    href={info.link}
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5, delay: 0.4 + index * 0.1 }}
-                    viewport={{ once: true }}
-                    whileHover={{ x: -5 }}
-                    className="group flex items-start gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-primary/30 transition-all duration-300"
-                  >
-                    <div className="p-2 rounded-lg bg-primary/20 group-hover:bg-primary/30 border border-primary/30 group-hover:border-primary/50 transition-all duration-300 flex-shrink-0">
-                      <span className="text-primary text-base">
-                        {info.icon}
-                      </span>
-                    </div>
-                    <span className="text-gray-300 group-hover:text-white transition-colors duration-300 text-sm pt-1">
-                      {info.text}
-                    </span>
-                  </motion.a>
-                ))}
-              </div>
-            </motion.div>
           </div>
 
           {/* حقوق النشر */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.4 }}
+            transition={{ duration: 0.7, delay: 0.3 }}
             viewport={{ once: true }}
             className="mt-20 pt-8 border-t border-white/10"
           >
