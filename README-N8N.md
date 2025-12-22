@@ -33,14 +33,24 @@ docker-compose up -d n8n
 
 ### 2. الوصول إلى n8n
 
-بعد التشغيل، افتح المتصفح على العنوان:
+#### الوصول المباشر (Development):
 
+للتطوير المحلي:
 ```
 http://localhost:5678
 ```
 
-ستطلب منك n8n تسجيل الدخول:
-- **Username**: `admin` (قم بتغييره في `.env.n8n`)
+#### الوصول عبر Nginx Proxy Manager (Production):
+
+للإنتاج عبر النطاق الفرعي:
+```
+https://n8n.smartagency-ye.com
+```
+
+**ملاحظة**: يجب إعداد Nginx Proxy Manager أولاً. راجع [`NGINX-PROXY-MANAGER-SETUP.md`](./NGINX-PROXY-MANAGER-SETUP.md) للتعليمات الكاملة.
+
+**بيانات الدخول**:
+- **Username**: `admin` (قم بتغييره!)
 - **Password**: `admin_password_change_me` (⚠️ يجب تغييره!)
 
 ### 3. التحقق من الحالة
@@ -206,6 +216,28 @@ docker-compose up -d n8n
 - تأكد من تشغيل Container: `docker ps | grep n8n`
 - تحقق من Port 5678: `netstat -ano | findstr :5678`
 - تحقق من Firewall Settings
+
+## 🌐 إعداد Nginx Proxy Manager
+
+### استخدام n8n مع نطاق فرعي (Subdomain)
+
+تم إعداد n8n للعمل مع **Nginx Proxy Manager** على النطاق:
+```
+https://n8n.smartagency-ye.com
+```
+
+### خطوات الإعداد السريعة:
+
+1. **DNS**: أضف سجل A يشير من `n8n` إلى IP السيرفر
+2. **NPM**: أضف Proxy Host جديد:
+   - Domain: `n8n.smartagency-ye.com`
+   - Forward to: `n8n:5678`
+   - SSL: Enable with Let's Encrypt
+   - ✅ Websockets Support
+3. **إعادة التشغيل**: `docker-compose up -d n8n`
+
+📖 **للتعليمات الكاملة والمفصلة**: راجع [`NGINX-PROXY-MANAGER-SETUP.md`](./NGINX-PROXY-MANAGER-SETUP.md)  
+⚡ **للإعداد السريع**: راجع [`NPM-QUICK-SETUP.md`](./NPM-QUICK-SETUP.md)
 
 ## 📝 ملاحظات
 
