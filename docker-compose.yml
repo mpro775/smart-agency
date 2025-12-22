@@ -24,6 +24,67 @@ services:
     networks:
       - web-network
 
+  # n8n PostgreSQL Database
+  n8n-postgres:
+    image: postgres:15-alpine
+    container_name: n8n-postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=n8n
+      - POSTGRES_PASSWORD=n8n_password_change_me
+      - POSTGRES_DB=n8n
+    volumes:
+      - n8n-postgres-data:/var/lib/postgresql/data
+    networks:
+      - web-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U n8n"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # n8n Workflow Automation
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: n8n
+    restart: unless-stopped
+    ports:
+      - "5678:5678"
+    environment:
+      # Database Configuration
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_HOST=n8n-postgres
+      - DB_POSTGRESDB_PORT=5432
+      - DB_POSTGRESDB_DATABASE=n8n
+      - DB_POSTGRESDB_USER=n8n
+      - DB_POSTGRESDB_PASSWORD=n8n_password_change_me
+      
+      # n8n Configuration
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=admin
+      - N8N_BASIC_AUTH_PASSWORD=admin_password_change_me
+      - N8N_HOST=localhost
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - WEBHOOK_URL=http://localhost:5678/
+      
+      # Timezone
+      - GENERIC_TIMEZONE=Asia/Riyadh
+      - TZ=Asia/Riyadh
+    volumes:
+      - n8n-data:/home/node/.n8n
+    networks:
+      - web-network
+    depends_on:
+      n8n-postgres:
+        condition: service_healthy
+
 networks:
   web-network:
     external: true
+
+volumes:
+  n8n-postgres-data:
+    driver: local
+  n8n-data:
+    driver: local

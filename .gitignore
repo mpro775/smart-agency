@@ -1,0 +1,32 @@
+# n8n Environment Variables (contains sensitive passwords)
+.env.n8n
+
+# n8n local data (if running locally)
+.n8n/
+
+# Docker volumes backup
+n8n-backup.tar.gz
+postgres-backup.tar.gz
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+logs/
+
+# Node modules
+node_modules/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
