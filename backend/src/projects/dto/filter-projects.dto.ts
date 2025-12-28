@@ -29,6 +29,14 @@ export class FilterProjectsDto extends PaginationDto {
   featured?: boolean;
 
   @ApiPropertyOptional({
+    description: 'Filter by published status (only works when includeUnpublished is true)',
+  })
+  @IsOptional()
+  @Transform(({ value }) => value === 'true' || value === true)
+  @IsBoolean()
+  isPublished?: boolean;
+
+  @ApiPropertyOptional({
     description: 'Search in title and summary',
   })
   @IsOptional()

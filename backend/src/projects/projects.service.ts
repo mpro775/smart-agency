@@ -40,6 +40,7 @@ export class ProjectsService {
 
   async findAll(
     filterDto: FilterProjectsDto,
+    includeUnpublished = false,
   ): Promise<PaginatedResponseDto<ProjectDocument>> {
     const {
       page = 1,
@@ -48,10 +49,19 @@ export class ProjectsService {
       category,
       featured,
       search,
+      isPublished,
     } = filterDto;
 
     // Build query
-    const query: any = { isPublished: true };
+    const query: any = {};
+    
+    // Only filter by isPublished if explicitly provided, or default to true for public access
+    if (!includeUnpublished) {
+      query.isPublished = true;
+    } else if (isPublished !== undefined) {
+      query.isPublished = isPublished;
+    }
+    // If includeUnpublished is true and isPublished is not specified, show all projects
 
     if (tech) {
       query.technologies = tech;

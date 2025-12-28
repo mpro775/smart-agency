@@ -39,7 +39,8 @@ export const projectsService = {
     if (filters?.isFeatured !== undefined) params.append('isFeatured', String(filters.isFeatured));
     if (filters?.search) params.append('search', filters.search);
 
-    const response = await api.get<ApiResponse<Project[]>>(`/projects?${params.toString()}`);
+    // Use admin endpoint to get all projects including unpublished
+    const response = await api.get<ApiResponse<Project[]>>(`/projects/admin?${params.toString()}`);
     return {
       data: response.data.data,
       meta: response.data.meta!,

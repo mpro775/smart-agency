@@ -46,7 +46,18 @@ export class ProjectsController {
   @ApiResponse({ status: 200, description: 'Projects fetched successfully' })
   @ResponseMessage('Projects fetched successfully')
   findAll(@Query() filterDto: FilterProjectsDto) {
-    return this.projectsService.findAll(filterDto);
+    return this.projectsService.findAll(filterDto, false);
+  }
+
+  @Get('admin')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('JWT-auth')
+  @ApiOperation({ summary: 'Get all projects including unpublished (Admin)' })
+  @ApiResponse({ status: 200, description: 'Projects fetched successfully' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ResponseMessage('Projects fetched successfully')
+  findAllAdmin(@Query() filterDto: FilterProjectsDto) {
+    return this.projectsService.findAll(filterDto, true);
   }
 
   @Get('featured')

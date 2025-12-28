@@ -29,6 +29,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { slugify } from "../../utils/format";
 import { ProjectCategory } from "../../types";
+import type { Technology } from "../../types";
 
 const projectSchema = z.object({
   title: z.string().min(1, "العنوان مطلوب"),
@@ -94,9 +95,10 @@ export default function ProjectForm() {
     watch,
     setValue,
     reset,
-    formState: { errors },
+    formState: { errors, isDirty, isValid },
   } = useForm<ProjectFormData>({
     resolver: zodResolver(projectSchema),
+    mode: "onChange",
     defaultValues: {
       title: "",
       slug: "",
@@ -141,8 +143,8 @@ export default function ProjectForm() {
         challenge: project.challenge || "",
         solution: project.solution || "",
         results: project.results || [],
-        technologies: (project.technologies as any[]).map((t) =>
-          typeof t === "string" ? t : t._id
+        technologies: (project.technologies as (Technology | string)[]).map(
+          (t) => (typeof t === "string" ? t : t._id)
         ),
         images: {
           cover: project.images?.cover || "",
@@ -551,7 +553,13 @@ export default function ProjectForm() {
                     render={({ field }) => (
                       <GalleryUpload
                         value={field.value}
-                        onChange={field.onChange}
+                        onChange={(urls) => {
+                          field.onChange(urls);
+                          setValue("images.gallery", urls, {
+                            shouldDirty: true,
+                            shouldValidate: true,
+                          });
+                        }}
                         maxImages={8}
                       />
                     )}
@@ -658,8 +666,12 @@ export default function ProjectForm() {
           </Button>
           <Button
             type="submit"
-            className="bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600"
-            disabled={mutation.isPending}
+            className="bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={
+              mutation.isPending ||
+              (isEdit && !isDirty) ||
+              (!isEdit && !isValid)
+            }
             dir="rtl"
           >
             {mutation.isPending ? (
