@@ -1,10 +1,9 @@
 import axios from "axios";
 
-const API_BASE_URL =
-  import.meta.env.VITE_API_URL || "http://localhost:3000/api";
 // const API_BASE_URL =
-//   import.meta.env.VITE_API_URL || "https://api.smartagency-ye.com/api";
-// Create axios instance for public API calls (no auth required)
+//   import.meta.env.VITE_API_URL || "http://localhost:3000/api";
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL || "https://api.smartagency-ye.com/api";
 export const publicApi = axios.create({
   baseURL: API_BASE_URL,
   headers: {
