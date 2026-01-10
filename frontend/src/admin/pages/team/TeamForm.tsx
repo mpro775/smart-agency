@@ -27,18 +27,18 @@ const teamSchema = z.object({
   fullName: z.string().min(1, "الاسم مطلوب"),
   role: z.string().min(1, "المنصب مطلوب"),
   department: z.nativeEnum(Department),
-  photo: z.string().optional(),
-  bio: z.string().optional(),
-  funFact: z.string().optional(),
+  photo: z.string().nullish(),
+  bio: z.string().nullish(),
+  funFact: z.string().nullish(),
   email: z
     .string()
     .email("البريد الإلكتروني غير صالح")
-    .optional()
+    .nullish()
     .or(z.literal("")),
-  linkedinUrl: z.string().optional(),
-  githubUrl: z.string().optional(),
-  twitterUrl: z.string().optional(),
-  websiteUrl: z.string().optional(),
+  linkedinUrl: z.string().nullish(),
+  githubUrl: z.string().nullish(),
+  twitterUrl: z.string().nullish(),
+  websiteUrl: z.string().nullish(),
   specializations: z.array(z.string()),
   showOnHome: z.boolean(),
   showOnAbout: z.boolean(),
@@ -117,10 +117,10 @@ export default function TeamForm() {
         twitterUrl: member.twitterUrl || "",
         websiteUrl: member.websiteUrl || "",
         specializations: member.specializations || [],
-        showOnHome: member.showOnHome,
-        showOnAbout: member.showOnAbout,
-        isActive: member.isActive,
-        sortOrder: member.sortOrder,
+        showOnHome: !!member.showOnHome,
+        showOnAbout: !!member.showOnAbout,
+        isActive: !!member.isActive,
+        sortOrder: member.sortOrder || 0,
       });
     }
   }, [member, reset]);
@@ -139,7 +139,13 @@ export default function TeamForm() {
   });
 
   const onSubmit = (data: TeamFormData) => {
+    console.log("Submitting team data:", data);
     mutation.mutate(data);
+  };
+
+  const onFormError = (errors: any) => {
+    console.error("Form validation errors:", errors);
+    toast.error("يرجى التأكد من ملء جميع الحقول المطلوبة بشكل صحيح");
   };
 
   if (isEdit && memberLoading) {
@@ -157,7 +163,7 @@ export default function TeamForm() {
         backLink="/admin/team"
       />
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={handleSubmit(onSubmit, onFormError)} className="space-y-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Main Info */}
           <div className="lg:col-span-2 space-y-6">
@@ -208,7 +214,7 @@ export default function TeamForm() {
                           onValueChange={field.onChange}
                         >
                           <SelectTrigger className="bg-slate-700/50 border-slate-600 text-white">
-                            <SelectValue />
+                            <SelectValue placeholder="اختر القسم" />
                           </SelectTrigger>
                           <SelectContent className="bg-slate-800 border-slate-700">
                             {departmentOptions.map((option) => (
@@ -224,6 +230,11 @@ export default function TeamForm() {
                         </Select>
                       )}
                     />
+                    {errors.department && (
+                      <p className="text-sm text-red-400">
+                        {errors.department.message}
+                      </p>
+                    )}
                   </div>
 
                   <div className="space-y-2">
@@ -235,6 +246,11 @@ export default function TeamForm() {
                       placeholder="email@example.com"
                       dir="ltr"
                     />
+                    {errors.email && (
+                      <p className="text-sm text-red-400">
+                        {errors.email.message}
+                      </p>
+                    )}
                   </div>
                 </div>
 

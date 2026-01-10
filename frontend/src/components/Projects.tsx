@@ -115,11 +115,10 @@ export default function Projects() {
                   setSelectedCategory(cat.value);
                   setShowAll(false);
                 }}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                  selectedCategory === cat.value
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${selectedCategory === cat.value
                     ? " bg-[linear-gradient(to_right,var(--color-primary),var(--color-primary-dark))] text-white shadow-lg"
                     : "bg-white text-gray-700 hover:bg-gray-100 shadow-md"
-                }`}
+                  }`}
               >
                 {cat.label}
                 {cat.count > 0 && cat.value !== "all" && (
@@ -157,10 +156,10 @@ export default function Projects() {
                     {displayedProjects.map((project) => {
                       const techNames = Array.isArray(project.technologies)
                         ? project.technologies.map((t) =>
-                            typeof t === "string"
-                              ? t
-                              : (t as { name: string }).name
-                          )
+                          typeof t === "string"
+                            ? t
+                            : (t as { name: string }).name
+                        )
                         : [];
                       const projectImage =
                         project.images?.cover ||
@@ -207,7 +206,7 @@ export default function Projects() {
                                 </a>
                               )}
                               <Link
-                                to={`/projects/${project.slug}`}
+                                to={`/projects/${project._id}`}
                                 className="w-9 h-9 bg-white/90 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-primary hover:text-white"
                               >
                                 <FaSearchPlus />
@@ -222,7 +221,7 @@ export default function Projects() {
                               dir="rtl"
                             >
                               <div>
-                                <Link to={`/projects/${project.slug}`}>
+                                <Link to={`/projects/${project._id}`}>
                                   <h3
                                     className="text-xl font-bold text-gray-900 hover:text-primary transition-colors"
                                     dir="rtl"

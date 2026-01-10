@@ -156,16 +156,16 @@ function TestimonialCard({ testimonial }: { testimonial: Testimonial }) {
                 style={
                   i < testimonial.rating!
                     ? {
-                        color: "var(--color-primary)",
-                        fill: "var(--color-primary)",
-                        stroke: "var(--color-primary)",
-                      }
+                      color: "var(--color-primary)",
+                      fill: "var(--color-primary)",
+                      stroke: "var(--color-primary)",
+                    }
                     : {
-                        color: "transparent",
-                        fill: "transparent",
-                        stroke: "var(--color-primary)",
-                        strokeWidth: "1.5",
-                      }
+                      color: "transparent",
+                      fill: "transparent",
+                      stroke: "var(--color-primary)",
+                      strokeWidth: "1.5",
+                    }
                 }
               />
             ))}
@@ -174,9 +174,9 @@ function TestimonialCard({ testimonial }: { testimonial: Testimonial }) {
 
         {testimonial.linkedProject &&
           typeof testimonial.linkedProject === "object" &&
-          "slug" in testimonial.linkedProject && (
+          "_id" in testimonial.linkedProject && (
             <Link
-              to={`/projects/${testimonial.linkedProject.slug}`}
+              to={`/projects/${testimonial.linkedProject._id}`}
               className="inline-flex items-center gap-2 text-sm text-primary hover:text-primary-dark transition-colors mb-4"
             >
               <FiExternalLink className="w-4 h-4" />

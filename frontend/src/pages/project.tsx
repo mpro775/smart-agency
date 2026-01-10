@@ -62,41 +62,37 @@ export default function ProjectsPage() {
       >
         <button
           onClick={() => setSelectedCategory("all")}
-          className={`px-4 py-2 rounded-full font-medium text-sm transition ${
-            selectedCategory === "all"
+          className={`px-4 py-2 rounded-full font-medium text-sm transition ${selectedCategory === "all"
               ? "bg-primary text-white"
               : "bg-white text-gray-700 hover:bg-gray-100"
-          }`}
+            }`}
         >
           الكل
         </button>
         <button
           onClick={() => setSelectedCategory("Web App")}
-          className={`px-4 py-2 rounded-full font-medium text-sm transition ${
-            selectedCategory === "Web App"
+          className={`px-4 py-2 rounded-full font-medium text-sm transition ${selectedCategory === "Web App"
               ? "bg-primary text-white"
               : "bg-white text-gray-700 hover:bg-gray-100"
-          }`}
+            }`}
         >
           مواقع إلكترونية
         </button>
         <button
           onClick={() => setSelectedCategory("E-Commerce")}
-          className={`px-4 py-2 rounded-full font-medium text-sm transition ${
-            selectedCategory === "E-Commerce"
+          className={`px-4 py-2 rounded-full font-medium text-sm transition ${selectedCategory === "E-Commerce"
               ? "bg-primary text-white"
               : "bg-white text-gray-700 hover:bg-gray-100"
-          }`}
+            }`}
         >
           متاجر إلكترونية
         </button>
         <button
           onClick={() => setSelectedCategory("Mobile App")}
-          className={`px-4 py-2 rounded-full font-medium text-sm transition ${
-            selectedCategory === "Mobile App"
+          className={`px-4 py-2 rounded-full font-medium text-sm transition ${selectedCategory === "Mobile App"
               ? "bg-primary text-white"
               : "bg-white text-gray-700 hover:bg-gray-100"
-          }`}
+            }`}
         >
           تطبيقات الجوال
         </button>
@@ -128,8 +124,8 @@ export default function ProjectsPage() {
             projects.map((project, index) => {
               const techNames = Array.isArray(project.technologies)
                 ? project.technologies.map((t: string | Technology) =>
-                    typeof t === "string" ? t : t.name
-                  )
+                  typeof t === "string" ? t : t.name
+                )
                 : [];
               const projectImage =
                 project.images?.cover ||
@@ -145,7 +141,7 @@ export default function ProjectsPage() {
                   viewport={{ once: true }}
                   className="group relative overflow-hidden bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100"
                 >
-                  <Link to={`/projects/${project.slug}`}>
+                  <Link to={`/projects/${project._id}`}>
                     <div className="relative overflow-hidden h-60">
                       <img
                         src={projectImage}
@@ -166,7 +162,7 @@ export default function ProjectsPage() {
                     </span>
                     <h3 className="text-lg font-bold text-gray-900 mb-2">
                       <Link
-                        to={`/projects/${project.slug}`}
+                        to={`/projects/${project._id}`}
                         className="hover:text-primary transition-colors"
                       >
                         {project.title}

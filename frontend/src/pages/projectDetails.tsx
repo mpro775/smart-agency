@@ -6,7 +6,7 @@ import { publicProjectsService } from "../services/projects.service";
 import type { Project } from "../admin/types";
 
 export default function ProjectDetailsPage() {
-  const { slug } = useParams<{ slug: string }>();
+  const { id } = useParams<{ id: string }>();
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -14,11 +14,11 @@ export default function ProjectDetailsPage() {
 
   useEffect(() => {
     const fetchProject = async () => {
-      if (!slug) return;
+      if (!id) return;
 
       try {
         setLoading(true);
-        const data = await publicProjectsService.getBySlug(slug);
+        const data = await publicProjectsService.getById(id);
         setProject(data);
         setError(null);
       } catch (err) {
@@ -30,7 +30,7 @@ export default function ProjectDetailsPage() {
     };
 
     fetchProject();
-  }, [slug]);
+  }, [id]);
 
   if (loading) {
     return (

@@ -115,7 +115,7 @@ export default function ProjectsList() {
       header: 'الإجراءات',
       cell: (project) => (
         <div className="flex items-center gap-1">
-          <Link to={`/projects/${project.slug}`} target="_blank">
+          <Link to={`/projects/${project._id}`} target="_blank">
             <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-white">
               <Eye className="h-4 w-4" />
             </Button>

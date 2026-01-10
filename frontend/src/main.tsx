@@ -50,7 +50,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <BrowserRouter>
           {/* Custom Cursor - Global for all pages */}
           <CustomCursor />
-          
+
           <ScrollToTop />
           <Routes>
             {/* Public Routes */}
@@ -66,7 +66,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                       <Route path="/blog" element={<BlogPage />} />
                       <Route path="/bot" element={<BotLanding />} />
                       <Route
-                        path="/projects/:slug"
+                        path="/projects/:id"
                         element={<ProjectDetailsPage />}
                       />
                       <Route path="/blog/:slug" element={<BlogDetailsPage />} />
