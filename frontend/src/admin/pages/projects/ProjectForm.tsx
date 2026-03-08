@@ -216,6 +216,11 @@ export default function ProjectForm() {
     mutation.mutate(payload);
   };
 
+  const onInvalid = (errors: Record<string, { message?: string }>) => {
+    const firstError = Object.values(errors)[0]?.message;
+    toast.error(firstError || "يرجى تصحيح الأخطاء في النموذج");
+  };
+
   if (isEdit && projectLoading) {
     return (
       <div className="flex items-center justify-center h-96">
@@ -231,7 +236,14 @@ export default function ProjectForm() {
         backLink="/admin/projects"
       />
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" dir="rtl">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit(onSubmit, onInvalid)(e);
+        }}
+        className="space-y-6"
+        dir="rtl"
+      >
         <Tabs defaultValue="basic" className="space-y-6" dir="rtl">
           <TabsList className="bg-slate-800 border border-slate-700" dir="rtl">
             <TabsTrigger
@@ -753,9 +765,10 @@ export default function ProjectForm() {
             إلغاء
           </Button>
           <Button
-            type="submit"
+            type="button"
             className="bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={mutation.isPending || (!isEdit && !isValid)}
+            onClick={() => handleSubmit(onSubmit, onInvalid)()}
             dir="rtl"
           >
             {mutation.isPending ? (
