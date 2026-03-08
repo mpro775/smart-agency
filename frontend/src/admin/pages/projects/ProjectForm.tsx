@@ -75,6 +75,34 @@ const categoryOptions = [
   { value: ProjectCategory.OTHER, label: "أخرى" },
 ];
 
+const legacyCategoryMap: Record<string, ProjectCategory> = {
+  "مواقع إلكترونية": ProjectCategory.WEB_APP,
+  "مواقع الكترونية": ProjectCategory.WEB_APP,
+  "تطبيقات الجوال": ProjectCategory.MOBILE_APP,
+  "تطبيق موبايل": ProjectCategory.MOBILE_APP,
+  "متاجر إلكترونية": ProjectCategory.ECOMMERCE,
+  "متاجر الكترونية": ProjectCategory.ECOMMERCE,
+  "متجر إلكتروني": ProjectCategory.ECOMMERCE,
+  "متجر الكتروني": ProjectCategory.ECOMMERCE,
+  "Ecommerce": ProjectCategory.ECOMMERCE,
+  "E-Commerce": ProjectCategory.ECOMMERCE,
+  "أتمتة": ProjectCategory.AUTOMATION,
+  Automation: ProjectCategory.AUTOMATION,
+  "أنظمة ERP": ProjectCategory.ERP,
+  ERP: ProjectCategory.ERP,
+  Other: ProjectCategory.OTHER,
+  "أخرى": ProjectCategory.OTHER,
+};
+
+const normalizeProjectCategory = (category: unknown): ProjectCategory => {
+  if (typeof category !== "string") return ProjectCategory.OTHER;
+
+  const enumValues = Object.values(ProjectCategory) as string[];
+  if (enumValues.includes(category)) return category as ProjectCategory;
+
+  return legacyCategoryMap[category] ?? ProjectCategory.OTHER;
+};
+
 export default function ProjectForm() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -186,7 +214,7 @@ export default function ProjectForm() {
         },
         projectUrl: project.projectUrl || "",
         clientName: project.clientName || "",
-        category: project.category,
+        category: normalizeProjectCategory(project.category),
         isFeatured: Boolean(project.isFeatured),
         isPublished: Boolean(project.isPublished),
         seo: {
@@ -217,6 +245,7 @@ export default function ProjectForm() {
     const payload: CreateProjectDto = {
       ...data,
       features: data.features.map((f) => f.value),
+      projectUrl: data.projectUrl?.trim() || undefined,
     };
     mutation.mutate(payload);
   };
