@@ -63,6 +63,9 @@ export class Project {
   @Prop({ type: [ProjectResult], default: [] })
   results: ProjectResult[];
 
+  @Prop({ type: [String], default: [] })
+  features: string[];
+
   @Prop({ type: [{ type: Types.ObjectId, ref: 'Technology' }] })
   technologies: Technology[] | Types.ObjectId[];
 

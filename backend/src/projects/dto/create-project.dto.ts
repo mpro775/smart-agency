@@ -111,6 +111,15 @@ export class CreateProjectDto {
   results?: ProjectResultDto[];
 
   @ApiPropertyOptional({
+    description: 'Project features',
+    type: [String],
+  })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  features?: string[];
+
+  @ApiPropertyOptional({
     description: 'Technology IDs used in the project',
     type: [String],
   })

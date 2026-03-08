@@ -72,6 +72,7 @@ export interface Project {
   challenge?: string;
   solution?: string;
   results: ProjectResult[];
+  features?: string[];
   technologies: Technology[] | string[];
   images: ProjectImages;
   projectUrl?: string;

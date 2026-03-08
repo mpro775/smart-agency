@@ -43,6 +43,7 @@ const projectSchema = z.object({
       value: z.string(),
     })
   ),
+  features: z.array(z.string()),
   technologies: z.array(z.string()),
   images: z.object({
     cover: z.string().optional(),
@@ -106,6 +107,7 @@ export default function ProjectForm() {
       challenge: "",
       solution: "",
       results: [],
+      features: [],
       technologies: [],
       images: { cover: "", gallery: [] },
       projectUrl: "",
@@ -126,6 +128,15 @@ export default function ProjectForm() {
     name: "results",
   });
 
+  const {
+    fields: featureFields,
+    append: appendFeature,
+    remove: removeFeature,
+  } = useFieldArray({
+    control,
+    name: "features",
+  });
+
   const title = watch("title");
 
   useEffect(() => {
@@ -143,6 +154,7 @@ export default function ProjectForm() {
         challenge: project.challenge || "",
         solution: project.solution || "",
         results: project.results || [],
+        features: project.features || [],
         technologies: (project.technologies as (Technology | string)[]).map(
           (t) => (typeof t === "string" ? t : t._id)
         ),
@@ -489,16 +501,60 @@ export default function ProjectForm() {
                       className="flex gap-3 items-start"
                       dir="rtl"
                     >
+                      <div className="flex-1 space-y-2">
+                        <Input
+                          {...register(`results.${index}.label`)}
+                          className="bg-slate-700/50 border-slate-600 text-white"
+                          placeholder="العنوان (مثال: توحيد دورة العمل)"
+                          dir="rtl"
+                        />
+                        <Textarea
+                          {...register(`results.${index}.value`)}
+                          className="bg-slate-700/50 border-slate-600 text-white min-h-20"
+                          placeholder="الوصف (مثال: من البلاغ العام إلى طلب الصيانة ثم الإغلاق داخل منصة واحدة)"
+                          dir="rtl"
+                        />
+                      </div>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="text-slate-400 hover:text-red-400 flex-shrink-0"
+                        onClick={() => removeResult(index)}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between" dir="rtl">
+                    <Label className="text-slate-200" dir="rtl">
+                      المميزات
+                    </Label>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="border-slate-600 text-slate-400 hover:text-white"
+                      onClick={() => appendFeature("")}
+                      dir="rtl"
+                    >
+                      <Plus className="h-4 w-4 mr-1" />
+                      إضافة ميزة
+                    </Button>
+                  </div>
+                  {featureFields.map((field, index) => (
+                    <div
+                      key={field.id}
+                      className="flex gap-3 items-center"
+                      dir="rtl"
+                    >
                       <Input
-                        {...register(`results.${index}.label`)}
+                        {...register(`features.${index}`)}
                         className="bg-slate-700/50 border-slate-600 text-white flex-1"
-                        placeholder="العنوان (مثال: زيادة المبيعات)"
-                        dir="rtl"
-                      />
-                      <Input
-                        {...register(`results.${index}.value`)}
-                        className="bg-slate-700/50 border-slate-600 text-white w-32"
-                        placeholder="القيمة (مثال: 50%)"
+                        placeholder="أدخل الميزة (مثال: لوحة تحكم شاملة)"
                         dir="rtl"
                       />
                       <Button
@@ -506,7 +562,7 @@ export default function ProjectForm() {
                         variant="ghost"
                         size="icon"
                         className="text-slate-400 hover:text-red-400"
-                        onClick={() => removeResult(index)}
+                        onClick={() => removeFeature(index)}
                       >
                         <X className="h-4 w-4" />
                       </Button>

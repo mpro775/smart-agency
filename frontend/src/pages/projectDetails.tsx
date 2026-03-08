@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiArrowLeft, FiGlobe, FiX } from "react-icons/fi";
+import { FiArrowLeft, FiCheck, FiChevronLeft, FiChevronRight, FiGlobe, FiX } from "react-icons/fi";
 import { Link, useParams } from "react-router-dom";
 import { publicProjectsService } from "../services/projects.service";
 import type { Project } from "../admin/types";
@@ -10,7 +10,7 @@ export default function ProjectDetailsPage() {
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -31,6 +31,24 @@ export default function ProjectDetailsPage() {
 
     fetchProject();
   }, [id]);
+
+  const gallery = project?.images?.gallery ?? [];
+  const currentImage = selectedImageIndex !== null ? gallery[selectedImageIndex] : null;
+
+  useEffect(() => {
+    if (selectedImageIndex === null || gallery.length === 0) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSelectedImageIndex(null);
+      if (e.key === "ArrowRight") {
+        setSelectedImageIndex((i) => (i === null ? null : (i + 1) % gallery.length));
+      }
+      if (e.key === "ArrowLeft") {
+        setSelectedImageIndex((i) => (i === null ? null : (i - 1 + gallery.length) % gallery.length));
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedImageIndex, gallery.length]);
 
   if (loading) {
     return (
@@ -249,33 +267,78 @@ export default function ProjectDetailsPage() {
               </motion.div>
             )}
 
-            {/* النتائج */}
+            {/* النتائج المحققة */}
             {project.results && project.results.length > 0 && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.5 }}
                 viewport={{ once: true }}
-                className="relative overflow-hidden rounded-3xl shadow-2xl"
+                className="bg-white p-8 md:p-10 rounded-2xl shadow-xl border border-gray-100 relative overflow-hidden group"
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary-dark to-primary" />
-                <div className="relative z-10 p-8 md:p-12 text-white">
-                  <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center">
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-primary/2 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="relative z-10">
+                  <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8 flex items-center gap-3">
+                    <span className="w-1 h-8 bg-gradient-to-b from-primary to-primary-dark rounded-full" />
                     النتائج المحققة
                   </h2>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {project.results.map((result, i) => (
                       <motion.div
                         key={i}
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.5, delay: 0.6 + i * 0.1 }}
-                        className="bg-white/10 p-6 rounded-xl backdrop-blur-sm hover:bg-white/20 transition-all duration-300 transform hover:scale-105 text-center"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.6 + i * 0.08 }}
+                        className="flex gap-4 p-5 rounded-xl bg-gray-50/80 hover:bg-primary/5 border border-gray-100 hover:border-primary/20 transition-all duration-300 text-right"
                       >
-                        <p className="text-4xl md:text-5xl font-bold mb-3">
-                          {result.value}
+                        <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary font-bold">
+                          {i + 1}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="text-lg font-bold text-gray-900 mb-2">
+                            {result.label}
+                          </h3>
+                          <p className="text-gray-700 leading-relaxed">
+                            {result.value}
+                          </p>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
+            {/* المميزات */}
+            {project.features && project.features.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.55 }}
+                viewport={{ once: true }}
+                className="bg-white p-8 md:p-10 rounded-2xl shadow-xl border border-gray-100 relative overflow-hidden group"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-primary/2 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="relative z-10">
+                  <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8 flex items-center gap-3">
+                    <span className="w-1 h-8 bg-gradient-to-b from-primary to-primary-dark rounded-full" />
+                    المميزات
+                  </h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {project.features.map((feature, i) => (
+                      <motion.div
+                        key={i}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.4, delay: 0.6 + i * 0.05 }}
+                        className="flex items-start gap-4 p-4 rounded-xl bg-gray-50/80 hover:bg-primary/5 border border-gray-100 hover:border-primary/20 transition-all duration-300"
+                      >
+                        <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+                          <FiCheck className="w-4 h-4" />
+                        </div>
+                        <p className="text-gray-700 leading-relaxed pt-0.5">
+                          {feature}
                         </p>
-                        <p className="text-lg opacity-90">{result.label}</p>
                       </motion.div>
                     ))}
                   </div>
@@ -284,7 +347,7 @@ export default function ProjectDetailsPage() {
             )}
 
             {/* معرض الصور */}
-            {project.images?.gallery && project.images.gallery.length > 0 && (
+            {gallery.length > 0 && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -297,24 +360,33 @@ export default function ProjectDetailsPage() {
                   معرض المشروع
                 </h2>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  {project.images.gallery.map((img, i) => (
+                  {gallery.map((img, i) => (
                     <motion.div
                       key={i}
-                      initial={{ opacity: 0, scale: 0.9 }}
+                      initial={{ opacity: 0, scale: 0.95 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ duration: 0.4, delay: 0.7 + i * 0.05 }}
-                      className="rounded-xl overflow-hidden shadow-lg cursor-pointer group relative"
-                      onClick={() => setSelectedImage(img)}
-                      whileHover={{ scale: 1.05, y: -5 }}
+                      className={`rounded-xl overflow-hidden shadow-lg cursor-pointer group relative ${
+                        i === 0 ? "col-span-2 md:col-span-2" : ""
+                      }`}
+                      onClick={() => setSelectedImageIndex(i)}
+                      whileHover={{ scale: 1.02, y: -4 }}
                     >
                       <img
                         src={img}
                         alt={`${project.title} - ${i + 1}`}
                         width={600}
                         height={400}
-                        className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
+                        className={`w-full object-cover transition-transform duration-500 group-hover:scale-110 ${
+                          i === 0 ? "aspect-video min-h-[200px]" : "aspect-[4/3] min-h-[180px]"
+                        }`}
                       />
-                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <span className="text-white text-sm font-medium drop-shadow-lg">
+                          {i + 1} / {gallery.length}
+                        </span>
+                      </div>
                     </motion.div>
                   ))}
                 </div>
@@ -428,37 +500,96 @@ export default function ProjectDetailsPage() {
 
       {/* Lightbox للصور */}
       <AnimatePresence>
-        {selectedImage && (
+        {selectedImageIndex !== null && currentImage && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm flex items-center justify-center p-4"
-            onClick={() => setSelectedImage(null)}
+            className="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex flex-col items-center justify-center p-4"
+            onClick={() => setSelectedImageIndex(null)}
           >
             <motion.button
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
-              className="absolute top-4 right-4 w-12 h-12 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white backdrop-blur-sm transition-all"
+              className="absolute top-4 right-4 w-12 h-12 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white backdrop-blur-sm transition-all z-10"
               onClick={(e) => {
                 e.stopPropagation();
-                setSelectedImage(null);
+                setSelectedImageIndex(null);
               }}
               whileHover={{ scale: 1.1, rotate: 90 }}
               whileTap={{ scale: 0.9 }}
             >
               <FiX size={24} />
             </motion.button>
+
+            <div className="absolute top-4 left-1/2 -translate-x-1/2 text-white/90 text-sm font-medium bg-black/30 px-4 py-2 rounded-full backdrop-blur-sm">
+              {selectedImageIndex + 1} / {gallery.length}
+            </div>
+
+            {gallery.length > 1 && (
+              <>
+                <motion.button
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white backdrop-blur-sm transition-all z-10"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedImageIndex((i) => (i === null ? null : (i - 1 + gallery.length) % gallery.length));
+                  }}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <FiChevronRight size={24} />
+                </motion.button>
+                <motion.button
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white backdrop-blur-sm transition-all z-10"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedImageIndex((i) => (i === null ? null : (i + 1) % gallery.length));
+                  }}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <FiChevronLeft size={24} />
+                </motion.button>
+              </>
+            )}
+
             <motion.img
-              initial={{ scale: 0.8, opacity: 0 }}
+              key={selectedImageIndex}
+              initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-              src={selectedImage}
-              alt="معرض المشروع"
-              className="max-w-full max-h-[90vh] object-contain rounded-lg"
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              src={currentImage}
+              alt={`${project.title} - ${selectedImageIndex + 1}`}
+              className="max-w-full max-h-[70vh] object-contain rounded-lg shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             />
+
+            {gallery.length > 1 && (
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 overflow-x-auto max-w-full px-4 py-2 bg-black/40 rounded-xl backdrop-blur-sm">
+                {gallery.map((img, i) => (
+                  <button
+                    key={i}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedImageIndex(i);
+                    }}
+                    className={`flex-shrink-0 w-14 h-14 rounded-lg overflow-hidden border-2 transition-all ${
+                      i === selectedImageIndex
+                        ? "border-white scale-110"
+                        : "border-transparent opacity-70 hover:opacity-100"
+                    }`}
+                  >
+                    <img src={img} alt="" className="w-full h-full object-cover" />
+                  </button>
+                ))}
+              </div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>
