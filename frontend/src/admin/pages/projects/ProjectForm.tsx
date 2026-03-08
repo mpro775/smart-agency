@@ -149,6 +149,18 @@ export default function ProjectForm() {
   }, [title, isEdit, setValue]);
 
   const resetProjectIdRef = useRef<string | null>(null);
+  const featuresContainerRef = useRef<HTMLDivElement>(null);
+
+  const focusLastFeatureInput = () => {
+    const container = featuresContainerRef.current;
+    if (container) {
+      const inputs = container.querySelectorAll<HTMLInputElement>(
+        'input[name^="features."]'
+      );
+      const lastInput = inputs[inputs.length - 1];
+      if (lastInput) lastInput.focus();
+    }
+  };
   useEffect(() => {
     if (project && isEdit && project._id !== resetProjectIdRef.current) {
       resetProjectIdRef.current = project._id;
@@ -537,7 +549,7 @@ export default function ProjectForm() {
                   ))}
                 </div>
 
-                <div className="space-y-3">
+                <div className="space-y-3" ref={featuresContainerRef}>
                   <div className="flex items-center justify-between" dir="rtl">
                     <Label className="text-slate-200" dir="rtl">
                       المميزات
@@ -547,7 +559,10 @@ export default function ProjectForm() {
                       variant="outline"
                       size="sm"
                       className="border-slate-600 text-slate-400 hover:text-white"
-                      onClick={() => appendFeature({ value: "" })}
+                      onClick={() => {
+                        appendFeature({ value: "" });
+                        setTimeout(() => focusLastFeatureInput(), 0);
+                      }}
                       dir="rtl"
                     >
                       <Plus className="h-4 w-4 mr-1" />
@@ -563,12 +578,14 @@ export default function ProjectForm() {
                       <Input
                         {...register(`features.${index}.value`)}
                         className="bg-slate-700/50 border-slate-600 text-white flex-1"
-                        placeholder="أدخل الميزة ثم اضغط Enter للميزة التالية"
+                        placeholder="أدخل الميزة ثم Enter للميزة التالية"
                         dir="rtl"
                         onKeyDown={(e) => {
                           if (e.key === "Enter") {
                             e.preventDefault();
+                            e.stopPropagation();
                             appendFeature({ value: "" });
+                            setTimeout(() => focusLastFeatureInput(), 0);
                           }
                         }}
                       />
