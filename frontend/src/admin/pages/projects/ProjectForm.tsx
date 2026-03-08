@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
@@ -148,8 +148,10 @@ export default function ProjectForm() {
     }
   }, [title, isEdit, setValue]);
 
+  const resetProjectIdRef = useRef<string | null>(null);
   useEffect(() => {
-    if (project) {
+    if (project && isEdit && project._id !== resetProjectIdRef.current) {
+      resetProjectIdRef.current = project._id;
       reset({
         title: project.title,
         slug: project.slug,
@@ -177,7 +179,7 @@ export default function ProjectForm() {
         },
       });
     }
-  }, [project, reset]);
+  }, [project, isEdit, reset]);
 
   const mutation = useMutation({
     mutationFn: (data: CreateProjectDto) =>
@@ -561,8 +563,14 @@ export default function ProjectForm() {
                       <Input
                         {...register(`features.${index}.value`)}
                         className="bg-slate-700/50 border-slate-600 text-white flex-1"
-                        placeholder="أدخل الميزة (مثال: لوحة تحكم شاملة)"
+                        placeholder="أدخل الميزة ثم اضغط Enter للميزة التالية"
                         dir="rtl"
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            e.preventDefault();
+                            appendFeature({ value: "" });
+                          }
+                        }}
                       />
                       <Button
                         type="button"
@@ -730,11 +738,7 @@ export default function ProjectForm() {
           <Button
             type="submit"
             className="bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={
-              mutation.isPending ||
-              (isEdit && !isDirty) ||
-              (!isEdit && !isValid)
-            }
+            disabled={mutation.isPending || (!isEdit && !isValid)}
             dir="rtl"
           >
             {mutation.isPending ? (
