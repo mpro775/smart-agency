@@ -17,6 +17,7 @@ export interface CreateProjectDto {
   challenge?: string;
   solution?: string;
   results?: { label: string; value: string }[];
+  features?: string[];
   technologies?: string[];
   images?: { cover?: string; gallery?: string[] };
   projectUrl?: string;

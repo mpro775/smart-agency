@@ -5,7 +5,10 @@ import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Loader2, Plus, X } from "lucide-react";
-import { projectsService } from "../../services/projects.service";
+import {
+  projectsService,
+  type CreateProjectDto,
+} from "../../services/projects.service";
 import { technologiesService } from "../../services/technologies.service";
 import {
   PageHeader,
@@ -43,7 +46,7 @@ const projectSchema = z.object({
       value: z.string(),
     })
   ),
-  features: z.array(z.string()),
+  features: z.array(z.object({ value: z.string() })),
   technologies: z.array(z.string()),
   images: z.object({
     cover: z.string().optional(),
@@ -107,7 +110,7 @@ export default function ProjectForm() {
       challenge: "",
       solution: "",
       results: [],
-      features: [],
+      features: [] as { value: string }[],
       technologies: [],
       images: { cover: "", gallery: [] },
       projectUrl: "",
@@ -154,7 +157,7 @@ export default function ProjectForm() {
         challenge: project.challenge || "",
         solution: project.solution || "",
         results: project.results || [],
-        features: project.features || [],
+        features: (project.features || []).map((value) => ({ value })),
         technologies: (project.technologies as (Technology | string)[]).map(
           (t) => (typeof t === "string" ? t : t._id)
         ),
@@ -177,7 +180,7 @@ export default function ProjectForm() {
   }, [project, reset]);
 
   const mutation = useMutation({
-    mutationFn: (data: ProjectFormData) =>
+    mutationFn: (data: CreateProjectDto) =>
       isEdit ? projectsService.update(id!, data) : projectsService.create(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["projects"] });
@@ -192,7 +195,11 @@ export default function ProjectForm() {
   });
 
   const onSubmit = (data: ProjectFormData) => {
-    mutation.mutate(data);
+    const payload: CreateProjectDto = {
+      ...data,
+      features: data.features.map((f) => f.value),
+    };
+    mutation.mutate(payload);
   };
 
   if (isEdit && projectLoading) {
@@ -538,7 +545,7 @@ export default function ProjectForm() {
                       variant="outline"
                       size="sm"
                       className="border-slate-600 text-slate-400 hover:text-white"
-                      onClick={() => appendFeature("")}
+                      onClick={() => appendFeature({ value: "" })}
                       dir="rtl"
                     >
                       <Plus className="h-4 w-4 mr-1" />
@@ -552,7 +559,7 @@ export default function ProjectForm() {
                       dir="rtl"
                     >
                       <Input
-                        {...register(`features.${index}`)}
+                        {...register(`features.${index}.value`)}
                         className="bg-slate-700/50 border-slate-600 text-white flex-1"
                         placeholder="أدخل الميزة (مثال: لوحة تحكم شاملة)"
                         dir="rtl"
