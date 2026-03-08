@@ -32,7 +32,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { slugify } from "../../utils/format";
 import { ProjectCategory } from "../../types";
-import type { Technology } from "../../types";
+import type { Technology, ProjectResult } from "../../types";
 
 const projectSchema = z.object({
   title: z.string().min(1, "العنوان مطلوب"),
@@ -164,30 +164,35 @@ export default function ProjectForm() {
   useEffect(() => {
     if (project && isEdit && project._id !== resetProjectIdRef.current) {
       resetProjectIdRef.current = project._id;
+      const rawResults = project.results || [];
+      const rawTech = (project.technologies as (Technology | string)[]) || [];
       reset({
         title: project.title,
         slug: project.slug,
         summary: project.summary,
         challenge: project.challenge || "",
         solution: project.solution || "",
-        results: project.results || [],
-        features: (project.features || []).map((value) => ({ value })),
-        technologies: (project.technologies as (Technology | string)[]).map(
-          (t) => (typeof t === "string" ? t : t._id)
-        ),
+        results: rawResults.map((r: ProjectResult) => ({
+          label: r?.label != null ? String(r.label) : "",
+          value: r?.value != null ? String(r.value) : "",
+        })),
+        features: (project.features || []).map((value: string) => ({ value: value ?? "" })),
+        technologies: rawTech
+          .map((t) => (typeof t === "string" ? t : (t as Technology)?._id))
+          .filter((id): id is string => Boolean(id)),
         images: {
-          cover: project.images?.cover || "",
-          gallery: project.images?.gallery || [],
+          cover: project.images?.cover ?? "",
+          gallery: Array.isArray(project.images?.gallery) ? project.images.gallery : [],
         },
         projectUrl: project.projectUrl || "",
         clientName: project.clientName || "",
         category: project.category,
-        isFeatured: project.isFeatured,
-        isPublished: project.isPublished,
+        isFeatured: Boolean(project.isFeatured),
+        isPublished: Boolean(project.isPublished),
         seo: {
           metaTitle: project.seo?.metaTitle || "",
           metaDescription: project.seo?.metaDescription || "",
-          keywords: project.seo?.keywords || [],
+          keywords: Array.isArray(project.seo?.keywords) ? project.seo.keywords : [],
         },
       });
     }
@@ -216,8 +221,18 @@ export default function ProjectForm() {
     mutation.mutate(payload);
   };
 
-  const onInvalid = (errors: Record<string, { message?: string }>) => {
-    const firstError = Object.values(errors)[0]?.message;
+  const onInvalid = (errors: Record<string, unknown>) => {
+    const getFirstMessage = (obj: unknown): string | null => {
+      if (!obj || typeof obj !== "object") return null;
+      const o = obj as Record<string, unknown>;
+      if (typeof o.message === "string") return o.message;
+      for (const v of Object.values(o)) {
+        const msg = getFirstMessage(v);
+        if (msg) return msg;
+      }
+      return null;
+    };
+    const firstError = getFirstMessage(errors);
     toast.error(firstError || "يرجى تصحيح الأخطاء في النموذج");
   };
 
