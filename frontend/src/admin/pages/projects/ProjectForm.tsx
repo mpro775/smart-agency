@@ -242,10 +242,11 @@ export default function ProjectForm() {
   });
 
   const onSubmit = (data: ProjectFormData) => {
+    const projectUrl = data.projectUrl?.trim();
     const payload: CreateProjectDto = {
       ...data,
       features: data.features.map((f) => f.value),
-      projectUrl: data.projectUrl?.trim() || undefined,
+      projectUrl: isEdit ? (projectUrl || null) : (projectUrl || undefined),
     };
     mutation.mutate(payload);
   };

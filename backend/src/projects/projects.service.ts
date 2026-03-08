@@ -151,8 +151,37 @@ export class ProjectsService {
       updateProjectDto.slug = updateProjectDto.slug.toLowerCase();
     }
 
+    const hasProjectUrl = Object.prototype.hasOwnProperty.call(
+      updateProjectDto,
+      'projectUrl',
+    );
+
+    const updatePayload: Record<string, unknown> = { ...updateProjectDto };
+    const unsetPayload: Record<string, 1> = {};
+
+    if (hasProjectUrl) {
+      const urlValue = updateProjectDto.projectUrl;
+      const normalizedUrl =
+        typeof urlValue === 'string' ? urlValue.trim() : urlValue;
+
+      if (!normalizedUrl) {
+        delete updatePayload.projectUrl;
+        unsetPayload.projectUrl = 1;
+      } else {
+        updatePayload.projectUrl = normalizedUrl;
+      }
+    }
+
+    const finalUpdatePayload =
+      Object.keys(unsetPayload).length > 0
+        ? {
+            $set: updatePayload,
+            $unset: unsetPayload,
+          }
+        : updatePayload;
+
     const project = await this.projectModel
-      .findByIdAndUpdate(id, updateProjectDto, { new: true })
+      .findByIdAndUpdate(id, finalUpdatePayload, { new: true })
       .populate('technologies', 'name icon category')
       .exec();
 

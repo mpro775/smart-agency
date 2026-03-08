@@ -20,7 +20,7 @@ export interface CreateProjectDto {
   features?: string[];
   technologies?: string[];
   images?: { cover?: string; gallery?: string[] };
-  projectUrl?: string;
+  projectUrl?: string | null;
   clientName?: string;
   category?: string;
   isFeatured?: boolean;
