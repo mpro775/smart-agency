@@ -99,7 +99,7 @@ export default function ProjectForm() {
     watch,
     setValue,
     reset,
-    formState: { errors, isDirty, isValid },
+    formState: { errors, isValid },
   } = useForm<ProjectFormData>({
     resolver: zodResolver(projectSchema),
     mode: "onChange",
