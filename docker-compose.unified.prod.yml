@@ -33,8 +33,9 @@ services:
     networks:
       - app-network
       - platform-network
-    labels:
-      - traefik.docker.network=l8y7dqdwvasfu6phazwubawu
+  labels:
+    - traefik.docker.network=l8y7dqdwvasfu6phazwubawu
+    - traefik.http.services.smartagency_api.loadbalancer.server.port=3000
 
   frontend:
     container_name: ${PROJECT_SLUG}-frontend
@@ -55,6 +56,7 @@ services:
       - platform-network
     labels:
       - traefik.docker.network=l8y7dqdwvasfu6phazwubawu
+      - traefik.http.services.smartagency_api.loadbalancer.server.port=3000
 
 networks:
   app-network:
