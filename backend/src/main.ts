@@ -16,12 +16,11 @@ async function bootstrap() {
   app.use(helmet());
 
   // CORS Configuration - Multiple origins support
-  const allowedOrigins =
-    configService
-      .get<string>('FRONTEND_URL')
-      ?.split(',')
-      .map((url) => url.trim())
-      .filter(Boolean) || ['http://localhost:5173'];
+  const allowedOrigins = configService
+    .get<string>('FRONTEND_URL')
+    ?.split(',')
+    .map((url) => url.trim())
+    .filter(Boolean) || ['http://localhost:5173'];
 
   app.enableCors({
     origin: (origin, callback) => {
@@ -79,9 +78,9 @@ async function bootstrap() {
 
   // Start Server
   const port = configService.get<number>('PORT') || 3000;
-  await app.listen(port);
+  await app.listen(port, '0.0.0.0');
 
-  console.log(`🚀 Application is running on: http://localhost:${port}/api`);
-  console.log(`📚 Swagger docs available at: http://localhost:${port}/api/docs`);
+  console.log(`🚀 Application is running on port ${port}`);
+  console.log(`📚 Swagger docs available at: /api/docs`);
 }
 bootstrap();
