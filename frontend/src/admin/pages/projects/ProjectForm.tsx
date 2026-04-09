@@ -1,11 +1,14 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Loader2, Plus, X } from "lucide-react";
-import { projectsService } from "../../services/projects.service";
+import {
+  projectsService,
+  type CreateProjectDto,
+} from "../../services/projects.service";
 import { technologiesService } from "../../services/technologies.service";
 import {
   PageHeader,
@@ -29,7 +32,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { slugify } from "../../utils/format";
 import { ProjectCategory } from "../../types";
-import type { Technology } from "../../types";
+import type { Technology, ProjectResult } from "../../types";
 
 const projectSchema = z.object({
   title: z.string().min(1, "العنوان مطلوب"),
@@ -43,6 +46,7 @@ const projectSchema = z.object({
       value: z.string(),
     })
   ),
+  features: z.array(z.object({ value: z.string() })),
   technologies: z.array(z.string()),
   images: z.object({
     cover: z.string().optional(),
@@ -71,6 +75,34 @@ const categoryOptions = [
   { value: ProjectCategory.OTHER, label: "أخرى" },
 ];
 
+const legacyCategoryMap: Record<string, ProjectCategory> = {
+  "مواقع إلكترونية": ProjectCategory.WEB_APP,
+  "مواقع الكترونية": ProjectCategory.WEB_APP,
+  "تطبيقات الجوال": ProjectCategory.MOBILE_APP,
+  "تطبيق موبايل": ProjectCategory.MOBILE_APP,
+  "متاجر إلكترونية": ProjectCategory.ECOMMERCE,
+  "متاجر الكترونية": ProjectCategory.ECOMMERCE,
+  "متجر إلكتروني": ProjectCategory.ECOMMERCE,
+  "متجر الكتروني": ProjectCategory.ECOMMERCE,
+  "Ecommerce": ProjectCategory.ECOMMERCE,
+  "E-Commerce": ProjectCategory.ECOMMERCE,
+  "أتمتة": ProjectCategory.AUTOMATION,
+  Automation: ProjectCategory.AUTOMATION,
+  "أنظمة ERP": ProjectCategory.ERP,
+  ERP: ProjectCategory.ERP,
+  Other: ProjectCategory.OTHER,
+  "أخرى": ProjectCategory.OTHER,
+};
+
+const normalizeProjectCategory = (category: unknown): ProjectCategory => {
+  if (typeof category !== "string") return ProjectCategory.OTHER;
+
+  const enumValues = Object.values(ProjectCategory) as string[];
+  if (enumValues.includes(category)) return category as ProjectCategory;
+
+  return legacyCategoryMap[category] ?? ProjectCategory.OTHER;
+};
+
 export default function ProjectForm() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -95,7 +127,7 @@ export default function ProjectForm() {
     watch,
     setValue,
     reset,
-    formState: { errors, isDirty, isValid },
+    formState: { errors, isValid },
   } = useForm<ProjectFormData>({
     resolver: zodResolver(projectSchema),
     mode: "onChange",
@@ -106,6 +138,7 @@ export default function ProjectForm() {
       challenge: "",
       solution: "",
       results: [],
+      features: [] as { value: string }[],
       technologies: [],
       images: { cover: "", gallery: [] },
       projectUrl: "",
@@ -126,6 +159,15 @@ export default function ProjectForm() {
     name: "results",
   });
 
+  const {
+    fields: featureFields,
+    append: appendFeature,
+    remove: removeFeature,
+  } = useFieldArray({
+    control,
+    name: "features",
+  });
+
   const title = watch("title");
 
   useEffect(() => {
@@ -134,38 +176,58 @@ export default function ProjectForm() {
     }
   }, [title, isEdit, setValue]);
 
+  const resetProjectIdRef = useRef<string | null>(null);
+  const featuresContainerRef = useRef<HTMLDivElement>(null);
+
+  const focusLastFeatureInput = () => {
+    const container = featuresContainerRef.current;
+    if (container) {
+      const inputs = container.querySelectorAll<HTMLInputElement>(
+        'input[name^="features."]'
+      );
+      const lastInput = inputs[inputs.length - 1];
+      if (lastInput) lastInput.focus();
+    }
+  };
   useEffect(() => {
-    if (project) {
+    if (project && isEdit && project._id !== resetProjectIdRef.current) {
+      resetProjectIdRef.current = project._id;
+      const rawResults = project.results || [];
+      const rawTech = (project.technologies as (Technology | string)[]) || [];
       reset({
         title: project.title,
         slug: project.slug,
         summary: project.summary,
         challenge: project.challenge || "",
         solution: project.solution || "",
-        results: project.results || [],
-        technologies: (project.technologies as (Technology | string)[]).map(
-          (t) => (typeof t === "string" ? t : t._id)
-        ),
+        results: rawResults.map((r: ProjectResult) => ({
+          label: r?.label != null ? String(r.label) : "",
+          value: r?.value != null ? String(r.value) : "",
+        })),
+        features: (project.features || []).map((value: string) => ({ value: value ?? "" })),
+        technologies: rawTech
+          .map((t) => (typeof t === "string" ? t : (t as Technology)?._id))
+          .filter((id): id is string => Boolean(id)),
         images: {
-          cover: project.images?.cover || "",
-          gallery: project.images?.gallery || [],
+          cover: project.images?.cover ?? "",
+          gallery: Array.isArray(project.images?.gallery) ? project.images.gallery : [],
         },
         projectUrl: project.projectUrl || "",
         clientName: project.clientName || "",
-        category: project.category,
-        isFeatured: project.isFeatured,
-        isPublished: project.isPublished,
+        category: normalizeProjectCategory(project.category),
+        isFeatured: Boolean(project.isFeatured),
+        isPublished: Boolean(project.isPublished),
         seo: {
           metaTitle: project.seo?.metaTitle || "",
           metaDescription: project.seo?.metaDescription || "",
-          keywords: project.seo?.keywords || [],
+          keywords: Array.isArray(project.seo?.keywords) ? project.seo.keywords : [],
         },
       });
     }
-  }, [project, reset]);
+  }, [project, isEdit, reset]);
 
   const mutation = useMutation({
-    mutationFn: (data: ProjectFormData) =>
+    mutationFn: (data: CreateProjectDto) =>
       isEdit ? projectsService.update(id!, data) : projectsService.create(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["projects"] });
@@ -180,7 +242,28 @@ export default function ProjectForm() {
   });
 
   const onSubmit = (data: ProjectFormData) => {
-    mutation.mutate(data);
+    const projectUrl = data.projectUrl?.trim();
+    const payload: CreateProjectDto = {
+      ...data,
+      features: data.features.map((f) => f.value),
+      projectUrl: isEdit ? (projectUrl || null) : (projectUrl || undefined),
+    };
+    mutation.mutate(payload);
+  };
+
+  const onInvalid = (errors: Record<string, unknown>) => {
+    const getFirstMessage = (obj: unknown): string | null => {
+      if (!obj || typeof obj !== "object") return null;
+      const o = obj as Record<string, unknown>;
+      if (typeof o.message === "string") return o.message;
+      for (const v of Object.values(o)) {
+        const msg = getFirstMessage(v);
+        if (msg) return msg;
+      }
+      return null;
+    };
+    const firstError = getFirstMessage(errors);
+    toast.error(firstError || "يرجى تصحيح الأخطاء في النموذج");
   };
 
   if (isEdit && projectLoading) {
@@ -198,7 +281,14 @@ export default function ProjectForm() {
         backLink="/admin/projects"
       />
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" dir="rtl">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit(onSubmit, onInvalid)(e);
+        }}
+        className="space-y-6"
+        dir="rtl"
+      >
         <Tabs defaultValue="basic" className="space-y-6" dir="rtl">
           <TabsList className="bg-slate-800 border border-slate-700" dir="rtl">
             <TabsTrigger
@@ -489,24 +579,79 @@ export default function ProjectForm() {
                       className="flex gap-3 items-start"
                       dir="rtl"
                     >
+                      <div className="flex-1 space-y-2">
+                        <Input
+                          {...register(`results.${index}.label`)}
+                          className="bg-slate-700/50 border-slate-600 text-white"
+                          placeholder="العنوان (مثال: توحيد دورة العمل)"
+                          dir="rtl"
+                        />
+                        <Textarea
+                          {...register(`results.${index}.value`)}
+                          className="bg-slate-700/50 border-slate-600 text-white min-h-20"
+                          placeholder="الوصف (مثال: من البلاغ العام إلى طلب الصيانة ثم الإغلاق داخل منصة واحدة)"
+                          dir="rtl"
+                        />
+                      </div>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="text-slate-400 hover:text-red-400 flex-shrink-0"
+                        onClick={() => removeResult(index)}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="space-y-3" ref={featuresContainerRef}>
+                  <div className="flex items-center justify-between" dir="rtl">
+                    <Label className="text-slate-200" dir="rtl">
+                      المميزات
+                    </Label>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="border-slate-600 text-slate-400 hover:text-white"
+                      onClick={() => {
+                        appendFeature({ value: "" });
+                        setTimeout(() => focusLastFeatureInput(), 0);
+                      }}
+                      dir="rtl"
+                    >
+                      <Plus className="h-4 w-4 mr-1" />
+                      إضافة ميزة
+                    </Button>
+                  </div>
+                  {featureFields.map((field, index) => (
+                    <div
+                      key={field.id}
+                      className="flex gap-3 items-center"
+                      dir="rtl"
+                    >
                       <Input
-                        {...register(`results.${index}.label`)}
+                        {...register(`features.${index}.value`)}
                         className="bg-slate-700/50 border-slate-600 text-white flex-1"
-                        placeholder="العنوان (مثال: زيادة المبيعات)"
+                        placeholder="أدخل الميزة ثم Enter للميزة التالية"
                         dir="rtl"
-                      />
-                      <Input
-                        {...register(`results.${index}.value`)}
-                        className="bg-slate-700/50 border-slate-600 text-white w-32"
-                        placeholder="القيمة (مثال: 50%)"
-                        dir="rtl"
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            appendFeature({ value: "" });
+                            setTimeout(() => focusLastFeatureInput(), 0);
+                          }
+                        }}
                       />
                       <Button
                         type="button"
                         variant="ghost"
                         size="icon"
                         className="text-slate-400 hover:text-red-400"
-                        onClick={() => removeResult(index)}
+                        onClick={() => removeFeature(index)}
                       >
                         <X className="h-4 w-4" />
                       </Button>
@@ -665,13 +810,10 @@ export default function ProjectForm() {
             إلغاء
           </Button>
           <Button
-            type="submit"
+            type="button"
             className="bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={
-              mutation.isPending ||
-              (isEdit && !isDirty) ||
-              (!isEdit && !isValid)
-            }
+            disabled={mutation.isPending || (!isEdit && !isValid)}
+            onClick={() => handleSubmit(onSubmit, onInvalid)()}
             dir="rtl"
           >
             {mutation.isPending ? (

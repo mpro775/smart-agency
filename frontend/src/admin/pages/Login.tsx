@@ -36,7 +36,7 @@ export default function LoginPage() {
       await login(data.email, data.password);
       toast.success('تم تسجيل الدخول بنجاح');
       navigate('/admin');
-    } catch (error) {
+    } catch  {
       toast.error('البريد الإلكتروني أو كلمة المرور غير صحيحة');
     }
   };

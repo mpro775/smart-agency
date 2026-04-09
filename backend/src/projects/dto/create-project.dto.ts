@@ -9,8 +9,9 @@ import {
   ValidateNested,
   IsUrl,
   IsMongoId,
+  ValidateIf,
 } from 'class-validator';
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import { ProjectCategory } from '../schemas/project.schema';
 
 class ProjectResultDto {
@@ -111,6 +112,15 @@ export class CreateProjectDto {
   results?: ProjectResultDto[];
 
   @ApiPropertyOptional({
+    description: 'Project features',
+    type: [String],
+  })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  features?: string[];
+
+  @ApiPropertyOptional({
     description: 'Technology IDs used in the project',
     type: [String],
   })
@@ -130,6 +140,10 @@ export class CreateProjectDto {
     example: 'https://rim-store.com',
   })
   @IsOptional()
+  @Transform(({ value }) =>
+    typeof value === 'string' ? value.trim() : value,
+  )
+  @ValidateIf((_, value) => value !== '')
   @IsUrl({}, { message: 'Invalid project URL' })
   projectUrl?: string;
 

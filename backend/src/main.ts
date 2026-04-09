@@ -15,9 +15,25 @@ async function bootstrap() {
   // Security - Helmet
   app.use(helmet());
 
-  // CORS Configuration
+  // CORS Configuration - Multiple origins support
+  const allowedOrigins =
+    configService
+      .get<string>('FRONTEND_URL')
+      ?.split(',')
+      .map((url) => url.trim())
+      .filter(Boolean) || ['http://localhost:5173'];
+
   app.enableCors({
-    origin: configService.get<string>('FRONTEND_URL') || 'http://localhost:5173',
+    origin: (origin, callback) => {
+      // Allow requests with no origin (e.g. Postman or same-origin requests)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     credentials: true,
   });
