@@ -33,6 +33,8 @@ services:
     networks:
       - app-network
       - platform-network
+    labels:
+      - traefik.docker.network=l8y7dqdwvasfu6phazwubawu
 
   frontend:
     container_name: ${PROJECT_SLUG}-frontend
@@ -51,6 +53,8 @@ services:
     networks:
       - app-network
       - platform-network
+    labels:
+      - traefik.docker.network=l8y7dqdwvasfu6phazwubawu
 
 networks:
   app-network:
