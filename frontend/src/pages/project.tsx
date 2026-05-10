@@ -137,57 +137,81 @@ export default function ProjectsPage() {
                   key={project._id}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  transition={{ duration: 0.5, delay: index * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
                   viewport={{ once: true }}
-                  className="group relative overflow-hidden bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100"
+                  className="group relative overflow-hidden bg-white rounded-2xl transition-all duration-500 border border-gray-100 hover:border-primary/15 shadow-sm hover:shadow-[0_20px_50px_-12px_rgba(0,128,128,0.1),0_8px_20px_-6px_rgba(0,0,0,0.05)]"
                 >
+                  {/* شريط تزييني علوي يظهر عند التحويم */}
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-primary/60 to-primary origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-600 ease-[cubic-bezier(0.4,0,0.2,1)] z-10" />
+
                   <Link to={`/projects/${project._id}`}>
-                    <div className="relative overflow-hidden h-60">
+                    <div className="relative overflow-hidden h-52 bg-gray-100">
                       <img
                         src={projectImage}
                         alt={project.title}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        className="w-full h-full object-cover transition-all duration-700 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:scale-105 group-hover:brightness-105"
+                        loading="lazy"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                      <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/35 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-end p-5">
                         <div className="text-white">
-                          <p className="text-sm mb-2">{project.summary}</p>
+                          <p className="text-sm leading-relaxed line-clamp-3 translate-y-3 group-hover:translate-y-0 transition-transform duration-500 delay-75">
+                            {project.summary}
+                          </p>
                         </div>
+                      </div>
+                      {/* شارة الفئة على الصورة */}
+                      <div className="absolute top-4 left-4 z-10">
+                        <span className="inline-block px-3 py-1.5 bg-black/30 backdrop-blur-md text-white text-xs font-medium rounded-xl border border-white/15 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-400 delay-100">
+                          {project.category}
+                        </span>
                       </div>
                     </div>
                   </Link>
 
-                  <div className="p-5">
-                    <span className="inline-block px-2 py-1 text-xs font-medium rounded-full mb-2 bg-green-100 text-green-800">
-                      {project.isPublished ? "نشط" : "مسودة"}
-                    </span>
+                  <div className="p-5" dir="rtl">
+                    <div className="flex items-center justify-between mb-3">
+                      <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg border ${project.isPublished ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-gray-100 text-gray-600 border-gray-200'}`}>
+                        <span className={`w-1.5 h-1.5 rounded-full ${project.isPublished ? 'bg-emerald-500' : 'bg-gray-400'}`} />
+                        {project.isPublished ? "نشط" : "مسودة"}
+                      </span>
+                      {project.isFeatured && (
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-amber-50 text-amber-600 text-xs font-semibold rounded-lg border border-amber-200">
+                          <svg className="w-3 h-3" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                          </svg>
+                          مميز
+                        </span>
+                      )}
+                    </div>
                     <h3 className="text-lg font-bold text-gray-900 mb-2">
                       <Link
                         to={`/projects/${project._id}`}
-                        className="hover:text-primary transition-colors"
+                        className="hover:text-primary transition-colors duration-300 line-clamp-1 block"
                       >
                         {project.title}
                       </Link>
                     </h3>
-                    <p className="text-sm text-gray-600 mb-3">
-                      {project.category}
-                    </p>
 
                     <div className="flex flex-wrap gap-2">
                       {techNames.slice(0, 3).map((tech, i) => (
                         <span
                           key={i}
-                          className="text-xs bg-gray-100 px-2 py-1 rounded"
+                          className="inline-block px-2.5 py-1 bg-gray-50 text-gray-600 text-xs font-medium rounded-lg border border-gray-100 hover:border-primary/25 hover:text-primary hover:bg-primary/[0.03] transition-all duration-300 cursor-default"
                         >
                           {tech}
                         </span>
                       ))}
                       {techNames.length > 3 && (
-                        <span className="text-xs bg-gray-100 px-2 py-1 rounded">
+                        <span className="inline-flex items-center justify-center px-2.5 py-1 bg-gray-50 text-gray-400 text-xs font-medium rounded-lg border border-gray-100">
                           +{techNames.length - 3}
                         </span>
                       )}
                     </div>
                   </div>
+
+                  {/* خط تزييني سفلي */}
+                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-primary/0 via-primary to-primary/0 scale-x-0 group-hover:scale-x-100 transition-transform duration-600 ease-[cubic-bezier(0.4,0,0.2,1)]" />
                 </motion.div>
               );
             })

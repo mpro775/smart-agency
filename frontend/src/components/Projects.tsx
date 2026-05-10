@@ -170,104 +170,110 @@ export default function Projects() {
                         <motion.div
                           key={project._id}
                           layout
-                          initial={{ opacity: 0, scale: 0.9 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          exit={{ opacity: 0, scale: 0.9 }}
-                          transition={{ duration: 0.4 }}
-                          className="group bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden relative"
+                          initial={{ opacity: 0, scale: 0.92, y: 16 }}
+                          animate={{ opacity: 1, scale: 1, y: 0 }}
+                          exit={{ opacity: 0, scale: 0.92, y: 16 }}
+                          transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+                          className="group relative bg-white rounded-2xl overflow-hidden transition-all duration-500 border border-gray-100 hover:border-primary/15 shadow-sm hover:shadow-[0_24px_56px_-12px_rgba(0,128,128,0.12),0_8px_24px_-6px_rgba(0,0,0,0.06)]"
                         >
+                          {/* شريط تزييني علوي يظهر عند التحويم */}
+                          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-primary/60 to-primary origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-600 ease-[cubic-bezier(0.4,0,0.2,1)] z-10" />
+                          
                           {/* صورة المشروع */}
-                          <div className="relative h-60 overflow-hidden">
+                          <div className="relative h-52 overflow-hidden bg-gray-100">
                             <img
                               src={projectImage}
                               alt={project.title}
-                              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                              className="w-full h-full object-cover transition-all duration-700 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:scale-105 group-hover:brightness-105"
                               loading="lazy"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                              <p className="text-white text-sm">
+                            {/* تأثير لمعان عند التحميل */}
+                            <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+                            
+                            {/* طبقة متدرجة عند التحويم مع ملخص المشروع */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-end p-5">
+                              <p className="text-white/90 text-sm leading-relaxed line-clamp-3 translate-y-3 group-hover:translate-y-0 transition-transform duration-500 delay-75">
                                 {project.summary}
                               </p>
                             </div>
 
-                            {/* أيقونات الروابط */}
-                            <div
-                              className="absolute top-4 right-4 flex gap-2"
-                              dir="rtl"
-                            >
+                            {/* شارة الفئة على الصورة */}
+                            <div className="absolute top-4 left-4 z-10">
+                              <span className="inline-block px-3 py-1.5 bg-black/30 backdrop-blur-md text-white text-xs font-medium rounded-xl border border-white/15 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-400 delay-100">
+                                {project.category}
+                              </span>
+                            </div>
+
+                            {/* أزرار الإجراءات - تصميم زجاجي */}
+                            <div className="absolute top-4 right-4 flex items-center gap-2 z-10 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-400 delay-100" dir="rtl">
                               {project.projectUrl && (
                                 <a
                                   href={project.projectUrl}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="w-9 h-9 bg-white/90 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-primary hover:text-white"
+                                  className="w-10 h-10 bg-white/15 backdrop-blur-md rounded-xl flex items-center justify-center text-white hover:bg-white hover:text-primary transition-all duration-300 border border-white/20 hover:border-white hover:scale-110 hover:shadow-lg"
+                                  title="فتح المشروع"
                                 >
-                                  <FiExternalLink />
+                                  <FiExternalLink className="w-4 h-4" />
                                 </a>
                               )}
                               <Link
                                 to={`/projects/${project._id}`}
-                                className="w-9 h-9 bg-white/90 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-primary hover:text-white"
+                                className="w-10 h-10 bg-white/15 backdrop-blur-md rounded-xl flex items-center justify-center text-white hover:bg-white hover:text-primary transition-all duration-300 border border-white/20 hover:border-white hover:scale-110 hover:shadow-lg"
+                                title="عرض التفاصيل"
                               >
-                                <FaSearchPlus />
+                                <FaSearchPlus className="w-4 h-4" />
                               </Link>
                             </div>
                           </div>
 
                           {/* تفاصيل المشروع */}
-                          <div className="p-6" dir="rtl">
-                            <div
-                              className="flex items-start justify-between"
-                              dir="rtl"
-                            >
-                              <div>
-                                <Link to={`/projects/${project._id}`}>
-                                  <h3
-                                    className="text-xl font-bold text-gray-900 hover:text-primary transition-colors"
-                                    dir="rtl"
-                                  >
-                                    {project.title}
-                                  </h3>
-                                </Link>
-                                <span
-                                  className="inline-block mt-1 px-3 py-1 bg-primary/10 text-primary text-xs font-medium rounded-full"
-                                  dir="rtl"
-                                >
-                                  {project.category}
-                                </span>
-                              </div>
+                          <div className="p-5" dir="rtl">
+                            {/* الصف: الفئة + مميز */}
+                            <div className="flex items-center justify-between mb-3">
+                              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-primary/[0.06] text-primary text-xs font-semibold rounded-lg border border-primary/10">
+                                <span className="w-1.5 h-1.5 rounded-full bg-primary shadow-[0_0_6px_rgba(0,128,128,0.4)]" />
+                                {project.category}
+                              </span>
                               {project.isFeatured && (
-                                <span
-                                  className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-medium rounded"
-                                  dir="rtl"
-                                >
+                                <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-amber-50 text-amber-600 text-xs font-semibold rounded-lg border border-amber-200">
+                                  <svg className="w-3 h-3" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                  </svg>
                                   مميز
                                 </span>
                               )}
                             </div>
 
+                            {/* العنوان */}
+                            <Link to={`/projects/${project._id}`} className="block group/title">
+                              <h3 className="text-lg font-bold text-gray-900 group-hover/title:text-primary transition-colors duration-300 mb-3 line-clamp-1">
+                                {project.title}
+                              </h3>
+                            </Link>
+
                             {/* تاغات التقنيات */}
                             {techNames.length > 0 && (
-                              <div
-                                className="mt-4 flex flex-wrap gap-2"
-                                dir="rtl"
-                              >
-                                {techNames.slice(0, 4).map((tag, i) => (
+                              <div className="flex flex-wrap gap-2" dir="rtl">
+                                {techNames.slice(0, 3).map((tag, i) => (
                                   <span
                                     key={i}
-                                    className="inline-block px-2 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded-full hover:bg-primary hover:text-white transition-colors"
+                                    className="inline-block px-2.5 py-1 bg-gray-50 text-gray-600 text-xs font-medium rounded-lg border border-gray-100 hover:border-primary/25 hover:text-primary hover:bg-primary/[0.03] transition-all duration-300 cursor-default"
                                   >
                                     {tag}
                                   </span>
                                 ))}
-                                {techNames.length > 4 && (
-                                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded-full">
-                                    +{techNames.length - 4}
+                                {techNames.length > 3 && (
+                                  <span className="inline-flex items-center justify-center px-2.5 py-1 bg-gray-50 text-gray-400 text-xs font-medium rounded-lg border border-gray-100">
+                                    +{techNames.length - 3}
                                   </span>
                                 )}
                               </div>
                             )}
                           </div>
+
+                          {/* خط تزييني سفلي يظهر عند التحويم */}
+                          <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-primary/0 via-primary to-primary/0 scale-x-0 group-hover:scale-x-100 transition-transform duration-600 ease-[cubic-bezier(0.4,0,0.2,1)]" />
                         </motion.div>
                       );
                     })}
