@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiMenu, FiX } from "react-icons/fi";
+import { Rocket } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export default function Navbar() {
@@ -17,9 +18,11 @@ export default function Navbar() {
   }, []);
 
   const navLinks = [
-    { label: "الرئيسية", href: "/" },
+    { label: "الرئيسية", href: "/", active: true },
     { label: "من نحن", href: "/about" },
     { label: "أعمالنا", href: "/projects" },
+    { label: "مدونة", href: "/blog" },
+    { label: "تواصل معنا", href: "/contact" },
   ];
 
   return (
@@ -27,65 +30,74 @@ export default function Navbar() {
       initial={{ y: -50, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6 }}
-      className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-full max-w-5xl px-4 sm:px-6"
+      className="fixed top-5 left-1/2 -translate-x-1/2 z-50 w-full max-w-5xl px-4 sm:px-6"
       dir="rtl"
     >
-      {/* الكبسولة العائمة */}
       <motion.div
         className={`relative rounded-full transition-all duration-500 ${
           scrolled
-            ? "bg-white/80 backdrop-blur-xl shadow-2xl border border-white/20"
-            : "bg-white/60 backdrop-blur-md shadow-lg border border-white/30"
+            ? "bg-white/90 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.08)] border border-white/40"
+            : "bg-white/80 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.06)] border border-white/50"
         }`}
-        whileHover={{ scale: 1.02 }}
-        transition={{ duration: 0.3 }}
       >
-        <div className="flex items-center justify-between h-16 md:h-18 px-4 md:px-8">
-          {/* اللوجو على اليمين (في RTL) */}
-          <Link to="/" className="flex items-center group">
-            <motion.div
-              whileHover={{ scale: 1.1, rotate: -5 }}
-              transition={{ duration: 0.3 }}
-              className="flex items-center"
-            >
-              <img
-                src="/logo2.png"
-                alt="Smart Agency Logo"
-                className="h-8 md:h-10 w-auto object-contain"
-              />
-            </motion.div>
+        <div className="flex items-center justify-between h-16 md:h-[68px] px-5 md:px-8">
+          {/* اللوجو على اليمين */}
+          <Link to="/" className="flex items-center gap-3 group">
+            <div className="flex items-center gap-2">
+              <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+                <rect width="36" height="36" rx="8" fill="#008080" />
+                <path d="M10 12h4v12h-4z" fill="white" />
+                <path d="M16 16h4v8h-4z" fill="white" opacity="0.7" />
+                <path d="M22 10h4v14h-4z" fill="white" opacity="0.5" />
+              </svg>
+              <div>
+                <span className="text-base font-black text-[#008080]">وكالة سمارت</span>
+                <p className="text-[9px] text-slate-400 -mt-1">حلول رقمية تدفع أعمالك للأمام</p>
+              </div>
+            </div>
           </Link>
 
           {/* الروابط في الوسط */}
-          <div className="hidden lg:flex items-center gap-1 flex-1 justify-center">
+          <div className="hidden lg:flex items-center gap-0.5 flex-1 justify-center">
             {navLinks.map((link, index) => (
               <motion.div
                 key={link.href}
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
+                transition={{ delay: index * 0.08 }}
               >
                 <Link
                   to={link.href}
-                  className="relative px-4 py-2 text-sm font-medium text-gray-700 hover:text-primary transition-colors rounded-full hover:bg-white/50"
+                  className={`relative px-4 py-2 text-sm font-medium transition-colors rounded-full ${
+                    link.active
+                      ? "text-[#008080]"
+                      : "text-gray-500 hover:text-[#008080]"
+                  }`}
                 >
                   {link.label}
+                  {link.active && (
+                    <motion.span
+                      layoutId="navActive"
+                      className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-5 h-[2px] rounded-full bg-[#008080]"
+                    />
+                  )}
                 </Link>
               </motion.div>
             ))}
           </div>
 
-          {/* زر "ابدأ مشروعك" على اليسار (في RTL) */}
+          {/* زر CTA على اليسار */}
           <div className="hidden lg:flex items-center">
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.3 }}
+              transition={{ delay: 0.4 }}
             >
               <Link
                 to="/quote"
-                className="px-5 py-2 rounded-full text-sm font-semibold text-white bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-dark)] shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold text-white bg-[#008080] shadow-lg shadow-[#008080]/20 hover:shadow-xl hover:shadow-[#008080]/30 transition-all duration-300 hover:scale-105"
               >
+                <Rocket size={15} />
                 ابدأ مشروعك
               </Link>
             </motion.div>
@@ -94,7 +106,7 @@ export default function Navbar() {
           {/* زر القائمة للجوال */}
           <button
             onClick={() => setOpen(!open)}
-            className="lg:hidden p-2 rounded-full text-gray-700 hover:bg-white/50 transition-colors"
+            className="lg:hidden p-2 rounded-full text-gray-600 hover:bg-white/50 transition-colors"
             aria-label="فتح القائمة"
           >
             {open ? <FiX size={20} /> : <FiMenu size={20} />}
@@ -111,7 +123,7 @@ export default function Navbar() {
               transition={{ duration: 0.3 }}
               className="lg:hidden overflow-hidden"
             >
-              <div className="px-4 pb-4 pt-2 border-t border-white/20">
+              <div className="px-4 pb-4 pt-2 border-t border-gray-100">
                 <ul className="space-y-1 py-2">
                   {navLinks.map((link, index) => (
                     <motion.li
@@ -122,7 +134,11 @@ export default function Navbar() {
                     >
                       <Link
                         to={link.href}
-                        className="block py-2.5 px-4 rounded-full hover:bg-white/50 text-gray-700 font-medium transition-colors text-sm"
+                        className={`block py-2.5 px-4 rounded-full font-medium transition-colors text-sm ${
+                          link.active
+                            ? "text-[#008080] bg-[#008080]/5"
+                            : "text-gray-600 hover:bg-gray-50"
+                        }`}
                         onClick={() => setOpen(false)}
                       >
                         {link.label}
@@ -130,18 +146,18 @@ export default function Navbar() {
                     </motion.li>
                   ))}
                 </ul>
-
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3, delay: 0.2 }}
-                  className="mt-3 pt-3 border-t border-white/20"
+                  className="mt-3 pt-3 border-t border-gray-100"
                 >
                   <Link
                     to="/quote"
-                    className="block text-center py-2.5 px-4 rounded-full font-semibold text-white bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-dark)] shadow-lg hover:shadow-xl transition-all text-sm"
+                    className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-full font-bold text-white bg-[#008080] shadow-lg text-sm"
                     onClick={() => setOpen(false)}
                   >
+                    <Rocket size={14} />
                     ابدأ مشروعك
                   </Link>
                 </motion.div>

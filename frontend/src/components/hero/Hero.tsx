@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Eye } from "lucide-react";
+import { Rocket, Eye, Sparkles } from "lucide-react";
 import HeroDashboard from "./HeroDashboard";
 import HeroValueBadges from "./HeroValueBadges";
 import HeroSectionNav from "./HeroSectionNav";
@@ -10,74 +10,104 @@ const Hero = () => {
     <section
       id="home"
       dir="rtl"
-      className="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#f8fbfb] via-white to-[#eefafa]"
+      className="relative min-h-screen overflow-hidden bg-white"
     >
-      {/* ─── Background Layers ─── */}
+      {/* ── Background Layers ─── */}
       <div className="absolute inset-0 pointer-events-none">
         {/* Grid */}
         <div
-          className="absolute inset-0 opacity-70"
+          className="absolute inset-0"
           style={{
             backgroundImage: `
-              linear-gradient(rgba(0,128,128,0.045) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(0,128,128,0.045) 1px, transparent 1px)
+              linear-gradient(rgba(0,128,128,0.04) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(0,128,128,0.04) 1px, transparent 1px)
             `,
-            backgroundSize: "48px 48px",
+            backgroundSize: "40px 40px",
           }}
         />
 
-        {/* Glow — top right */}
+        {/* Subtle glow — behind dashboard */}
         <motion.div
-          className="absolute -top-40 right-10 h-[520px] w-[520px] rounded-full bg-[#008080]/10 blur-[120px]"
-          animate={{ x: [0, 20, 0], y: [0, -15, 0] }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-20 left-10 h-[600px] w-[600px] rounded-full bg-[#008080]/8 blur-[140px]"
+          animate={{ x: [0, 15, 0], y: [0, -10, 0] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
         />
 
-        {/* Glow — bottom left */}
+        {/* Subtle glow — behind text */}
         <motion.div
-          className="absolute bottom-0 left-0 h-[460px] w-[460px] rounded-full bg-[#00b3b3]/8 blur-[110px]"
-          animate={{ x: [0, -20, 0], y: [0, 15, 0] }}
+          className="absolute top-40 right-20 h-[400px] w-[400px] rounded-full bg-[#00b3b3]/5 blur-[120px]"
+          animate={{ x: [0, -10, 0], y: [0, 10, 0] }}
           transition={{
-            duration: 9,
+            duration: 11,
             repeat: Infinity,
             ease: "easeInOut",
-            delay: 0.5,
+            delay: 1,
           }}
         />
 
-        {/* Dotted decoration — top left */}
-        <div className="absolute left-16 top-36 grid grid-cols-8 gap-2 opacity-20">
-          {Array.from({ length: 64 }).map((_, i) => (
-            <span key={i} className="h-1 w-1 rounded-full bg-[#008080]" />
+        {/* Dotted decoration — top left corner */}
+        <div className="absolute left-8 top-28 grid grid-cols-6 gap-1.5 opacity-15">
+          {Array.from({ length: 36 }).map((_, i) => (
+            <span key={i} className="h-[3px] w-[3px] rounded-full bg-[#008080]" />
           ))}
         </div>
+
+        {/* Dotted decoration — bottom right corner */}
+        <div className="absolute right-8 bottom-20 grid grid-cols-6 gap-1.5 opacity-10">
+          {Array.from({ length: 36 }).map((_, i) => (
+            <span key={i} className="h-[3px] w-[3px] rounded-full bg-[#008080]" />
+          ))}
+        </div>
+
+        {/* Geometric shapes — circles */}
+        <div className="absolute left-20 bottom-32 w-16 h-16 rounded-full border border-[#008080]/10" />
+        <div className="absolute right-40 top-60 w-10 h-10 rounded-full border border-[#008080]/8" />
       </div>
 
-      {/* ─── Section Nav — decorative vertical dots ─── */}
+      {/* ─── Section Nav — right side ─── */}
       <HeroSectionNav />
 
-      {/* ─── Main Content ─── */}
-      <div className="relative z-10 mx-auto grid min-h-screen max-w-7xl grid-cols-1 items-center gap-10 px-4 pb-16 pt-32 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:px-8 xl:gap-16">
-        {/* Text Column — appears on the right visually in RTL */}
-        <div className="text-center lg:text-right">
+      {/* ─── Main Content ── */}
+      <div className="relative z-10 mx-auto grid min-h-screen max-w-[1320px] grid-cols-1 items-center gap-8 px-4 pb-20 pt-28 sm:px-6 lg:grid-cols-[1fr_1.1fr] lg:px-8 xl:gap-12">
+        {/* Text Column — right side in RTL */}
+        <div className="order-1 text-center lg:text-right">
+          {/* Sparkle icon */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="flex justify-center lg:justify-start mb-4"
+          >
+            <Sparkles size={24} className="text-[#008080]" />
+          </motion.div>
+
           {/* Title */}
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: "easeOut" }}
-            className="mx-auto max-w-3xl text-3xl font-black leading-[1.25] tracking-[-0.02em] text-[#111827] sm:text-4xl lg:mx-0 lg:text-5xl xl:text-6xl"
+            className="mx-auto max-w-2xl text-4xl font-black leading-[1.3] tracking-[-0.02em] text-[#0f172a] sm:text-5xl lg:mx-0 lg:text-6xl xl:text-7xl"
           >
             <span className="block">نبني</span>
-            <span className="relative mx-1 inline-block text-[#008080]">
+            <span className="relative inline-block text-[#008080]">
               أنظمة رقمية
-              <motion.span
-                initial={{ scaleX: 0 }}
-                animate={{ scaleX: 1 }}
-                transition={{ duration: 0.5, delay: 0.6 }}
-                className="absolute -bottom-1 left-0 right-0 h-[10px] rounded-full bg-[#008080]/10 origin-right"
-              />
+              <svg
+                className="absolute -bottom-2 left-0 w-full"
+                viewBox="0 0 200 12"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M2 8C30 3 60 2 100 5C140 8 170 6 198 3"
+                  stroke="#008080"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  opacity="0.3"
+                />
+              </svg>
             </span>
-            <span className="block">تساعد مشروعك على النمو</span>
+            <span className="block">تساعد مشروعك</span>
+            <span className="block">على النمو</span>
           </motion.h1>
 
           {/* Description */}
@@ -85,10 +115,9 @@ const Hero = () => {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.65, ease: "easeOut", delay: 0.15 }}
-            className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-[#4a5568] sm:text-lg lg:mx-0"
+            className="mx-auto mt-6 max-w-lg text-sm leading-relaxed text-[#64748b] sm:text-base lg:mx-0"
           >
-            نطوّر مواقع، تطبيقات، متاجر وأنظمة مخصّصة تجمع بين التصميم الاحترافي،
-            البرمجة المتقنة، والبنية القابلة للتوسع.
+            نطوّر مواقع، تطبيقات، متاجر وأنظمة مخصّصة تجمع بين التصميم الاحترافي، البرمجة المتقنة، والبنية القابلة للتوسع.
           </motion.p>
 
           {/* CTA Buttons */}
@@ -96,24 +125,23 @@ const Hero = () => {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.65, ease: "easeOut", delay: 0.3 }}
-            className="mt-7 flex flex-wrap items-center justify-center gap-3 lg:justify-start"
+            className="mt-8 flex flex-wrap items-center justify-center gap-3 lg:justify-start"
           >
             <Link to="/quote">
               <motion.button
-                whileHover={{ scale: 1.04, y: -2 }}
+                whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
-                className="group relative flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#008080] to-[#006666] px-6 py-3 text-sm font-bold text-white shadow-lg shadow-[#008080]/25 transition-all duration-300 hover:shadow-xl hover:shadow-[#008080]/35"
+                className="group flex items-center gap-2 rounded-xl bg-[#008080] px-7 py-3.5 text-sm font-bold text-white shadow-lg shadow-[#008080]/25 transition-all duration-300 hover:shadow-xl hover:shadow-[#008080]/35"
               >
-                <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-white/0 via-white/15 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
-                <ArrowLeft size={16} className="relative z-10" />
+                <Rocket size={16} className="relative z-10" />
                 <span className="relative z-10">ابدأ مشروعك الآن</span>
               </motion.button>
             </Link>
             <Link to="/projects">
               <motion.button
-                whileHover={{ scale: 1.04, y: -2 }}
+                whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
-                className="flex items-center gap-2 rounded-xl border border-[#e5e7eb] bg-white/80 backdrop-blur-sm px-6 py-3 text-sm font-medium text-[#2d3748] shadow-md transition-all duration-300 hover:border-[#008080]/30 hover:text-[#008080] hover:shadow-lg"
+                className="flex items-center gap-2 rounded-xl border-2 border-[#e2e8f0] bg-white px-7 py-3.5 text-sm font-medium text-[#334155] transition-all duration-300 hover:border-[#008080]/40 hover:text-[#008080]"
               >
                 <Eye size={16} />
                 <span>شاهد أعمالنا</span>
@@ -122,13 +150,13 @@ const Hero = () => {
           </motion.div>
 
           {/* Value Badges */}
-          <div className="mt-6 flex justify-center lg:justify-start">
+          <div className="mt-8 flex justify-center lg:justify-start">
             <HeroValueBadges />
           </div>
         </div>
 
-        {/* Dashboard Column — appears on the left visually in RTL */}
-        <div className="flex justify-center lg:justify-start">
+        {/* Dashboard Column — left side in RTL */}
+        <div className="order-2 flex justify-center lg:justify-end">
           <HeroDashboard />
         </div>
       </div>

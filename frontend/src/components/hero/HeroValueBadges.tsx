@@ -24,25 +24,25 @@ const HeroValueBadges = () => {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.65, ease: "easeOut", delay: 0.8 }}
-      className="flex flex-col sm:flex-row gap-3 w-full max-w-xl"
+      transition={{ duration: 0.65, ease: "easeOut", delay: 0.9 }}
+      className="flex flex-col sm:flex-row rounded-2xl border border-[#e2e8f0] bg-white/80 backdrop-blur-sm p-1.5 shadow-sm"
     >
       {values.map((item, index) => (
         <div
           key={item.title}
-          className="flex-1 flex items-center gap-3 bg-white/70 backdrop-blur-sm rounded-2xl border border-[#e5e7eb]/80 p-3 shadow-sm"
+          className="flex-1 flex items-center gap-3 rounded-xl px-4 py-2.5"
         >
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#008080]/10 text-[#008080]">
-            <item.icon size={18} />
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#008080]/10 text-[#008080]">
+            <item.icon size={16} />
           </div>
           <div className="min-w-0">
-            <p className="text-xs font-bold text-[#111827] truncate">
+            <p className="text-[12px] font-bold text-[#0f172a] truncate">
               {item.title}
             </p>
-            <p className="text-[11px] text-[#6b7280] truncate">{item.desc}</p>
+            <p className="text-[10px] text-[#94a3b8] truncate">{item.desc}</p>
           </div>
           {index < values.length - 1 && (
-            <div className="hidden sm:block w-px h-8 bg-[#e5e7eb] mx-1 shrink-0" />
+            <div className="hidden sm:block w-px h-7 bg-[#e2e8f0] mx-1 shrink-0" />
           )}
         </div>
       ))}
