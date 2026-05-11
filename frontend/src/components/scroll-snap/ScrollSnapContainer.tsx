@@ -23,75 +23,123 @@ const ScrollSnapContainer = ({
   const [snapEnabled, setSnapEnabled] = useState(true);
   const snapRestoreTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Detect screen size
+  // ── Screen size detection ──
   useEffect(() => {
-    const checkScreenSize = () => {
-      setIsDesktop(window.innerWidth >= 1024);
-    };
-    checkScreenSize();
-    window.addEventListener("resize", checkScreenSize);
-    return () => window.removeEventListener("resize", checkScreenSize);
+    const check = () => setIsDesktop(window.innerWidth >= 1024);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
   }, []);
 
-  // Track active section with continuous progress
+  // ── IntersectionObserver: accurate active-section tracking ──
+  useEffect(() => {
+    if (!isDesktop) return;
+    const container = containerRef.current;
+    if (!container) return;
+
+    // Track intersection ratios for all observed sections
+    const ratios = new Map<string, number>();
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        // Update ratio map
+        for (const entry of entries) {
+          ratios.set(entry.target.id, entry.isIntersecting ? entry.intersectionRatio : 0);
+        }
+
+        // Find section with highest intersection ratio
+        let maxRatio = 0;
+        let activeId = "";
+        for (const [id, ratio] of ratios) {
+          if (ratio > maxRatio) {
+            maxRatio = ratio;
+            activeId = id;
+          }
+        }
+
+        if (activeId && maxRatio > 0) {
+          const index = sections.findIndex((s) => s.id === activeId);
+          if (index !== -1) {
+            setActiveSection(index);
+            // Discrete progress for connector line fill
+            setScrollProgress(index / Math.max(sections.length - 1, 1));
+          }
+        }
+      },
+      {
+        threshold: [0, 0.1, 0.25, 0.4, 0.5, 0.6, 0.75, 1],
+        root: container,
+      }
+    );
+
+    // Observe each section by its DOM id
+    for (const section of sections) {
+      const el = document.getElementById(section.id);
+      if (el) observer.observe(el);
+    }
+
+    return () => {
+      observer.disconnect();
+      ratios.clear();
+    };
+  }, [isDesktop, sections]);
+
+  // ── Scroll event: continuous progress for connector line fill ──
   useEffect(() => {
     if (!isDesktop) return;
     const container = containerRef.current;
     if (!container) return;
 
     const handleScroll = () => {
-      const scrollTop = container.scrollTop;
-      const sectionHeight = window.innerHeight;
-      const newActiveSection = Math.round(scrollTop / sectionHeight);
-      const clamped = Math.min(newActiveSection, sections.length - 1);
-      setActiveSection(clamped);
-
-      // Continuous progress for the connector line fill
-      const maxScroll = (sections.length - 1) * sectionHeight;
-      const progress = maxScroll > 0 ? Math.min(scrollTop / maxScroll, 1) : 0;
-      setScrollProgress(progress);
+      const maxScroll = container.scrollHeight - container.clientHeight;
+      if (maxScroll > 0) {
+        setScrollProgress(Math.min(container.scrollTop / maxScroll, 1));
+      }
     };
+
+    // Initial calculation
+    handleScroll();
 
     container.addEventListener("scroll", handleScroll, { passive: true });
     return () => container.removeEventListener("scroll", handleScroll);
-  }, [isDesktop, sections.length]);
+  }, [isDesktop]);
 
-  // Navigate to section — disables scroll-snap temporarily for smooth motion
+  // ── Navigate using actual element position (scrollIntoView) ──
   const navigateToSection = useCallback(
     (index: number) => {
-      const container = containerRef.current;
-      if (!container || isScrolling) return;
+      if (isScrolling) return;
+
+      const target = document.getElementById(sections[index].id);
+      if (!target) return;
 
       setIsScrolling(true);
+
+      // Temporarily disable snap for smooth programmatic scroll
       setSnapEnabled(false);
 
-      const sectionHeight = window.innerHeight;
-      container.scrollTo({
-        top: index * sectionHeight,
-        behavior: "smooth",
-      });
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
 
       // Clear any pending restore
       if (snapRestoreTimer.current) clearTimeout(snapRestoreTimer.current);
 
-      // Restore scroll-snap after smooth scroll animation completes
+      // Restore scroll-snap after animation settles
       snapRestoreTimer.current = setTimeout(() => {
         setSnapEnabled(true);
         setIsScrolling(false);
         snapRestoreTimer.current = null;
       }, 1000);
     },
-    [isScrolling]
+    [isScrolling, sections]
   );
 
-  // Cleanup snap restore timer on unmount
+  // Cleanup timer on unmount
   useEffect(() => {
     return () => {
       if (snapRestoreTimer.current) clearTimeout(snapRestoreTimer.current);
     };
   }, []);
 
-  // Handle keyboard navigation
+  // ── Keyboard navigation ──
   useEffect(() => {
     if (!isDesktop) return;
 
@@ -109,12 +157,12 @@ const ScrollSnapContainer = ({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isDesktop, activeSection, sections.length, navigateToSection]);
 
-  // Mobile: render children without scroll-snap
+  // ── Mobile: plain children ──
   if (!isDesktop) {
     return <>{children}</>;
   }
 
-  // Helper to decide step state
+  // ── Helper ──
   const getStepState = (index: number) => {
     if (index === activeSection) return "active";
     if (index < activeSection) return "completed";
@@ -123,7 +171,7 @@ const ScrollSnapContainer = ({
 
   return (
     <>
-      {/* Main scroll container */}
+      {/* ═══ Main scroll container ═══ */}
       <div
         ref={containerRef}
         className="scroll-snap-container"
@@ -137,7 +185,7 @@ const ScrollSnapContainer = ({
         {children}
       </div>
 
-      {/* ───────── Vertical Stepper Navigation ───────── */}
+      {/* ═══ Vertical Stepper Navigation ═══ */}
       <AnimatePresence>
         <motion.nav
           initial={{ opacity: 0, x: 20 }}
@@ -147,11 +195,10 @@ const ScrollSnapContainer = ({
           className="fixed right-8 top-1/2 -translate-y-1/2 z-[60]"
           dir="rtl"
         >
-          {/* ── Buttons + connector line ── */}
+          {/* Buttons + connector line */}
           <div className="relative">
-            {/* Vertical progress line — runs through the center of all circles */}
+            {/* Vertical progress line */}
             <div className="absolute right-5 top-2 bottom-2 w-0.5 bg-white/10 rounded-full overflow-hidden">
-              {/* Active progress fill */}
               <motion.div
                 className="absolute top-0 left-0 right-0 bg-gradient-to-b from-[#008080] to-[#00b3b3] rounded-full origin-top"
                 animate={{ scaleY: Math.max(scrollProgress, 0) }}
@@ -172,10 +219,14 @@ const ScrollSnapContainer = ({
                     whileHover={{ x: -2 }}
                     whileTap={{ scale: 0.98 }}
                     aria-label={`${section.label} — ${
-                      state === "active" ? "القسم الحالي" : state === "completed" ? "تمت زيارته" : ""
+                      state === "active"
+                        ? "القسم الحالي"
+                        : state === "completed"
+                        ? "تمت زيارته"
+                        : ""
                     }`.trim()}
                   >
-                    {/* Step circle with number/checkmark */}
+                    {/* Circle with number / checkmark */}
                     <div className="relative flex-shrink-0 z-10">
                       <motion.div
                         className={`w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold transition-colors duration-300 ${
@@ -206,18 +257,25 @@ const ScrollSnapContainer = ({
                           <span>{String(index + 1).padStart(2, "0")}</span>
                         )}
 
-                        {/* Active pulse ring */}
+                        {/* Pulse ring (active step only) */}
                         {state === "active" && (
                           <motion.div
                             className="absolute inset-0 rounded-full bg-[#008080]/40 pointer-events-none"
-                            animate={{ scale: [1, 1.6, 1.6], opacity: [0.5, 0, 0] }}
-                            transition={{ duration: 2, repeat: Infinity, ease: "easeOut" }}
+                            animate={{
+                              scale: [1, 1.6, 1.6],
+                              opacity: [0.5, 0, 0],
+                            }}
+                            transition={{
+                              duration: 2,
+                              repeat: Infinity,
+                              ease: "easeOut",
+                            }}
                           />
                         )}
                       </motion.div>
                     </div>
 
-                    {/* Step label — always visible */}
+                    {/* Label — always visible */}
                     <motion.span
                       className={`text-sm whitespace-nowrap transition-all duration-300 select-none ${
                         state === "active"
@@ -253,7 +311,7 @@ const ScrollSnapContainer = ({
         </motion.nav>
       </AnimatePresence>
 
-      {/* ── Scroll-down indicator (hero only) ── */}
+      {/* ═══ Scroll-down indicator (hero only) ═══ */}
       <AnimatePresence>
         {activeSection === 0 && (
           <motion.div

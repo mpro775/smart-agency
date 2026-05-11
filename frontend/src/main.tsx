@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import App from "./App";
 import About from "./pages/about";
 import Projects from "./pages/project";
@@ -13,6 +13,13 @@ import Footer from "./components/Footer";
 import CustomCursor from "./components/CustomCursor";
 import ScrollToTop from "./components/ScrollToTop";
 import BotLanding from "./pages/bot";
+
+// Conditional Footer: hides on home page (handled inside ScrollSnapContainer)
+function LayoutFooter() {
+  const { pathname } = useLocation();
+  if (pathname === "/") return null;
+  return <Footer />;
+}
 
 // Admin imports
 import { QueryProvider, AuthProvider } from "./admin/context";
@@ -73,7 +80,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                       <Route path="/quote" element={<QuotePage />} />
                     </Routes>
                   </main>
-                  <Footer />
+                  <LayoutFooter />
                 </>
               }
               path="/*"

@@ -8,7 +8,6 @@ import Technologies from "./components/Technologies";
 import Testimonials from "./components/Testimonials";
 import FAQs from "./components/FAQs";
 import HostingPackages from "./components/HostingPackages";
-import Footer from "./components/Footer";
 import { ScrollSnapContainer, ScrollSnapSection } from "./components/scroll-snap";
 
 // تعريف الأقسام للتنقل
@@ -22,7 +21,6 @@ const sections = [
   { id: "hosting", label: "باقات الاستضافة" },
   { id: "faqs", label: "الأسئلة الشائعة" },
   { id: "blogs", label: "المدونة" },
-  { id: "footer", label: "تواصل معنا" },
 ];
 
 function App() {
@@ -71,11 +69,6 @@ function App() {
         {/* Blogs Section - Wave animation */}
         <ScrollSnapSection id="blogs" animationStyle="wave">
           <LatestBlogs />
-        </ScrollSnapSection>
-        
-        {/* Footer Section - No animation (Footer has its own) */}
-        <ScrollSnapSection id="footer" animationStyle="none">
-          <Footer />
         </ScrollSnapSection>
       </ScrollSnapContainer>
   );
