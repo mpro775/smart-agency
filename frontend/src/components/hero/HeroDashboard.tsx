@@ -106,10 +106,10 @@ const HeroDashboard = () => {
                 <h3 className="text-[13px] font-bold text-white">
                   منصة إدارة المشاريع
                 </h3>
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
                 <span className="text-[10px] text-emerald-300 font-medium">
                   مباشر
                 </span>
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
               </div>
               <p className="mt-0.5 text-[10px] text-slate-500">
                 آخر تحديث: منذ 5 دقائق
@@ -119,29 +119,7 @@ const HeroDashboard = () => {
         </div>
 
         {/* ── Checklist + Progress Row ── */}
-        <div className="relative mb-4 grid grid-cols-[1fr_1.2fr] gap-3">
-          {/* Checklist */}
-          <div className="rounded-xl border border-white/[0.06] bg-white/[0.025] p-3">
-            {checklist.map((item, index) => (
-              <div
-                key={item}
-                className={`flex items-center justify-between py-2 text-[12px] ${
-                  index === checklist.length - 1 ? "" : "border-b border-white/[0.04]"
-                }`}
-              >
-                <span className="text-slate-300">{item}</span>
-                <CheckCircle2
-                  size={14}
-                  className={`shrink-0 ${
-                    index === checklist.length - 1
-                      ? "text-[#008080] animate-pulse"
-                      : "text-emerald-400"
-                  }`}
-                />
-              </div>
-            ))}
-          </div>
-
+        <div className="relative mb-4 grid grid-cols-[1.2fr_1fr] gap-3">
           {/* Progress */}
           <div className="rounded-xl border border-white/[0.06] bg-white/[0.025] p-3">
             <p className="text-[11px] font-bold text-slate-300 mb-2">
@@ -220,10 +198,32 @@ const HeroDashboard = () => {
               </div>
             </div>
           </div>
+
+          {/* Checklist */}
+          <div className="rounded-xl border border-white/[0.06] bg-white/[0.025] p-3">
+            {checklist.map((item, index) => (
+              <div
+                key={item}
+                className={`flex items-center justify-between py-2 text-[12px] ${
+                  index === checklist.length - 1 ? "" : "border-b border-white/[0.04]"
+                }`}
+              >
+                <span className="text-slate-300">{item}</span>
+                <CheckCircle2
+                  size={14}
+                  className={`shrink-0 ${
+                    index === checklist.length - 1
+                      ? "text-[#008080] animate-pulse"
+                      : "text-emerald-400"
+                  }`}
+                />
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* ── Metric Cards ── */}
-        <div className="relative grid grid-cols-3 gap-3 mb-4">
+        <div className="relative grid grid-cols-3 gap-3 mb-4" dir="ltr">
           {metrics.map((metric, i) => (
             <div
               key={metric.label}
