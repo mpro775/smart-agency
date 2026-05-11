@@ -3,9 +3,13 @@ import { useState, useEffect } from "react";
 import type { ComponentType } from "react";
 import { motion } from "framer-motion";
 import * as FaIcons from "react-icons/fa";
-import { FiArrowLeft } from "react-icons/fi";
-import { Sparkles, BarChart3, Shield, Headphones, UserCheck } from "lucide-react";
-import { Link } from "react-router-dom";
+import {
+  Sparkles,
+  BarChart3,
+  Shield,
+  Headphones,
+  UserCheck,
+} from "lucide-react";
 import { publicServicesService } from "../services/services.service";
 import type { Service } from "../services/services.service";
 
@@ -41,7 +45,8 @@ const servicesData = [
   {
     id: 2,
     title: "التسويق الرقمي",
-    description: "استراتيجيات تسويق رقمية متكاملة لزيادة الظهور وجذب العملاء وتحقيق النمو",
+    description:
+      "استراتيجيات تسويق رقمية متكاملة لزيادة الظهور وجذب العملاء وتحقيق النمو",
     icon: "FaBullhorn",
     iconType: "react-icon",
     side: "right",
@@ -50,7 +55,8 @@ const servicesData = [
   {
     id: 3,
     title: "الاستشارات التقنية",
-    description: "نقدم لك الخبرة التقنية اللازمة لتحويل فكرتك إلى مشروع ناجح ومستدام",
+    description:
+      "نقدم لك الخبرة التقنية اللازمة لتحويل فكرتك إلى مشروع ناجح ومستدام",
     icon: "FaComments",
     iconType: "react-icon",
     side: "right",
@@ -59,7 +65,8 @@ const servicesData = [
   {
     id: 4,
     title: "تصميم وتطوير مواقع الويب",
-    description: "مواقع احترافية سريعة، متجاوبة، ومحسنة لتجربة المستخدم ومحركات البحث",
+    description:
+      "مواقع احترافية سريعة، متجاوبة، ومحسنة لتجربة المستخدم ومحركات البحث",
     icon: "FaCode",
     iconType: "react-icon",
     side: "left",
@@ -77,7 +84,8 @@ const servicesData = [
   {
     id: 6,
     title: "الأنظمة ولوحات التحكم",
-    description: "أنظمة مخصصة ولوحات تحكم ذكية لإدارة العمليات واتخاذ قرارات أدق",
+    description:
+      "أنظمة مخصصة ولوحات تحكم ذكية لإدارة العمليات واتخاذ قرارات أدق",
     icon: "FaChartBar",
     iconType: "react-icon",
     side: "left",
@@ -89,7 +97,7 @@ export default function Services() {
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
+  console.log(services);
   useEffect(() => {
     const fetchServices = async () => {
       try {
@@ -204,7 +212,8 @@ export default function Services() {
             viewport={{ once: true }}
             className="text-lg text-[#4a5568] max-w-2xl mx-auto leading-relaxed"
           >
-            نحوّل الأفكار إلى منتجات رقمية متكاملة، ونبني أنظمة تدعم النمو وتحقق النتائج المستدامة لأعمالك.
+            نحوّل الأفكار إلى منتجات رقمية متكاملة، ونبني أنظمة تدعم النمو وتحقق
+            النتائج المستدامة لأعمالك.
           </motion.p>
         </motion.div>
 
@@ -281,7 +290,8 @@ export default function Services() {
                   محرك النمو الرقمي
                 </h3>
                 <p className="text-[#4a5568] text-sm leading-relaxed mb-4">
-                  حلول تقنية وتسويقية متكاملة تدفع أعمالك للأمام وتضاعف أثرها في السوق.
+                  حلول تقنية وتسويقية متكاملة تدفع أعمالك للأمام وتضاعف أثرها في
+                  السوق.
                 </p>
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#008080]/10 text-[#008080] text-sm font-medium">
                   <BarChart3 size={16} />
