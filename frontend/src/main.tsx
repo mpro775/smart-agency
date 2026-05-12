@@ -13,6 +13,7 @@ import Footer from "./components/Footer";
 import CustomCursor from "./components/CustomCursor";
 import ScrollToTop from "./components/ScrollToTop";
 import BotLanding from "./pages/bot";
+import ContactPage from "./pages/contact";
 
 // Conditional Footer: hides on home page (handled inside ScrollSnapContainer)
 function LayoutFooter() {
@@ -78,6 +79,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                       />
                       <Route path="/blog/:slug" element={<BlogDetailsPage />} />
                       <Route path="/quote" element={<QuotePage />} />
+                      <Route path="/contact" element={<ContactPage />} />
                     </Routes>
                   </main>
                   <LayoutFooter />

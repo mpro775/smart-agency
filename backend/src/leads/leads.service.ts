@@ -62,7 +62,7 @@ export class LeadsService {
   async findAll(
     filterDto: FilterLeadsDto,
   ): Promise<PaginatedResponseDto<LeadDocument>> {
-    const { page = 1, limit = 10, status, serviceType, search } = filterDto;
+    const { page = 1, limit = 10, status, serviceType, search, leadType, priority, timeline, preferredContactMethod } = filterDto;
 
     // Build query
     const query: any = {};
@@ -75,11 +75,31 @@ export class LeadsService {
       query.serviceType = serviceType;
     }
 
+    if (leadType) {
+      query.leadType = leadType;
+    }
+
+    if (priority) {
+      query.priority = priority;
+    }
+
+    if (timeline) {
+      query.timeline = timeline;
+    }
+
+    if (preferredContactMethod) {
+      query.preferredContactMethod = preferredContactMethod;
+    }
+
     if (search) {
       query.$or = [
         { fullName: { $regex: search, $options: 'i' } },
         { email: { $regex: search, $options: 'i' } },
         { companyName: { $regex: search, $options: 'i' } },
+        { phone: { $regex: search, $options: 'i' } },
+        { message: { $regex: search, $options: 'i' } },
+        { projectGoal: { $regex: search, $options: 'i' } },
+        { source: { $regex: search, $options: 'i' } },
       ];
     }
 

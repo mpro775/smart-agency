@@ -1,5 +1,5 @@
 import api from './api';
-import type { Lead, ApiResponse, PaginatedResponse, LeadStatus, ServiceType } from '../types';
+import type { Lead, ApiResponse, PaginatedResponse, LeadStatus, ServiceType, LeadType, LeadPriority, Timeline, PreferredContactMethod } from '../types';
 
 export interface LeadFilters {
   page?: number;
@@ -7,11 +7,16 @@ export interface LeadFilters {
   status?: LeadStatus;
   serviceType?: ServiceType;
   search?: string;
+  leadType?: LeadType;
+  priority?: LeadPriority;
+  timeline?: Timeline;
+  preferredContactMethod?: PreferredContactMethod;
 }
 
 export interface UpdateLeadDto {
   status?: LeadStatus;
   notes?: string;
+  priority?: LeadPriority;
 }
 
 export const leadsService = {
@@ -22,6 +27,10 @@ export const leadsService = {
     if (filters?.status) params.append('status', filters.status);
     if (filters?.serviceType) params.append('serviceType', filters.serviceType);
     if (filters?.search) params.append('search', filters.search);
+    if (filters?.leadType) params.append('leadType', filters.leadType);
+    if (filters?.priority) params.append('priority', filters.priority);
+    if (filters?.timeline) params.append('timeline', filters.timeline);
+    if (filters?.preferredContactMethod) params.append('preferredContactMethod', filters.preferredContactMethod);
 
     const response = await api.get<ApiResponse<Lead[]>>(`/leads?${params.toString()}`);
     return {
@@ -44,4 +53,3 @@ export const leadsService = {
     await api.delete(`/leads/${id}`);
   },
 };
-

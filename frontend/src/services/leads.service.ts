@@ -19,6 +19,46 @@ export enum BudgetRange {
   NOT_SPECIFIED = "Not Specified",
 }
 
+export enum LeadType {
+  CONTACT = "Contact",
+  PROJECT_BRIEF = "Project Brief",
+  PACKAGE_REQUEST = "Package Request",
+}
+
+export enum ProjectStage {
+  IDEA = "Idea",
+  EXISTING_BUSINESS = "Existing Business",
+  REDESIGN = "Redesign",
+  SCALING = "Scaling",
+}
+
+export enum Timeline {
+  URGENT = "Urgent",
+  ONE_MONTH = "1 Month",
+  TWO_THREE_MONTHS = "2-3 Months",
+  FLEXIBLE = "Flexible",
+}
+
+export enum PreferredContactMethod {
+  WHATSAPP = "WhatsApp",
+  PHONE = "Phone",
+  EMAIL = "Email",
+  MEETING = "Meeting",
+}
+
+export enum CompanySize {
+  INDIVIDUAL = "Individual",
+  STARTUP = "Startup",
+  SMALL_BUSINESS = "Small Business",
+  COMPANY = "Company",
+}
+
+export enum LeadPriority {
+  LOW = "Low",
+  MEDIUM = "Medium",
+  HIGH = "High",
+}
+
 export interface CreateLeadDto {
   fullName: string;
   companyName?: string;
@@ -28,6 +68,22 @@ export interface CreateLeadDto {
   serviceType: ServiceType;
   message?: string;
   source?: string;
+
+  leadType?: LeadType;
+  projectStage?: ProjectStage;
+  projectGoal?: string;
+  timeline?: Timeline;
+  preferredContactMethod?: PreferredContactMethod;
+  companySize?: CompanySize;
+  currentWebsite?: string;
+  referenceLinks?: string[];
+  hasBrandIdentity?: boolean;
+  hasContentReady?: boolean;
+  expectedLaunchDate?: string;
+  meetingPreference?: string;
+  contactReason?: string;
+  projectAnswers?: Record<string, unknown>;
+  priority?: LeadPriority;
 }
 
 export interface LeadResponse {
@@ -40,7 +96,6 @@ export interface LeadResponse {
 }
 
 export const publicLeadsService = {
-  // Submit a new lead (contact form)
   create: async (data: CreateLeadDto): Promise<LeadResponse> => {
     const response = await publicApi.post<ApiResponse<LeadResponse>>(
       "/leads",
