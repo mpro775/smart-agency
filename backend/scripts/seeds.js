@@ -377,29 +377,84 @@ const aboutSchema = new mongoose.Schema(
     hero: {
       title: { type: String, required: true },
       subtitle: { type: String, required: true },
+      badge: { type: String, default: '' },
       image: { type: String, default: '' },
+      primaryButtonText: { type: String, default: '' },
+      primaryButtonUrl: { type: String, default: '' },
+      secondaryButtonText: { type: String, default: '' },
+      secondaryButtonUrl: { type: String, default: '' },
+      trustBadges: [{ type: String }],
     },
     vision: { type: String, required: true },
     mission: { type: String, required: true },
     approach: { type: String, required: true },
+    story: {
+      title: { type: String, default: '' },
+      description: { type: String, default: '' },
+      painPoints: [{ type: String }],
+      closingStatement: { type: String, default: '' },
+    },
+    thinking: [
+      {
+        icon: { type: String, required: true },
+        title: { type: String, required: true },
+        description: { type: String, required: true },
+        result: { type: String, default: '' },
+      },
+    ],
+    differentiators: [
+      {
+        icon: { type: String, required: true },
+        title: { type: String, required: true },
+        description: { type: String, required: true },
+        badge: { type: String, default: '' },
+      },
+    ],
+    process: [
+      {
+        step: { type: Number, required: true },
+        title: { type: String, required: true },
+        description: { type: String, required: true },
+        deliverable: { type: String, default: '' },
+        icon: { type: String, default: '' },
+      },
+    ],
     values: [
       {
         icon: { type: String, required: true },
         title: { type: String, required: true },
         description: { type: String, required: true },
+        example: { type: String, default: '' },
       },
     ],
     stats: [
       {
         icon: { type: String, required: true },
         value: { type: Number, required: true },
+        suffix: { type: String, default: '' },
         label: { type: String, required: true },
+        description: { type: String, default: '' },
       },
     ],
+    teamNote: {
+      title: { type: String, default: '' },
+      description: { type: String, default: '' },
+      highlights: [{ type: String }],
+      image: { type: String, default: '' },
+    },
     cta: {
       title: { type: String, required: true },
       description: { type: String, required: true },
       buttonText: { type: String, required: true },
+      buttonUrl: { type: String, default: '/contact' },
+      secondaryButtonText: { type: String, default: '' },
+      secondaryButtonUrl: { type: String, default: '' },
+    },
+    seo: {
+      metaTitle: { type: String, default: '' },
+      metaDescription: { type: String, default: '' },
+      keywords: [{ type: String }],
+      ogImage: { type: String, default: '' },
     },
     isActive: { type: Boolean, default: true },
   },
@@ -1705,84 +1760,289 @@ async function seedCompanyInfo() {
 }
 
 async function seedAbout() {
-  console.log('🌱 جاري زرع بيانات صفحة من نحن...');
+  console.log('🌱 جاري زرع بيانات صفحة من نحن الاحترافية...');
 
   const aboutData = {
     hero: {
-      title: 'نحن فريق من المبدعين والمطورين',
-      subtitle: 'نحول الأفكار إلى حلول رقمية مبتكرة',
+      badge: 'من نحن',
+      title: 'لا نبني مواقع فقط… نبني أنظمة رقمية تساعد الشركات على النمو',
+      subtitle:
+        'سمارت وكالة تقنية تجمع بين الاستراتيجية، تجربة المستخدم، التصميم، البرمجة، والذكاء الاصطناعي لتحويل الأفكار إلى منتجات رقمية واضحة، قابلة للاستخدام، وقابلة للتوسع.',
       image:
-        'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200',
+        'https://images.unsplash.com/photo-1556761175-b413da4baf72?w=1400',
+      primaryButtonText: 'ابدأ مشروعك معنا',
+      primaryButtonUrl: '/contact',
+      secondaryButtonText: 'شاهد أعمالنا',
+      secondaryButtonUrl: '/projects',
+      trustBadges: [
+        'استراتيجية قبل التنفيذ',
+        'تصميم يخدم التحويل',
+        'برمجة قابلة للتوسع',
+        'شريك نمو لا مجرد منفذ',
+      ],
     },
+
     vision:
-      'أن نكون الشريك الرقمي الأول للشركات الناشئة والمؤسسات في المنطقة، من خلال تقديم حلول تقنية متقدمة تساعدهم على النمو والازدهار في العصر الرقمي.',
+      'أن تكون سمارت الشريك التقني الأقرب للشركات والمشاريع الطموحة في المنطقة، من خلال بناء منتجات رقمية لا تكتفي بالمظهر الجميل، بل تصنع أثرًا تشغيليًا وتجاريًا حقيقيًا.',
+
     mission:
-      'نمكّن المشاريع من النمو والازدهار من خلال مزيج احترافي من التصميم والتطوير والتسويق الرقمي، مع التركيز على الجودة والابتكار ورضا العملاء.',
+      'مهمتنا هي مساعدة المشاريع على الانتقال من فكرة مبعثرة إلى منتج رقمي واضح، منظم، وسهل الاستخدام، عبر مزيج متكامل من التخطيط، التصميم، التطوير، الإطلاق، والتحسين المستمر.',
+
     approach:
-      'نتبع منهجية عمل مرنة تجمع بين التخطيط الاستراتيجي والتنفيذ السريع. نبدأ بفهم عميق لاحتياجات العميل، ثم نطور حلولاً مخصصة باستخدام أحدث التقنيات وأفضل الممارسات في الصناعة.',
-    values: [
+      'نعمل بمنهجية تبدأ بفهم الهدف والسوق والمستخدم، ثم نترجم ذلك إلى تجربة استخدام واضحة، ونبنيها بتقنيات مستقرة قابلة للتوسع، ثم نتابع التحسين بعد الإطلاق بناءً على البيانات والتجربة الواقعية.',
+
+    story: {
+      title: 'لماذا وُجدت سمارت؟',
+      description:
+        'كثير من المشاريع لا تفشل بسبب ضعف الفكرة، بل بسبب ضعف تحويلها إلى تجربة واضحة ونظام قابل للتشغيل. لذلك وُجدت سمارت لتكون الجسر بين الفكرة والتنفيذ الحقيقي.',
+      painPoints: [
+        'أفكار قوية تضيع بسبب تنفيذ تقليدي لا يفهم السوق.',
+        'واجهات جميلة ظاهريًا لكنها لا تقود المستخدم لاتخاذ قرار.',
+        'مشاريع تُبنى بسرعة لكنها تصبح صعبة التطوير بعد الإطلاق.',
+        'غياب شريك تقني يفهم المنتج والعميل والنمو معًا.',
+      ],
+      closingStatement:
+        'نحن لا نتعامل مع المشروع كتصميم أو كود فقط، بل كنظام رقمي يجب أن يخدم هدفًا واضحًا ويستطيع النمو مع الوقت.',
+    },
+
+    thinking: [
       {
-        icon: 'FiUsers',
-        title: 'العمل الجماعي',
-        description: 'نؤمن بقوة العمل الجماعي والتعاون لتحقيق أفضل النتائج',
+        icon: 'FiSearch',
+        title: 'نفهم قبل أن نصمم',
+        description:
+          'نبدأ بفهم الهدف التجاري، طبيعة الجمهور، رحلة المستخدم، والمشكلة التي يجب أن يحلها المنتج.',
+        result: 'مخرجات أوضح قبل الدخول في التصميم والتنفيذ.',
+      },
+      {
+        icon: 'FiPenTool',
+        title: 'نصمم تجربة تقود المستخدم',
+        description:
+          'لا نكتفي بواجهة جميلة؛ نصمم رحلة استخدام تقلل التشتت وتزيد وضوح القرار لدى العميل.',
+        result: 'تجربة استخدام أكثر وضوحًا وقابلية للتحويل.',
+      },
+      {
+        icon: 'FiCode',
+        title: 'نبني بنظام قابل للتوسع',
+        description:
+          'نراعي بنية الكود، تنظيم الواجهات، واجهات API، لوحة التحكم، وقابلية التطوير بعد الإطلاق.',
+        result: 'منتج مستقر لا ينهار عند أول توسع.',
       },
       {
         icon: 'FiTrendingUp',
-        title: 'الابتكار',
-        description: 'نسعى دائماً لاستخدام أحدث التقنيات والأساليب المبتكرة',
+        title: 'نقيس ونحسن بعد الإطلاق',
+        description:
+          'نؤمن أن الإطلاق ليس النهاية، بل بداية مرحلة تحسين مستمرة بناءً على الاستخدام والبيانات.',
+        result: 'تحسين مستمر بدل تسليم جامد.',
+      },
+    ],
+
+    differentiators: [
+      {
+        icon: 'FiLayers',
+        title: 'نفهم المنتج وليس الكود فقط',
+        description:
+          'نتعامل مع كل مشروع كسير عمل وتجربة وهدف تجاري، وليس مجرد صفحات يتم تنفيذها.',
+        badge: 'Product Mindset',
+      },
+      {
+        icon: 'FiLayout',
+        title: 'نجمع التصميم والتطوير والتشغيل',
+        description:
+          'نربط بين واجهة المستخدم، الباك إند، لوحة التحكم، وسهولة إدارة المحتوى بعد التسليم.',
+        badge: 'Full Experience',
+      },
+      {
+        icon: 'FiCpu',
+        title: 'نستخدم التقنية حيث تصنع قيمة',
+        description:
+          'نستفيد من الأتمتة والذكاء الاصطناعي والتكاملات عندما تخدم المشروع فعليًا لا لمجرد الاستعراض.',
+        badge: 'Smart Tech',
+      },
+      {
+        icon: 'FiShield',
+        title: 'نبني على أساس قابل للنمو',
+        description:
+          'نهتم بالبنية، الأداء، الأمان، وتجربة الإدارة حتى يكون المشروع قابلًا للتطوير لاحقًا.',
+        badge: 'Scalable Build',
+      },
+    ],
+
+    stats: [
+      {
+        icon: 'FiBriefcase',
+        value: 20,
+        suffix: '+',
+        label: 'مشروع رقمي',
+        description:
+          'بين مواقع تعريفية، متاجر إلكترونية، تطبيقات، أنظمة تشغيلية، ولوحات تحكم.',
+      },
+      {
+        icon: 'FiGrid',
+        value: 6,
+        suffix: '+',
+        label: 'أنواع حلول',
+        description:
+          'مواقع، تطبيقات، متاجر، أنظمة SaaS، لوحات إدارة، وأتمتة تشغيلية.',
+      },
+      {
+        icon: 'FiUsers',
+        value: 10,
+        suffix: '+',
+        label: 'قطاعات تعاملنا معها',
+        description:
+          'تجارة، خدمات، تعليم، تقنية، محتوى، مشاريع ناشئة، وحلول داخلية.',
+      },
+      {
+        icon: 'FiRepeat',
+        value: 7,
+        suffix: ' مراحل',
+        label: 'منهجية تنفيذ',
+        description:
+          'من الاكتشاف والتخطيط إلى التصميم، التطوير، الاختبار، الإطلاق، والتحسين.',
+      },
+    ],
+
+    process: [
+      {
+        step: 1,
+        icon: 'FiSearch',
+        title: 'الاكتشاف والتحليل',
+        description:
+          'نحدد الهدف، الجمهور، نطاق المشروع، الأولويات، والمشاكل التي يجب حلها.',
+        deliverable: 'ملخص المتطلبات وخريطة أولية للحل',
+      },
+      {
+        step: 2,
+        icon: 'FiMap',
+        title: 'هيكلة التجربة',
+        description:
+          'نرتب الصفحات، رحلة المستخدم، تدفق البيانات، والمنطق الأساسي قبل التصميم.',
+        deliverable: 'User Flow / Sitemap / Wireframe',
+      },
+      {
+        step: 3,
+        icon: 'FiPenTool',
+        title: 'تصميم الواجهة',
+        description:
+          'نصمم واجهة احترافية تعكس الهوية وتخدم الاستخدام والتحويل.',
+        deliverable: 'UI Design قابل للتنفيذ',
+      },
+      {
+        step: 4,
+        icon: 'FiCode',
+        title: 'التطوير والربط',
+        description:
+          'نبني الواجهات، الباك إند، لوحة التحكم، وربط البيانات والتكاملات المطلوبة.',
+        deliverable: 'نسخة عملية قابلة للاختبار',
+      },
+      {
+        step: 5,
+        icon: 'FiCheckCircle',
+        title: 'الاختبار والتحسين',
+        description:
+          'نراجع الأداء، الأخطاء، التجاوب، سهولة الاستخدام، وجودة التجربة النهائية.',
+        deliverable: 'نسخة محسنة قبل الإطلاق',
+      },
+      {
+        step: 6,
+        icon: 'FiUploadCloud',
+        title: 'الإطلاق والتسليم',
+        description:
+          'نطلق المشروع، نضبط الإعدادات الأساسية، ونسلم لوحة التحكم وطريقة الاستخدام.',
+        deliverable: 'إطلاق رسمي ومستندات تشغيل مختصرة',
+      },
+      {
+        step: 7,
+        icon: 'FiTrendingUp',
+        title: 'النمو والتطوير المستمر',
+        description:
+          'نراجع تجربة الاستخدام والبيانات ونقترح تحسينات بعد الإطلاق.',
+        deliverable: 'خطة تحسين مستمرة',
+      },
+    ],
+
+    values: [
+      {
+        icon: 'FiTarget',
+        title: 'لا نبدأ قبل فهم الهدف',
+        description:
+          'كل قرار تصميمي أو تقني يجب أن يخدم هدفًا واضحًا للمشروع والمستخدم.',
+        example: 'قبل التصميم نسأل: ما القرار الذي نريد من المستخدم اتخاذه؟',
+      },
+      {
+        icon: 'FiEye',
+        title: 'الجمال يجب أن يخدم الوضوح',
+        description:
+          'نؤمن أن الواجهة الاحترافية ليست زخرفة فقط، بل وضوح وترتيب وثقة وسهولة استخدام.',
+        example: 'نقلل الضجيج البصري ونرفع وضوح الرسالة والزر الأساسي.',
+      },
+      {
+        icon: 'FiDatabase',
+        title: 'لا نبني شيئًا يصعب تطويره',
+        description:
+          'نهتم بالبنية والتنظيم من البداية حتى لا يتحول المشروع إلى عبء عند التوسع.',
+        example: 'نفصل المكونات ونراعي قابلية إعادة الاستخدام وتوسع البيانات.',
       },
       {
         icon: 'FaHandshake',
-        title: 'الشفافية',
-        description: 'نحافظ على شفافية كاملة في جميع مراحل المشروع',
-      },
-      {
-        icon: 'FiGlobe',
-        title: 'الجودة',
-        description: 'نلتزم بأعلى معايير الجودة في كل ما نقدمه',
+        title: 'نتعامل كشريك لا كمورد',
+        description:
+          'نناقش، نقترح، ونصحح الاتجاه عندما نرى أن القرار لا يخدم المشروع.',
+        example: 'إذا كان المطلوب غير مناسب، نقترح بديلًا يخدم الهدف بشكل أفضل.',
       },
     ],
-    stats: [
-      {
-        icon: 'FiUsers',
-        value: 50,
-        label: 'مشروع منجز',
-      },
-      {
-        icon: 'RiTeamLine',
-        value: 15,
-        label: 'عضو فريق',
-      },
-      {
-        icon: 'FiGlobe',
-        value: 30,
-        label: 'عميل راضٍ',
-      },
-      {
-        icon: 'FiTrendingUp',
-        value: 5,
-        label: 'سنوات خبرة',
-      },
-    ],
-    cta: {
-      title: 'هل أنت مستعد لبدء مشروعك القادم؟',
-      description: 'تواصل معنا اليوم واحصل على استشارة مجانية حول مشروعك',
-      buttonText: 'تواصل معنا',
+
+    teamNote: {
+      title: 'فريق صغير بعقلية تنفيذ كبيرة',
+      description:
+        'نؤمن أن قوة الوكالة لا تقاس بعدد الأشخاص فقط، بل بوضوح المنهجية، جودة التنفيذ، وسرعة تحويل الأفكار إلى نتائج. نعمل كفريق متكامل يجمع بين التفكير المنتج، التصميم، البرمجة، والتشغيل.',
+      highlights: [
+        'تواصل مباشر وواضح خلال مراحل التنفيذ',
+        'قرارات مبنية على هدف المشروع لا على الذوق فقط',
+        'اهتمام بالتفاصيل من أول شاشة حتى لوحة التحكم',
+      ],
+      image:
+        'https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200',
     },
+
+    cta: {
+      title: 'هل لديك فكرة وتريد تحويلها إلى منتج رقمي حقيقي؟',
+      description:
+        'شاركنا فكرتك، وسنساعدك على تحويلها إلى تجربة واضحة، نظام مستقر، وإطلاق احترافي قابل للنمو.',
+      buttonText: 'ابدأ مشروعك معنا',
+      buttonUrl: '/contact',
+      secondaryButtonText: 'استعرض أعمالنا',
+      secondaryButtonUrl: '/projects',
+    },
+
+    seo: {
+      metaTitle: 'من نحن | وكالة سمارت للحلول الرقمية والبرمجية',
+      metaDescription:
+        'تعرف على وكالة سمارت: شريك تقني يساعد الشركات على بناء مواقع، تطبيقات، متاجر، وأنظمة رقمية احترافية قابلة للنمو.',
+      keywords: [
+        'وكالة سمارت',
+        'شركة برمجة',
+        'تصميم مواقع',
+        'تطوير تطبيقات',
+        'حلول رقمية',
+        'وكالة تقنية',
+      ],
+      ogImage:
+        'https://images.unsplash.com/photo-1556761175-b413da4baf72?w=1400',
+    },
+
     isActive: true,
   };
 
-  // Check if about data already exists (singleton pattern)
   const existingAbout = await About.findOne();
   if (!existingAbout) {
     const about = new About(aboutData);
     await about.save();
-    console.log('✅ تم إنشاء بيانات صفحة من نحن');
+    console.log('✅ تم إنشاء بيانات صفحة من نحن الاحترافية');
   } else {
-    // Update existing record with seed data
     Object.assign(existingAbout, aboutData);
     await existingAbout.save();
-    console.log('🔄 تم تحديث بيانات صفحة من نحن');
+    console.log('🔄 تم تحديث بيانات صفحة من نحن الاحترافية');
   }
 }
 
