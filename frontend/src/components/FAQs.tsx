@@ -15,7 +15,6 @@ import {
   FiShield,
   FiUsers,
   FiMessageCircle,
-  FiLayers,
   FiCheckCircle,
   FiArrowUpLeft,
 } from "react-icons/fi";
@@ -302,7 +301,10 @@ export default function FAQs() {
 
   if (loading) {
     return (
-      <section className="py-24 bg-[#061317] text-white relative overflow-hidden" id="faqs">
+      <section
+        className="py-24 bg-[#061317] text-white relative overflow-hidden"
+        id="faqs"
+      >
         <BackgroundEffects />
         <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
@@ -316,7 +318,10 @@ export default function FAQs() {
 
   if (error) {
     return (
-      <section className="py-24 bg-[#061317] text-white relative overflow-hidden" id="faqs">
+      <section
+        className="py-24 bg-[#061317] text-white relative overflow-hidden"
+        id="faqs"
+      >
         <BackgroundEffects />
         <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center rounded-2xl border border-white/10 bg-white/[0.04] p-8">
@@ -332,7 +337,11 @@ export default function FAQs() {
   }
 
   return (
-    <section className="py-24 bg-[#061317] text-white relative overflow-hidden" id="faqs" dir="rtl">
+    <section
+      className="py-24 bg-[#061317] text-white relative overflow-hidden"
+      id="faqs"
+      dir="rtl"
+    >
       <BackgroundEffects />
 
       <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
@@ -350,11 +359,13 @@ export default function FAQs() {
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
             إجابات واضحة لـ
             <span className="text-transparent bg-clip-text bg-gradient-to-l from-primary to-teal-400">
-              {" "}قرارات أفضل
+              {" "}
+              قرارات أفضل
             </span>
           </h2>
           <p className="text-lg text-white/60 max-w-2xl mx-auto leading-relaxed">
-            جمعنا أكثر الأسئلة شيوعًا لمساعدتك على فهم طريقة عملنا واتخاذ قرارك بثقة ووضوح.
+            جمعنا أكثر الأسئلة شيوعًا لمساعدتك على فهم طريقة عملنا واتخاذ قرارك
+            بثقة ووضوح.
           </p>
         </motion.div>
 
@@ -421,14 +432,18 @@ export default function FAQs() {
             {/* Results Count */}
             {searchQuery && (
               <p className="text-sm text-white/40 mb-4">
-                تم العثور على {filteredFaqs.length} نتيجة{` لـ "${searchQuery}"`}
+                تم العثور على {filteredFaqs.length} نتيجة
+                {` لـ "${searchQuery}"`}
               </p>
             )}
 
             {/* FAQ Accordion Cards */}
             <AnimatePresence mode="popLayout">
               {filteredFaqs.map((faq, index) => {
-                const IconComponent = getCategoryIcon(faq.category, faq.question);
+                const IconComponent = getCategoryIcon(
+                  faq.category,
+                  faq.question,
+                );
                 return (
                   <motion.div
                     key={faq._id}
