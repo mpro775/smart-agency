@@ -6,7 +6,7 @@ export interface FAQ {
   question: string;
   answer: string;
   category?: string;
-  orderNumber?: number;
+  order?: number;
   isActive?: boolean;
   createdAt?: string;
   updatedAt?: string;

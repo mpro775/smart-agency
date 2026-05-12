@@ -11,17 +11,37 @@ import {
   FiCreditCard,
   FiCode,
   FiSettings,
+  FiClock,
+  FiShield,
+  FiUsers,
+  FiMessageCircle,
+  FiLayers,
+  FiCheckCircle,
+  FiArrowUpLeft,
 } from "react-icons/fi";
 import { FaWhatsapp } from "react-icons/fa";
 import { publicFaqsService } from "../services/faqs.service";
 import type { FAQ } from "../services/faqs.service";
 
-// Icon mapping function based on category and question content
+const categoryDisplayMap: Record<string, string> = {
+  General: "قبل بدء المشروع",
+  عام: "قبل بدء المشروع",
+  تقني: "التقنية والتنفيذ",
+  استضافة: "الاستضافة والبنية التحتية",
+  دفع: "التكلفة والمدة",
+  مالي: "التكلفة والمدة",
+  خدمات: "التقنية والتنفيذ",
+};
+
+const getCategoryLabel = (category?: string) => {
+  if (!category) return "عام";
+  return categoryDisplayMap[category] || category;
+};
+
 const getCategoryIcon = (category?: string, question?: string) => {
   const categoryLower = category?.toLowerCase() || "";
   const questionLower = question?.toLowerCase() || "";
 
-  // Hosting related
   if (
     categoryLower.includes("استضاف") ||
     questionLower.includes("سيرفر") ||
@@ -30,7 +50,6 @@ const getCategoryIcon = (category?: string, question?: string) => {
     return FiServer;
   }
 
-  // Cloud/Technical
   if (
     categoryLower.includes("تقني") ||
     questionLower.includes("سحاب") ||
@@ -39,7 +58,6 @@ const getCategoryIcon = (category?: string, question?: string) => {
     return FiCloud;
   }
 
-  // Payment/Financial
   if (
     categoryLower.includes("دفع") ||
     questionLower.includes("دفع") ||
@@ -49,7 +67,6 @@ const getCategoryIcon = (category?: string, question?: string) => {
     return FiCreditCard;
   }
 
-  // Code/Development
   if (
     categoryLower.includes("تطوير") ||
     questionLower.includes("كود") ||
@@ -58,7 +75,6 @@ const getCategoryIcon = (category?: string, question?: string) => {
     return FiCode;
   }
 
-  // Settings/General technical
   if (
     categoryLower.includes("إعداد") ||
     questionLower.includes("إعداد") ||
@@ -67,26 +83,131 @@ const getCategoryIcon = (category?: string, question?: string) => {
     return FiSettings;
   }
 
-  // Default fallback
   return FiHelpCircle;
 };
 
-// Get color class for category
-const getCategoryColor = (category?: string) => {
-  const categoryLower = category?.toLowerCase() || "";
+const formatIndex = (index: number) => String(index + 1).padStart(2, "0");
 
-  if (categoryLower.includes("استضاف") || categoryLower.includes("تقني")) {
-    return "text-primary";
-  }
-  if (categoryLower.includes("دفع") || categoryLower.includes("مالي")) {
-    return "text-green-600";
-  }
-  if (categoryLower.includes("تطوير")) {
-    return "text-blue-600";
-  }
+function BackgroundEffects() {
+  return (
+    <>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(20,184,166,0.18),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(20,184,166,0.10),transparent_35%)]" />
+      <div className="absolute inset-0 opacity-[0.06] bg-[linear-gradient(to_right,#fff_1px,transparent_1px),linear-gradient(to_bottom,#fff_1px,transparent_1px)] bg-[size:56px_56px]" />
+    </>
+  );
+}
 
-  return "text-primary";
-};
+function SmartAdvisoryCard() {
+  const steps = [
+    { num: "01", text: "تحليل الفكرة" },
+    { num: "02", text: "تقدير المدة والتكلفة" },
+    { num: "03", text: "خطة التنفيذ والدعم" },
+  ];
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: -20 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.6 }}
+      viewport={{ once: true }}
+      className="sticky top-24 rounded-3xl border border-white/10 bg-white/[0.04] backdrop-blur-sm p-8 overflow-hidden"
+    >
+      <div className="absolute top-0 right-0 h-1 w-full bg-gradient-to-l from-primary to-transparent" />
+
+      <h3 className="text-xl font-bold text-white mb-2">هل لديك فكرة مشروع؟</h3>
+      <p className="text-white/60 text-sm mb-6 leading-relaxed">
+        نساعدك على تحويلها إلى واقع ناجح.
+      </p>
+
+      <div className="space-y-4 mb-8">
+        {steps.map((step) => (
+          <div key={step.num} className="flex items-center gap-3">
+            <span className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/20 text-primary text-xs font-bold flex items-center justify-center">
+              {step.num}
+            </span>
+            <span className="text-white/80 text-sm">{step.text}</span>
+          </div>
+        ))}
+      </div>
+
+      <motion.a
+        href="https://wa.me/967778032532"
+        target="_blank"
+        rel="noopener noreferrer"
+        whileHover={{ scale: 1.03 }}
+        whileTap={{ scale: 0.97 }}
+        className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-2xl font-semibold transition-all duration-300 shadow-lg shadow-primary/20"
+      >
+        <FaWhatsapp className="text-lg" />
+        احجز استشارة مجانية
+      </motion.a>
+
+      <p className="text-white/40 text-xs text-center mt-4 flex items-center justify-center gap-1">
+        <FiCheckCircle className="text-primary" />
+        نرد عليك خلال أسرع وقت
+      </p>
+    </motion.div>
+  );
+}
+
+function TrustBar() {
+  const items = [
+    {
+      icon: FiShield,
+      title: "حلول موثوقة وآمنة",
+      desc: "نستخدم أفضل الممارسات لحماية مشروعك وبياناتك.",
+    },
+    {
+      icon: FiUsers,
+      title: "فريق متخصص",
+      desc: "خبرة في التصميم، البرمجة، وإدارة المشاريع الرقمية.",
+    },
+    {
+      icon: FiClock,
+      title: "تسليم في الوقت المحدد",
+      desc: "نعمل بخطة واضحة وجدول زمني متفق عليه.",
+    },
+  ];
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      viewport={{ once: true }}
+      className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6"
+    >
+      {items.map((item, i) => (
+        <div
+          key={i}
+          className="flex flex-col items-center text-center p-6 rounded-2xl border border-white/10 bg-white/[0.03]"
+        >
+          <item.icon className="text-3xl text-primary mb-3" />
+          <h4 className="text-white font-semibold mb-1">{item.title}</h4>
+          <p className="text-white/50 text-sm leading-relaxed">{item.desc}</p>
+        </div>
+      ))}
+    </motion.div>
+  );
+}
+
+function EmptyResults() {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="text-center py-16 rounded-2xl border border-white/10 bg-white/[0.03]"
+    >
+      <FiMessageCircle className="text-5xl text-white/20 mx-auto mb-4" />
+      <h4 className="text-white/80 font-semibold text-lg mb-2">
+        لم نجد سؤالًا مطابقًا لبحثك
+      </h4>
+      <p className="text-white/40 text-sm max-w-md mx-auto leading-relaxed">
+        جرّب كلمات مثل: التكلفة، المدة، الدعم، الاستضافة، أو تواصل معنا مباشرة.
+      </p>
+    </motion.div>
+  );
+}
 
 export default function FAQs() {
   const [faqs, setFaqs] = useState<FAQ[]>([]);
@@ -119,18 +240,15 @@ export default function FAQs() {
     fetchData();
   }, []);
 
-  // Inject FAQPage schema for SEO
   useEffect(() => {
     if (faqs.length === 0) return;
 
-    // Function to strip HTML tags from answer
     const stripHtml = (html: string) => {
       const tmp = document.createElement("div");
       tmp.innerHTML = html;
       return tmp.textContent || tmp.innerText || "";
     };
 
-    // Generate FAQPage schema
     const faqSchema = {
       "@context": "https://schema.org",
       "@type": "FAQPage",
@@ -144,22 +262,18 @@ export default function FAQs() {
       })),
     };
 
-    // Create script element
     const script = document.createElement("script");
     script.type = "application/ld+json";
     script.textContent = JSON.stringify(faqSchema);
     script.id = "faq-schema";
 
-    // Remove existing schema if present
     const existingScript = document.getElementById("faq-schema");
     if (existingScript) {
       existingScript.remove();
     }
 
-    // Add new schema
     document.head.appendChild(script);
 
-    // Cleanup function
     return () => {
       const scriptToRemove = document.getElementById("faq-schema");
       if (scriptToRemove) {
@@ -174,7 +288,6 @@ export default function FAQs() {
         ? faqs
         : faqs.filter((faq) => faq.category === selectedCategory);
 
-    // Apply search filter if there's a search query
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase().trim();
       filtered = filtered.filter((faq) => {
@@ -189,11 +302,12 @@ export default function FAQs() {
 
   if (loading) {
     return (
-      <section className="py-20 bg-white" id="faqs">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-24 bg-[#061317] text-white relative overflow-hidden" id="faqs">
+        <BackgroundEffects />
+        <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-            <p className="mt-4 text-gray-600">جاري تحميل الأسئلة الشائعة...</p>
+            <p className="mt-4 text-white/60">جاري تحميل مركز المساعدة...</p>
           </div>
         </div>
       </section>
@@ -202,10 +316,11 @@ export default function FAQs() {
 
   if (error) {
     return (
-      <section className="py-20 bg-white" id="faqs">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <p className="text-red-600">{error}</p>
+      <section className="py-24 bg-[#061317] text-white relative overflow-hidden" id="faqs">
+        <BackgroundEffects />
+        <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center rounded-2xl border border-white/10 bg-white/[0.04] p-8">
+            <p className="text-red-400">{error}</p>
           </div>
         </div>
       </section>
@@ -217,279 +332,215 @@ export default function FAQs() {
   }
 
   return (
-    <section className="py-20 bg-white" id="faqs">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-24 bg-[#061317] text-white relative overflow-hidden" id="faqs" dir="rtl">
+      <BackgroundEffects />
+
+      <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header Section */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.7 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mb-12"
         >
-          <span className="inline-block px-3 py-1 text-sm font-medium rounded-full bg-primary/10 text-primary mb-4">
-            الأسئلة الشائعة
+          <span className="inline-block px-4 py-1.5 text-sm font-medium rounded-full border border-primary/30 bg-primary/10 text-primary mb-4">
+            مركز المساعدة
           </span>
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            أسئلة{" "}
-            <span className="text-transparent bg-clip-text bg-[linear-gradient(to_right,var(--color-primary),var(--color-primary-dark))]">
-              شائعة
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            إجابات واضحة لـ
+            <span className="text-transparent bg-clip-text bg-gradient-to-l from-primary to-teal-400">
+              {" "}قرارات أفضل
             </span>
           </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            إجابات على الأسئلة الأكثر شيوعاً التي يطرحها عملاؤنا
+          <p className="text-lg text-white/60 max-w-2xl mx-auto leading-relaxed">
+            جمعنا أكثر الأسئلة شيوعًا لمساعدتك على فهم طريقة عملنا واتخاذ قرارك بثقة ووضوح.
           </p>
         </motion.div>
 
-        {/* شريط البحث */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1, duration: 0.6 }}
-          viewport={{ once: true }}
-          className="max-w-2xl mx-auto mb-12"
-        >
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <FiSearch className="text-gray-400 text-lg" />
-            </div>
-            <input
-              type="text"
-              placeholder="بماذا يمكننا مساعدتك اليوم؟"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-4 text-lg border-2 border-gray-200 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-300 bg-white shadow-sm hover:shadow-md"
-            />
-          </div>
-          {searchQuery && (
-            <p className="text-sm text-gray-500 mt-2 text-center">
-              تم العثور على {filteredFaqs.length} نتيجة
-              {searchQuery && searchQuery.length > 0
-                ? ` لـ "${searchQuery}"`
-                : ""}
-            </p>
-          )}
-        </motion.div>
-
-        {/* الفلاتر - تظهر فقط على الشاشات الصغيرة */}
+        {/* Smart Filters */}
         {categories.length > 0 && (
           <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            className="flex flex-wrap justify-center gap-3 mb-12 lg:hidden"
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1, duration: 0.5 }}
+            viewport={{ once: true }}
+            className="flex flex-wrap justify-center gap-3 mb-10"
           >
             <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.96 }}
               onClick={() => setSelectedCategory("all")}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+              className={`px-5 py-2.5 rounded-2xl text-sm font-medium transition-all duration-300 border ${
                 selectedCategory === "all"
-                  ? "bg-[linear-gradient(to_right,var(--color-primary),var(--color-primary-dark))] text-white shadow-lg"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200 shadow-md"
+                  ? "bg-primary/20 border-primary/40 text-primary shadow-lg shadow-primary/10"
+                  : "border-white/10 bg-white/[0.04] text-white/60 hover:bg-white/[0.08] hover:text-white/80"
               }`}
             >
-              الكل
+              جميع الأسئلة
             </motion.button>
             {categories.map((category) => (
               <motion.button
                 key={category}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.96 }}
                 onClick={() => setSelectedCategory(category)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                className={`px-5 py-2.5 rounded-2xl text-sm font-medium transition-all duration-300 border ${
                   selectedCategory === category
-                    ? "bg-[linear-gradient(to_right,var(--color-primary),var(--color-primary-dark))] text-white shadow-lg"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200 shadow-md"
+                    ? "bg-primary/20 border-primary/40 text-primary shadow-lg shadow-primary/10"
+                    : "border-white/10 bg-white/[0.04] text-white/60 hover:bg-white/[0.08] hover:text-white/80"
                 }`}
               >
-                {category}
+                {getCategoryLabel(category)}
               </motion.button>
             ))}
           </motion.div>
         )}
 
-        {/* تخطيط القائمة مع الشريط الجانبي على الشاشات الكبيرة */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* الشريط الجانبي للفئات - مخفي على الشاشات الصغيرة */}
-          {categories.length > 0 && (
-            <div className="hidden lg:block lg:col-span-4">
-              <div className="sticky top-20">
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.3, duration: 0.6 }}
-                  viewport={{ once: true }}
-                  className="bg-white rounded-xl shadow-lg border border-gray-100 p-6"
-                >
-                  <h3 className="text-lg font-bold text-gray-900 mb-4 text-right">
-                    الفئات
-                  </h3>
-                  <div className="space-y-2">
-                    <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      onClick={() => setSelectedCategory("all")}
-                      className={`w-full text-right px-3 py-2 rounded-lg transition-all duration-300 ${
-                        selectedCategory === "all"
-                          ? "bg-primary text-white shadow-md"
-                          : "text-gray-700 hover:bg-gray-100"
-                      }`}
-                    >
-                      الكل
-                    </motion.button>
-                    {categories.map((category) => (
-                      <motion.button
-                        key={category}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                        onClick={() => setSelectedCategory(category)}
-                        className={`w-full text-right px-3 py-2 rounded-lg transition-all duration-300 ${
-                          selectedCategory === category
-                            ? "bg-primary text-white shadow-md"
-                            : "text-gray-700 hover:bg-gray-100"
-                        }`}
-                      >
-                        {category}
-                      </motion.button>
-                    ))}
-                  </div>
-                  {searchQuery && (
-                    <div className="mt-4 pt-4 border-t border-gray-200">
-                      <p className="text-sm text-gray-600">
-                        تم العثور على {filteredFaqs.length} نتيجة
-                        {searchQuery && searchQuery.length > 0
-                          ? ` لـ "${searchQuery}"`
-                          : ""}
-                      </p>
-                    </div>
-                  )}
-                </motion.div>
-              </div>
+        {/* Main Layout: Sidebar + FAQ List */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Sidebar Advisory Card */}
+          <aside className="lg:col-span-4">
+            <SmartAdvisoryCard />
+          </aside>
+
+          {/* FAQ List */}
+          <div className="lg:col-span-8">
+            {/* Search Box */}
+            <div className="relative mb-6">
+              <FiSearch className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 text-lg" />
+              <input
+                type="text"
+                placeholder="ابحث عن التكلفة، المدة، الدعم، أو طريقة العمل..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full rounded-2xl border border-white/10 bg-white/[0.05] py-4 pr-12 pl-4 text-white placeholder:text-white/40 outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all duration-300"
+              />
             </div>
-          )}
 
-          {/* قائمة الأسئلة */}
-          <div className="lg:col-span-8 space-y-4">
-            <AnimatePresence>
-              {filteredFaqs.map((faq, index) => (
-                <motion.div
-                  key={faq._id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ delay: index * 0.05, duration: 0.3 }}
-                  className={`bg-white rounded-xl transition-all duration-300 overflow-hidden ${
-                    expandedId === faq._id
-                      ? "shadow-lg border-2 border-primary bg-primary/5"
-                      : "shadow-md hover:shadow-lg border border-gray-100"
-                  }`}
-                >
-                  <button
-                    onClick={() =>
-                      setExpandedId(expandedId === faq._id ? null : faq._id)
-                    }
-                    className="w-full px-6 py-5 flex items-center justify-between text-right hover:bg-gray-50 transition-colors"
+            {/* Results Count */}
+            {searchQuery && (
+              <p className="text-sm text-white/40 mb-4">
+                تم العثور على {filteredFaqs.length} نتيجة{` لـ "${searchQuery}"`}
+              </p>
+            )}
+
+            {/* FAQ Accordion Cards */}
+            <AnimatePresence mode="popLayout">
+              {filteredFaqs.map((faq, index) => {
+                const IconComponent = getCategoryIcon(faq.category, faq.question);
+                return (
+                  <motion.div
+                    key={faq._id}
+                    initial={{ opacity: 0, y: 18 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -12 }}
+                    transition={{ duration: 0.25, delay: index * 0.04 }}
+                    layout
+                    className={`relative overflow-hidden rounded-2xl border transition-all duration-300 mb-4 ${
+                      expandedId === faq._id
+                        ? "border-primary/40 bg-white/[0.07] shadow-[0_0_40px_rgba(20,184,166,0.12)]"
+                        : "border-white/10 bg-white/[0.04] hover:bg-white/[0.06]"
+                    }`}
                   >
-                    <div className="shrink-0 ml-4">
-                      {expandedId === faq._id ? (
-                        <FiChevronUp className="text-gray-400 text-xl" />
-                      ) : (
-                        <FiChevronDown className="text-gray-400 text-xl" />
-                      )}
-                    </div>
-                    <div className="flex items-center gap-4 flex-1">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-3 flex-wrap">
-                          <h3 className="font-semibold text-gray-900 text-lg">
-                            {faq.question}
-                          </h3>
-                          {faq.category && (
-                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
-                              {faq.category}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0 mr-4">
-                      {(() => {
-                        const IconComponent = getCategoryIcon(
-                          faq.category,
-                          faq.question
-                        );
-                        return (
-                          <IconComponent
-                            className={`text-xl ${getCategoryColor(
-                              faq.category
-                            )}`}
-                          />
-                        );
-                      })()}
-                    </div>
-                  </button>
-
-                  <AnimatePresence>
                     {expandedId === faq._id && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3 }}
-                        className="overflow-hidden"
-                      >
-                        <div className="px-6 pb-5 pr-16">
-                          <div
-                            className="text-gray-700 leading-relaxed prose prose-sm max-w-none"
-                            dangerouslySetInnerHTML={{ __html: faq.answer }}
-                          />
-                        </div>
-                      </motion.div>
+                      <div className="absolute right-0 top-0 h-full w-1 bg-primary" />
                     )}
-                  </AnimatePresence>
-                </motion.div>
-              ))}
+
+                    <button
+                      onClick={() =>
+                        setExpandedId(expandedId === faq._id ? null : faq._id)
+                      }
+                      aria-expanded={expandedId === faq._id}
+                      className="w-full px-6 py-5 flex items-center gap-4 text-right hover:bg-white/[0.02] transition-colors"
+                    >
+                      <span className="text-white/20 text-sm font-mono font-bold flex-shrink-0">
+                        {formatIndex(index)}
+                      </span>
+
+                      <IconComponent className="text-primary text-xl flex-shrink-0" />
+
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-semibold text-white text-base md:text-lg leading-snug">
+                          {faq.question}
+                        </h3>
+                        {faq.category && (
+                          <span className="inline-flex items-center mt-1 px-2 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
+                            {getCategoryLabel(faq.category)}
+                          </span>
+                        )}
+                      </div>
+
+                      <div className="flex-shrink-0">
+                        {expandedId === faq._id ? (
+                          <FiChevronUp className="text-white/40 text-xl" />
+                        ) : (
+                          <FiChevronDown className="text-white/40 text-xl" />
+                        )}
+                      </div>
+                    </button>
+
+                    <AnimatePresence>
+                      {expandedId === faq._id && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.3 }}
+                          className="overflow-hidden"
+                        >
+                          <div className="px-6 pb-5 pr-16">
+                            <div
+                              className="text-white/70 leading-relaxed prose prose-sm prose-invert max-w-none"
+                              dangerouslySetInnerHTML={{ __html: faq.answer }}
+                            />
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </motion.div>
+                );
+              })}
             </AnimatePresence>
 
-            {/* بطاقة الدعوة للعمل */}
+            {/* Empty State */}
+            {filteredFaqs.length === 0 && <EmptyResults />}
+
+            {/* CTA Card */}
             {filteredFaqs.length > 0 && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2, duration: 0.6 }}
                 viewport={{ once: true }}
-                className="bg-gradient-to-r from-primary/10 to-primary/5 rounded-2xl p-8 border-2 border-primary/20 shadow-lg hover:shadow-xl transition-all duration-300"
+                className="mt-8 rounded-3xl border border-primary/30 bg-primary/[0.06] p-8 text-center overflow-hidden relative"
               >
-                <div className="text-center">
-                  <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-3">
-                    لم تجد السؤال الذي تبحث عنه؟
-                  </h3>
-                  <p className="text-gray-600 mb-6 leading-relaxed">
-                    فريق الدعم لدينا متواجد للمساعدة. تواصل معنا مباشرة عبر
-                    واتساب وسنقوم بحل استفسارك في أقرب وقت ممكن.
-                  </p>
-                  <motion.a
-                    href="https://wa.me/967778032532"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="inline-flex items-center gap-3 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300"
-                  >
-                    <FaWhatsapp className="text-xl" />
-                    تحدث معنا واتساب
-                    <FaWhatsapp className="text-xl" />
-                  </motion.a>
-                </div>
+                <div className="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-primary to-transparent" />
+                <h3 className="text-xl md:text-2xl font-bold text-white mb-3">
+                  لم تجد إجابة لسؤالك؟
+                </h3>
+                <p className="text-white/60 mb-6 leading-relaxed max-w-lg mx-auto">
+                  تواصل معنا مباشرة وسنساعدك في فهم الخطوة المناسبة لمشروعك.
+                </p>
+                <motion.a
+                  href="https://wa.me/967778032532"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.96 }}
+                  className="inline-flex items-center gap-3 bg-green-600 hover:bg-green-700 text-white px-8 py-3.5 rounded-2xl font-semibold text-lg shadow-lg shadow-green-600/20 transition-all duration-300"
+                >
+                  <FaWhatsapp className="text-xl" />
+                  تواصل معنا واتساب
+                  <FiArrowUpLeft className="text-sm" />
+                </motion.a>
               </motion.div>
-            )}
-
-            {filteredFaqs.length === 0 && (
-              <div className="text-center py-12">
-                <p className="text-gray-500">لا توجد أسئلة في هذه الفئة</p>
-              </div>
             )}
           </div>
         </div>
+
+        {/* Trust Bar */}
+        <TrustBar />
       </div>
     </section>
   );
