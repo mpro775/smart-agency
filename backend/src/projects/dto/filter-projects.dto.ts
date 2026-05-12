@@ -21,11 +21,26 @@ export class FilterProjectsDto extends PaginationDto {
   category?: ProjectCategory;
 
   @ApiPropertyOptional({
+    description: 'Filter by project type (checks projectTypes array)',
+    enum: ProjectCategory,
+  })
+  @IsOptional()
+  @IsEnum(ProjectCategory)
+  projectType?: ProjectCategory;
+
+  @ApiPropertyOptional({
     description: 'Filter by category ID from database',
   })
   @IsOptional()
   @IsMongoId()
   categoryId?: string;
+
+  @ApiPropertyOptional({
+    description: 'Filter by multiple category IDs (comma-separated)',
+  })
+  @IsOptional()
+  @IsString()
+  categoryIds?: string;
 
   @ApiPropertyOptional({
     description: 'Filter by industry/sector',

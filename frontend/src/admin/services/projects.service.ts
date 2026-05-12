@@ -5,13 +5,16 @@ export interface ProjectFilters {
   page?: number;
   limit?: number;
   category?: string;
+  projectType?: string;
   categoryId?: string;
+  categoryIds?: string[];
   industry?: string;
   displayVariant?: string;
   isPublished?: boolean;
   isFeatured?: boolean;
   featured?: boolean;
   search?: string;
+  tech?: string;
 }
 
 export interface ProjectStatDto {
@@ -33,7 +36,9 @@ export interface CreateProjectDto {
   projectUrl?: string | null;
   clientName?: string;
   category?: string;
+  projectTypes?: string[];
   categoryId?: string;
+  categoryIds?: string[];
   industry?: string;
   duration?: string;
   year?: string;
@@ -58,13 +63,16 @@ export const projectsService = {
     if (filters?.page) params.append('page', String(filters.page));
     if (filters?.limit) params.append('limit', String(filters.limit));
     if (filters?.category) params.append('category', filters.category);
+    if (filters?.projectType) params.append('projectType', filters.projectType);
     if (filters?.categoryId) params.append('categoryId', filters.categoryId);
+    if (filters?.categoryIds?.length) params.append('categoryIds', filters.categoryIds.join(','));
     if (filters?.industry) params.append('industry', filters.industry);
     if (filters?.displayVariant) params.append('displayVariant', filters.displayVariant);
     if (filters?.isPublished !== undefined) params.append('isPublished', String(filters.isPublished));
     if (filters?.isFeatured !== undefined) params.append('isFeatured', String(filters.isFeatured));
     if (filters?.featured !== undefined) params.append('featured', String(filters.featured));
     if (filters?.search) params.append('search', filters.search);
+    if (filters?.tech) params.append('tech', filters.tech);
 
     // Use admin endpoint to get all projects including unpublished
     const response = await api.get<ApiResponse<Project[]>>(`/projects/admin?${params.toString()}`);

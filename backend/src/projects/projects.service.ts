@@ -23,7 +23,6 @@ export class ProjectsService {
   ) {}
 
   async create(createProjectDto: CreateProjectDto): Promise<ProjectDocument> {
-    // Check if slug already exists
     const existingProject = await this.projectModel
       .findOne({ slug: createProjectDto.slug.toLowerCase() })
       .exec();
@@ -32,9 +31,25 @@ export class ProjectsService {
       throw new ConflictException('Project with this slug already exists');
     }
 
+    const normalizedProjectTypes =
+      createProjectDto.projectTypes?.length
+        ? createProjectDto.projectTypes
+        : createProjectDto.category
+          ? [createProjectDto.category]
+          : [];
+
+    const normalizedCategoryIds =
+      createProjectDto.categoryIds?.length
+        ? createProjectDto.categoryIds
+        : createProjectDto.categoryId
+          ? [createProjectDto.categoryId]
+          : [];
+
     const project = new this.projectModel({
       ...createProjectDto,
       slug: createProjectDto.slug.toLowerCase(),
+      projectTypes: normalizedProjectTypes,
+      categoryIds: normalizedCategoryIds,
     });
     return project.save();
   }
@@ -48,7 +63,9 @@ export class ProjectsService {
       limit = 10,
       tech,
       category,
+      projectType,
       categoryId,
+      categoryIds,
       industry,
       displayVariant,
       featured,
@@ -76,8 +93,19 @@ export class ProjectsService {
       query.category = category;
     }
 
+    if (projectType) {
+      query.projectTypes = projectType;
+    }
+
     if (categoryId) {
       query.categoryId = categoryId;
+    }
+
+    if (categoryIds) {
+      const ids = categoryIds.split(',').filter(Boolean);
+      if (ids.length > 0) {
+        query.categoryIds = { $in: ids };
+      }
     }
 
     if (industry) {
@@ -107,8 +135,9 @@ export class ProjectsService {
     // Get paginated results
     const projects = await this.projectModel
       .find(query)
-      .populate('technologies', 'name icon category')
+      .populate('technologies', 'name icon category description tooltip')
       .populate('categoryId')
+      .populate('categoryIds')
       .sort({ sortOrder: 1, createdAt: -1 })
       .skip((page - 1) * limit)
       .limit(limit)
@@ -120,8 +149,9 @@ export class ProjectsService {
   async findFeatured(): Promise<ProjectDocument[]> {
     return this.projectModel
       .find({ isFeatured: true, isPublished: true })
-      .populate('technologies', 'name icon category')
+      .populate('technologies', 'name icon category description tooltip')
       .populate('categoryId')
+      .populate('categoryIds')
       .sort({ featuredOrder: 1, sortOrder: 1, createdAt: -1 })
       .limit(6)
       .exec();
@@ -130,8 +160,9 @@ export class ProjectsService {
   async findBySlug(slug: string): Promise<ProjectDocument> {
     const project = await this.projectModel
       .findOne({ slug: slug.toLowerCase(), isPublished: true })
-      .populate('technologies', 'name icon category')
+      .populate('technologies', 'name icon category description tooltip')
       .populate('categoryId')
+      .populate('categoryIds')
       .exec();
 
     if (!project) {
@@ -144,8 +175,9 @@ export class ProjectsService {
   async findOne(id: string): Promise<ProjectDocument> {
     const project = await this.projectModel
       .findById(id)
-      .populate('technologies', 'name icon category')
+      .populate('technologies', 'name icon category description tooltip')
       .populate('categoryId')
+      .populate('categoryIds')
       .exec();
 
     if (!project) {
@@ -158,8 +190,9 @@ export class ProjectsService {
   async findPublicById(id: string): Promise<ProjectDocument> {
     const project = await this.projectModel
       .findOne({ _id: id, isPublished: true })
-      .populate('technologies', 'name icon category')
+      .populate('technologies', 'name icon category description tooltip')
       .populate('categoryId')
+      .populate('categoryIds')
       .exec();
 
     if (!project) {
@@ -173,7 +206,6 @@ export class ProjectsService {
     id: string,
     updateProjectDto: UpdateProjectDto,
   ): Promise<ProjectDocument> {
-    // If slug is being updated, check for conflicts
     if (updateProjectDto.slug) {
       const existingProject = await this.projectModel
         .findOne({
@@ -188,12 +220,35 @@ export class ProjectsService {
       updateProjectDto.slug = updateProjectDto.slug.toLowerCase();
     }
 
+    const normalizedProjectTypes =
+      updateProjectDto.projectTypes?.length
+        ? updateProjectDto.projectTypes
+        : updateProjectDto.category
+          ? [updateProjectDto.category]
+          : undefined;
+
+    const normalizedCategoryIds =
+      updateProjectDto.categoryIds?.length
+        ? updateProjectDto.categoryIds
+        : updateProjectDto.categoryId
+          ? [updateProjectDto.categoryId]
+          : undefined;
+
     const hasProjectUrl = Object.prototype.hasOwnProperty.call(
       updateProjectDto,
       'projectUrl',
     );
 
     const updatePayload: Record<string, unknown> = { ...updateProjectDto };
+
+    if (normalizedProjectTypes !== undefined) {
+      updatePayload.projectTypes = normalizedProjectTypes;
+    }
+
+    if (normalizedCategoryIds !== undefined) {
+      updatePayload.categoryIds = normalizedCategoryIds;
+    }
+
     const unsetPayload: Record<string, 1> = {};
 
     if (hasProjectUrl) {
@@ -219,8 +274,9 @@ export class ProjectsService {
 
     const project = await this.projectModel
       .findByIdAndUpdate(id, finalUpdatePayload, { new: true })
-      .populate('technologies', 'name icon category')
+      .populate('technologies', 'name icon category description tooltip')
       .populate('categoryId')
+      .populate('categoryIds')
       .exec();
 
     if (!project) {
@@ -240,16 +296,16 @@ export class ProjectsService {
   async getCategories(): Promise<
     { value: string; label: string; count: number }[]
   > {
-    // Get all categories from enum
     const allCategories = Object.values(ProjectCategory);
 
-    // Get count of projects for each category
     const categoriesWithCount = await Promise.all(
       allCategories.map(async (category) => {
         const count = await this.projectModel
           .countDocuments({
-            category,
-            isPublished: true,
+            $or: [
+              { category, isPublished: true },
+              { projectTypes: category, isPublished: true },
+            ],
           })
           .exec();
         return {
@@ -260,7 +316,6 @@ export class ProjectsService {
       }),
     );
 
-    // Return only categories that have at least one published project
     return categoriesWithCount.filter((cat) => cat.count > 0);
   }
 

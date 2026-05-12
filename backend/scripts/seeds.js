@@ -1197,7 +1197,7 @@ async function seedLeads() {
   }
 }
 
-async function seedProjects(users, technologies) {
+async function seedProjects(users, technologies, projectCategories) {
   console.log('🌱 جاري زرع بيانات المشاريع...');
 
   const projectsData = [
@@ -1210,10 +1210,22 @@ async function seedProjects(users, technologies) {
         'كان العميل يحتاج إلى نظام يدعم عدة بائعين مع إدارة معقدة للمخزون والطلبات',
       solution:
         'قمنا بتطوير نظام متكامل باستخدام NestJS و React مع دعم كامل للمتاجر المتعددة',
+      features: [
+        'لوحة تحكم متعددة البائعين',
+        'نظام دفع إلكتروني متكامل',
+        'إدارة المخزون والطلبات',
+        'تقارير وتحليلات متقدمة',
+        'تطبيق موبايل للعملاء',
+      ],
       results: [
         { label: 'زيادة المبيعات', value: '300%' },
         { label: 'تحسين الأداء', value: '85%' },
         { label: 'رضا العملاء', value: '95%' },
+      ],
+      stats: [
+        { label: 'الشاشات', value: '+35', description: 'واجهة ولوحة تحكم' },
+        { label: 'مدة التنفيذ', value: '45 يوم' },
+        { label: 'البائعين', value: '+120' },
       ],
       technologies: [
         technologies[0]._id,
@@ -1228,9 +1240,18 @@ async function seedProjects(users, technologies) {
           'https://images.unsplash.com/photo-1556740758-90de374c12ad?w=800',
         ],
       },
+      previewScreens: [
+        'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800',
+      ],
       projectUrl: 'https://example-ecommerce.com',
       clientName: 'شركة التجارة الإلكترونية',
+      clientLogo: 'https://via.placeholder.com/150x50?text=E-Commerce+Co',
       category: 'E-Commerce',
+      projectTypes: ['E-Commerce', 'Web App'],
+      industry: 'تجارة إلكترونية',
+      duration: '45 يوم',
+      year: '2025',
+      accentColor: '#008C84',
       isFeatured: true,
       isPublished: true,
       seo: {
@@ -1247,12 +1268,24 @@ async function seedProjects(users, technologies) {
       challenge: 'كانت الحاجة لتطبيق يعمل على iOS و Android مع مزامنة فورية',
       solution:
         'استخدمنا React Native لبناء تطبيق واحد يعمل على كلا المنصتين مع MongoDB للمزامنة',
+      features: [
+        'مزامنة فورية عبر السحابة',
+        'إشعارات ذكية',
+        'تصنيف المهام والمشاريع',
+        'تقارير الإنتاجية',
+        'وضع عدم الاتصال',
+      ],
       results: [
         { label: 'عدد المستخدمين', value: '50,000+' },
         { label: 'تقييم التطبيق', value: '4.8/5' },
         { label: 'معدل الاستخدام اليومي', value: '85%' },
       ],
-      technologies: [technologies[9]._id, technologies[5]._id],
+      stats: [
+        { label: 'المستخدمين', value: '50K+', description: 'مستخدم نشط' },
+        { label: 'مدة التنفيذ', value: '60 يوم' },
+        { label: 'التقييم', value: '4.8/5' },
+      ],
+      technologies: [technologies[9]._id, technologies[5]._id, technologies[11]._id],
       images: {
         cover:
           'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800',
@@ -1260,9 +1293,18 @@ async function seedProjects(users, technologies) {
           'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800',
         ],
       },
+      previewScreens: [
+        'https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800',
+      ],
       projectUrl: 'https://example-taskapp.com',
       clientName: 'شركة الإنتاجية',
+      clientLogo: 'https://via.placeholder.com/150x50?text=Productivity+Co',
       category: 'Mobile App',
+      projectTypes: ['Mobile App'],
+      industry: 'إنتاجية',
+      duration: '60 يوم',
+      year: '2025',
+      accentColor: '#3B82F6',
       isFeatured: true,
       isPublished: true,
       seo: {
@@ -1278,24 +1320,46 @@ async function seedProjects(users, technologies) {
       challenge: 'كانت الشركة تحتاج إلى دمج عدة أنظمة منفصلة في نظام واحد موحد',
       solution:
         'طورنا نظام ERP متكامل باستخدام NestJS مع واجهات متعددة للوحدات المختلفة',
+      features: [
+        'إدارة المخزون والمشتريات',
+        'نظام الموارد البشرية',
+        'إدارة الإنتاج والجودة',
+        'تقارير مالية متقدمة',
+        'لوحة تحكم تنفيذية',
+      ],
       results: [
         { label: 'تقليل التكاليف', value: '40%' },
         { label: 'تحسين الكفاءة', value: '60%' },
         { label: 'تقليل الأخطاء', value: '75%' },
       ],
+      stats: [
+        { label: 'الوحدات', value: '8', description: 'وحدة متكاملة' },
+        { label: 'مدة التنفيذ', value: '4 أشهر' },
+        { label: 'الموظفين', value: '+200' },
+      ],
       technologies: [
         technologies[0]._id,
         technologies[6]._id,
         technologies[13]._id,
+        technologies[7]._id,
       ],
       images: {
         cover:
           'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800',
         gallery: [],
       },
+      previewScreens: [
+        'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800',
+      ],
       projectUrl: 'https://example-erp.com',
       clientName: 'مصنع التصنيع المتقدم',
+      clientLogo: 'https://via.placeholder.com/150x50?text=Manufacturing+Co',
       category: 'ERP',
+      projectTypes: ['ERP', 'Web App'],
+      industry: 'تصنيع',
+      duration: '4 أشهر',
+      year: '2024',
+      accentColor: '#8B5CF6',
       isFeatured: false,
       isPublished: true,
       seo: {
@@ -2066,13 +2130,14 @@ async function seedAll() {
     console.log('');
     await seedLeads();
     console.log('');
-    const projects = await seedProjects(users, technologies);
+    await seedProjectCategories();
+    console.log('');
+    const projectCategories = await ProjectCategory.find().exec();
+    const projects = await seedProjects(users, technologies, projectCategories);
     console.log('');
     await seedTeamMembers();
     console.log('');
     await seedTestimonials(projects);
-    console.log('');
-    await seedProjectCategories();
     console.log('');
     await seedServices();
     console.log('');

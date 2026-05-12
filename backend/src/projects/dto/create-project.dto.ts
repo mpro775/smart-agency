@@ -180,12 +180,32 @@ export class CreateProjectDto {
   category: ProjectCategory;
 
   @ApiPropertyOptional({
+    description: 'Multiple project types',
+    enum: ProjectCategory,
+    isArray: true,
+    example: [ProjectCategory.WEB_APP, ProjectCategory.MOBILE_APP],
+  })
+  @IsOptional()
+  @IsArray()
+  @IsEnum(ProjectCategory, { each: true })
+  projectTypes?: ProjectCategory[];
+
+  @ApiPropertyOptional({
     description: 'Project category ID from database',
     example: '60d5ec49f1b2c8b1f8e4e5f1',
   })
   @IsOptional()
   @IsMongoId()
   categoryId?: string;
+
+  @ApiPropertyOptional({
+    description: 'Multiple project category IDs from database',
+    type: [String],
+  })
+  @IsOptional()
+  @IsArray()
+  @IsMongoId({ each: true })
+  categoryIds?: string[];
 
   @ApiPropertyOptional({
     description: 'Industry/sector',

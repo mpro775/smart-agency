@@ -96,14 +96,14 @@ export default function ProjectsShowcase({
     const totalProjects = projects.length;
     const uniqueCategories = new Set(
       projects
-        .map((p) => p.industry || p.category)
+        .flatMap((p) => p.projectTypes?.length ? p.projectTypes : [p.industry || p.category])
         .filter(Boolean)
     ).size;
     const webAppCount = projects.filter(
-      (p) => p.category === "Web App"
+      (p) => (p.projectTypes?.includes("Web App") || p.category === "Web App")
     ).length;
     const mobileCount = projects.filter(
-      (p) => p.category === "Mobile App"
+      (p) => (p.projectTypes?.includes("Mobile App") || p.category === "Mobile App")
     ).length;
 
     return [

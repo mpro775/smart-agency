@@ -100,7 +100,9 @@ export interface Project {
   projectUrl?: string;
   clientName?: string;
   category: ProjectCategory;
+  projectTypes?: ProjectCategory[];
   categoryId?: ProjectCategoryRef | string;
+  categoryIds?: ProjectCategoryRef[] | string[];
   industry?: string;
   duration?: string;
   year?: string;

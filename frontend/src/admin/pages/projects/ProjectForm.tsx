@@ -56,7 +56,9 @@ const projectSchema = z.object({
   projectUrl: z.string().optional(),
   clientName: z.string().optional(),
   category: z.nativeEnum(ProjectCategory),
+  projectTypes: z.array(z.nativeEnum(ProjectCategory)),
   categoryId: z.string().optional(),
+  categoryIds: z.array(z.string()),
   industry: z.string().optional(),
   duration: z.string().optional(),
   year: z.string().optional(),
@@ -176,7 +178,9 @@ export default function ProjectForm() {
       projectUrl: "",
       clientName: "",
       category: ProjectCategory.OTHER,
+      projectTypes: [],
       categoryId: "",
+      categoryIds: [],
       industry: "",
       duration: "",
       year: "",
@@ -256,6 +260,11 @@ export default function ProjectForm() {
         ? (project.categoryId as { _id: string })._id
         : (project.categoryId || "");
 
+      const rawProjectTypes = project.projectTypes || (project.category ? [project.category] : []);
+      const rawCategoryIds = Array.isArray(project.categoryIds)
+        ? project.categoryIds.map((c) => typeof c === 'object' && c !== null ? (c as { _id: string })._id : c).filter(Boolean)
+        : (categoryIdValue ? [categoryIdValue] : []);
+
       reset({
         title: project.title,
         slug: project.slug,
@@ -277,7 +286,9 @@ export default function ProjectForm() {
         projectUrl: project.projectUrl || "",
         clientName: project.clientName || "",
         category: normalizeProjectCategory(project.category),
+        projectTypes: rawProjectTypes as ProjectCategory[],
         categoryId: categoryIdValue,
+        categoryIds: rawCategoryIds,
         industry: project.industry || "",
         duration: project.duration || "",
         year: project.year || "",
@@ -325,7 +336,10 @@ export default function ProjectForm() {
       ...data,
       features: data.features.map((f) => f.value),
       projectUrl: isEdit ? (projectUrl || null) : (projectUrl || undefined),
-      categoryId: data.categoryId || undefined,
+      projectTypes: data.projectTypes.length > 0 ? data.projectTypes : undefined,
+      categoryIds: data.categoryIds.length > 0 ? data.categoryIds : undefined,
+      categoryId: data.categoryIds.length > 0 ? data.categoryIds[0] : (data.categoryId || undefined),
+      category: data.projectTypes.length > 0 ? data.projectTypes[0] : data.category,
       sortOrder: data.sortOrder ?? 0,
       featuredOrder: data.featuredOrder ?? 0,
       previewScreens: data.previewScreens.filter((url) => url.trim() !== ""),
@@ -468,85 +482,81 @@ export default function ProjectForm() {
                   )}
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label className="text-slate-200" dir="rtl">
-                      التصنيف (Enum)
-                    </Label>
-                    <Controller
-                      name="category"
-                      control={control}
-                      render={({ field }) => (
-                        <Select
-                          value={field.value}
-                          onValueChange={field.onChange}
-                        >
-                          <SelectTrigger
-                            className="bg-slate-700/50 border-slate-600 text-white"
-                            dir="rtl"
-                          >
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent
-                            className="bg-slate-800 border-slate-700"
-                            dir="rtl"
-                          >
-                            {categoryOptions.map((option) => (
-                              <SelectItem
-                                key={option.value}
-                                value={option.value}
-                                className="text-white hover:bg-slate-700"
-                                dir="rtl"
-                              >
-                                {option.label}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      )}
-                    />
-                  </div>
+                <div className="space-y-3">
+                  <Label className="text-slate-200" dir="rtl">
+                    أنواع المشروع / Project Types
+                  </Label>
+                  <Controller
+                    name="projectTypes"
+                    control={control}
+                    render={({ field }) => (
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-2" dir="rtl">
+                        {categoryOptions.map((option) => {
+                          const isSelected = field.value.includes(option.value);
+                          return (
+                            <button
+                              key={option.value}
+                              type="button"
+                              onClick={() => {
+                                const newVal = isSelected
+                                  ? field.value.filter((v) => v !== option.value)
+                                  : [...field.value, option.value];
+                                field.onChange(newVal);
+                              }}
+                              className={`px-3 py-2 rounded-lg border text-sm font-medium transition-all ${
+                                isSelected
+                                  ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/30"
+                                  : "bg-slate-700/50 text-slate-400 border-slate-600 hover:text-white hover:border-slate-500"
+                              }`}
+                            >
+                              {isSelected && "✓ "}{option.label}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
+                  />
+                  {errors.projectTypes && (
+                    <p className="text-sm text-red-400" dir="rtl">
+                      {errors.projectTypes.message}
+                    </p>
+                  )}
+                </div>
 
-                  <div className="space-y-2">
-                    <Label className="text-slate-200" dir="rtl">
-                      الفئة (قاعدة البيانات)
-                    </Label>
-                    <Controller
-                      name="categoryId"
-                      control={control}
-                      render={({ field }) => (
-                        <Select
-                          value={field.value || "none"}
-                          onValueChange={(val) => field.onChange(val === "none" ? "" : val)}
-                        >
-                          <SelectTrigger
-                            className="bg-slate-700/50 border-slate-600 text-white"
-                            dir="rtl"
-                          >
-                            <SelectValue placeholder="اختر الفئة" />
-                          </SelectTrigger>
-                          <SelectContent
-                            className="bg-slate-800 border-slate-700"
-                            dir="rtl"
-                          >
-                            <SelectItem value="none" className="text-white hover:bg-slate-700">
-                              بدون فئة
-                            </SelectItem>
-                            {dbCategories?.map((cat) => (
-                              <SelectItem
-                                key={cat._id}
-                                value={cat._id}
-                                className="text-white hover:bg-slate-700"
-                                dir="rtl"
-                              >
-                                {cat.label}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      )}
-                    />
-                  </div>
+                <div className="space-y-2">
+                  <Label className="text-slate-200" dir="rtl">
+                    التصنيفات الديناميكية / Dynamic Categories
+                  </Label>
+                  <Controller
+                    name="categoryIds"
+                    control={control}
+                    render={({ field }) => (
+                      <div className="flex flex-wrap gap-2" dir="rtl">
+                        {dbCategories?.map((cat) => {
+                          const isSelected = field.value.includes(cat._id);
+                          return (
+                            <button
+                              key={cat._id}
+                              type="button"
+                              onClick={() => {
+                                const newVal = isSelected
+                                  ? field.value.filter((id) => id !== cat._id)
+                                  : [...field.value, cat._id];
+                                field.onChange(newVal);
+                              }}
+                              className={`px-3 py-1.5 rounded-lg border text-sm transition-all ${
+                                isSelected
+                                  ? "bg-cyan-500/20 text-cyan-400 border-cyan-500/30"
+                                  : "bg-slate-700/50 text-slate-400 border-slate-600 hover:text-white hover:border-slate-500"
+                              }`}
+                            >
+                              {isSelected && "✓ "}{cat.label}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
+                  />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -575,46 +585,83 @@ export default function ProjectForm() {
                   </div>
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-3">
                   <Label className="text-slate-200" dir="rtl">
-                    التقنيات المستخدمة
+                    التقنيات المستخدمة ({watch("technologies").length} مختارة)
                   </Label>
                   <Controller
                     name="technologies"
                     control={control}
-                    render={({ field }) => (
-                      <div className="flex flex-wrap gap-2" dir="rtl">
-                        {technologies?.map((tech) => (
-                          <Button
-                            key={tech._id}
-                            type="button"
-                            variant={
-                              field.value.includes(tech._id)
-                                ? "default"
-                                : "outline"
-                            }
-                            size="sm"
-                            className={
-                              field.value.includes(tech._id)
-                                ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/30"
-                                : "border-slate-600 text-slate-400 hover:text-white"
-                            }
-                            onClick={() => {
-                              if (field.value.includes(tech._id)) {
-                                field.onChange(
-                                  field.value.filter((id) => id !== tech._id)
+                    render={({ field }) => {
+                      const grouped = (technologies || []).reduce((groups, tech) => {
+                        const cat = tech.category || "Other";
+                        if (!groups[cat]) groups[cat] = [];
+                        groups[cat].push(tech);
+                        return groups;
+                      }, {} as Record<string, Technology[]>);
+
+                      return (
+                        <div className="space-y-4" dir="rtl">
+                          {field.value.length > 0 && (
+                            <div className="flex flex-wrap gap-2 p-3 bg-slate-700/30 rounded-lg">
+                              <span className="text-xs text-slate-400 w-full mb-1">المختارة:</span>
+                              {field.value.map((id) => {
+                                const tech = technologies?.find((t) => t._id === id);
+                                if (!tech) return null;
+                                return (
+                                  <span
+                                    key={id}
+                                    className="inline-flex items-center gap-1 px-2 py-1 bg-emerald-500/20 text-emerald-400 text-xs rounded-md border border-emerald-500/30"
+                                  >
+                                    {tech.icon && <img src={tech.icon} alt="" className="w-4 h-4" />}
+                                    {tech.name}
+                                    <button
+                                      type="button"
+                                      onClick={() => field.onChange(field.value.filter((v) => v !== id))}
+                                      className="ml-1 text-emerald-400/70 hover:text-emerald-300"
+                                    >
+                                      ×
+                                    </button>
+                                  </span>
                                 );
-                              } else {
-                                field.onChange([...field.value, tech._id]);
-                              }
-                            }}
-                            dir="rtl"
-                          >
-                            {tech.name}
-                          </Button>
-                        ))}
-                      </div>
-                    )}
+                              })}
+                            </div>
+                          )}
+                          {Object.entries(grouped).map(([category, techs]) => (
+                            <div key={category}>
+                              <h4 className="text-sm font-semibold text-slate-300 mb-2">{category}</h4>
+                              <div className="flex flex-wrap gap-2">
+                                {techs.map((tech) => {
+                                  const isSelected = field.value.includes(tech._id);
+                                  return (
+                                    <button
+                                      key={tech._id}
+                                      type="button"
+                                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-sm transition-all ${
+                                        isSelected
+                                          ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/30"
+                                          : "bg-slate-700/50 text-slate-400 border-slate-600 hover:text-white hover:border-slate-500"
+                                      }`}
+                                      onClick={() => {
+                                        if (isSelected) {
+                                          field.onChange(field.value.filter((id) => id !== tech._id));
+                                        } else {
+                                          field.onChange([...field.value, tech._id]);
+                                        }
+                                      }}
+                                      title={tech.description || tech.tooltip || ""}
+                                    >
+                                      {tech.icon && <img src={tech.icon} alt="" className="w-4 h-4" />}
+                                      {tech.name}
+                                    </button>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      );
+                    }}
                   />
                 </div>
 

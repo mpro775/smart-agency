@@ -109,6 +109,16 @@ export class Project {
   @Prop({ type: Types.ObjectId, ref: 'ProjectCategory' })
   categoryId?: Types.ObjectId;
 
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'ProjectCategory' }], default: [] })
+  categoryIds?: Types.ObjectId[];
+
+  @Prop({
+    type: [String],
+    enum: ProjectCategory,
+    default: [],
+  })
+  projectTypes?: ProjectCategory[];
+
   @Prop()
   industry?: string;
 
@@ -166,6 +176,8 @@ ProjectSchema.index({ slug: 1 }, { unique: true });
 ProjectSchema.index({ isFeatured: 1 });
 ProjectSchema.index({ category: 1 });
 ProjectSchema.index({ categoryId: 1 });
+ProjectSchema.index({ categoryIds: 1 });
+ProjectSchema.index({ projectTypes: 1 });
 ProjectSchema.index({ isPublished: 1 });
 ProjectSchema.index({ technologies: 1 });
 ProjectSchema.index({ sortOrder: 1 });
