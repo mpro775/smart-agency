@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 // MongoDB connection string
 const MONGODB_URI =
   process.env.MONGODB_URI ||
-  'mongodb+srv://smartagencyyem_db_user:IazzxQxHifWrtv1p@cluster0.sma4e8a.mongodb.net/smart-agency?retryWrites=true&w=majority';
+  'mongodb://root:Smart-7780@84.247.184.154:27017/smart-agency?authSource=admin&directConnection=true';
 // ==================== SCHEMAS ====================
 
 // User Schema
@@ -1768,8 +1768,7 @@ async function seedAbout() {
       title: 'لا نبني مواقع فقط… نبني أنظمة رقمية تساعد الشركات على النمو',
       subtitle:
         'سمارت وكالة تقنية تجمع بين الاستراتيجية، تجربة المستخدم، التصميم، البرمجة، والذكاء الاصطناعي لتحويل الأفكار إلى منتجات رقمية واضحة، قابلة للاستخدام، وقابلة للتوسع.',
-      image:
-        'https://images.unsplash.com/photo-1556761175-b413da4baf72?w=1400',
+      image: 'https://images.unsplash.com/photo-1556761175-b413da4baf72?w=1400',
       primaryButtonText: 'ابدأ مشروعك معنا',
       primaryButtonUrl: '/contact',
       secondaryButtonText: 'شاهد أعمالنا',
@@ -1988,7 +1987,8 @@ async function seedAbout() {
         title: 'نتعامل كشريك لا كمورد',
         description:
           'نناقش، نقترح، ونصحح الاتجاه عندما نرى أن القرار لا يخدم المشروع.',
-        example: 'إذا كان المطلوب غير مناسب، نقترح بديلًا يخدم الهدف بشكل أفضل.',
+        example:
+          'إذا كان المطلوب غير مناسب، نقترح بديلًا يخدم الهدف بشكل أفضل.',
       },
     ],
 
@@ -2001,8 +2001,7 @@ async function seedAbout() {
         'قرارات مبنية على هدف المشروع لا على الذوق فقط',
         'اهتمام بالتفاصيل من أول شاشة حتى لوحة التحكم',
       ],
-      image:
-        'https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200',
+      image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200',
     },
 
     cta: {

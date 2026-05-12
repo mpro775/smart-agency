@@ -162,7 +162,7 @@ function TechHeader() {
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
       viewport={{ once: true }}
-      className="text-center mb-16 lg:mb-20"
+      className="text-center mb-10 lg:mb-12"
       dir="rtl"
     >
       <motion.span
@@ -218,7 +218,30 @@ function TechEcosystemMap({
 }: {
   grouped: Record<string, Technology[]>;
 }) {
-  const categoryNames = Object.keys(grouped);
+  const preferredCategoryOrder = [
+    "Backend",
+    "Frontend",
+    "Database",
+    "Mobile",
+    "DevOps",
+    "Automation",
+    "Other",
+  ];
+
+  const categoryNames = preferredCategoryOrder.filter(
+    (category) => grouped[category]?.length
+  );
+
+  const orbitPositions: Record<string, { top: string; left: string }> = {
+    Backend: { top: "18%", left: "28%" },
+    Frontend: { top: "18%", left: "72%" },
+    Database: { top: "48%", left: "22%" },
+    Mobile: { top: "48%", left: "78%" },
+    DevOps: { top: "78%", left: "32%" },
+    Automation: { top: "78%", left: "68%" },
+    Other: { top: "88%", left: "50%" },
+  };
+
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(containerRef, { once: true, margin: "-100px" });
@@ -231,26 +254,17 @@ function TechEcosystemMap({
     );
   }
 
-  const orbitPositions = [
-    { top: "0%", left: "50%", transform: "translate(-50%, -50%)" },
-    { top: "25%", left: "100%", transform: "translate(-50%, -50%)" },
-    { top: "75%", left: "100%", transform: "translate(-50%, -50%)" },
-    { top: "100%", left: "50%", transform: "translate(-50%, -50%)" },
-    { top: "75%", left: "0%", transform: "translate(-50%, -50%)" },
-    { top: "25%", left: "0%", transform: "translate(-50%, -50%)" },
-  ];
-
   return (
     <motion.div
       ref={containerRef}
       initial={{ opacity: 0, y: 30 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.8, delay: 0.2 }}
-      className="mb-20"
+      className="mb-12"
       dir="rtl"
     >
       {/* Desktop Hub-and-Spoke Layout */}
-      <div className="hidden lg:block relative" style={{ minHeight: "600px" }}>
+      <div className="hidden lg:block relative mx-auto max-w-[1180px] h-[560px] overflow-visible">
         {/* Orbit Rings Background */}
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-0">
           <svg
@@ -291,7 +305,6 @@ function TechEcosystemMap({
         {/* Connection Lines SVG */}
         <svg
           className="absolute inset-0 w-full h-full pointer-events-none z-0"
-          style={{ minWidth: "800px", minHeight: "600px" }}
         >
           <defs>
             <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -299,26 +312,24 @@ function TechEcosystemMap({
               <stop offset="100%" stopColor="#008080" stopOpacity="0.1" />
             </linearGradient>
           </defs>
-          {categoryNames.map((_, index) => {
-            const pos = orbitPositions[index % orbitPositions.length];
-            const topPercent = parseFloat(pos.top);
-            const leftPercent = parseFloat(pos.left);
+          {categoryNames.map((categoryName) => {
+            const pos = orbitPositions[categoryName] || orbitPositions.Other;
             const x1 = 50;
             const y1 = 50;
-            const x2 = leftPercent;
-            const y2 = topPercent;
+            const x2 = pos.left;
+            const y2 = pos.top;
             return (
               <line
-                key={`line-${index}`}
+                key={`line-${categoryName}`}
                 x1={`${x1}%`}
                 y1={`${y1}%`}
-                x2={`${x2}%`}
-                y2={`${y2}%`}
+                x2={x2}
+                y2={y2}
                 stroke="url(#lineGradient)"
                 strokeWidth="1.5"
                 strokeDasharray="4 4"
                 className={`transition-all duration-300 ${
-                  activeCategory === categoryNames[index]
+                  activeCategory === categoryName
                     ? "opacity-60"
                     : "opacity-30"
                 }`}
@@ -364,7 +375,7 @@ function TechEcosystemMap({
           const meta = getCategoryMeta(categoryName);
           const topTechs = techs.slice(0, 4);
           const IconComp = meta.icon;
-          const pos = orbitPositions[index % orbitPositions.length];
+          const pos = orbitPositions[categoryName] || orbitPositions.Other;
           const isActive = activeCategory === categoryName;
 
           return (
@@ -382,7 +393,7 @@ function TechEcosystemMap({
               style={{
                 top: pos.top,
                 left: pos.left,
-                transform: pos.transform,
+                transform: "translate(-50%, -50%)",
               }}
             >
               <div
@@ -737,10 +748,9 @@ export default function Technologies() {
   // ============================================================
   if (loading) {
     return (
-      <section
-        className="relative py-28 bg-gradient-to-br from-[#f9fafb] via-white to-[#f0f9ff] overflow-hidden"
-        id="technologies"
-      >
+    <section
+      className="relative py-28 bg-gradient-to-br from-[#f9fafb] via-white to-[#f0f9ff] overflow-hidden"
+    >
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <motion.div
@@ -762,7 +772,6 @@ export default function Technologies() {
     return (
       <section
         className="relative py-28 bg-gradient-to-br from-[#f9fafb] via-white to-[#f0f9ff] overflow-hidden"
-        id="technologies"
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
@@ -785,8 +794,7 @@ export default function Technologies() {
   // ============================================================
   return (
     <section
-      className="relative py-24 lg:py-32 bg-gradient-to-br from-[#f9fafb] via-white to-[#f0f9ff] overflow-hidden"
-      id="technologies"
+      className="relative py-16 lg:py-20 bg-gradient-to-br from-[#f9fafb] via-white to-[#f0f9ff] overflow-visible"
     >
       {/* Background Decorations */}
       <div className="absolute inset-0 overflow-hidden -z-10">
