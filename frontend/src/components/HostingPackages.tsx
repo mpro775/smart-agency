@@ -9,6 +9,13 @@ import {
   FiCpu,
   FiHardDrive,
   FiActivity,
+  FiHeadphones,
+  FiShield,
+  FiLayers,
+  FiGlobe,
+  FiSend,
+  FiAward,
+  FiBox,
 } from "react-icons/fi";
 import { publicHostingPackagesService } from "../services/hosting-packages.service";
 import type { HostingPackage } from "../services/hosting-packages.service";
@@ -40,6 +47,91 @@ function AnimatedPrice({ price }: { price: number }) {
   return <span>{currentValue}</span>;
 }
 
+// --- أيقونات الباقات ---
+function getPackageIcon(name: string) {
+  const normalized = name.toLowerCase();
+
+  if (
+    normalized.includes("wordpress") ||
+    normalized.includes("وورد") ||
+    normalized.includes("wordpress")
+  ) {
+    return FiGlobe;
+  }
+
+  if (normalized.includes("أساسية") || normalized.includes("basic")) {
+    return FiSend;
+  }
+
+  if (
+    normalized.includes("متوسطة") ||
+    normalized.includes("growth") ||
+    normalized.includes("النمو")
+  ) {
+    return FiAward;
+  }
+
+  if (normalized.includes("متقدمة") || normalized.includes("advanced")) {
+    return FiBox;
+  }
+
+  return FiServer;
+}
+
+// --- نصوص مساعدة للباقات ---
+function getPackageMicrocopy(pkg: HostingPackage) {
+  const name = pkg.name.toLowerCase();
+
+  if (name.includes("أساسية")) return "مثالية للمواقع الصغيرة والبدايات الذكية.";
+  if (name.includes("متوسطة")) return "للشركات النامية والمشاريع الاحترافية.";
+  if (name.includes("متقدمة")) return "للمشاريع الكبيرة والتطبيقات عالية الأداء.";
+  if (name.includes("wordpress") || name.includes("وورد"))
+    return "مخصصة لمواقع WordPress مع أداء محسن.";
+
+  return pkg.description || "خطة مرنة مصممة لدعم نمو مشروعك.";
+}
+
+// --- مكون Spec للمواصفات التقنية ---
+function Spec({
+  label,
+  value,
+  icon: Icon,
+  dark = false,
+}: {
+  label: string;
+  value: string;
+  icon: React.ElementType;
+  dark?: boolean;
+}) {
+  return (
+    <div
+      className={`rounded-2xl border p-3 ${
+        dark ? "border-white/10 bg-white/5" : "border-gray-100 bg-gray-50"
+      }`}
+    >
+      <div className="flex items-center gap-2 text-xs text-gray-400">
+        <Icon className="text-primary" />
+        <span>{label}</span>
+      </div>
+      <div
+        className={`mt-1 text-sm font-bold ${
+          dark ? "text-white" : "text-gray-900"
+        }`}
+      >
+        {value}
+      </div>
+    </div>
+  );
+}
+
+// --- نقاط القيمة ---
+const valuePoints = [
+  { label: "دعم فني سريع", icon: FiHeadphones },
+  { label: "حماية SSL", icon: FiShield },
+  { label: "أداء عالي", icon: FiZap },
+  { label: "جاهز للتوسع", icon: FiLayers },
+];
+
 export default function HostingPackages() {
   const [packages, setPackages] = useState<HostingPackage[]>([]);
   const [loading, setLoading] = useState(true);
@@ -53,7 +145,7 @@ export default function HostingPackages() {
     new Set()
   );
 
-  // --- دوال الحساب والمنطق (نفس المنطق السابق لضمان العمل الصحيح) ---
+  // --- دوال الحساب والمنطق ---
   const getDisplayPrice = useCallback(
     (pkg: HostingPackage) =>
       billingCycle === "Yearly"
@@ -130,6 +222,11 @@ export default function HostingPackages() {
     fetchPackages();
   }, []);
 
+  // ترتيب الباقات حسب sortOrder
+  const sortedPackages = [...packages].sort(
+    (a, b) => (a.sortOrder || 0) - (b.sortOrder || 0)
+  );
+
   // --- حالات التحميل والخطأ ---
   if (loading)
     return (
@@ -144,12 +241,14 @@ export default function HostingPackages() {
   if (packages.length === 0) return null;
 
   return (
-    <section className="relative py-24 bg-gray-50 overflow-hidden" id="hosting">
-      {/* خلفية جمالية خفيفة */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-      </div>
+    <section
+      id="hosting"
+      className="relative overflow-hidden py-24 bg-[radial-gradient(circle_at_top_right,rgba(0,128,128,0.10),transparent_35%),linear-gradient(180deg,#ffffff_0%,#f8fafc_100%)]"
+    >
+      {/* خلفية زخرفية */}
+      <div className="absolute top-20 right-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-10 left-10 w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute inset-0 opacity-[0.035] bg-[linear-gradient(to_right,#0f766e_1px,transparent_1px),linear-gradient(to_bottom,#0f766e_1px,transparent_1px)] bg-[size:42px_42px] pointer-events-none" />
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* رأس القسم */}
@@ -161,10 +260,10 @@ export default function HostingPackages() {
           className="text-center mb-16"
         >
           <span className="inline-block py-1 px-3 rounded-full bg-primary/10 text-primary text-sm font-semibold tracking-wide mb-4">
-            خطط الاستضافة
+            خطط مرنة
           </span>
           <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-6 tracking-tight">
-            اختر الخطة المثالية{" "}
+            اختر الخطة الأنسب{" "}
             <span
               className="text-transparent bg-clip-text"
               style={{
@@ -176,15 +275,14 @@ export default function HostingPackages() {
             </span>
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
-            استضافة سحابية عالية الأداء مع ضمان استقرار بنسبة 99.9% ودعم فني على
-            مدار الساعة.
+            خطط احترافية للاستضافة والخدمات الرقمية مصممة لتحقيق أعلى أداء، أمان
+            واستقرار، مع دعم فني متخصص يساعدك على النجاح والنمو.
           </p>
         </motion.div>
 
-        {/* زر التبديل (Monthly / Yearly) بتصميم محسّن */}
-        <div className="flex justify-center mb-16">
+        {/* زر التبديل (Monthly / Yearly) */}
+        <div className="flex justify-center mb-10">
           <div className="relative bg-white p-1.5 rounded-2xl border border-gray-200 shadow-md inline-flex">
-            {/* الخلفية المتحركة مع تأثير gradient */}
             <motion.div
               className="absolute top-1.5 bottom-1.5 rounded-xl z-0"
               style={{
@@ -251,245 +349,241 @@ export default function HostingPackages() {
                       : "1px solid #bbf7d0",
                 }}
               >
-                توفير 20%
+                وفّر 20%
               </motion.span>
             </motion.button>
           </div>
         </div>
 
-        {/* شبكة الكروت */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 items-start">
-          {packages.map((pkg, index) => {
+        {/* شريط نقاط القيمة */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1, duration: 0.5 }}
+          viewport={{ once: true }}
+          className="mx-auto mb-14 grid max-w-4xl grid-cols-2 gap-3 rounded-2xl border border-gray-200/70 bg-white/70 p-3 shadow-sm backdrop-blur md:grid-cols-4"
+        >
+          {valuePoints.map((item, idx) => (
+            <div
+              key={idx}
+              className="flex items-center justify-center gap-2 rounded-xl bg-white px-4 py-3 text-sm font-semibold text-gray-700 shadow-sm"
+            >
+              <item.icon className="text-primary" size={16} />
+              <span>{item.label}</span>
+            </div>
+          ))}
+        </motion.div>
+
+        {/* شبكة البطاقات */}
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4 items-start">
+          {sortedPackages.map((pkg, index) => {
             const displayPrice = getDisplayPrice(pkg);
             const originalPrice = getOriginalPrice(pkg);
             const isPopular = pkg.isPopular;
+            const PackageIcon = getPackageIcon(pkg.name);
+            const microcopy = getPackageMicrocopy(pkg);
+            const allFeatures = [];
+
+            if (pkg.basePackageId) {
+              const base = getBasePackage(pkg.basePackageId);
+              if (base)
+                allFeatures.push({
+                  text: `كل مميزات ${base.name}`,
+                  highlight: true,
+                });
+            }
+
+            const extras = getAdditionalFeatures(pkg);
+            extras.forEach((f) =>
+              allFeatures.push({ text: f, highlight: false })
+            );
+
+            if (!pkg.basePackageId && pkg.features) {
+              pkg.features.forEach((f) =>
+                allFeatures.push({ text: f, highlight: false })
+              );
+            }
+
+            const displayedFeatures = expandedFeatures.has(pkg._id)
+              ? allFeatures
+              : allFeatures.slice(0, 5);
 
             return (
               <motion.div
                 key={pkg._id}
-                initial={{ opacity: 0, y: 50 }}
+                initial={{ opacity: 0, y: 32 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1, duration: 0.5 }}
-                viewport={{ once: true }}
-                className={`relative flex flex-col p-6 rounded-3xl transition-all duration-300 group ${
+                transition={{ delay: index * 0.08, duration: 0.45 }}
+                viewport={{ once: true, amount: 0.2 }}
+                whileHover={{ y: -8 }}
+                className={`relative flex flex-col rounded-3xl transition-all duration-300 ${
                   isPopular
-                    ? "bg-gray-900 text-white shadow-2xl shadow-gray-900/20 scale-100 lg:scale-110 z-10 ring-1 ring-gray-800"
-                    : "bg-white text-gray-900 shadow-lg border border-gray-100 hover:border-primary/30 hover:shadow-xl"
+                    ? "bg-gray-900 text-white shadow-2xl shadow-gray-900/30 xl:-translate-y-4 ring-1 ring-primary/30"
+                    : "bg-white text-gray-900 shadow-lg border border-gray-100 hover:shadow-xl"
                 }`}
               >
-                {/* شارة "الأكثر طلباً" */}
+                {/* شارة "الأكثر طلبًا" */}
                 {isPopular && (
-                  <div className="absolute -top-5 left-0 right-0 flex justify-center">
+                  <div className="absolute -top-4 left-0 right-0 flex justify-center">
                     <span
-                      className="text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-lg tracking-wide uppercase"
+                      className="text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-lg tracking-wide"
                       style={{
                         background:
                           "linear-gradient(to right, var(--color-primary), var(--color-primary-dark))",
                       }}
                     >
-                      الخيار الأفضل
+                      الأكثر طلبًا
                     </span>
                   </div>
                 )}
 
-                {/* رأس البطاقة */}
-                <div className="mb-6">
-                  <h3
-                    className={`text-xl font-bold mb-2 ${
-                      isPopular ? "text-white" : "text-gray-900"
-                    }`}
-                  >
-                    {pkg.name}
-                  </h3>
-                  <p
-                    className={`text-sm leading-relaxed ${
-                      isPopular ? "text-gray-400" : "text-gray-500"
-                    }`}
-                  >
-                    {pkg.description || "حل مثالي للمواقع الناشئة"}
-                  </p>
-                </div>
-
-                {/* السعر */}
-                <div className="mb-6 pb-6 border-b border-gray-100/10">
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-4xl font-extrabold tracking-tight">
-                      <AnimatedPrice price={displayPrice} />
-                    </span>
-                    <span
-                      className={`text-lg font-medium ${
-                        isPopular ? "text-gray-400" : "text-gray-500"
+                <div className="p-6">
+                  {/* رأس البطاقة */}
+                  <div className="mb-5 flex items-center gap-3">
+                    <div
+                      className={`flex h-12 w-12 items-center justify-center rounded-2xl ${
+                        isPopular ? "bg-white/10" : "bg-primary/10"
                       }`}
                     >
-                      {pkg.currency || "ر.س"}
-                    </span>
-                    <span
-                      className={`text-sm ${
-                        isPopular ? "text-gray-500" : "text-gray-400"
-                      }`}
-                    >
-                      /{billingCycle === "Monthly" ? "شهرياً" : "سنوياً"}
-                    </span>
+                      <PackageIcon
+                        className={isPopular ? "text-primary" : "text-primary"}
+                        size={22}
+                      />
+                    </div>
+                    <div>
+                      <h3
+                        className={`text-xl font-bold ${
+                          isPopular ? "text-white" : "text-gray-900"
+                        }`}
+                      >
+                        {pkg.name}
+                      </h3>
+                      <p
+                        className={`text-sm leading-relaxed ${
+                          isPopular ? "text-gray-400" : "text-gray-500"
+                        }`}
+                      >
+                        {microcopy}
+                      </p>
+                    </div>
                   </div>
-                  {originalPrice && originalPrice > displayPrice && (
-                    <div className="mt-1 text-sm text-red-500 line-through decoration-red-500/50">
-                      بدلاً من {originalPrice} {pkg.currency}
-                    </div>
-                  )}
-                </div>
 
-                {/* المواصفات الأساسية (Grid Layout) */}
-                <div className="grid grid-cols-2 gap-4 mb-6">
-                  {pkg.storage && (
-                    <div className="flex flex-col gap-1">
-                      <span
-                        className={`text-xs ${
-                          isPopular ? "text-gray-500" : "text-gray-400"
-                        }`}
-                      >
-                        المساحة
-                      </span>
-                      <div className="flex items-center gap-2 font-semibold text-sm">
-                        <FiHardDrive
-                          className={
-                            isPopular ? "text-primary" : "text-primary"
-                          }
-                        />
-                        {pkg.storage}
-                      </div>
-                    </div>
+                  {/* سبب تمييز الباقة */}
+                  {isPopular && (
+                    <p className="mb-5 rounded-2xl bg-white/10 px-4 py-3 text-sm leading-6 text-teal-50">
+                      أفضل توازن بين السعر، الأداء، والدعم للمشاريع الجادة.
+                    </p>
                   )}
-                  {pkg.bandwidth && (
-                    <div className="flex flex-col gap-1">
-                      <span
-                        className={`text-xs ${
-                          isPopular ? "text-gray-500" : "text-gray-400"
-                        }`}
-                      >
-                        النطاق
-                      </span>
-                      <div className="flex items-center gap-2 font-semibold text-sm">
-                        <FiActivity
-                          className={
-                            isPopular ? "text-primary" : "text-primary"
-                          }
-                        />
-                        {pkg.bandwidth}
-                      </div>
-                    </div>
-                  )}
-                  {pkg.cpu && (
-                    <div className="flex flex-col gap-1">
-                      <span
-                        className={`text-xs ${
-                          isPopular ? "text-gray-500" : "text-gray-400"
-                        }`}
-                      >
-                        المعالج
-                      </span>
-                      <div className="flex items-center gap-2 font-semibold text-sm">
-                        <FiCpu
-                          className={
-                            isPopular ? "text-primary" : "text-primary"
-                          }
-                        />
-                        {pkg.cpu}
-                      </div>
-                    </div>
-                  )}
-                  {pkg.ram && (
-                    <div className="flex flex-col gap-1">
-                      <span
-                        className={`text-xs ${
-                          isPopular ? "text-gray-500" : "text-gray-400"
-                        }`}
-                      >
-                        الذاكرة
-                      </span>
-                      <div className="flex items-center gap-2 font-semibold text-sm">
-                        <FiZap
-                          className={
-                            isPopular ? "text-primary" : "text-blue-600"
-                          }
-                        />
-                        {pkg.ram}
-                      </div>
-                    </div>
-                  )}
-                </div>
 
-                {/* قائمة المميزات */}
-                <div className="flex-1 mb-8">
-                  <div className="flex items-center justify-between mb-4">
-                    <span
-                      className={`text-sm font-bold uppercase tracking-wider ${
-                        isPopular ? "text-gray-500" : "text-gray-400"
-                      }`}
-                    >
-                      أبرز المميزات
-                    </span>
-                    {/* زر التوسيع */}
-                    {pkg.features && pkg.features.length > 0 && (
-                      <button
-                        onClick={() => toggleFeatures(pkg._id)}
-                        className={`text-xs hover:underline ${
+                  {/* السعر */}
+                  <div className="mb-5">
+                    <div className="flex items-end gap-2">
+                      <span
+                        className={`text-sm font-semibold ${
+                          isPopular ? "text-gray-400" : "text-gray-500"
+                        }`}
+                      >
+                        {pkg.currency || "SAR"}
+                      </span>
+                      <span
+                        className={`text-5xl font-black tracking-tight ${
                           isPopular ? "text-primary" : "text-primary"
                         }`}
                       >
-                        {expandedFeatures.has(pkg._id)
-                          ? "إخفاء التفاصيل"
-                          : "عرض الكل"}
-                      </button>
+                        <AnimatedPrice price={displayPrice} />
+                      </span>
+                      <span
+                        className={`pb-2 text-sm ${
+                          isPopular ? "text-gray-400" : "text-gray-500"
+                        }`}
+                      >
+                        / {billingCycle === "Monthly" ? "شهرياً" : "سنوياً"}
+                      </span>
+                    </div>
+                    {originalPrice && originalPrice > displayPrice && (
+                      <div className="mt-1 text-sm text-red-500 line-through decoration-red-500/50">
+                        بدلاً من {originalPrice} {pkg.currency}
+                      </div>
                     )}
                   </div>
 
-                  <ul className="space-y-3">
-                    {/* عرض أول 4 مميزات فقط أو الكل إذا تم التوسيع */}
-                    {(() => {
-                      const allFeatures = [];
+                  {/* المواصفات التقنية */}
+                  {(pkg.storage || pkg.bandwidth || pkg.cpu || pkg.ram) && (
+                    <div className="mb-5 grid grid-cols-2 gap-2">
+                      {pkg.storage && (
+                        <Spec
+                          label="التخزين"
+                          value={pkg.storage}
+                          icon={FiHardDrive}
+                          dark={isPopular}
+                        />
+                      )}
+                      {pkg.bandwidth && (
+                        <Spec
+                          label="النطاق"
+                          value={pkg.bandwidth}
+                          icon={FiActivity}
+                          dark={isPopular}
+                        />
+                      )}
+                      {pkg.cpu && (
+                        <Spec
+                          label="المعالج"
+                          value={pkg.cpu}
+                          icon={FiCpu}
+                          dark={isPopular}
+                        />
+                      )}
+                      {pkg.ram && (
+                        <Spec
+                          label="الذاكرة"
+                          value={pkg.ram}
+                          icon={FiZap}
+                          dark={isPopular}
+                        />
+                      )}
+                    </div>
+                  )}
 
-                      // إضافة مميزات الباقة الأساسية إن وجدت
-                      if (pkg.basePackageId) {
-                        const base = getBasePackage(pkg.basePackageId);
-                        if (base)
-                          allFeatures.push({
-                            text: `كل مميزات ${base.name}`,
-                            highlight: true,
-                          });
-                      }
+                  {/* المميزات */}
+                  <div className="mb-6">
+                    <div className="flex items-center justify-between mb-3">
+                      <span
+                        className={`text-xs font-bold uppercase tracking-wider ${
+                          isPopular ? "text-gray-500" : "text-gray-400"
+                        }`}
+                      >
+                        المميزات
+                      </span>
+                      {pkg.features && pkg.features.length > 0 && (
+                        <button
+                          onClick={() => toggleFeatures(pkg._id)}
+                          className={`text-xs hover:underline ${
+                            isPopular ? "text-primary" : "text-primary"
+                          }`}
+                        >
+                          {expandedFeatures.has(pkg._id)
+                            ? "إخفاء التفاصيل"
+                            : "عرض الكل"}
+                        </button>
+                      )}
+                    </div>
 
-                      // إضافة المميزات الإضافية
-                      const extras = getAdditionalFeatures(pkg);
-                      extras.forEach((f) =>
-                        allFeatures.push({ text: f, highlight: false })
-                      );
-
-                      // إضافة المميزات العادية إذا لم يكن هناك باقة أساسية
-                      if (!pkg.basePackageId && pkg.features) {
-                        pkg.features.forEach((f) =>
-                          allFeatures.push({ text: f, highlight: false })
-                        );
-                      }
-
-                      // المنطق للعرض
-                      const displayedFeatures = expandedFeatures.has(pkg._id)
-                        ? allFeatures
-                        : allFeatures.slice(0, 4);
-
-                      return displayedFeatures.map((feat, idx) => (
+                    <ul className="space-y-2.5">
+                      {displayedFeatures.map((feat, idx) => (
                         <li
                           key={idx}
-                          className="flex items-start gap-3 text-sm"
+                          className="flex items-start gap-3 text-sm leading-6"
                         >
-                          <div
-                            className={`mt-0.5 rounded-full p-0.5 ${
+                          <span
+                            className={`mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full ${
                               isPopular
                                 ? "bg-primary/20 text-primary"
                                 : "bg-primary/10 text-primary"
                             }`}
                           >
-                            <FiCheck size={12} />
-                          </div>
+                            <FiCheck size={13} />
+                          </span>
                           <span
                             className={
                               isPopular ? "text-gray-300" : "text-gray-600"
@@ -504,65 +598,63 @@ export default function HostingPackages() {
                             )}
                           </span>
                         </li>
-                      ));
-                    })()}
-                  </ul>
-                </div>
+                      ))}
+                    </ul>
+                  </div>
 
-                {/* زر الإجراء (CTA) */}
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => openPackageModal(pkg)}
-                  className={`w-full py-4 rounded-xl font-bold text-sm transition-all duration-300 flex items-center justify-center gap-2 ${
-                    isPopular
-                      ? "bg-primary text-white hover:bg-primaryDark hover:shadow-lg hover:shadow-primary/25"
-                      : "bg-gray-100 text-gray-900 hover:bg-gray-200"
-                  }`}
-                >
-                  {isPopular ? "ابدأ الآن" : "اختر الباقة"}
-                  <FiArrowLeft className={isPopular ? "animate-pulse" : ""} />
-                </motion.button>
+                  {/* زر الإجراء */}
+                  <motion.button
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => openPackageModal(pkg)}
+                    className={`w-full py-4 rounded-2xl font-bold text-sm transition-all duration-300 flex items-center justify-center gap-2 ${
+                      isPopular
+                        ? "bg-primary text-white hover:bg-primaryDark shadow-lg shadow-primary/25"
+                        : "bg-gray-100 text-gray-900 hover:bg-gray-200"
+                    }`}
+                  >
+                    {isPopular ? "اختر الخطة" : "ابدأ الآن"}
+                    <FiArrowLeft
+                      className={isPopular ? "animate-pulse" : ""}
+                    />
+                  </motion.button>
+                </div>
               </motion.div>
             );
           })}
         </div>
 
-        {/* قسم المؤسسات (Enterprise) بتصميم عصري */}
+        {/* CTA الحل المخصص */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
           viewport={{ once: true }}
-          className="mt-20"
+          className="mt-12"
         >
-          <div className="relative rounded-3xl overflow-hidden bg-gray-900 text-white p-8 md:p-12 lg:flex items-center justify-between border border-gray-800">
-            {/* خلفية جمالية */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-primary/20 rounded-full blur-[100px] pointer-events-none" />
-
-            <div className="relative z-10 max-w-2xl mb-8 lg:mb-0">
-              <div className="flex items-center gap-3 mb-4 text-primary">
-                <FiServer size={24} />
-                <span className="font-bold tracking-wide uppercase">
-                  حلول المؤسسات
-                </span>
+          <div className="rounded-3xl border border-gray-200/70 bg-white/80 p-6 shadow-xl shadow-gray-900/5 backdrop-blur md:p-8">
+            <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
+              <div className="flex items-center gap-5">
+                <div className="hidden h-20 w-28 rounded-2xl bg-primary/10 md:flex items-center justify-center">
+                  <FiServer size={32} className="text-primary" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-extrabold text-gray-900">
+                    تحتاج حلاً مخصصًا؟ دعنا نبني لك باقة تناسب مشروعك
+                  </h3>
+                  <p className="mt-2 text-gray-600">
+                    سنصمم لك خطة خاصة تتناسب مع احتياجاتك، حجم الزيارات، نوع
+                    المشروع، وأهداف النمو.
+                  </p>
+                </div>
               </div>
-              <h3 className="text-3xl font-bold mb-4">
-                هل تحتاج إلى موارد مخصصة؟
-              </h3>
-              <p className="text-gray-400 text-lg leading-relaxed">
-                نقدم سيرفرات خاصة، توازن حمل (Load Balancing)، وحماية متقدمة من
-                هجمات DDoS للمتاجر الكبرى والتطبيقات ذات الزيارات العالية.
-              </p>
-            </div>
-
-            <div className="relative z-10">
-              <button
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={openEnterpriseModal}
-                className="whitespace-nowrap bg-white text-gray-900 px-8 py-4 rounded-xl font-bold text-lg hover:bg-gray-100 transition-colors shadow-lg shadow-white/10"
+                className="rounded-2xl bg-gray-950 px-8 py-4 font-bold text-white shadow-lg transition hover:bg-primary whitespace-nowrap"
               >
-                تواصل مع المبيعات
-              </button>
+                تواصل معنا
+              </motion.button>
             </div>
           </div>
         </motion.div>
