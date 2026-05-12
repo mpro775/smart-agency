@@ -1,293 +1,192 @@
-import { useState, useEffect } from "react";
-import {
-  FiArrowLeft,
-  FiEye,
-  FiUser,
-  FiCalendar,
-  FiTag,
-  FiShare2,
-} from "react-icons/fi";
+import { useEffect, useMemo, useState } from "react";
+import { ArrowRight, Share2 } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
-import { motion } from "framer-motion";
 import { publicBlogService } from "../services/blog.service";
 import type { Blog } from "../admin/types";
+import { sanitizeHtml } from "../utils/sanitizeHtml";
+import ReadingProgressBar from "../components/blog/ReadingProgressBar";
+import ArticleHero from "../components/blog/ArticleHero";
+import TableOfContents from "../components/blog/TableOfContents";
+import ArticleCTA from "../components/blog/ArticleCTA";
+import AuthorBox from "../components/blog/AuthorBox";
+import RelatedArticles from "../components/blog/RelatedArticles";
+import { getAuthorName, getBlogImage } from "../components/blog/blogUtils";
+
+function withHeadingIds(html: string) {
+  if (typeof window === "undefined") return html;
+  const template = document.createElement("template");
+  template.innerHTML = html;
+  template.content.querySelectorAll("h2, h3").forEach((heading, index) => {
+    heading.id = `article-heading-${index}`;
+  });
+  return template.innerHTML;
+}
+
+function useArticleSeo(blog: Blog | null) {
+  useEffect(() => {
+    if (!blog) return;
+
+    const title = blog.seo?.metaTitle || blog.title;
+    const description = blog.seo?.metaDescription || blog.excerpt || "";
+    const canonical = blog.seo?.canonicalUrl || window.location.href;
+    const image = blog.seo?.ogImage || blog.coverImage || "";
+    const previousTitle = document.title;
+
+    document.title = title;
+
+    const upsertMeta = (selector: string, attrs: Record<string, string>) => {
+      let element = document.head.querySelector(selector) as HTMLMetaElement | null;
+      if (!element) {
+        element = document.createElement("meta");
+        document.head.appendChild(element);
+      }
+      Object.entries(attrs).forEach(([key, value]) => element?.setAttribute(key, value));
+      return element;
+    };
+
+    const descriptionMeta = upsertMeta('meta[name="description"]', { name: "description", content: description });
+    const robotsMeta = upsertMeta('meta[name="robots"]', {
+      name: "robots",
+      content: blog.seo?.noIndex || blog.allowIndexing === false ? "noindex,nofollow" : "index,follow",
+    });
+    const ogTitle = upsertMeta('meta[property="og:title"]', { property: "og:title", content: blog.seo?.ogTitle || title });
+    const ogDescription = upsertMeta('meta[property="og:description"]', { property: "og:description", content: blog.seo?.ogDescription || description });
+    const ogImage = upsertMeta('meta[property="og:image"]', { property: "og:image", content: image });
+    const twitterTitle = upsertMeta('meta[name="twitter:title"]', { name: "twitter:title", content: blog.seo?.twitterTitle || title });
+    const twitterDescription = upsertMeta('meta[name="twitter:description"]', { name: "twitter:description", content: blog.seo?.twitterDescription || description });
+
+    let canonicalLink = document.head.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+    if (!canonicalLink) {
+      canonicalLink = document.createElement("link");
+      canonicalLink.rel = "canonical";
+      document.head.appendChild(canonicalLink);
+    }
+    canonicalLink.href = canonical;
+
+    const schema = document.createElement("script");
+    schema.type = "application/ld+json";
+    schema.text = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": blog.seo?.schemaType || "Article",
+      headline: blog.title,
+      description,
+      image: getBlogImage(blog),
+      datePublished: blog.publishedAt,
+      dateModified: blog.updatedAt,
+      author: { "@type": "Person", name: getAuthorName(blog) },
+      publisher: { "@type": "Organization", name: "Smart Agency" },
+    });
+    document.head.appendChild(schema);
+
+    return () => {
+      document.title = previousTitle;
+      schema.remove();
+      [descriptionMeta, robotsMeta, ogTitle, ogDescription, ogImage, twitterTitle, twitterDescription].forEach((meta) => meta?.remove());
+    };
+  }, [blog]);
+}
 
 export default function BlogDetailsPage() {
   const { slug } = useParams<{ slug: string }>();
   const [blog, setBlog] = useState<Blog | null>(null);
+  const [related, setRelated] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [relatedBlogs, setRelatedBlogs] = useState<Blog[]>([]);
+
+  useArticleSeo(blog);
 
   useEffect(() => {
-    const fetchBlog = async () => {
-      if (!slug) return;
+    if (!slug) return;
 
-      try {
-        setLoading(true);
-        const data = await publicBlogService.getBySlug(slug);
-        setBlog(data);
-
-        // Fetch related blogs based on tags
-        if (data.tags && data.tags.length > 0) {
-          const relatedResponse = await publicBlogService.getAll({
-            limit: 3,
-            tag: data.tags[0], // Use first tag to find related blogs
-          });
-          // Filter out current blog from related blogs
-          const filteredRelated = relatedResponse.data.filter(
-            (b) => b._id !== data._id
-          );
-          setRelatedBlogs(filteredRelated.slice(0, 3));
-        }
-
+    setLoading(true);
+    Promise.all([publicBlogService.getBySlug(slug), publicBlogService.getRelated(slug, 3)])
+      .then(([blogData, relatedData]) => {
+        setBlog(blogData);
+        setRelated(relatedData);
         setError(null);
-      } catch (err) {
-        console.error("Error fetching blog:", err);
-        setError("فشل تحميل المدونة. يرجى المحاولة مرة أخرى.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchBlog();
+      })
+      .catch(() => setError("تعذر تحميل المقال. تأكد من الرابط وحاول مرة أخرى."))
+      .finally(() => setLoading(false));
   }, [slug]);
 
-  const formatDate = (dateString?: string) => {
-    if (!dateString) return "";
-    return new Date(dateString).toLocaleDateString("ar-SA", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  };
+  const articleHtml = useMemo(() => withHeadingIds(sanitizeHtml(blog?.content || "")), [blog?.content]);
 
-  const getAuthorName = (author?: any) => {
-    if (!author) return "الإدارة";
-    if (typeof author === "string") return author;
-    return author.name || "الإدارة";
-  };
-
-  const handleShare = () => {
+  const handleShare = async () => {
+    if (!blog) return;
     if (navigator.share) {
-      navigator.share({
-        title: blog?.title,
-        text: blog?.excerpt,
-        url: window.location.href,
-      });
-    } else {
-      // Fallback: copy to clipboard
-      navigator.clipboard.writeText(window.location.href);
-      // You could show a toast notification here
+      await navigator.share({ title: blog.title, text: blog.excerpt, url: window.location.href });
+      return;
     }
+    await navigator.clipboard.writeText(window.location.href);
   };
 
   if (loading) {
     return (
-      <main className="py-16 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
-        <div className="text-center py-12">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-          <p className="mt-4 text-gray-600">جاري تحميل المدونة...</p>
-        </div>
+      <main className="px-4 py-24 text-center" dir="rtl">
+        <div className="mx-auto h-12 w-12 animate-spin rounded-full border-b-2 border-primary" />
+        <p className="mt-4 text-slate-600">جاري تحميل المقال...</p>
       </main>
     );
   }
 
   if (error || !blog) {
     return (
-      <main className="py-16 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
-        <div className="text-center py-12">
-          <p className="text-red-600 mb-4">{error || "المدونة غير موجودة"}</p>
-          <Link
-            to="/blog"
-            className="inline-flex items-center gap-2 text-primary hover:text-primaryDark transition"
-          >
-            <FiArrowLeft /> العودة إلى المدونة
-          </Link>
-        </div>
+      <main className="px-4 py-24 text-center" dir="rtl">
+        <p className="mb-6 text-red-600">{error || "المقال غير موجود"}</p>
+        <Link to="/blog" className="inline-flex items-center gap-2 text-primary">
+          <ArrowRight className="h-4 w-4" />
+          العودة إلى المدونة
+        </Link>
       </main>
     );
   }
 
-  const blogImage =
-    blog.coverImage || "https://via.placeholder.com/1200x600?text=مدونة";
-
   return (
-    <main className="py-16 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
-      {/* زر العودة */}
-      <div className="mb-8">
-        <Link
-          to="/blog"
-          className="inline-flex items-center gap-2 text-primary hover:text-primaryDark transition"
-        >
-          <FiArrowLeft /> العودة إلى المدونة
-        </Link>
-      </div>
+    <main className="bg-white">
+      <ReadingProgressBar />
+      <ArticleHero blog={blog} />
 
-      {/* صورة المدونة */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.6 }}
-        className="mb-12 rounded-2xl overflow-hidden shadow-xl"
-      >
-        <img
-          src={blogImage}
-          alt={blog.title}
-          width={1200}
-          height={600}
-          className="w-full h-auto object-cover"
-        />
-      </motion.div>
+      <section className="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[1fr_280px] lg:px-8" dir="rtl">
+        <article className="min-w-0">
+          <div className="mb-8 flex flex-wrap items-center justify-between gap-3">
+            <Link to="/blog" className="inline-flex items-center gap-2 text-sm font-semibold text-primary">
+              <ArrowRight className="h-4 w-4" />
+              العودة إلى المدونة
+            </Link>
+            <button
+              onClick={handleShare}
+              className="inline-flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2 text-sm text-slate-600 hover:text-primary"
+            >
+              <Share2 className="h-4 w-4" />
+              مشاركة
+            </button>
+          </div>
 
-      {/* معلومات المدونة */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2, duration: 0.6 }}
-        className="mb-8"
-      >
-        {/* العنوان */}
-        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
-          {blog.title}
-        </h1>
-
-        {/* الملخص */}
-        {blog.excerpt && (
-          <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-            {blog.excerpt}
-          </p>
-        )}
-
-        {/* معلومات النشر والمؤلف */}
-        <div className="flex flex-wrap items-center gap-6 text-gray-500 border-b border-gray-200 pb-8 mb-8">
-          {blog.author && (
-            <div className="flex items-center gap-2">
-              <FiUser className="w-5 h-5" />
-              <span className="font-medium">{getAuthorName(blog.author)}</span>
+          {blog.summaryPoints && blog.summaryPoints.length > 0 && (
+            <div className="mb-10 rounded-2xl bg-primary/5 p-6">
+              <h2 className="mb-3 font-bold text-slate-950">ملخص سريع</h2>
+              <ul className="space-y-2 text-slate-700">
+                {blog.summaryPoints.map((point) => (
+                  <li key={point}>• {point}</li>
+                ))}
+              </ul>
             </div>
           )}
 
-          {blog.publishedAt && (
-            <div className="flex items-center gap-2">
-              <FiCalendar className="w-5 h-5" />
-              <span>{formatDate(blog.publishedAt)}</span>
-            </div>
-          )}
+          <div
+            className="prose prose-lg max-w-none prose-headings:scroll-mt-24 prose-headings:text-slate-950 prose-p:leading-8 prose-p:text-slate-700 prose-a:text-primary prose-img:rounded-2xl"
+            dangerouslySetInnerHTML={{ __html: articleHtml }}
+          />
 
-          <div className="flex items-center gap-2">
-            <FiEye className="w-5 h-5" />
-            <span>{blog.views} مشاهدة</span>
-          </div>
+          <ArticleCTA blog={blog} />
+          <AuthorBox blog={blog} />
+          <RelatedArticles blogs={related} />
+        </article>
 
-          {/* زر المشاركة */}
-          <button
-            onClick={handleShare}
-            className="flex items-center gap-2 hover:text-primary transition-colors"
-          >
-            <FiShare2 className="w-5 h-5" />
-            <span>مشاركة</span>
-          </button>
-        </div>
-
-        {/* التاغات */}
-        {blog.tags && blog.tags.length > 0 && (
-          <div className="flex items-center gap-3 mb-8">
-            <FiTag className="w-5 h-5 text-gray-500" />
-            <div className="flex flex-wrap gap-2">
-              {blog.tags.map((tag, i) => (
-                <Link
-                  key={i}
-                  to={`/blog?tag=${tag}`}
-                  className="inline-block px-3 py-1 bg-primary/10 text-primary text-sm font-medium rounded-full hover:bg-primary hover:text-white transition-colors"
-                >
-                  {tag}
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
-      </motion.div>
-
-      {/* محتوى المدونة */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4, duration: 0.6 }}
-        className="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-p:leading-relaxed prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 prose-code:bg-gray-100 prose-code:px-2 prose-code:py-1 prose-code:rounded prose-code:text-sm prose-pre:bg-gray-900 prose-pre:text-gray-100 prose-blockquote:border-primary prose-blockquote:text-gray-700 mb-12"
-      >
-        {/* Here we assume the content is HTML. In a real app, you might need to parse markdown or handle different content types */}
-        <div dangerouslySetInnerHTML={{ __html: blog.content }} />
-      </motion.div>
-
-      {/* المدونات ذات الصلة */}
-      {relatedBlogs.length > 0 && (
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6, duration: 0.6 }}
-          className="border-t border-gray-200 pt-12"
-        >
-          <h2 className="text-2xl font-bold text-gray-900 mb-8">
-            مدونات ذات صلة
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {relatedBlogs.map((relatedBlog, index) => {
-              const relatedImage =
-                relatedBlog.coverImage ||
-                "https://via.placeholder.com/400x250?text=مدونة";
-
-              return (
-                <motion.div
-                  key={relatedBlog._id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1, duration: 0.4 }}
-                  className="group bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-100"
-                >
-                  <Link to={`/blog/${relatedBlog.slug}`}>
-                    <div className="relative h-32 overflow-hidden">
-                      <img
-                        src={relatedImage}
-                        alt={relatedBlog.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-                    </div>
-                    <div className="p-4">
-                      <h3 className="font-bold text-gray-900 hover:text-primary transition-colors line-clamp-2 mb-2">
-                        {relatedBlog.title}
-                      </h3>
-                      <p className="text-sm text-gray-600 line-clamp-2">
-                        {relatedBlog.excerpt}
-                      </p>
-                      <div className="flex items-center gap-2 text-xs text-gray-500 mt-3">
-                        <FiCalendar className="w-4 h-4" />
-                        <span>{formatDate(relatedBlog.publishedAt)}</span>
-                      </div>
-                    </div>
-                  </Link>
-                </motion.div>
-              );
-            })}
-          </div>
-        </motion.div>
-      )}
-
-      {/* زر العودة للأعلى */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.8, duration: 0.6 }}
-        className="text-center mt-16"
-      >
-        <Link
-          to="/blog"
-          className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-white font-medium hover:bg-primaryDark transition-colors"
-        >
-          <FiArrowLeft className="group-hover:translate-x-1 transition-transform" />
-          تصفح المزيد من المدونات
-        </Link>
-      </motion.div>
+        <aside className="hidden lg:block">
+          <TableOfContents html={articleHtml} />
+        </aside>
+      </section>
     </main>
   );
 }

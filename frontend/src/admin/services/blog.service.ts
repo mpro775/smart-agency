@@ -6,7 +6,11 @@ export interface BlogFilters {
   limit?: number;
   tag?: string;
   isPublished?: boolean;
+  category?: string;
+  contentType?: string;
+  isFeatured?: boolean;
   search?: string;
+  sort?: 'latest' | 'popular' | 'featured';
 }
 
 export interface CreateBlogDto {
@@ -15,9 +19,38 @@ export interface CreateBlogDto {
   content: string;
   excerpt?: string;
   coverImage?: string;
+  coverAlt?: string;
   tags?: string[];
+  category?: string;
+  contentType?: 'article' | 'guide' | 'case-study' | 'insight' | 'news';
   isPublished?: boolean;
-  seo?: { metaTitle?: string; metaDescription?: string; keywords?: string[] };
+  isFeatured?: boolean;
+  featuredOrder?: number;
+  readingTime?: number;
+  authorName?: string;
+  authorRole?: string;
+  authorAvatar?: string;
+  summaryPoints?: string[];
+  isEditorPick?: boolean;
+  allowIndexing?: boolean;
+  ctaTitle?: string;
+  ctaDescription?: string;
+  ctaButtonText?: string;
+  ctaButtonUrl?: string;
+  seo?: {
+    metaTitle?: string;
+    metaDescription?: string;
+    keywords?: string[];
+    canonicalUrl?: string;
+    ogTitle?: string;
+    ogDescription?: string;
+    ogImage?: string;
+    twitterTitle?: string;
+    twitterDescription?: string;
+    twitterImage?: string;
+    noIndex?: boolean;
+    schemaType?: string;
+  };
 }
 
 export type UpdateBlogDto = Partial<CreateBlogDto>;
@@ -29,9 +62,13 @@ export const blogService = {
     if (filters?.limit) params.append('limit', String(filters.limit));
     if (filters?.tag) params.append('tag', filters.tag);
     if (filters?.isPublished !== undefined) params.append('isPublished', String(filters.isPublished));
+    if (filters?.category) params.append('category', filters.category);
+    if (filters?.contentType) params.append('contentType', filters.contentType);
+    if (filters?.isFeatured !== undefined) params.append('isFeatured', String(filters.isFeatured));
     if (filters?.search) params.append('search', filters.search);
+    if (filters?.sort) params.append('sort', filters.sort);
 
-    const response = await api.get<ApiResponse<Blog[]>>(`/blog?${params.toString()}`);
+    const response = await api.get<ApiResponse<Blog[]>>(`/blog/admin?${params.toString()}`);
     return {
       data: response.data.data,
       meta: response.data.meta!,
@@ -57,4 +94,3 @@ export const blogService = {
     await api.delete(`/blog/${id}`);
   },
 };
-

@@ -25,5 +25,34 @@ export class FilterBlogDto extends PaginationDto {
   @Transform(({ value }) => value === 'true' || value === true)
   @IsBoolean()
   isPublished?: boolean;
-}
 
+  @ApiPropertyOptional({
+    description: 'Filter by category',
+  })
+  @IsOptional()
+  @IsString()
+  category?: string;
+
+  @ApiPropertyOptional({
+    description: 'Filter by content type',
+  })
+  @IsOptional()
+  @IsString()
+  contentType?: string;
+
+  @ApiPropertyOptional({
+    description: 'Only featured posts',
+  })
+  @IsOptional()
+  @Transform(({ value }) => value === 'true' || value === true)
+  @IsBoolean()
+  isFeatured?: boolean;
+
+  @ApiPropertyOptional({
+    description: 'Sort option',
+    enum: ['latest', 'popular', 'featured'],
+  })
+  @IsOptional()
+  @IsString()
+  sort?: 'latest' | 'popular' | 'featured';
+}

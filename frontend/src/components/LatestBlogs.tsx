@@ -1,10 +1,9 @@
-"use client";
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { FiArrowLeft, FiEye, FiUser, FiCalendar } from "react-icons/fi";
+import { useEffect, useState } from "react";
+import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 import { publicBlogService } from "../services/blog.service";
 import type { Blog } from "../admin/types";
+import BlogInsightCard from "./blog/BlogInsightCard";
 
 export default function LatestBlogs() {
   const [blogs, setBlogs] = useState<Blog[]>([]);
@@ -12,281 +11,71 @@ export default function LatestBlogs() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchBlogs = async () => {
+    const loadBlogs = async () => {
       try {
         setLoading(true);
-        const response = await publicBlogService.getAll({ limit: 3 });
-        setBlogs(response.data);
+        const featured = await publicBlogService.getFeatured(3);
+        if (featured.length > 0) {
+          setBlogs(featured);
+        } else {
+          const latest = await publicBlogService.getAll({ limit: 3, sort: "latest" });
+          setBlogs(latest.data);
+        }
         setError(null);
-      } catch (err) {
-        console.error("Error fetching blogs:", err);
-        setError("فشل تحميل المدونات. يرجى المحاولة مرة أخرى.");
+      } catch {
+        setError("تعذر تحميل المقالات حالياً.");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchBlogs();
+    loadBlogs();
   }, []);
 
-  const getRelativeTime = (dateString?: string) => {
-    if (!dateString) return "";
-
-    const now = new Date();
-    const date = new Date(dateString);
-    const diffInMs = now.getTime() - date.getTime();
-    const diffInSeconds = Math.floor(diffInMs / 1000);
-    const diffInMinutes = Math.floor(diffInSeconds / 60);
-    const diffInHours = Math.floor(diffInMinutes / 60);
-    const diffInDays = Math.floor(diffInHours / 24);
-    const diffInWeeks = Math.floor(diffInDays / 7);
-    const diffInMonths = Math.floor(diffInDays / 30);
-    const diffInYears = Math.floor(diffInDays / 365);
-
-    if (diffInSeconds < 60) {
-      return "منذ لحظات";
-    } else if (diffInMinutes < 60) {
-      if (diffInMinutes === 1) {
-        return "منذ دقيقة";
-      } else if (diffInMinutes === 2) {
-        return "منذ دقيقتين";
-      } else if (diffInMinutes <= 10) {
-        return `منذ ${diffInMinutes} دقائق`;
-      } else {
-        return `منذ ${diffInMinutes} دقيقة`;
-      }
-    } else if (diffInHours < 24) {
-      if (diffInHours === 1) {
-        return "منذ ساعة";
-      } else if (diffInHours === 2) {
-        return "منذ ساعتين";
-      } else if (diffInHours <= 10) {
-        return `منذ ${diffInHours} ساعات`;
-      } else {
-        return `منذ ${diffInHours} ساعة`;
-      }
-    } else if (diffInDays < 7) {
-      if (diffInDays === 1) {
-        return "منذ يوم";
-      } else if (diffInDays === 2) {
-        return "منذ يومين";
-      } else if (diffInDays <= 10) {
-        return `منذ ${diffInDays} أيام`;
-      } else {
-        return `منذ ${diffInDays} يوم`;
-      }
-    } else if (diffInWeeks < 4) {
-      if (diffInWeeks === 1) {
-        return "منذ أسبوع";
-      } else if (diffInWeeks === 2) {
-        return "منذ أسبوعين";
-      } else if (diffInWeeks <= 10) {
-        return `منذ ${diffInWeeks} أسابيع`;
-      } else {
-        return `منذ ${diffInWeeks} أسبوع`;
-      }
-    } else if (diffInMonths < 12) {
-      if (diffInMonths === 1) {
-        return "منذ شهر";
-      } else if (diffInMonths === 2) {
-        return "منذ شهرين";
-      } else if (diffInMonths <= 10) {
-        return `منذ ${diffInMonths} أشهر`;
-      } else {
-        return `منذ ${diffInMonths} شهر`;
-      }
-    } else {
-      if (diffInYears === 1) {
-        return "منذ سنة";
-      } else if (diffInYears === 2) {
-        return "منذ سنتين";
-      } else if (diffInYears <= 10) {
-        return `منذ ${diffInYears} سنوات`;
-      } else {
-        return `منذ ${diffInYears} سنة`;
-      }
-    }
-  };
-
-  const getAuthorName = (author?: any) => {
-    if (!author) return "الإدارة";
-    if (typeof author === "string") return author;
-    return author.name || "الإدارة";
-  };
-
   return (
-    <section className="py-20 bg-gradient-to-b from-white to-gray-50" id="blog">
+    <section className="bg-gradient-to-b from-white to-slate-50 py-20" id="blog" dir="rtl">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            مدونة{" "}
-            <span className="text-transparent bg-clip-text bg-[linear-gradient(to_right,var(--color-primary),var(--color-primary-dark))]">
-              التقنية
+        <div className="mb-12 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+          <div>
+            <span className="rounded-full bg-primary/10 px-4 py-2 text-sm font-semibold text-primary">
+              مركز المعرفة
             </span>
-          </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            آخر الأخبار والمقالات التقنية والحلول المبتكرة في عالم البرمجة
-            والتكنولوجيا
-          </p>
-        </motion.div>
+            <h2 className="mt-5 text-4xl font-bold text-slate-950 md:text-5xl">
+              أحدث رؤى Smart Agency
+            </h2>
+            <p className="mt-4 max-w-2xl text-slate-600">
+              محتوى عملي حول بناء المواقع، المتاجر، الأتمتة، وتجارب المستخدم التي تصنع فرقاً في النمو.
+            </p>
+          </div>
+          <Link to="/blog" className="inline-flex items-center gap-2 font-semibold text-primary hover:text-primaryDark">
+            عرض كل المقالات
+            <ArrowLeft className="h-4 w-4" />
+          </Link>
+        </div>
 
-        {/* حالة التحميل */}
         {loading && (
-          <div className="text-center py-20">
-            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-            <p className="mt-4 text-gray-600">جاري تحميل المدونات...</p>
+          <div className="grid gap-6 md:grid-cols-3">
+            {Array.from({ length: 3 }).map((_, index) => (
+              <div key={index} className="h-96 animate-pulse rounded-2xl bg-slate-100" />
+            ))}
           </div>
         )}
 
-        {/* حالة الخطأ */}
-        {error && (
-          <div className="text-center py-20">
-            <p className="text-red-600 mb-4">{error}</p>
+        {error && !loading && <div className="rounded-2xl bg-red-50 p-6 text-center text-red-700">{error}</div>}
+
+        {!loading && !error && blogs.length > 0 && (
+          <div className="grid gap-6 md:grid-cols-3">
+            {blogs.map((blog) => (
+              <BlogInsightCard key={blog._id} blog={blog} />
+            ))}
           </div>
         )}
 
-        <AnimatePresence>
-          {!loading && !error && (
-            <>
-              {blogs.length > 0 ? (
-                <>
-                  {/* شبكة المدونات */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-                    {blogs.map((blog, index) => {
-                      const blogImage =
-                        blog.coverImage ||
-                        "https://via.placeholder.com/800x600?text=مدونة";
-
-                      return (
-                        <motion.div
-                          key={blog._id}
-                          initial={{ opacity: 0, y: 50 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: index * 0.1, duration: 0.6 }}
-                          viewport={{ once: true }}
-                          className="group bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100"
-                          data-cursor="hover"
-                        >
-                          {/* صورة المدونة */}
-                          <div className="relative h-48 overflow-hidden">
-                            <img
-                              src={blogImage}
-                              alt={blog.title}
-                              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                              loading="lazy"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                              <p className="text-white text-sm line-clamp-3">
-                                {blog.excerpt ||
-                                  "اقرأ المزيد عن هذا الموضوع..."}
-                              </p>
-                            </div>
-                          </div>
-
-                          {/* تفاصيل المدونة */}
-                          <div className="p-6">
-                            <Link to={`/blog/${blog.slug}`}>
-                              <h3 className="text-xl font-bold text-gray-900 hover:text-primary transition-colors line-clamp-2 mb-3">
-                                {blog.title}
-                              </h3>
-                            </Link>
-
-                            {blog.excerpt && (
-                              <p className="text-gray-600 text-sm line-clamp-3 mb-4">
-                                {blog.excerpt}
-                              </p>
-                            )}
-
-                            {/* معلومات النشر */}
-                            <div className="flex items-center gap-4 text-xs text-gray-500 mb-4">
-                              {blog.publishedAt && (
-                                <div className="flex items-center gap-1">
-                                  <FiCalendar className="w-4 h-4" />
-                                  <span>
-                                    {getRelativeTime(blog.publishedAt)}
-                                  </span>
-                                </div>
-                              )}
-                              <div className="flex items-center gap-1">
-                                <FiEye className="w-4 h-4" />
-                                <span>{blog.views} مشاهدة</span>
-                              </div>
-                            </div>
-
-                            {/* معلومات المؤلف */}
-                            {blog.author && (
-                              <div className="flex items-center gap-2 text-xs text-gray-500 mb-4">
-                                <FiUser className="w-4 h-4" />
-                                <span>بقلم: {getAuthorName(blog.author)}</span>
-                              </div>
-                            )}
-
-                            {/* تاغات */}
-                            {blog.tags && blog.tags.length > 0 && (
-                              <div className="flex flex-wrap gap-2">
-                                {blog.tags.slice(0, 3).map((tag, i) => (
-                                  <span
-                                    key={i}
-                                    className="inline-block px-2 py-1 bg-primary/10 text-primary text-xs font-medium rounded-full hover:bg-primary hover:text-white transition-colors"
-                                  >
-                                    {tag}
-                                  </span>
-                                ))}
-                                {blog.tags.length > 3 && (
-                                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded-full">
-                                    +{blog.tags.length - 3}
-                                  </span>
-                                )}
-                              </div>
-                            )}
-                          </div>
-                        </motion.div>
-                      );
-                    })}
-                  </div>
-
-                  {/* زر عرض الكل */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4 }}
-                    className="text-center"
-                  >
-                    <Link
-                      to="/blog"
-                      className="relative inline-flex items-center px-8 py-4 rounded-xl bg-[linear-gradient(to_right,var(--color-primary),var(--color-primary-dark))] text-white font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] group overflow-hidden"
-                    >
-                      <span className="relative z-10 flex items-center justify-center gap-2">
-                        عرض جميع المدونات
-                        <FiArrowLeft className="group-hover:translate-x-1 transition-transform" />
-                      </span>
-                      <span className="absolute inset-0 bg-gradient-to-r from-primaryDark to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    </Link>
-                  </motion.div>
-                </>
-              ) : (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="text-center py-20"
-                >
-                  <div className="text-gray-400 text-lg mb-4">
-                    لا توجد مدونات حاليًا
-                  </div>
-                  <p className="text-gray-500 text-sm">
-                    ستكون متوفرة قريبًا مع المحتوى الجديد
-                  </p>
-                </motion.div>
-              )}
-            </>
-          )}
-        </AnimatePresence>
+        {!loading && !error && blogs.length === 0 && (
+          <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center text-slate-500">
+            لا توجد مقالات منشورة حالياً.
+          </div>
+        )}
       </div>
     </section>
   );

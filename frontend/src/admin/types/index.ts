@@ -124,7 +124,18 @@ export interface BlogSeo {
   metaTitle?: string;
   metaDescription?: string;
   keywords: string[];
+  canonicalUrl?: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImage?: string;
+  twitterTitle?: string;
+  twitterDescription?: string;
+  twitterImage?: string;
+  noIndex?: boolean;
+  schemaType?: string;
 }
+
+export type BlogContentType = 'article' | 'guide' | 'case-study' | 'insight' | 'news';
 
 export interface Blog {
   _id: string;
@@ -133,9 +144,25 @@ export interface Blog {
   content: string;
   excerpt?: string;
   coverImage?: string;
+  coverAlt?: string;
   author?: User | string;
+  authorName?: string;
+  authorRole?: string;
+  authorAvatar?: string;
   tags: string[];
+  category?: string;
+  contentType?: BlogContentType;
   isPublished: boolean;
+  isFeatured?: boolean;
+  featuredOrder?: number;
+  readingTime?: number;
+  summaryPoints?: string[];
+  isEditorPick?: boolean;
+  allowIndexing?: boolean;
+  ctaTitle?: string;
+  ctaDescription?: string;
+  ctaButtonText?: string;
+  ctaButtonUrl?: string;
   seo: BlogSeo;
   publishedAt?: string;
   views: number;
