@@ -15,6 +15,7 @@ export interface TeamMember {
   twitterUrl?: string;
   websiteUrl?: string;
   specializations?: string[];
+  projectsCount?: number;
   showOnHome?: boolean;
   showOnAbout?: boolean;
   isActive?: boolean;
