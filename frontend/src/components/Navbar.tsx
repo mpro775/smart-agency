@@ -43,18 +43,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16 md:h-[68px] px-5 md:px-8">
           {/* اللوجو على اليمين */}
           <Link to="/" className="flex items-center gap-3 group">
-            <div className="flex items-center gap-2">
-              <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-                <rect width="36" height="36" rx="8" fill="#008080" />
-                <path d="M10 12h4v12h-4z" fill="white" />
-                <path d="M16 16h4v8h-4z" fill="white" opacity="0.7" />
-                <path d="M22 10h4v14h-4z" fill="white" opacity="0.5" />
-              </svg>
-              <div>
-                <span className="text-base font-black text-[#008080]">وكالة سمارت</span>
-                <p className="text-[9px] text-slate-400 -mt-1">حلول رقمية تدفع أعمالك للأمام</p>
-              </div>
-            </div>
+            <img src="/logo2.png" alt="وكالة سمارت" className="h-10 w-auto" />
           </Link>
 
           {/* الروابط في الوسط */}

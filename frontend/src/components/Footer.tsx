@@ -270,21 +270,9 @@ export default function Footer() {
             >
               <Link
                 to="/"
-                className="inline-flex items-center gap-3 mb-6 group"
+                className="inline-flex mb-6 group"
               >
-                <div className="relative">
-                  <motion.div
-                    className="absolute inset-0 bg-primary/20 rounded-xl blur-lg group-hover:blur-xl transition-all duration-300"
-                    animate={{ scale: [1, 1.1, 1] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                  />
-                  <div className="relative px-4 py-2 rounded-xl bg-gradient-to-r from-primary to-primary-dark">
-                    <span className="text-xl font-black text-white">SMART</span>
-                  </div>
-                </div>
-                <span className="text-xl font-bold text-white group-hover:text-primary transition-colors duration-300">
-                  AGENCY
-                </span>
+                <img src="/logo2.png" alt="وكالة سمارت" className="h-12 w-auto brightness-0 invert" />
               </Link>
 
               <p className="text-gray-300 leading-relaxed text-sm mb-6">
