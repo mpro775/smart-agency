@@ -1,13 +1,23 @@
 import api from './api';
-import type { Project, ApiResponse, PaginatedResponse } from '../types';
+import type { Project, ApiResponse, PaginatedResponse, DisplayVariant } from '../types';
 
 export interface ProjectFilters {
   page?: number;
   limit?: number;
   category?: string;
+  categoryId?: string;
+  industry?: string;
+  displayVariant?: string;
   isPublished?: boolean;
   isFeatured?: boolean;
+  featured?: boolean;
   search?: string;
+}
+
+export interface ProjectStatDto {
+  label: string;
+  value: string;
+  description?: string;
 }
 
 export interface CreateProjectDto {
@@ -23,6 +33,18 @@ export interface CreateProjectDto {
   projectUrl?: string | null;
   clientName?: string;
   category?: string;
+  categoryId?: string;
+  industry?: string;
+  duration?: string;
+  year?: string;
+  clientLogo?: string;
+  accentColor?: string;
+  sortOrder?: number;
+  featuredOrder?: number;
+  displayVariant?: DisplayVariant;
+  previewScreens?: string[];
+  videoUrl?: string;
+  stats?: ProjectStatDto[];
   isFeatured?: boolean;
   seo?: { metaTitle?: string; metaDescription?: string; keywords?: string[] };
   isPublished?: boolean;
@@ -36,8 +58,12 @@ export const projectsService = {
     if (filters?.page) params.append('page', String(filters.page));
     if (filters?.limit) params.append('limit', String(filters.limit));
     if (filters?.category) params.append('category', filters.category);
+    if (filters?.categoryId) params.append('categoryId', filters.categoryId);
+    if (filters?.industry) params.append('industry', filters.industry);
+    if (filters?.displayVariant) params.append('displayVariant', filters.displayVariant);
     if (filters?.isPublished !== undefined) params.append('isPublished', String(filters.isPublished));
     if (filters?.isFeatured !== undefined) params.append('isFeatured', String(filters.isFeatured));
+    if (filters?.featured !== undefined) params.append('featured', String(filters.featured));
     if (filters?.search) params.append('search', filters.search);
 
     // Use admin endpoint to get all projects including unpublished
@@ -49,7 +75,7 @@ export const projectsService = {
   },
 
   getById: async (id: string): Promise<Project> => {
-    const response = await api.get<ApiResponse<Project>>(`/projects/${id}`);
+    const response = await api.get<ApiResponse<Project>>(`/projects/admin/${id}`);
     return response.data.data;
   },
 
@@ -70,6 +96,16 @@ export const projectsService = {
 
   delete: async (id: string): Promise<void> => {
     await api.delete(`/projects/${id}`);
+  },
+
+  toggleFeatured: async (id: string, isFeatured: boolean): Promise<Project> => {
+    const response = await api.patch<ApiResponse<Project>>(`/projects/${id}`, { isFeatured });
+    return response.data.data;
+  },
+
+  togglePublished: async (id: string, isPublished: boolean): Promise<Project> => {
+    const response = await api.patch<ApiResponse<Project>>(`/projects/${id}`, { isPublished });
+    return response.data.data;
   },
 };
 

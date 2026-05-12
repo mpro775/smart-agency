@@ -10,9 +10,11 @@ import {
   IsUrl,
   IsMongoId,
   ValidateIf,
+  IsNumber,
+  IsIn,
 } from 'class-validator';
 import { Transform, Type } from 'class-transformer';
-import { ProjectCategory } from '../schemas/project.schema';
+import { ProjectCategory, DisplayVariant } from '../schemas/project.schema';
 
 class ProjectResultDto {
   @ApiProperty({ description: 'Result label', example: 'زيادة المبيعات' })
@@ -61,6 +63,23 @@ class ProjectSeoDto {
   @IsArray()
   @IsString({ each: true })
   keywords?: string[];
+}
+
+class ProjectStatDto {
+  @ApiProperty({ description: 'Stat label', example: 'مدة التنفيذ' })
+  @IsString()
+  @IsNotEmpty()
+  label: string;
+
+  @ApiProperty({ description: 'Stat value', example: '45 يوم' })
+  @IsString()
+  @IsNotEmpty()
+  value: string;
+
+  @ApiPropertyOptional({ description: 'Stat description' })
+  @IsOptional()
+  @IsString()
+  description?: string;
 }
 
 export class CreateProjectDto {
@@ -159,6 +178,106 @@ export class CreateProjectDto {
   })
   @IsEnum(ProjectCategory, { message: 'Invalid project category' })
   category: ProjectCategory;
+
+  @ApiPropertyOptional({
+    description: 'Project category ID from database',
+    example: '60d5ec49f1b2c8b1f8e4e5f1',
+  })
+  @IsOptional()
+  @IsMongoId()
+  categoryId?: string;
+
+  @ApiPropertyOptional({
+    description: 'Industry/sector',
+    example: 'تعليم',
+  })
+  @IsOptional()
+  @IsString()
+  industry?: string;
+
+  @ApiPropertyOptional({
+    description: 'Project duration',
+    example: '45 يوم',
+  })
+  @IsOptional()
+  @IsString()
+  duration?: string;
+
+  @ApiPropertyOptional({
+    description: 'Project year',
+    example: '2025',
+  })
+  @IsOptional()
+  @IsString()
+  year?: string;
+
+  @ApiPropertyOptional({
+    description: 'Client logo URL',
+    example: 'https://cdn.example.com/logos/client.png',
+  })
+  @IsOptional()
+  @IsString()
+  clientLogo?: string;
+
+  @ApiPropertyOptional({
+    description: 'Accent color for project card',
+    example: '#008C84',
+  })
+  @IsOptional()
+  @IsString()
+  accentColor?: string;
+
+  @ApiPropertyOptional({
+    description: 'Sort order for display',
+    example: 1,
+  })
+  @IsOptional()
+  @IsNumber()
+  sortOrder?: number;
+
+  @ApiPropertyOptional({
+    description: 'Featured order for featured projects',
+    example: 1,
+  })
+  @IsOptional()
+  @IsNumber()
+  featuredOrder?: number;
+
+  @ApiPropertyOptional({
+    description: 'Display variant for project card',
+    enum: DisplayVariant,
+    example: DisplayVariant.FEATURED,
+  })
+  @IsOptional()
+  @IsEnum(DisplayVariant)
+  displayVariant?: DisplayVariant;
+
+  @ApiPropertyOptional({
+    description: 'Preview screenshots URLs',
+    type: [String],
+  })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  previewScreens?: string[];
+
+  @ApiPropertyOptional({
+    description: 'Video URL or demo link',
+    example: 'https://youtube.com/watch?v=...',
+  })
+  @IsOptional()
+  @IsString()
+  videoUrl?: string;
+
+  @ApiPropertyOptional({
+    description: 'Project statistics',
+    type: [ProjectStatDto],
+  })
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => ProjectStatDto)
+  stats?: ProjectStatDto[];
 
   @ApiPropertyOptional({
     description: 'Is featured on homepage',

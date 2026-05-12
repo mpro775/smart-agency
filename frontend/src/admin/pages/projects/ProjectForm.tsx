@@ -10,6 +10,7 @@ import {
   type CreateProjectDto,
 } from "../../services/projects.service";
 import { technologiesService } from "../../services/technologies.service";
+import { projectCategoriesService } from "../../services/project-categories.service";
 import {
   PageHeader,
   ImageUpload,
@@ -31,8 +32,8 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { slugify } from "../../utils/format";
-import { ProjectCategory } from "../../types";
-import type { Technology, ProjectResult } from "../../types";
+import { ProjectCategory, DisplayVariant } from "../../types";
+import type { Technology, ProjectResult, ProjectStat } from "../../types";
 
 const projectSchema = z.object({
   title: z.string().min(1, "العنوان مطلوب"),
@@ -55,6 +56,24 @@ const projectSchema = z.object({
   projectUrl: z.string().optional(),
   clientName: z.string().optional(),
   category: z.nativeEnum(ProjectCategory),
+  categoryId: z.string().optional(),
+  industry: z.string().optional(),
+  duration: z.string().optional(),
+  year: z.string().optional(),
+  clientLogo: z.string().optional(),
+  accentColor: z.string().optional(),
+  sortOrder: z.number().optional(),
+  featuredOrder: z.number().optional(),
+  displayVariant: z.nativeEnum(DisplayVariant).optional(),
+  previewScreens: z.array(z.string()),
+  videoUrl: z.string().optional(),
+  stats: z.array(
+    z.object({
+      label: z.string(),
+      value: z.string(),
+      description: z.string().optional(),
+    })
+  ),
   isFeatured: z.boolean(),
   isPublished: z.boolean(),
   seo: z.object({
@@ -73,6 +92,14 @@ const categoryOptions = [
   { value: ProjectCategory.ERP, label: "ERP" },
   { value: ProjectCategory.ECOMMERCE, label: "متجر إلكتروني" },
   { value: ProjectCategory.OTHER, label: "أخرى" },
+];
+
+const displayVariantOptions = [
+  { value: DisplayVariant.STANDARD, label: "عادي" },
+  { value: DisplayVariant.FEATURED, label: "مميز" },
+  { value: DisplayVariant.WIDE, label: "عريض" },
+  { value: DisplayVariant.COMPACT, label: "مضغوط" },
+  { value: DisplayVariant.CASE_STUDY, label: "دراسة حالة" },
 ];
 
 const legacyCategoryMap: Record<string, ProjectCategory> = {
@@ -120,6 +147,11 @@ export default function ProjectForm() {
     queryFn: () => technologiesService.getAll(),
   });
 
+  const { data: dbCategories } = useQuery({
+    queryKey: ["project-categories"],
+    queryFn: () => projectCategoriesService.getAll(),
+  });
+
   const {
     register,
     control,
@@ -144,6 +176,18 @@ export default function ProjectForm() {
       projectUrl: "",
       clientName: "",
       category: ProjectCategory.OTHER,
+      categoryId: "",
+      industry: "",
+      duration: "",
+      year: "",
+      clientLogo: "",
+      accentColor: "",
+      sortOrder: 0,
+      featuredOrder: 0,
+      displayVariant: DisplayVariant.STANDARD,
+      previewScreens: [],
+      videoUrl: "",
+      stats: [],
       isFeatured: false,
       isPublished: false,
       seo: { metaTitle: "", metaDescription: "", keywords: [] },
@@ -168,6 +212,17 @@ export default function ProjectForm() {
     name: "features",
   });
 
+  const {
+    fields: statFields,
+    append: appendStat,
+    remove: removeStat,
+  } = useFieldArray({
+    control,
+    name: "stats",
+  });
+
+  const previewScreens = watch("previewScreens");
+
   const title = watch("title");
 
   useEffect(() => {
@@ -189,11 +244,18 @@ export default function ProjectForm() {
       if (lastInput) lastInput.focus();
     }
   };
+
   useEffect(() => {
     if (project && isEdit && project._id !== resetProjectIdRef.current) {
       resetProjectIdRef.current = project._id;
       const rawResults = project.results || [];
       const rawTech = (project.technologies as (Technology | string)[]) || [];
+      const rawStats = project.stats || [];
+      const rawPreviews = project.previewScreens || [];
+      const categoryIdValue = typeof project.categoryId === 'object' && project.categoryId !== null
+        ? (project.categoryId as { _id: string })._id
+        : (project.categoryId || "");
+
       reset({
         title: project.title,
         slug: project.slug,
@@ -215,6 +277,22 @@ export default function ProjectForm() {
         projectUrl: project.projectUrl || "",
         clientName: project.clientName || "",
         category: normalizeProjectCategory(project.category),
+        categoryId: categoryIdValue,
+        industry: project.industry || "",
+        duration: project.duration || "",
+        year: project.year || "",
+        clientLogo: project.clientLogo || "",
+        accentColor: project.accentColor || "",
+        sortOrder: project.sortOrder ?? 0,
+        featuredOrder: project.featuredOrder ?? 0,
+        displayVariant: project.displayVariant || DisplayVariant.STANDARD,
+        previewScreens: rawPreviews,
+        videoUrl: project.videoUrl || "",
+        stats: rawStats.map((s: ProjectStat) => ({
+          label: s?.label != null ? String(s.label) : "",
+          value: s?.value != null ? String(s.value) : "",
+          description: s?.description || "",
+        })),
         isFeatured: Boolean(project.isFeatured),
         isPublished: Boolean(project.isPublished),
         seo: {
@@ -247,6 +325,11 @@ export default function ProjectForm() {
       ...data,
       features: data.features.map((f) => f.value),
       projectUrl: isEdit ? (projectUrl || null) : (projectUrl || undefined),
+      categoryId: data.categoryId || undefined,
+      sortOrder: data.sortOrder ?? 0,
+      featuredOrder: data.featuredOrder ?? 0,
+      previewScreens: data.previewScreens.filter((url) => url.trim() !== ""),
+      stats: data.stats.filter((s) => s.label && s.value),
     };
     mutation.mutate(payload);
   };
@@ -290,7 +373,7 @@ export default function ProjectForm() {
         dir="rtl"
       >
         <Tabs defaultValue="basic" className="space-y-6" dir="rtl">
-          <TabsList className="bg-slate-800 border border-slate-700" dir="rtl">
+          <TabsList className="bg-slate-800 border border-slate-700 flex flex-wrap" dir="rtl">
             <TabsTrigger
               value="basic"
               className="data-[state=active]:bg-slate-700"
@@ -308,6 +391,12 @@ export default function ProjectForm() {
               className="data-[state=active]:bg-slate-700"
             >
               الوسائط
+            </TabsTrigger>
+            <TabsTrigger
+              value="display"
+              className="data-[state=active]:bg-slate-700"
+            >
+              إعدادات العرض
             </TabsTrigger>
             <TabsTrigger
               value="seo"
@@ -382,7 +471,7 @@ export default function ProjectForm() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label className="text-slate-200" dir="rtl">
-                      التصنيف
+                      التصنيف (Enum)
                     </Label>
                     <Controller
                       name="category"
@@ -420,6 +509,49 @@ export default function ProjectForm() {
 
                   <div className="space-y-2">
                     <Label className="text-slate-200" dir="rtl">
+                      الفئة (قاعدة البيانات)
+                    </Label>
+                    <Controller
+                      name="categoryId"
+                      control={control}
+                      render={({ field }) => (
+                        <Select
+                          value={field.value || ""}
+                          onValueChange={field.onChange}
+                        >
+                          <SelectTrigger
+                            className="bg-slate-700/50 border-slate-600 text-white"
+                            dir="rtl"
+                          >
+                            <SelectValue placeholder="اختر الفئة" />
+                          </SelectTrigger>
+                          <SelectContent
+                            className="bg-slate-800 border-slate-700"
+                            dir="rtl"
+                          >
+                            <SelectItem value="" className="text-white hover:bg-slate-700">
+                              بدون فئة
+                            </SelectItem>
+                            {dbCategories?.map((cat) => (
+                              <SelectItem
+                                key={cat._id}
+                                value={cat._id}
+                                className="text-white hover:bg-slate-700"
+                                dir="rtl"
+                              >
+                                {cat.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      )}
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label className="text-slate-200" dir="rtl">
                       اسم العميل
                     </Label>
                     <Input
@@ -429,18 +561,18 @@ export default function ProjectForm() {
                       dir="rtl"
                     />
                   </div>
-                </div>
 
-                <div className="space-y-2">
-                  <Label className="text-slate-200" dir="rtl">
-                    رابط المشروع
-                  </Label>
-                  <Input
-                    {...register("projectUrl")}
-                    className="bg-slate-700/50 border-slate-600 text-white"
-                    placeholder="https://example.com"
-                    dir="ltr"
-                  />
+                  <div className="space-y-2">
+                    <Label className="text-slate-200" dir="rtl">
+                      رابط المشروع
+                    </Label>
+                    <Input
+                      {...register("projectUrl")}
+                      className="bg-slate-700/50 border-slate-600 text-white"
+                      placeholder="https://example.com"
+                      dir="ltr"
+                    />
+                  </div>
                 </div>
 
                 <div className="space-y-2">
@@ -664,54 +796,369 @@ export default function ProjectForm() {
 
           {/* Media Tab */}
           <TabsContent value="media">
-            <Card className="bg-slate-800/50 border-slate-700" dir="rtl">
-              <CardHeader>
-                <CardTitle className="text-white" dir="rtl">
-                  الصور والوسائط
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6" dir="rtl">
-                <div className="space-y-2">
-                  <Label className="text-slate-200" dir="rtl">
-                    صورة الغلاف
-                  </Label>
-                  <Controller
-                    name="images.cover"
-                    control={control}
-                    render={({ field }) => (
-                      <ImageUpload
-                        value={field.value}
-                        onChange={field.onChange}
-                        onRemove={() => field.onChange("")}
-                      />
-                    )}
-                  />
-                </div>
+            <div className="space-y-6">
+              <Card className="bg-slate-800/50 border-slate-700" dir="rtl">
+                <CardHeader>
+                  <CardTitle className="text-white" dir="rtl">
+                    الصور الرئيسية
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6" dir="rtl">
+                  <div className="space-y-2">
+                    <Label className="text-slate-200" dir="rtl">
+                      صورة الغلاف
+                    </Label>
+                    <Controller
+                      name="images.cover"
+                      control={control}
+                      render={({ field }) => (
+                        <ImageUpload
+                          value={field.value}
+                          onChange={field.onChange}
+                          onRemove={() => field.onChange("")}
+                        />
+                      )}
+                    />
+                  </div>
 
-                <div className="space-y-2">
-                  <Label className="text-slate-200" dir="rtl">
-                    معرض الصور
-                  </Label>
-                  <Controller
-                    name="images.gallery"
-                    control={control}
-                    render={({ field }) => (
-                      <GalleryUpload
-                        value={field.value}
-                        onChange={(urls) => {
-                          field.onChange(urls);
-                          setValue("images.gallery", urls, {
-                            shouldDirty: true,
-                            shouldValidate: true,
-                          });
+                  <div className="space-y-2">
+                    <Label className="text-slate-200" dir="rtl">
+                      معرض الصور
+                    </Label>
+                    <Controller
+                      name="images.gallery"
+                      control={control}
+                      render={({ field }) => (
+                        <GalleryUpload
+                          value={field.value}
+                          onChange={(urls) => {
+                            field.onChange(urls);
+                            setValue("images.gallery", urls, {
+                              shouldDirty: true,
+                              shouldValidate: true,
+                            });
+                          }}
+                          maxImages={8}
+                        />
+                      )}
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-slate-800/50 border-slate-700" dir="rtl">
+                <CardHeader>
+                  <CardTitle className="text-white" dir="rtl">
+                    لقطات المعاينة (Preview Screens)
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4" dir="rtl">
+                  <p className="text-sm text-slate-400">
+                    هذه اللقطات ستُستخدم للعرض عند التمرير على الكرت أو في السلايدر
+                  </p>
+                  {previewScreens.map((url, index) => (
+                    <div
+                      key={index}
+                      className="flex gap-3 items-start"
+                      dir="rtl"
+                    >
+                      <div className="flex-1 space-y-2">
+                        <ImageUpload
+                          value={url}
+                          onChange={(newUrl) => {
+                            const updated = [...previewScreens];
+                            updated[index] = newUrl;
+                            setValue("previewScreens", updated);
+                          }}
+                          onRemove={() => {
+                            const updated = [...previewScreens];
+                            updated[index] = "";
+                            setValue("previewScreens", updated);
+                          }}
+                        />
+                      </div>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="text-slate-400 hover:text-red-400 flex-shrink-0 mt-2"
+                        onClick={() => {
+                          const updated = previewScreens.filter((_, i) => i !== index);
+                          setValue("previewScreens", updated);
                         }}
-                        maxImages={8}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="border-slate-600 text-slate-400 hover:text-white"
+                    onClick={() => setValue("previewScreens", [...previewScreens, ""])}
+                    dir="rtl"
+                  >
+                    <Plus className="h-4 w-4 mr-1" />
+                    إضافة لقطة
+                  </Button>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-slate-800/50 border-slate-700" dir="rtl">
+                <CardHeader>
+                  <CardTitle className="text-white" dir="rtl">
+                    شعار العميل والفيديو
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4" dir="rtl">
+                  <div className="space-y-2">
+                    <Label className="text-slate-200" dir="rtl">
+                      شعار العميل
+                    </Label>
+                    <Controller
+                      name="clientLogo"
+                      control={control}
+                      render={({ field }) => (
+                        <ImageUpload
+                          value={field.value}
+                          onChange={field.onChange}
+                          onRemove={() => field.onChange("")}
+                        />
+                      )}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label className="text-slate-200" dir="rtl">
+                      رابط الفيديو (اختياري)
+                    </Label>
+                    <Input
+                      {...register("videoUrl")}
+                      className="bg-slate-700/50 border-slate-600 text-white"
+                      placeholder="https://youtube.com/watch?v=..."
+                      dir="ltr"
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          {/* Display Settings Tab */}
+          <TabsContent value="display">
+            <div className="space-y-6">
+              <Card className="bg-slate-800/50 border-slate-700" dir="rtl">
+                <CardHeader>
+                  <CardTitle className="text-white" dir="rtl">
+                    إعدادات العرض في الموقع
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4" dir="rtl">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label className="text-slate-200" dir="rtl">
+                        نمط العرض
+                      </Label>
+                      <Controller
+                        name="displayVariant"
+                        control={control}
+                        render={({ field }) => (
+                          <Select
+                            value={field.value || DisplayVariant.STANDARD}
+                            onValueChange={field.onChange}
+                          >
+                            <SelectTrigger
+                              className="bg-slate-700/50 border-slate-600 text-white"
+                              dir="rtl"
+                            >
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent
+                              className="bg-slate-800 border-slate-700"
+                              dir="rtl"
+                            >
+                              {displayVariantOptions.map((option) => (
+                                <SelectItem
+                                  key={option.value}
+                                  value={option.value}
+                                  className="text-white hover:bg-slate-700"
+                                  dir="rtl"
+                                >
+                                  {option.label}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        )}
                       />
-                    )}
-                  />
-                </div>
-              </CardContent>
-            </Card>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-slate-200" dir="rtl">
+                        لون المشروع (Accent Color)
+                      </Label>
+                      <div className="flex gap-2">
+                        <Input
+                          {...register("accentColor")}
+                          className="bg-slate-700/50 border-slate-600 text-white flex-1"
+                          placeholder="#008C84"
+                          dir="ltr"
+                        />
+                        <Controller
+                          name="accentColor"
+                          control={control}
+                          render={({ field }) => (
+                            <input
+                              type="color"
+                              value={field.value || "#008C84"}
+                              onChange={(e) => field.onChange(e.target.value)}
+                              className="w-12 h-10 rounded cursor-pointer"
+                            />
+                          )}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label className="text-slate-200" dir="rtl">
+                        ترتيب الظهور
+                      </Label>
+                      <Input
+                        type="number"
+                        {...register("sortOrder", { valueAsNumber: true })}
+                        className="bg-slate-700/50 border-slate-600 text-white"
+                        placeholder="0"
+                        dir="ltr"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-slate-200" dir="rtl">
+                        ترتيب الظهور في المشاريع المميزة
+                      </Label>
+                      <Input
+                        type="number"
+                        {...register("featuredOrder", { valueAsNumber: true })}
+                        className="bg-slate-700/50 border-slate-600 text-white"
+                        placeholder="0"
+                        dir="ltr"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label className="text-slate-200" dir="rtl">
+                        القطاع / الصناعة
+                      </Label>
+                      <Input
+                        {...register("industry")}
+                        className="bg-slate-700/50 border-slate-600 text-white"
+                        placeholder="تعليم، تجارة إلكترونية، خدمات..."
+                        dir="rtl"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-slate-200" dir="rtl">
+                        سنة التنفيذ
+                      </Label>
+                      <Input
+                        {...register("year")}
+                        className="bg-slate-700/50 border-slate-600 text-white"
+                        placeholder="2025"
+                        dir="ltr"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label className="text-slate-200" dir="rtl">
+                      مدة التنفيذ
+                    </Label>
+                    <Input
+                      {...register("duration")}
+                      className="bg-slate-700/50 border-slate-600 text-white"
+                      placeholder="45 يوم، 3 أشهر، 6 أسابيع..."
+                      dir="rtl"
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-slate-800/50 border-slate-700" dir="rtl">
+                <CardHeader>
+                  <CardTitle className="text-white" dir="rtl">
+                    إحصائيات المشروع
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4" dir="rtl">
+                  <p className="text-sm text-slate-400">
+                    أرقام مختصرة تُعرض داخل الكرت أو صفحة التفاصيل
+                  </p>
+                  {statFields.map((field, index) => (
+                    <div
+                      key={field.id}
+                      className="flex gap-3 items-start p-3 bg-slate-700/30 rounded-lg"
+                      dir="rtl"
+                    >
+                      <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <div className="space-y-2">
+                          <Label className="text-xs text-slate-400">القيمة</Label>
+                          <Input
+                            {...register(`stats.${index}.value`)}
+                            className="bg-slate-700/50 border-slate-600 text-white"
+                            placeholder="+28"
+                            dir="rtl"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label className="text-xs text-slate-400">العنوان</Label>
+                          <Input
+                            {...register(`stats.${index}.label`)}
+                            className="bg-slate-700/50 border-slate-600 text-white"
+                            placeholder="شاشة"
+                            dir="rtl"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label className="text-xs text-slate-400">الوصف (اختياري)</Label>
+                          <Input
+                            {...register(`stats.${index}.description`)}
+                            className="bg-slate-700/50 border-slate-600 text-white"
+                            placeholder="عدد الشاشات المصممة والمطورة"
+                            dir="rtl"
+                          />
+                        </div>
+                      </div>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="text-slate-400 hover:text-red-400 flex-shrink-0"
+                        onClick={() => removeStat(index)}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="border-slate-600 text-slate-400 hover:text-white"
+                    onClick={() => appendStat({ label: "", value: "", description: "" })}
+                    dir="rtl"
+                  >
+                    <Plus className="h-4 w-4 mr-1" />
+                    إضافة رقم
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
 
           {/* SEO Tab */}

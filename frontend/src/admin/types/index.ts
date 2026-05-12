@@ -53,6 +53,12 @@ export interface ProjectResult {
   value: string;
 }
 
+export interface ProjectStat {
+  label: string;
+  value: string;
+  description?: string;
+}
+
 export interface ProjectImages {
   cover?: string;
   gallery: string[];
@@ -62,6 +68,22 @@ export interface ProjectSeo {
   metaTitle?: string;
   metaDescription?: string;
   keywords: string[];
+}
+
+export interface ProjectCategoryRef {
+  _id: string;
+  value: string;
+  label: string;
+  description?: string;
+  icon?: string;
+}
+
+export enum DisplayVariant {
+  STANDARD = 'standard',
+  FEATURED = 'featured',
+  WIDE = 'wide',
+  COMPACT = 'compact',
+  CASE_STUDY = 'case_study',
 }
 
 export interface Project {
@@ -78,6 +100,18 @@ export interface Project {
   projectUrl?: string;
   clientName?: string;
   category: ProjectCategory;
+  categoryId?: ProjectCategoryRef | string;
+  industry?: string;
+  duration?: string;
+  year?: string;
+  clientLogo?: string;
+  accentColor?: string;
+  sortOrder?: number;
+  featuredOrder?: number;
+  displayVariant?: DisplayVariant;
+  previewScreens?: string[];
+  videoUrl?: string;
+  stats?: ProjectStat[];
   isFeatured: boolean;
   seo: ProjectSeo;
   isPublished: boolean;

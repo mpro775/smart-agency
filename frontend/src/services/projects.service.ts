@@ -5,7 +5,11 @@ export interface ProjectFilters {
   page?: number;
   limit?: number;
   category?: string;
+  categoryId?: string;
+  industry?: string;
+  displayVariant?: string;
   featured?: boolean;
+  isFeatured?: boolean;
   search?: string;
 }
 
@@ -18,8 +22,14 @@ export const publicProjectsService = {
     if (filters?.page) params.append("page", String(filters.page));
     if (filters?.limit) params.append("limit", String(filters.limit));
     if (filters?.category) params.append("category", filters.category);
+    if (filters?.categoryId) params.append("categoryId", filters.categoryId);
+    if (filters?.industry) params.append("industry", filters.industry);
+    if (filters?.displayVariant)
+      params.append("displayVariant", filters.displayVariant);
     if (filters?.featured !== undefined)
       params.append("featured", String(filters.featured));
+    if (filters?.isFeatured !== undefined)
+      params.append("isFeatured", String(filters.isFeatured));
     if (filters?.search) params.append("search", filters.search);
 
     const response = await publicApi.get<ApiResponse<Project[]>>(
@@ -63,5 +73,31 @@ export const publicProjectsService = {
       ApiResponse<{ value: string; label: string; count: number }[]>
     >("/projects/categories");
     return response.data.data;
+  },
+
+  getProjects(filters?: ProjectFilters) {
+    return this.getAll(filters);
+  },
+
+  getFeaturedProjects() {
+    return this.getFeatured();
+  },
+
+  getProjectBySlug(slug: string) {
+    return this.getBySlug(slug);
+  },
+
+  getRelatedProjects: async (project: Project): Promise<Project[]> => {
+    const categoryId =
+      typeof project.categoryId === "object" && project.categoryId !== null
+        ? project.categoryId._id
+        : project.categoryId;
+    const response = await publicProjectsService.getAll({
+      limit: 4,
+      categoryId,
+      category: categoryId ? undefined : project.category,
+    });
+
+    return response.data.filter((item) => item._id !== project._id);
   },
 };

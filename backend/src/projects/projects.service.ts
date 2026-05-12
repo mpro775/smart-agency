@@ -9,6 +9,7 @@ import {
   Project,
   ProjectDocument,
   ProjectCategory,
+  DisplayVariant,
 } from './schemas/project.schema';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
@@ -47,7 +48,11 @@ export class ProjectsService {
       limit = 10,
       tech,
       category,
+      categoryId,
+      industry,
+      displayVariant,
       featured,
+      isFeatured,
       search,
       isPublished,
     } = filterDto;
@@ -71,8 +76,22 @@ export class ProjectsService {
       query.category = category;
     }
 
-    if (featured !== undefined) {
-      query.isFeatured = featured;
+    if (categoryId) {
+      query.categoryId = categoryId;
+    }
+
+    if (industry) {
+      query.industry = { $regex: industry, $options: 'i' };
+    }
+
+    if (displayVariant) {
+      query.displayVariant = displayVariant;
+    }
+
+    // Support both 'featured' and 'isFeatured' for backward compatibility
+    const featuredFilter = featured !== undefined ? featured : isFeatured;
+    if (featuredFilter !== undefined) {
+      query.isFeatured = featuredFilter;
     }
 
     if (search) {
@@ -89,7 +108,8 @@ export class ProjectsService {
     const projects = await this.projectModel
       .find(query)
       .populate('technologies', 'name icon category')
-      .sort({ createdAt: -1 })
+      .populate('categoryId')
+      .sort({ sortOrder: 1, createdAt: -1 })
       .skip((page - 1) * limit)
       .limit(limit)
       .exec();
@@ -101,7 +121,8 @@ export class ProjectsService {
     return this.projectModel
       .find({ isFeatured: true, isPublished: true })
       .populate('technologies', 'name icon category')
-      .sort({ createdAt: -1 })
+      .populate('categoryId')
+      .sort({ featuredOrder: 1, sortOrder: 1, createdAt: -1 })
       .limit(6)
       .exec();
   }
@@ -110,6 +131,7 @@ export class ProjectsService {
     const project = await this.projectModel
       .findOne({ slug: slug.toLowerCase(), isPublished: true })
       .populate('technologies', 'name icon category')
+      .populate('categoryId')
       .exec();
 
     if (!project) {
@@ -123,6 +145,21 @@ export class ProjectsService {
     const project = await this.projectModel
       .findById(id)
       .populate('technologies', 'name icon category')
+      .populate('categoryId')
+      .exec();
+
+    if (!project) {
+      throw new NotFoundException('Project not found');
+    }
+
+    return project;
+  }
+
+  async findPublicById(id: string): Promise<ProjectDocument> {
+    const project = await this.projectModel
+      .findOne({ _id: id, isPublished: true })
+      .populate('technologies', 'name icon category')
+      .populate('categoryId')
       .exec();
 
     if (!project) {
@@ -183,6 +220,7 @@ export class ProjectsService {
     const project = await this.projectModel
       .findByIdAndUpdate(id, finalUpdatePayload, { new: true })
       .populate('technologies', 'name icon category')
+      .populate('categoryId')
       .exec();
 
     if (!project) {

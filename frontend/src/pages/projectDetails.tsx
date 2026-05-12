@@ -8,7 +8,6 @@ import {
   FiChevronRight,
   FiExternalLink,
   FiGlobe,
-  FiGrid,
   FiImage,
   FiLayers,
   FiTag,
@@ -43,6 +42,7 @@ const getTechName = (item: Technology | string) =>
 export default function ProjectDetailsPage() {
   const { id } = useParams<{ id: string }>();
   const [project, setProject] = useState<Project | null>(null);
+  const [relatedProjects, setRelatedProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
@@ -53,8 +53,12 @@ export default function ProjectDetailsPage() {
 
       try {
         setLoading(true);
-        const data = await publicProjectsService.getById(id);
+        const data = await publicProjectsService.getBySlug(id);
         setProject(data);
+        publicProjectsService
+          .getRelatedProjects(data)
+          .then(setRelatedProjects)
+          .catch(() => setRelatedProjects([]));
         setError(null);
       } catch (err) {
         console.error("Error fetching project:", err);
@@ -80,11 +84,13 @@ export default function ProjectDetailsPage() {
   );
 
   const displayImages = useMemo(() => {
-    const images = [project?.images?.cover, ...(project?.images?.gallery ?? [])].filter(
-      Boolean,
-    ) as string[];
+    const images = [
+      project?.images?.cover,
+      ...(project?.previewScreens ?? []),
+      ...(project?.images?.gallery ?? []),
+    ].filter(Boolean) as string[];
     return Array.from(new Set(images));
-  }, [project?.images?.cover, project?.images?.gallery]);
+  }, [project?.images?.cover, project?.images?.gallery, project?.previewScreens]);
 
   const heroImage = displayImages[0] ?? "https://via.placeholder.com/1200x680";
   const currentImage =
@@ -200,12 +206,18 @@ export default function ProjectDetailsPage() {
               </div>
               <div className="flex items-center justify-between rounded-xl bg-slate-50 border border-slate-200 px-3 py-2">
                 <span className="text-slate-500 flex items-center gap-2">
-                  <FiTag /> الحالة
+                  <FiCalendar /> سنة التنفيذ
                 </span>
-                <span className="font-semibold text-emerald-700">
-                  {project.isPublished ? "منشور" : "مسودة"}
-                </span>
+                <span className="font-semibold text-slate-800">{project.year || "-"}</span>
               </div>
+              {project.duration && (
+                <div className="flex items-center justify-between rounded-xl bg-slate-50 border border-slate-200 px-3 py-2">
+                  <span className="text-slate-500 flex items-center gap-2">
+                    <FiTag /> مدة التنفيذ
+                  </span>
+                  <span className="font-semibold text-slate-800">{project.duration}</span>
+                </div>
+              )}
             </div>
           </div>
         </motion.div>
@@ -274,6 +286,33 @@ export default function ProjectDetailsPage() {
               </motion.section>
             )}
 
+            {project.stats && project.stats.length > 0 && (
+              <motion.section
+                {...fadeUp}
+                className="rounded-2xl border border-slate-200 bg-white/85 backdrop-blur p-6 md:p-8 shadow-lg"
+              >
+                <h3 className="text-2xl font-bold text-slate-900 mb-6">أرقام المشروع</h3>
+                <div className="grid sm:grid-cols-3 gap-4">
+                  {project.stats.map((stat, index) => (
+                    <div
+                      key={`${stat.label}-${index}`}
+                      className="rounded-xl border border-emerald-100 bg-emerald-50/70 p-5 text-center"
+                    >
+                      <p className="text-3xl font-black text-emerald-700 mb-2">
+                        {stat.value}
+                      </p>
+                      <p className="font-semibold text-slate-900">{stat.label}</p>
+                      {stat.description && (
+                        <p className="mt-2 text-sm text-slate-500 leading-relaxed">
+                          {stat.description}
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </motion.section>
+            )}
+
             {displayImages.length > 0 && (
               <motion.section
                 {...fadeUp}
@@ -332,18 +371,18 @@ export default function ProjectDetailsPage() {
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-slate-500 flex items-center gap-2">
-                      <FiCalendar /> تاريخ النشر
+                      <FiLayers /> القطاع
                     </span>
                     <span className="font-semibold text-slate-900">
-                      {formatArabicDate(project.createdAt)}
+                      {project.industry || "-"}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-slate-500 flex items-center gap-2">
-                      <FiGrid /> آخر تحديث
+                      <FiCalendar /> تاريخ التنفيذ
                     </span>
                     <span className="font-semibold text-slate-900">
-                      {formatArabicDate(project.updatedAt)}
+                      {project.year || formatArabicDate(project.createdAt)}
                     </span>
                   </div>
                 </div>
@@ -390,6 +429,43 @@ export default function ProjectDetailsPage() {
             </div>
           </div>
         </div>
+
+        {relatedProjects.length > 0 && (
+          <motion.section
+            {...fadeUp}
+            className="mt-12 rounded-2xl border border-slate-200 bg-white/75 backdrop-blur p-6 md:p-8 shadow-lg"
+          >
+            <h3 className="text-2xl font-bold text-slate-900 mb-6">مشاريع مشابهة</h3>
+            <div className="grid md:grid-cols-3 gap-4">
+              {relatedProjects.slice(0, 3).map((related) => (
+                <Link
+                  key={related._id}
+                  to={`/projects/${related.slug}`}
+                  className="group overflow-hidden rounded-xl border border-slate-200 bg-white hover:border-emerald-200 transition"
+                >
+                  <img
+                    src={
+                      related.images?.cover ||
+                      related.images?.gallery?.[0] ||
+                      "https://via.placeholder.com/800x600"
+                    }
+                    alt={related.title}
+                    className="h-36 w-full object-cover transition duration-500 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                  <div className="p-4">
+                    <p className="font-bold text-slate-900 group-hover:text-emerald-700 transition">
+                      {related.title}
+                    </p>
+                    <p className="mt-1 line-clamp-2 text-sm text-slate-500">
+                      {related.summary}
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </motion.section>
+        )}
       </section>
 
       <AnimatePresence>

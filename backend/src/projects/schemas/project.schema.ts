@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 import { Technology } from '../../technologies/schemas/technology.schema';
+import { ProjectCategory as ProjectCategoryEntity } from '../../project-categories/schemas/project-category.schema';
 
 export type ProjectDocument = Project & Document;
 
@@ -34,6 +35,18 @@ export class ProjectSeo {
   keywords: string[];
 }
 
+@Schema({ _id: false })
+export class ProjectStat {
+  @Prop({ required: true })
+  label: string;
+
+  @Prop({ required: true })
+  value: string;
+
+  @Prop()
+  description?: string;
+}
+
 export enum ProjectCategory {
   WEB_APP = 'Web App',
   MOBILE_APP = 'Mobile App',
@@ -41,6 +54,14 @@ export enum ProjectCategory {
   ERP = 'ERP',
   ECOMMERCE = 'E-Commerce',
   OTHER = 'Other',
+}
+
+export enum DisplayVariant {
+  STANDARD = 'standard',
+  FEATURED = 'featured',
+  WIDE = 'wide',
+  COMPACT = 'compact',
+  CASE_STUDY = 'case_study',
 }
 
 @Schema({ timestamps: true })
@@ -85,6 +106,46 @@ export class Project {
   })
   category: ProjectCategory;
 
+  @Prop({ type: Types.ObjectId, ref: 'ProjectCategory' })
+  categoryId?: Types.ObjectId;
+
+  @Prop()
+  industry?: string;
+
+  @Prop()
+  duration?: string;
+
+  @Prop()
+  year?: string;
+
+  @Prop()
+  clientLogo?: string;
+
+  @Prop()
+  accentColor?: string;
+
+  @Prop({ default: 0 })
+  sortOrder?: number;
+
+  @Prop({ default: 0 })
+  featuredOrder?: number;
+
+  @Prop({
+    type: String,
+    enum: DisplayVariant,
+    default: DisplayVariant.STANDARD,
+  })
+  displayVariant?: DisplayVariant;
+
+  @Prop({ type: [String], default: [] })
+  previewScreens?: string[];
+
+  @Prop()
+  videoUrl?: string;
+
+  @Prop({ type: [ProjectStat], default: [] })
+  stats?: ProjectStat[];
+
   @Prop({ default: false })
   isFeatured: boolean;
 
@@ -104,7 +165,10 @@ export const ProjectSchema = SchemaFactory.createForClass(Project);
 ProjectSchema.index({ slug: 1 }, { unique: true });
 ProjectSchema.index({ isFeatured: 1 });
 ProjectSchema.index({ category: 1 });
+ProjectSchema.index({ categoryId: 1 });
 ProjectSchema.index({ isPublished: 1 });
 ProjectSchema.index({ technologies: 1 });
+ProjectSchema.index({ sortOrder: 1 });
+ProjectSchema.index({ featuredOrder: 1 });
 ProjectSchema.index({ createdAt: -1 });
 

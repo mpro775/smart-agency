@@ -60,6 +60,18 @@ export class ProjectsController {
     return this.projectsService.findAll(filterDto, true);
   }
 
+  @Get('admin/:id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('JWT-auth')
+  @ApiOperation({ summary: 'Get a project by ID (Admin - includes unpublished)' })
+  @ApiResponse({ status: 200, description: 'Project found' })
+  @ApiResponse({ status: 404, description: 'Project not found' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ResponseMessage('Project fetched successfully')
+  findOneAdmin(@Param('id') id: string) {
+    return this.projectsService.findOne(id);
+  }
+
   @Get('featured')
   @Public()
   @ApiOperation({ summary: 'Get featured projects for homepage' })
@@ -101,7 +113,7 @@ export class ProjectsController {
   @ApiResponse({ status: 404, description: 'Project not found' })
   @ResponseMessage('Project fetched successfully')
   findOne(@Param('id') id: string) {
-    return this.projectsService.findOne(id);
+    return this.projectsService.findPublicById(id);
   }
 
   @Patch(':id')
