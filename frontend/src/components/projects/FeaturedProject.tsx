@@ -51,6 +51,7 @@ export default function FeaturedProject({ project }: FeaturedProjectProps) {
       viewport={{ once: true }}
       onMouseMove={handleMouseMove}
       className="group relative overflow-hidden rounded-[32px] border border-teal-900/10 bg-white/80 shadow-[0_20px_80px_rgba(0,0,0,0.06)] backdrop-blur-xl transition-all duration-500 hover:shadow-[0_30px_100px_rgba(0,128,120,0.18)] mb-10"
+      data-cursor="hover"
     >
       {/* Spotlight */}
       <div

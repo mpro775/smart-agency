@@ -1,143 +1,131 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
 import "../styles/custom-cursor.css";
 
-/**
- * Ultra-Premium Custom Cursor Component
- * Tech-style animated cursor with smooth tracking and professional effects
- */
+const INTERACTIVE_SELECTOR =
+  "a, button, [role='button'], .cursor-pointer, [data-cursor='hover']";
+const TEXT_INPUT_SELECTOR =
+  "input, textarea, [contenteditable='true']";
+
+const ADMIN_PATHS = ["/admin", "/dashboard", "/cms"];
+
 const CustomCursor = () => {
+  const location = useLocation();
+  const [isEnabled, setIsEnabled] = useState(false);
+
   const cursorRef = useRef<HTMLDivElement>(null);
   const followerRef = useRef<HTMLDivElement>(null);
-  const mousePosition = useRef({ x: 0, y: 0 });
-  const cursorPosition = useRef({ x: 0, y: 0 });
-  const followerPosition = useRef({ x: 0, y: 0 });
+  const mousePos = useRef({ x: 0, y: 0 });
+  const cursorPos = useRef({ x: 0, y: 0 });
+  const followerPos = useRef({ x: 0, y: 0 });
+  const isHovering = useRef(false);
 
   useEffect(() => {
-    // Check if device supports hover (not touch device)
-    const isTouchDevice = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
-    if (isTouchDevice) return;
+    const pathname = location.pathname;
+    const isAdmin = ADMIN_PATHS.some(
+      (p) => pathname === p || pathname.startsWith(p + "/")
+    );
+    if (isAdmin) {
+      setIsEnabled(false);
+      return;
+    }
+
+    const isTouch =
+      window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    if (isTouch || prefersReduced) {
+      setIsEnabled(false);
+      return;
+    }
+
+    setIsEnabled(true);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (!isEnabled) return;
 
     const cursor = cursorRef.current;
     const follower = followerRef.current;
     if (!cursor || !follower) return;
 
-    // Track mouse position
-    const handleMouseMove = (e: MouseEvent) => {
-      mousePosition.current = { x: e.clientX, y: e.clientY };
-    };
+    cursor.classList.add("is-visible");
+    follower.classList.add("is-visible");
 
-    // Detect interactive elements with improved logic
-    const handleMouseOver = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      
-      // Check if hovering over interactive elements
-      if (
-        target.tagName === "A" ||
-        target.tagName === "BUTTON" ||
-        target.onclick ||
-        target.closest("button") !== null ||
-        target.closest("a") !== null ||
-        target.classList.contains("cursor-pointer") ||
-        window.getComputedStyle(target).cursor === "pointer"
-      ) {
+    const onPointerMove = (e: MouseEvent) => {
+      mousePos.current = { x: e.clientX, y: e.clientY };
+
+      const target = e.target as HTMLElement | null;
+      const interactiveEl = target?.closest(INTERACTIVE_SELECTOR);
+      const textEl = target?.closest(TEXT_INPUT_SELECTOR);
+
+      if (interactiveEl && !isHovering.current) {
+        isHovering.current = true;
         document.body.classList.add("cursor-hover");
-      }
-      
-      // Check for text inputs
-      if (
-        target.tagName === "INPUT" ||
-        target.tagName === "TEXTAREA" ||
-        target.isContentEditable
-      ) {
+        document.body.classList.remove("cursor-text");
+      } else if (textEl) {
+        if (isHovering.current) {
+          isHovering.current = false;
+          document.body.classList.remove("cursor-hover");
+        }
         document.body.classList.add("cursor-text");
-      }
-      
-      // Check for draggable elements
-      if (target.draggable) {
-        document.body.classList.add("cursor-grab");
-      }
-    };
-
-    const handleMouseOut = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      
-      if (
-        target.tagName === "A" ||
-        target.tagName === "BUTTON" ||
-        target.onclick ||
-        target.closest("button") !== null ||
-        target.closest("a") !== null ||
-        target.classList.contains("cursor-pointer") ||
-        window.getComputedStyle(target).cursor === "pointer"
-      ) {
+      } else if (isHovering.current) {
+        isHovering.current = false;
         document.body.classList.remove("cursor-hover");
-      }
-      
-      if (
-        target.tagName === "INPUT" ||
-        target.tagName === "TEXTAREA" ||
-        target.isContentEditable
-      ) {
         document.body.classList.remove("cursor-text");
       }
-      
-      if (target.draggable) {
-        document.body.classList.remove("cursor-grab");
-      }
     };
 
-    // Handle click animation
-    const handleMouseDown = () => {
+    const onMouseDown = () => {
       document.body.classList.add("cursor-click");
     };
 
-    const handleMouseUp = () => {
+    const onMouseUp = () => {
       document.body.classList.remove("cursor-click");
     };
 
-    // Smooth cursor animation with requestAnimationFrame
-    let animationFrameId: number;
-    
-    const animateCursor = () => {
-      // Cursor follows mouse with high precision
-      const cursorSpeed = 0.95; // Very responsive
-      cursorPosition.current.x += (mousePosition.current.x - cursorPosition.current.x) * cursorSpeed;
-      cursorPosition.current.y += (mousePosition.current.y - cursorPosition.current.y) * cursorSpeed;
-      
-      // Follower lags behind for smooth trailing effect
-      const followerSpeed = 0.12; // Smooth lag
-      followerPosition.current.x += (mousePosition.current.x - followerPosition.current.x) * followerSpeed;
-      followerPosition.current.y += (mousePosition.current.y - followerPosition.current.y) * followerSpeed;
+    let rafId: number;
+    const animate = () => {
+      const ds = 0.92;
+      cursorPos.current.x +=
+        (mousePos.current.x - cursorPos.current.x) * ds;
+      cursorPos.current.y +=
+        (mousePos.current.y - cursorPos.current.y) * ds;
 
-      cursor.style.transform = `translate(${cursorPosition.current.x}px, ${cursorPosition.current.y}px) translate(-50%, -50%)`;
-      follower.style.transform = `translate(${followerPosition.current.x}px, ${followerPosition.current.y}px) translate(-50%, -50%)`;
+      const fs = 0.1;
+      followerPos.current.x +=
+        (mousePos.current.x - followerPos.current.x) * fs;
+      followerPos.current.y +=
+        (mousePos.current.y - followerPos.current.y) * fs;
 
-      animationFrameId = requestAnimationFrame(animateCursor);
+      cursor.style.transform = `translate(${cursorPos.current.x}px, ${cursorPos.current.y}px) translate(-50%, -50%)`;
+      follower.style.transform = `translate(${followerPos.current.x}px, ${followerPos.current.y}px) translate(-50%, -50%)`;
+
+      rafId = requestAnimationFrame(animate);
     };
 
-    // Add event listeners
-    document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseover", handleMouseOver);
-    document.addEventListener("mouseout", handleMouseOut);
-    document.addEventListener("mousedown", handleMouseDown);
-    document.addEventListener("mouseup", handleMouseUp);
-    
-    // Start animation loop
-    animationFrameId = requestAnimationFrame(animateCursor);
+    document.addEventListener("pointermove", onPointerMove);
+    document.addEventListener("mousedown", onMouseDown);
+    document.addEventListener("mouseup", onMouseUp);
+    rafId = requestAnimationFrame(animate);
 
-    // Cleanup
     return () => {
-      document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseover", handleMouseOver);
-      document.removeEventListener("mouseout", handleMouseOut);
-      document.removeEventListener("mousedown", handleMouseDown);
-      document.removeEventListener("mouseup", handleMouseUp);
-      cancelAnimationFrame(animationFrameId);
-      
-      // Remove all cursor classes
-      document.body.classList.remove("cursor-hover", "cursor-text", "cursor-grab", "cursor-click");
+      document.removeEventListener("pointermove", onPointerMove);
+      document.removeEventListener("mousedown", onMouseDown);
+      document.removeEventListener("mouseup", onMouseUp);
+      cancelAnimationFrame(rafId);
+      document.body.classList.remove(
+        "cursor-hover",
+        "cursor-text",
+        "cursor-click"
+      );
+      cursor.classList.remove("is-visible");
+      follower.classList.remove("is-visible");
     };
-  }, []);
+  }, [isEnabled]);
+
+  if (!isEnabled) return null;
 
   return (
     <>

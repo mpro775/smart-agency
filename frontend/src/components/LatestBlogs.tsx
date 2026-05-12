@@ -171,6 +171,7 @@ export default function LatestBlogs() {
                           transition={{ delay: index * 0.1, duration: 0.6 }}
                           viewport={{ once: true }}
                           className="group bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100"
+                          data-cursor="hover"
                         >
                           {/* صورة المدونة */}
                           <div className="relative h-48 overflow-hidden">

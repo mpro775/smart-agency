@@ -421,6 +421,7 @@ export default function HostingPackages() {
                     ? "bg-gray-900 text-white shadow-2xl shadow-gray-900/30 xl:-translate-y-4 ring-1 ring-primary/30"
                     : "bg-white text-gray-900 shadow-lg border border-gray-100 hover:shadow-xl"
                 }`}
+                data-cursor="hover"
               >
                 {/* شارة "الأكثر طلبًا" */}
                 {isPopular && (

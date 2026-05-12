@@ -60,6 +60,7 @@ export default function ProjectCard({
       transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
       onMouseMove={handleMouseMove}
       className="group relative flex flex-col overflow-hidden rounded-[28px] border border-teal-900/10 bg-white/80 shadow-[0_20px_80px_rgba(0,0,0,0.06)] backdrop-blur-xl transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_30px_100px_rgba(0,128,120,0.18)] h-full"
+      data-cursor="hover"
     >
       {/* Spotlight effect */}
       <div

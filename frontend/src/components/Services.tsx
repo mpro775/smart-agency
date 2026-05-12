@@ -389,6 +389,7 @@ function ServiceCard({
           ? "bg-gradient-to-br from-[#008080]/5 to-white border-[#008080]/30"
           : "bg-white border-[#008080]/10"
       } rounded-2xl p-6 shadow-md hover:shadow-lg transition-all duration-300 border`}
+      data-cursor="hover"
     >
       {/* Check badge for first items */}
       {service.hasCheck && (

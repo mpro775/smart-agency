@@ -92,6 +92,7 @@ function FeaturedTestimonialCard({ testimonial }: { testimonial: Testimonial }) 
       transition={{ duration: 0.7, delay: 0.1 }}
       viewport={{ once: true, amount: 0.2 }}
       className="lg:col-span-8 relative rounded-[2rem] border border-white/10 bg-white/[0.06] p-8 md:p-10 shadow-2xl backdrop-blur-xl"
+      data-cursor="hover"
     >
       <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-br from-white/10 to-transparent pointer-events-none" />
 
@@ -196,6 +197,7 @@ function SmallTestimonialCard({ testimonial }: { testimonial: Testimonial }) {
       viewport={{ once: true, amount: 0.2 }}
       whileHover={{ y: -4 }}
       className="rounded-3xl border border-white/10 bg-white/[0.05] p-6 backdrop-blur transition hover:bg-white/[0.08]"
+      data-cursor="hover"
     >
       {testimonial.rating && (
         <div className="mb-4">
