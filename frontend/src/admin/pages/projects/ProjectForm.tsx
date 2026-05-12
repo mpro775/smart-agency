@@ -516,8 +516,8 @@ export default function ProjectForm() {
                       control={control}
                       render={({ field }) => (
                         <Select
-                          value={field.value || ""}
-                          onValueChange={field.onChange}
+                          value={field.value || "none"}
+                          onValueChange={(val) => field.onChange(val === "none" ? "" : val)}
                         >
                           <SelectTrigger
                             className="bg-slate-700/50 border-slate-600 text-white"
@@ -529,7 +529,7 @@ export default function ProjectForm() {
                             className="bg-slate-800 border-slate-700"
                             dir="rtl"
                           >
-                            <SelectItem value="" className="text-white hover:bg-slate-700">
+                            <SelectItem value="none" className="text-white hover:bg-slate-700">
                               بدون فئة
                             </SelectItem>
                             {dbCategories?.map((cat) => (
