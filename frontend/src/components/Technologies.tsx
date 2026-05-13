@@ -1,724 +1,380 @@
 "use client";
-import { useState, useEffect, useMemo, useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { useState, useEffect, useMemo } from "react";
 import {
   Layers,
-  Layout,
-  Server,
+  Monitor,
+  Database as DatabaseIcon,
   Smartphone,
-  Database,
   Cloud,
   Bot,
-  Palette,
+  Brain,
+  Boxes,
   Rocket,
-  Wrench,
-  Workflow,
-  Zap,
-  Shield,
-  Gauge,
 } from "lucide-react";
+import { SectionShell } from "./brand";
 import { publicTechnologiesService } from "../services/technologies.service";
 import type { Technology } from "../services/technologies.service";
 
-// ============================================================
-// Category Mapping (Frontend Only — No Backend Changes)
-// ============================================================
+const preferredCategoryOrder = [
+  "Backend",
+  "Frontend",
+  "Database",
+  "Mobile",
+  "DevOps",
+  "Automation",
+  "AI",
+  "Other",
+];
+
 const categoryMetaMap: Record<
   string,
   {
-    label: string;
     titleAr: string;
-    icon: React.ComponentType<{ className?: string }>;
-    color: string;
+    label: string;
     description: string;
+    icon: React.ElementType;
   }
 > = {
-  Frontend: {
-    label: "Frontend",
-    titleAr: "تجربة الواجهة",
-    icon: Layout,
-    color: "#008080",
-    description: "واجهات سريعة وجذابة ومتجاوبة.",
-  },
   Backend: {
-    label: "Backend",
     titleAr: "هندسة الأنظمة",
-    icon: Server,
-    color: "#006666",
-    description: "أنظمة مستقرة وواجهات برمجية قابلة للتوسع.",
+    label: "Backend",
+    description:
+      "نصمم ونبني أنظمة خلفية قوية وواجهات برمجية منظمة قابلة للتوسع، مع التركيز على الأداء، الأمان، وسهولة الصيانة.",
+    icon: Layers,
   },
-  Mobile: {
-    label: "Mobile",
-    titleAr: "تطبيقات الجوال",
-    icon: Smartphone,
-    color: "#00b3b3",
-    description: "تجارب موبايل سلسة وعملية.",
+  Frontend: {
+    titleAr: "تجربة الواجهة",
+    label: "Frontend",
+    description:
+      "نبني واجهات سريعة، متجاوبة، وأنيقة تمنح المستخدم تجربة واضحة وسلسة على مختلف الأجهزة.",
+    icon: Monitor,
   },
   Database: {
-    label: "Database",
     titleAr: "إدارة البيانات",
-    icon: Database,
-    color: "#008080",
-    description: "بنية بيانات منظمة وآمنة.",
+    label: "Database",
+    description:
+      "ننظم البيانات بطريقة آمنة ومرنة تساعد المنتج على النمو، التحليل، والتكامل مع الخدمات الأخرى.",
+    icon: DatabaseIcon,
+  },
+  Mobile: {
+    titleAr: "تطبيقات الجوال",
+    label: "Mobile",
+    description:
+      "نطوّر تطبيقات جوال عملية وسلسة تدعم تجربة المستخدم وتتكامل مع أنظمة المنتج الأساسية.",
+    icon: Smartphone,
   },
   DevOps: {
-    label: "DevOps",
     titleAr: "التشغيل والنشر",
+    label: "DevOps",
+    description:
+      "نضمن نشرًا مستقرًا، مراقبة مستمرة، وبيئة تشغيل تساعد على استقرار المنتج واستمراره.",
     icon: Cloud,
-    color: "#006666",
-    description: "نشر، مراقبة، وموثوقية تشغيلية عالية.",
   },
   Automation: {
-    label: "AI & Automation",
     titleAr: "الذكاء والأتمتة",
+    label: "AI & Automation",
+    description:
+      "نستخدم الأتمتة والذكاء الاصطناعي لتقليل العمل اليدوي، ربط الأنظمة، وتحسين كفاءة التشغيل.",
     icon: Bot,
-    color: "#008080",
-    description: "أتمتة العمليات وتكاملات ذكية فعالة.",
+  },
+  AI: {
+    titleAr: "الذكاء الاصطناعي",
+    label: "AI",
+    description:
+      "نربط المنتجات بحلول ذكاء اصطناعي عملية تساعد في البحث، التحليل، الدعم، وأتمتة العمليات.",
+    icon: Brain,
+  },
+  Other: {
+    titleAr: "تقنيات مساعدة",
+    label: "Other",
+    description:
+      "تقنيات وأدوات داعمة نستخدمها حسب احتياج كل منتج لضمان تجربة أفضل واستقرار أعلى.",
+    icon: Boxes,
   },
 };
 
-// ============================================================
-// Helper Functions
-// ============================================================
-function getCategoryMeta(categoryName: string) {
-  return (
-    categoryMetaMap[categoryName] || {
-      label: categoryName,
-      titleAr: categoryName,
-      icon: Layers,
-      color: "#008080",
-      description: "",
-    }
-  );
-}
-
-function groupTechnologiesByCategory(technologies: Technology[]) {
-  const grouped: Record<string, Technology[]> = {};
-
-  const sorted = [...technologies].sort((a, b) => {
-    const cmpA = String(a.category || "").localeCompare(String(b.category || ""));
-    if (cmpA !== 0) return cmpA;
-    return String(a.name || "").localeCompare(String(b.name || ""));
-  });
-
-  for (const tech of sorted) {
-    const category = tech.category || "Other";
-    if (!grouped[category]) grouped[category] = [];
-    grouped[category].push(tech);
-  }
-  return grouped;
-}
-
-// ============================================================
-// TechIcon Component
-// ============================================================
-function TechIcon({
-  icon,
-  name,
-  size = "md",
-}: {
-  icon?: string;
-  name: string;
-  size?: "sm" | "md" | "lg";
-}) {
-  const [imgError, setImgError] = useState(false);
-  const sizeClasses = {
-    sm: "w-5 h-5",
-    md: "w-7 h-7",
-    lg: "w-9 h-9",
-  };
-  const iconSizes = { sm: 10, md: 14, lg: 18 };
-
-  if (icon && !imgError) {
-    return (
-      <img
-        src={icon}
-        alt={name}
-        className={`${sizeClasses[size]} object-contain`}
-        onError={() => setImgError(true)}
-      />
-    );
-  }
-
-  const firstChar = name.charAt(0).toUpperCase();
-  return (
-    <span
-      className={`${sizeClasses[size]} rounded-lg bg-gradient-to-br from-[#008080]/15 to-[#008080]/5 flex items-center justify-center text-[#008080] font-bold`}
-      style={{ fontSize: iconSizes[size] }}
-    >
-      {firstChar}
-    </span>
-  );
-}
-
-// ============================================================
-// Section Sub-Components
-// ============================================================
-
 function TechHeader() {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, ease: "easeOut" }}
-      viewport={{ once: true }}
-      className="text-center mb-10 lg:mb-12"
-      dir="rtl"
-    >
-      <motion.span
-        initial={{ opacity: 0, scale: 0.8 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 0.15, duration: 0.5 }}
-        viewport={{ once: true }}
-        className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-full bg-gradient-to-r from-[#008080]/10 to-[#008080]/5 text-[#008080] mb-6 border border-[#008080]/20 backdrop-blur-sm"
-      >
-        <Layers size={14} />
+    <div className="text-center mb-10 lg:mb-12" dir="rtl">
+      <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 border border-[#008080]/15 shadow-sm text-[#008080] text-xs font-bold tracking-[0.25em] uppercase mb-5">
+        <span className="w-1.5 h-1.5 rounded-full bg-[#008080]" />
         Technology Ecosystem
-      </motion.span>
+        <span className="w-1.5 h-1.5 rounded-full bg-[#008080]" />
+      </div>
 
-      <motion.h2
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.25, duration: 0.8 }}
-        viewport={{ once: true }}
-        className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#1a202c] mb-6 leading-tight"
-      >
-        المنظومة التقنية التي{" "}
-        <span className="relative inline-block">
-          <span className="relative z-10 bg-gradient-to-r from-[#008080] to-[#00b3b3] bg-clip-text text-transparent">
-            نبني بها
-          </span>
-          <motion.span
-            className="absolute bottom-0 left-0 right-0 h-2 bg-[#008080]/10 -z-0 rounded-full"
-            initial={{ scaleX: 0 }}
-            whileInView={{ scaleX: 1 }}
-            transition={{ delay: 0.7, duration: 0.8 }}
-            viewport={{ once: true }}
-          />
-        </span>{" "}
-        منتجات قابلة للنمو
-      </motion.h2>
+      <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-950 leading-tight mb-4">
+        المنظومة التقنية التي نبني بها منتجات رقمية ناجحة
+      </h2>
 
-      <motion.p
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4, duration: 0.8 }}
-        viewport={{ once: true }}
-        className="text-base sm:text-lg lg:text-xl text-[#4a5568] max-w-3xl mx-auto leading-relaxed px-4"
-      >
-        نستخدم التقنية كمنظومة تشغيل متكاملة، لا كأدوات منفصلة، لنصنع منتجات
-        سريعة، مستقرة، وقابلة للتوسع.
-      </motion.p>
-    </motion.div>
+      <p className="max-w-3xl mx-auto text-slate-500 text-base md:text-lg leading-8">
+        نستخدم التقنية كمنظومة تشغيل متكاملة تجمع بين الأداء، الأمان، الأتمتة، والذكاء الاصطناعي لتحويل الأفكار إلى منتجات قابلة للنمو والاستمرار.
+      </p>
+    </div>
   );
 }
 
-function TechEcosystemMap({
-  grouped,
+function StackSummary({
+  totalTechnologies,
+  totalCategories,
 }: {
-  grouped: Record<string, Technology[]>;
+  totalTechnologies: number;
+  totalCategories: number;
 }) {
-  const preferredCategoryOrder = [
-    "Backend",
-    "Frontend",
-    "Database",
-    "Mobile",
-    "DevOps",
-    "Automation",
-    "Other",
-  ];
-
-  const categoryNames = preferredCategoryOrder.filter(
-    (category) => grouped[category]?.length
-  );
-
-  const orbitPositions: Record<string, { top: string; left: string }> = {
-    Backend: { top: "18%", left: "28%" },
-    Frontend: { top: "18%", left: "72%" },
-    Database: { top: "48%", left: "22%" },
-    Mobile: { top: "48%", left: "78%" },
-    DevOps: { top: "78%", left: "32%" },
-    Automation: { top: "78%", left: "68%" },
-    Other: { top: "88%", left: "50%" },
-  };
-
-  const [activeCategory, setActiveCategory] = useState<string | null>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(containerRef, { once: true, margin: "-100px" });
-
-  if (categoryNames.length === 0) {
-    return (
-      <div className="text-center py-12">
-        <p className="text-[#64748b]">لا توجد تقنيات لعرضها حالياً.</p>
-      </div>
-    );
-  }
-
   return (
-    <motion.div
-      ref={containerRef}
-      initial={{ opacity: 0, y: 30 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.8, delay: 0.2 }}
-      className="mb-12"
-      dir="rtl"
-    >
-      {/* Desktop Hub-and-Spoke Layout */}
-      <div className="hidden lg:block relative mx-auto max-w-[1180px] h-[560px] overflow-visible">
-        {/* Orbit Rings Background */}
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-0">
-          <svg
-            width="700"
-            height="700"
-            viewBox="0 0 700 700"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="opacity-[0.06]"
-          >
-            <circle
-              cx="350"
-              cy="350"
-              r="160"
-              stroke="#008080"
-              strokeWidth="1"
-              strokeDasharray="8 6"
-            />
-            <circle
-              cx="350"
-              cy="350"
-              r="260"
-              stroke="#008080"
-              strokeWidth="1"
-              strokeDasharray="4 8"
-            />
-            <circle
-              cx="350"
-              cy="350"
-              r="330"
-              stroke="#008080"
-              strokeWidth="0.5"
-              strokeDasharray="2 6"
-            />
-          </svg>
+    <div className="rounded-[1.5rem] bg-gradient-to-br from-white via-[#f8ffff] to-[#eefafa] border border-[#008080]/10 p-6 lg:p-7 shadow-sm flex flex-col justify-between min-h-[360px]" dir="rtl">
+      <div>
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#008080]/8 text-[#008080] text-sm font-bold mb-8">
+          <Layers className="w-4 h-4" />
+          Smart Agency Stack
         </div>
 
-        {/* Connection Lines SVG */}
-        <svg
-          className="absolute inset-0 w-full h-full pointer-events-none z-0"
-        >
-          <defs>
-            <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#008080" stopOpacity="0.3" />
-              <stop offset="100%" stopColor="#008080" stopOpacity="0.1" />
-            </linearGradient>
-          </defs>
-          {categoryNames.map((categoryName) => {
-            const pos = orbitPositions[categoryName] || orbitPositions.Other;
-            const x1 = 50;
-            const y1 = 50;
-            const x2 = pos.left;
-            const y2 = pos.top;
-            return (
-              <line
-                key={`line-${categoryName}`}
-                x1={`${x1}%`}
-                y1={`${y1}%`}
-                x2={x2}
-                y2={y2}
-                stroke="url(#lineGradient)"
-                strokeWidth="1.5"
-                strokeDasharray="4 4"
-                className={`transition-all duration-300 ${
-                  activeCategory === categoryName
-                    ? "opacity-60"
-                    : "opacity-30"
-                }`}
-              />
-            );
-          })}
-        </svg>
+        <h3 className="text-3xl lg:text-4xl font-bold text-slate-950 leading-tight mb-5">
+          منظومة تشغيل تقنية متكاملة
+        </h3>
 
-        {/* Central Card — Smart Agency Stack */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.85 }}
-          animate={isInView ? { opacity: 1, scale: 1 } : {}}
-          transition={{ delay: 0.4, duration: 0.7, ease: "easeOut" }}
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10"
-        >
-          <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-[#008080]/25 to-[#00b3b3]/15 blur-2xl" />
-          <motion.div
-            animate={{ y: [0, -6, 0] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            className="relative bg-white/90 backdrop-blur-2xl rounded-3xl p-8 shadow-2xl border border-[#008080]/25 text-center min-w-[220px]"
-          >
-            <div className="mx-auto w-16 h-16 rounded-2xl bg-gradient-to-br from-[#008080] to-[#006666] flex items-center justify-center mb-4 shadow-lg shadow-[#008080]/25">
-              <Layers className="w-8 h-8 text-white" />
-            </div>
-            <h3 className="text-xl font-extrabold text-[#1a202c] mb-1">
-              Smart Agency Stack
-            </h3>
-            <p className="text-sm text-[#64748b]">
-              منظومة تقنية متكاملة
-            </p>
-            {/* Glow pulse */}
-            <motion.div
-              className="absolute inset-0 rounded-3xl border-2 border-[#008080]/20"
-              animate={{ scale: [1, 1.05, 1], opacity: [0.3, 0.6, 0.3] }}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-            />
-          </motion.div>
-        </motion.div>
-
-        {/* Category Cards in Orbit Positions */}
-        {categoryNames.map((categoryName, index) => {
-          const techs = grouped[categoryName] || [];
-          const meta = getCategoryMeta(categoryName);
-          const topTechs = techs.slice(0, 4);
-          const IconComp = meta.icon;
-          const pos = orbitPositions[categoryName] || orbitPositions.Other;
-          const isActive = activeCategory === categoryName;
-
-          return (
-            <motion.div
-              key={categoryName}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={isInView ? { opacity: 1, scale: 1 } : {}}
-              transition={{ delay: 0.5 + index * 0.08, duration: 0.6 }}
-              whileHover={{ scale: 1.03, y: -4 }}
-              onMouseEnter={() => setActiveCategory(categoryName)}
-              onMouseLeave={() => setActiveCategory(null)}
-              className={`absolute z-10 w-64 group cursor-pointer transition-all duration-300 ${
-                isActive ? "z-20" : ""
-              }`}
-              style={{
-                top: pos.top,
-                left: pos.left,
-                transform: "translate(-50%, -50%)",
-              }}
-            >
-              <div
-                className={`relative overflow-hidden rounded-2xl p-5 shadow-lg border transition-all duration-300 ${
-                  isActive
-                    ? "bg-white/95 border-[#008080]/30 shadow-xl shadow-[#008080]/10"
-                    : "bg-white/80 border-white/50 hover:border-[#008080]/25"
-                }`}
-              >
-                {/* Top accent line */}
-                <div
-                  className={`absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[#008080] to-transparent transition-opacity duration-300 ${
-                    isActive ? "opacity-100" : "opacity-0 group-hover:opacity-100"
-                  }`}
-                />
-
-                {/* Card Header */}
-                <div className="flex items-center gap-3 mb-3">
-                  <div
-                    className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300 ${
-                      isActive
-                        ? "bg-gradient-to-br from-[#008080]/20 to-[#008080]/10"
-                        : "bg-gradient-to-br from-[#008080]/10 to-[#008080]/5 group-hover:from-[#008080]/15 group-hover:to-[#008080]/8"
-                    }`}
-                  >
-                    <IconComp
-                      className={`w-5 h-5 transition-colors duration-300 ${
-                        isActive ? "text-[#008080]" : "text-[#008080]"
-                      }`}
-                    />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-[#1a202c] text-sm">
-                      {meta.titleAr}
-                    </h4>
-                    <span className="text-xs text-[#64748b]">{meta.label}</span>
-                  </div>
-                </div>
-
-                {/* Technology Pills */}
-                <div className="flex flex-wrap gap-1.5">
-                  {topTechs.map((tech) => (
-                    <span
-                      key={tech._id}
-                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#008080]/5 text-xs font-medium text-[#008080] border border-[#008080]/10"
-                    >
-                      <TechIcon icon={tech.icon} name={tech.name} size="sm" />
-                      {tech.name}
-                    </span>
-                  ))}
-                  {techs.length > 4 && (
-                    <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-white text-xs text-[#64748b] border border-dashed border-[#008080]/15">
-                      +{techs.length - 4}
-                    </span>
-                  )}
-                </div>
-
-                {/* Hover glow */}
-                <div
-                  className={`absolute inset-0 transition-all duration-500 pointer-events-none ${
-                    isActive
-                      ? "bg-gradient-to-br from-[#008080]/5 to-transparent"
-                      : "bg-gradient-to-br from-[#008080]/0 to-[#008080]/0 group-hover:from-[#008080]/3"
-                  }`}
-                />
-              </div>
-            </motion.div>
-          );
-        })}
+        <p className="text-slate-500 leading-8 text-base">
+          نربط بين الواجهة، الباك إند، قواعد البيانات، التشغيل، والأتمتة لبناء منتجات رقمية مستقرة وقابلة للتوسع.
+        </p>
       </div>
 
-      {/* Tablet & Mobile Grid Layout */}
-      <div className="lg:hidden">
-        {/* Central Card — Mobile/Tablet */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={isInView ? { opacity: 1, scale: 1 } : {}}
-          transition={{ delay: 0.4, duration: 0.7, ease: "easeOut" }}
-          className="relative mx-auto max-w-xs mb-8 z-10"
-        >
-          <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-[#008080]/20 to-[#00b3b3]/10 blur-2xl" />
-          <motion.div
-            animate={{ y: [0, -4, 0] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            className="relative bg-white/85 backdrop-blur-2xl rounded-2xl p-6 shadow-xl border border-[#008080]/20 text-center"
-          >
-            <div className="mx-auto w-14 h-14 rounded-2xl bg-gradient-to-br from-[#008080] to-[#006666] flex items-center justify-center mb-3 shadow-lg shadow-[#008080]/20">
-              <Layers className="w-7 h-7 text-white" />
-            </div>
-            <h3 className="text-lg font-extrabold text-[#1a202c] mb-1">
-              Smart Agency Stack
-            </h3>
-            <p className="text-sm text-[#64748b]">
-              منظومة تقنية متكاملة
-            </p>
-          </motion.div>
-        </motion.div>
+      <div className="grid grid-cols-2 gap-3 mt-8">
+        <div className="rounded-2xl bg-white/80 border border-[#008080]/10 p-4 text-center shadow-sm">
+          <div className="text-2xl font-bold text-[#008080]">+{totalTechnologies}</div>
+          <div className="text-xs text-slate-500 mt-1">تقنية</div>
+        </div>
 
-        {/* Category Cards Grid — Mobile/Tablet */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 relative z-10">
-          {categoryNames.map((categoryName, index) => {
-            const techs = grouped[categoryName] || [];
-            const meta = getCategoryMeta(categoryName);
-            const topTechs = techs.slice(0, 4);
-            const IconComp = meta.icon;
-            const isActive = activeCategory === categoryName;
+        <div className="rounded-2xl bg-white/80 border border-[#008080]/10 p-4 text-center shadow-sm">
+          <div className="text-2xl font-bold text-[#008080]">+{totalCategories}</div>
+          <div className="text-xs text-slate-500 mt-1">طبقات تقنية</div>
+        </div>
 
-            return (
-              <motion.div
-                key={categoryName}
-                initial={{ opacity: 0, y: 25 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ delay: 0.5 + index * 0.07, duration: 0.6 }}
-                whileHover={{ y: -4 }}
-                onMouseEnter={() => setActiveCategory(categoryName)}
-                onMouseLeave={() => setActiveCategory(null)}
-                className={`group relative overflow-hidden rounded-2xl p-5 shadow-md border transition-all duration-300 cursor-pointer ${
-                  isActive
-                    ? "bg-white/95 border-[#008080]/30 shadow-xl"
-                    : "bg-white/75 border-white/50 hover:border-[#008080]/25 hover:shadow-lg"
-                }`}
-              >
-                {/* Top accent line */}
-                <div
-                  className={`absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[#008080] to-transparent transition-opacity duration-300 ${
-                    isActive ? "opacity-100" : "opacity-0 group-hover:opacity-100"
-                  }`}
-                />
-
-                {/* Card Header */}
-                <div className="flex items-center gap-3 mb-3">
-                  <div
-                    className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300 ${
-                      isActive
-                        ? "bg-gradient-to-br from-[#008080]/20 to-[#008080]/10"
-                        : "bg-gradient-to-br from-[#008080]/10 to-[#008080]/5 group-hover:from-[#008080]/15 group-hover:to-[#008080]/8"
-                    }`}
-                  >
-                    <IconComp className="w-5 h-5 text-[#008080]" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-[#1a202c] text-sm">
-                      {meta.titleAr}
-                    </h4>
-                    <span className="text-xs text-[#64748b]">{meta.label}</span>
-                  </div>
-                </div>
-
-                {/* Technology Pills */}
-                <div className="flex flex-wrap gap-1.5">
-                  {topTechs.map((tech) => (
-                    <span
-                      key={tech._id}
-                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#008080]/5 text-xs font-medium text-[#008080] border border-[#008080]/10"
-                    >
-                      <TechIcon icon={tech.icon} name={tech.name} size="sm" />
-                      {tech.name}
-                    </span>
-                  ))}
-                  {techs.length > 4 && (
-                    <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-white text-xs text-[#64748b] border border-dashed border-[#008080]/15">
-                      +{techs.length - 4}
-                    </span>
-                  )}
-                </div>
-
-                {/* Hover glow */}
-                <div
-                  className={`absolute inset-0 transition-all duration-500 pointer-events-none ${
-                    isActive
-                      ? "bg-gradient-to-br from-[#008080]/5 to-transparent"
-                      : "bg-gradient-to-br from-[#008080]/0 to-[#008080]/0 group-hover:from-[#008080]/3"
-                  }`}
-                />
-              </motion.div>
-            );
-          })}
+        <div className="col-span-2 rounded-2xl bg-white/80 border border-[#008080]/10 p-4 shadow-sm">
+          <div className="flex items-center gap-2 text-[#008080] font-bold justify-center">
+            <Rocket className="w-4 h-4" />
+            UI + Backend + DevOps + AI
+          </div>
+          <div className="text-xs text-slate-500 text-center mt-1">منظومة عمل متكاملة</div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
-function TechValueCards() {
-  const cards = [
-    {
-      icon: Palette,
-      title: "تجربة الواجهة",
-      description: "واجهات سريعة وجذابة ومتجاوبة.",
-    },
-    {
-      icon: Wrench,
-      title: "هندسة الأنظمة",
-      description: "أنظمة مستقرة وواجهات برمجية قابلة للتوسع.",
-    },
-    {
-      icon: Rocket,
-      title: "التشغيل والنشر",
-      description: "نشر، مراقبة، وموثوقية تشغيلية عالية.",
-    },
-    {
-      icon: Workflow,
-      title: "الذكاء والأتمتة",
-      description: "أتمتة العمليات وتكاملات ذكية فعالة.",
-    },
-  ];
-
+function CategoryTabs({
+  categoryNames,
+  grouped,
+  activeCategory,
+  setActiveCategory,
+}: {
+  categoryNames: string[];
+  grouped: Record<string, Technology[]>;
+  activeCategory: string;
+  setActiveCategory: (category: string) => void;
+}) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.7, delay: 0.3 }}
-      viewport={{ once: true }}
-      className="mb-20"
-      dir="rtl"
-    >
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5">
-        {cards.map((card, index) => (
-          <motion.div
-            key={card.title}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.35 + index * 0.08, duration: 0.5 }}
-            viewport={{ once: true }}
-            whileHover={{ y: -4 }}
-            className="group relative bg-white/75 backdrop-blur-xl rounded-2xl p-6 shadow-md hover:shadow-lg border border-white/50 hover:border-[#008080]/20 transition-all duration-300"
+    <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3" dir="rtl">
+      {categoryNames.map((category) => {
+        const meta = categoryMetaMap[category] || categoryMetaMap.Other;
+        const Icon = meta.icon;
+        const isActive = activeCategory === category;
+
+        return (
+          <button
+            key={category}
+            type="button"
+            onClick={() => setActiveCategory(category)}
+            className={`relative rounded-2xl border p-4 text-start transition-all duration-300 group ${
+              isActive
+                ? "bg-[#008080] text-white border-[#008080] shadow-lg shadow-[#008080]/20"
+                : "bg-white/80 text-slate-700 border-slate-100 hover:border-[#008080]/25 hover:-translate-y-1 hover:shadow-md"
+            }`}
           >
-            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#008080]/10 to-[#008080]/5 flex items-center justify-center mb-4 group-hover:from-[#008080]/15 group-hover:to-[#008080]/8 transition-colors duration-300">
-              <card.icon className="w-5 h-5 text-[#008080]" />
+            <Icon className={`w-6 h-6 mb-3 ${isActive ? "text-white" : "text-[#008080]"}`} />
+            <div className="font-bold text-sm">{meta.label}</div>
+            <div className={`text-xs mt-1 ${isActive ? "text-white/75" : "text-slate-400"}`}>
+              {grouped[category]?.length || 0} أدوات
             </div>
-            <h4 className="font-bold text-[#1a202c] mb-2 text-base">
-              {card.title}
-            </h4>
-            <p className="text-sm text-[#64748b] leading-relaxed">
-              {card.description}
-            </p>
-            <div className="mt-3 w-8 h-0.5 rounded-full bg-gradient-to-r from-[#008080] to-transparent" />
-          </motion.div>
-        ))}
-      </div>
-    </motion.div>
+
+            {isActive && (
+              <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-4 h-4 rotate-45 bg-[#008080]" />
+            )}
+          </button>
+        );
+      })}
+    </div>
   );
 }
 
-function TechStatsStrip({
+function CategoryPanel({
+  meta,
+  Icon,
   technologies,
-  grouped,
 }: {
+  meta: {
+    titleAr: string;
+    label: string;
+    description: string;
+  };
+  Icon: React.ElementType;
   technologies: Technology[];
-  grouped: Record<string, Technology[]>;
 }) {
-  const totalTechnologies = technologies.length;
-  const totalCategories = Object.keys(grouped).length;
-
-  const stats = [
-    {
-      value: totalTechnologies > 0 ? `+${totalTechnologies}` : "متعددة",
-      label: "تقنية",
-      icon: Zap,
-    },
-    {
-      value: totalCategories > 0 ? `+${totalCategories}` : "متكاملة",
-      label: "طبقة تقنية",
-      icon: Shield,
-    },
-    {
-      value: "UI + Backend",
-      label: "DevOps + AI",
-      icon: Gauge,
-    },
-  ];
-
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay: 0.4 }}
-      viewport={{ once: true }}
-      dir="rtl"
-    >
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#008080]/8 via-[#008080]/4 to-[#008080]/8 border border-[#008080]/10 p-6 lg:p-8">
-        {/* Background pattern */}
-        <div className="absolute inset-0 opacity-[0.03]">
-          <svg width="100%" height="100%">
-            <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#008080" strokeWidth="1" />
-            </pattern>
-            <rect width="100%" height="100%" fill="url(#grid)" />
-          </svg>
+    <div className="rounded-[1.5rem] bg-white/90 border border-slate-100 shadow-sm p-6 lg:p-8 min-h-[310px]" dir="rtl">
+      <div className="grid md:grid-cols-[0.95fr_1.05fr] gap-8 items-center">
+        <div>
+          <div className="inline-flex items-center gap-2 text-[#008080] text-sm font-bold mb-4">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#008080]" />
+            {meta.titleAr}
+          </div>
+
+          <h3 className="text-3xl lg:text-4xl font-bold text-slate-950 mb-4">
+            {meta.label}
+          </h3>
+
+          <p className="text-slate-500 leading-8 mb-6">
+            {meta.description}
+          </p>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {[
+              "أداء عالي",
+              "هيكلة نظيفة",
+              "قابلية توسع",
+              "أمان متقدم",
+            ].map((item) => (
+              <div
+                key={item}
+                className="rounded-2xl bg-[#008080]/5 border border-[#008080]/10 p-3 text-center text-xs font-semibold text-slate-600"
+              >
+                {item}
+              </div>
+            ))}
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-4 relative z-10">
-          {stats.map((stat, index) => (
-            <motion.div
-              key={stat.label}
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.45 + index * 0.1, duration: 0.5 }}
-              viewport={{ once: true }}
-              className="flex flex-col items-center justify-center text-center"
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          {technologies.map((tech) => (
+            <div
+              key={tech._id || tech.name}
+              className="rounded-2xl bg-white border border-slate-100 shadow-sm p-4 flex flex-col items-center justify-center text-center min-h-[96px] hover:-translate-y-1 hover:shadow-md transition-all duration-300"
+              title={tech.tooltip || tech.description || tech.name}
             >
-              <div className="w-10 h-10 rounded-xl bg-[#008080]/10 flex items-center justify-center mb-3">
-                <stat.icon className="w-5 h-5 text-[#008080]" />
-              </div>
-              <span className="text-2xl lg:text-3xl font-extrabold text-[#008080] mb-1">
-                {stat.value}
-              </span>
-              <span className="text-sm text-[#4a5568] text-center">
-                {stat.label}
-              </span>
-            </motion.div>
+              {tech.icon ? (
+                <img
+                  src={tech.icon}
+                  alt={tech.name}
+                  className="w-8 h-8 object-contain mb-3"
+                  loading="lazy"
+                />
+              ) : (
+                <Icon className="w-8 h-8 text-[#008080] mb-3" />
+              )}
+              <span className="text-xs font-bold text-slate-700">{tech.name}</span>
+            </div>
           ))}
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
-// ============================================================
-// Main Technologies Component
-// ============================================================
+function TechCommandCenter({
+  technologies,
+  grouped,
+  categoryNames,
+  activeCategory,
+  setActiveCategory,
+}: {
+  technologies: Technology[];
+  grouped: Record<string, Technology[]>;
+  categoryNames: string[];
+  activeCategory: string;
+  setActiveCategory: (category: string) => void;
+}) {
+  const activeTechnologies = grouped[activeCategory] || [];
+  const meta = categoryMetaMap[activeCategory] || categoryMetaMap.Other;
+  const Icon = meta.icon;
+
+  return (
+    <div className="relative mx-auto max-w-7xl rounded-[2rem] bg-white/80 border border-[#008080]/10 shadow-[0_24px_80px_rgba(15,23,42,0.08)] backdrop-blur-xl overflow-hidden">
+      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_top_right,rgba(0,128,128,0.10),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(0,128,128,0.08),transparent_30%)]" />
+
+      <div className="relative grid lg:grid-cols-[0.85fr_1.15fr] gap-8 p-6 lg:p-8">
+        <StackSummary
+          totalTechnologies={technologies.length}
+          totalCategories={categoryNames.length}
+        />
+
+        <div className="space-y-5">
+          <CategoryTabs
+            categoryNames={categoryNames}
+            grouped={grouped}
+            activeCategory={activeCategory}
+            setActiveCategory={setActiveCategory}
+          />
+
+          <CategoryPanel
+            meta={meta}
+            Icon={Icon}
+            technologies={activeTechnologies}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function TechValueGrid() {
+  const values = [
+    {
+      title: "تجربة الواجهة",
+      description: "نصمم واجهات سريعة، متجاوبة، وتقدم أفضل تجربة للمستخدم.",
+      icon: Monitor,
+    },
+    {
+      title: "هندسة الأنظمة",
+      description: "نبني أنظمة خلفية قوية وقابلة للتوسع تدعم نمو منتجاتك.",
+      icon: Layers,
+    },
+    {
+      title: "التشغيل والنشر",
+      description: "نضمن نشرًا مستقرًا، مراقبة مستمرة، ونسخًا احتياطيًا يحافظ على استمرارية خدماتك.",
+      icon: Cloud,
+    },
+    {
+      title: "الذكاء والأتمتة",
+      description: "نستخدم الذكاء الاصطناعي والأتمتة لزيادة الكفاءة وتقليل العمل اليدوي.",
+      icon: Brain,
+    },
+  ];
+
+  return (
+    <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6 lg:mt-8" dir="rtl">
+      {values.map((value) => {
+        const Icon = value.icon;
+        return (
+          <div
+            key={value.title}
+            className="rounded-3xl bg-white/75 border border-slate-100 shadow-sm p-5 hover:-translate-y-1 hover:shadow-md transition-all duration-300"
+          >
+            <div className="w-11 h-11 rounded-2xl bg-[#008080]/8 text-[#008080] flex items-center justify-center mb-5">
+              <Icon className="w-5 h-5" />
+            </div>
+            <h4 className="font-bold text-slate-950 mb-2">{value.title}</h4>
+            <p className="text-sm text-slate-500 leading-7">{value.description}</p>
+            <div className="w-12 h-px bg-[#008080] mt-4" />
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 export default function Technologies() {
   const [allTechnologies, setAllTechnologies] = useState<Technology[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [activeCategory, setActiveCategory] = useState<string>("");
 
   useEffect(() => {
     const fetchTechnologies = async () => {
@@ -734,112 +390,73 @@ export default function Technologies() {
         setLoading(false);
       }
     };
-
     fetchTechnologies();
   }, []);
 
-  const grouped = useMemo(
-    () => groupTechnologiesByCategory(allTechnologies),
-    [allTechnologies]
-  );
+  const { grouped, categoryNames } = useMemo(() => {
+    const groupedMap: Record<string, Technology[]> = {};
+    for (const tech of allTechnologies) {
+      const category = tech.category || "Other";
+      if (!groupedMap[category]) groupedMap[category] = [];
+      groupedMap[category].push(tech);
+    }
 
-  // ============================================================
-  // Loading State
-  // ============================================================
+    const extraCategories = Object.keys(groupedMap).filter(
+      (category) => !preferredCategoryOrder.includes(category)
+    );
+
+    const names = [
+      ...preferredCategoryOrder.filter((category) => groupedMap[category]?.length),
+      ...extraCategories,
+    ];
+
+    return { grouped: groupedMap, categoryNames: names };
+  }, [allTechnologies]);
+
+  useEffect(() => {
+    if (!activeCategory && categoryNames.length > 0) {
+      setActiveCategory(categoryNames[0]);
+    }
+  }, [categoryNames, activeCategory]);
+
   if (loading) {
     return (
-    <section
-      className="relative py-28 bg-gradient-to-br from-[#f9fafb] via-white to-[#f0f9ff] overflow-hidden"
-    >
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-              className="inline-block rounded-full h-12 w-12 border-2 border-[#008080] border-t-transparent"
-            />
-            <p className="mt-4 text-[#4a5568]">جاري تحميل التقنيات...</p>
-          </div>
+      <SectionShell tone="light" pattern="mesh" patternIntensity="medium">
+        <div className="text-center">
+          <div className="inline-block rounded-full h-12 w-12 border-2 border-[#008080] border-t-transparent animate-spin" />
+          <p className="mt-4 text-slate-500">جاري تحميل التقنيات...</p>
         </div>
-      </section>
+      </SectionShell>
     );
   }
 
-  // ============================================================
-  // Error State
-  // ============================================================
   if (error) {
     return (
-      <section
-        className="relative py-28 bg-gradient-to-br from-[#f9fafb] via-white to-[#f0f9ff] overflow-hidden"
-      >
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <p className="text-red-600">{error}</p>
-          </div>
+      <SectionShell tone="light" pattern="mesh" patternIntensity="medium">
+        <div className="text-center">
+          <p className="text-red-600">{error}</p>
         </div>
-      </section>
+      </SectionShell>
     );
   }
 
-  // ============================================================
-  // Empty State
-  // ============================================================
-  if (allTechnologies.length === 0 && !loading) {
-    return null;
-  }
+  if (allTechnologies.length === 0 && !loading) return null;
 
-  // ============================================================
-  // Main Render
-  // ============================================================
   return (
-    <section
-      className="relative py-16 lg:py-20 bg-gradient-to-br from-[#f9fafb] via-white to-[#f0f9ff] overflow-visible"
-    >
-      {/* Background Decorations */}
-      <div className="absolute inset-0 overflow-hidden -z-10">
-        <div className="absolute inset-0 bg-gradient-to-br from-white/80 via-[#f9fafb]/50 to-white/80" />
-        <motion.div
-          className="absolute top-20 right-1/4 w-[400px] h-[400px] rounded-full bg-gradient-to-br from-[#008080]/10 to-[#00b3b3]/5 blur-3xl"
-          animate={{
-            scale: [1, 1.2, 1],
-            x: [0, -25, 0],
-            y: [0, 15, 0],
-          }}
-          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div
-          className="absolute bottom-20 left-1/4 w-[350px] h-[350px] rounded-full bg-gradient-to-tr from-[#008080]/10 to-[#00cccc]/5 blur-3xl"
-          animate={{
-            scale: [1, 1.15, 1],
-            x: [0, 25, 0],
-            y: [0, -15, 0],
-          }}
-          transition={{
-            duration: 12,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 1.5,
-          }}
-        />
-      </div>
-
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* 1. Header */}
+    <SectionShell tone="light" pattern="mesh" patternIntensity="medium">
+      <div className="relative">
         <TechHeader />
 
-        {/* 2. Ecosystem Map — Hub & Spoke */}
-        <TechEcosystemMap grouped={grouped} />
-
-        {/* 3. Value Cards */}
-        <TechValueCards />
-
-        {/* 4. Stats Strip */}
-        <TechStatsStrip
+        <TechCommandCenter
           technologies={allTechnologies}
           grouped={grouped}
+          categoryNames={categoryNames}
+          activeCategory={activeCategory}
+          setActiveCategory={setActiveCategory}
         />
+
+        <TechValueGrid />
       </div>
-    </section>
+    </SectionShell>
   );
 }

@@ -3,6 +3,7 @@ import { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
+import { SectionShell } from "../brand";
 import { publicProjectsService } from "../../services/projects.service";
 import type { Project } from "../../admin/types";
 import type { FilterCategory } from "./ProjectFilters";
@@ -26,7 +27,6 @@ export default function ProjectsShowcase({
   const [categoriesLoading, setCategoriesLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch categories on mount
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -59,7 +59,6 @@ export default function ProjectsShowcase({
     fetchCategories();
   }, []);
 
-  // Fetch projects when category changes
   useEffect(() => {
     const fetchProjects = async () => {
       try {
@@ -82,7 +81,6 @@ export default function ProjectsShowcase({
     fetchProjects();
   }, [selectedCategory]);
 
-  // Compute featured and grid projects
   const { featuredProject, gridProjects } = useMemo(() => {
     if (projects.length === 0) return { featuredProject: null, gridProjects: [] };
     const featured =
@@ -91,7 +89,6 @@ export default function ProjectsShowcase({
     return { featuredProject: featured, gridProjects: grid };
   }, [projects]);
 
-  // Compute section stats
   const sectionStats: StatItem[] = useMemo(() => {
     const totalProjects = projects.length;
     const uniqueCategories = new Set(
@@ -100,10 +97,10 @@ export default function ProjectsShowcase({
         .filter(Boolean)
     ).size;
     const webAppCount = projects.filter(
-      (p) => (p.projectTypes?.includes("Web App") || p.category === "Web App")
+      (p) => (p.projectTypes?.includes("Web App" as never) || String(p.category) === "Web App")
     ).length;
     const mobileCount = projects.filter(
-      (p) => (p.projectTypes?.includes("Mobile App") || p.category === "Mobile App")
+      (p) => (p.projectTypes?.includes("Mobile App" as never) || String(p.category) === "Mobile App")
     ).length;
 
     return [
@@ -123,26 +120,8 @@ export default function ProjectsShowcase({
   };
 
   return (
-    <section
-      className="relative min-h-screen py-14 lg:py-16 overflow-hidden"
-      id="portfolio"
-      style={{
-        background:
-          "radial-gradient(circle at 15% 20%, rgba(0,128,120,0.12), transparent 28%), radial-gradient(circle at 85% 65%, rgba(0,80,70,0.10), transparent 30%), linear-gradient(180deg, #ffffff 0%, #f7fbfb 100%)",
-      }}
-    >
-      {/* Subtle grid pattern */}
-      <div
-        className="absolute inset-0 pointer-events-none opacity-[0.03]"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(0,0,0,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.5) 1px, transparent 1px)",
-          backgroundSize: "42px 42px",
-        }}
-      />
-
+    <SectionShell tone="light" pattern="grid" id="portfolio" withContainer={false}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -152,7 +131,7 @@ export default function ProjectsShowcase({
         >
           <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4">
             مشاريع{" "}
-            <span className="text-transparent bg-clip-text bg-[linear-gradient(to_right,var(--color-primary),var(--color-primary-dark))]">
+            <span className="smart-text-gradient">
               نفتخر بها
             </span>
           </h2>
@@ -161,12 +140,10 @@ export default function ProjectsShowcase({
           </p>
         </motion.div>
 
-        {/* Stats bar */}
         {!loading && !error && projects.length > 0 && (
           <ProjectStats stats={sectionStats} />
         )}
 
-        {/* Filters */}
         {!categoriesLoading && categories.length > 1 && (
           <ProjectFilters
             categories={categories}
@@ -175,15 +152,13 @@ export default function ProjectsShowcase({
           />
         )}
 
-        {/* Loading state */}
         {loading && (
           <div className="text-center py-20">
-            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--smart-primary)]"></div>
             <p className="mt-4 text-gray-600">جاري تحميل المشاريع...</p>
           </div>
         )}
 
-        {/* Error state */}
         {error && !loading && (
           <motion.div
             initial={{ opacity: 0 }}
@@ -215,7 +190,6 @@ export default function ProjectsShowcase({
           </motion.div>
         )}
 
-        {/* Empty state (no projects at all) */}
         {!loading && !error && projects.length === 0 && (
           <motion.div
             initial={{ opacity: 0 }}
@@ -247,42 +221,36 @@ export default function ProjectsShowcase({
           </motion.div>
         )}
 
-        {/* Content */}
         {!loading && !error && projects.length > 0 && (
           <>
-            {/* Featured project */}
             {featuredProject && <FeaturedProject project={featuredProject} />}
 
-            {/* Bento grid for remaining projects */}
             <ProjectBentoGrid
               projects={gridProjects}
               onResetFilter={handleResetFilter}
             />
 
             {showViewAllLink && (
-              <>
-            {/* View all projects CTA */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              viewport={{ once: true }}
-              className="mt-16 text-center"
-            >
-              <Link
-                to="/projects"
-                className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-[linear-gradient(to_right,var(--color-primary),var(--color-primary-dark))] text-white font-semibold shadow-lg hover:shadow-xl transition-all hover:scale-105"
-                dir="rtl"
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+                viewport={{ once: true }}
+                className="mt-16 text-center"
               >
-                عرض كل المشاريع
-                <FiArrowLeft className="w-4 h-4" />
-              </Link>
-            </motion.div>
-              </>
+                <Link
+                  to="/projects"
+                  className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-gradient-to-r from-[var(--smart-primary)] to-[var(--smart-primary-light)] text-white font-semibold shadow-[var(--smart-shadow-brand)] hover:shadow-xl transition-all hover:scale-105"
+                  dir="rtl"
+                >
+                  عرض كل المشاريع
+                  <FiArrowLeft className="w-4 h-4" />
+                </Link>
+              </motion.div>
             )}
           </>
         )}
       </div>
-    </section>
+    </SectionShell>
   );
 }

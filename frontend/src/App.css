@@ -117,6 +117,39 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  /* Smart Agency Brand Tokens */
+  --smart-primary: #008080;
+  --smart-primary-dark: #006666;
+  --smart-primary-light: #00b3b3;
+
+  --smart-bg-light: #f7fbfb;
+  --smart-bg-soft: #ffffff;
+  --smart-bg-muted: #eef7f7;
+
+  --smart-bg-dark: #061317;
+  --smart-bg-dark-soft: #0b1f24;
+  --smart-bg-dark-card: rgba(255, 255, 255, 0.045);
+
+  --smart-text-main: #0f172a;
+  --smart-text-muted: #64748b;
+  --smart-text-soft: #94a3b8;
+
+  --smart-text-on-dark: #f8fafc;
+  --smart-text-muted-on-dark: rgba(226, 232, 240, 0.72);
+
+  --smart-border-light: rgba(0, 128, 128, 0.12);
+  --smart-border-light-strong: rgba(0, 128, 128, 0.22);
+  --smart-border-dark: rgba(255, 255, 255, 0.10);
+  --smart-border-dark-strong: rgba(255, 255, 255, 0.18);
+
+  --smart-shadow-soft: 0 20px 70px rgba(15, 23, 42, 0.08);
+  --smart-shadow-brand: 0 24px 80px rgba(0, 128, 128, 0.18);
+  --smart-shadow-dark: 0 30px 90px rgba(0, 0, 0, 0.30);
+
+  --smart-radius-card: 24px;
+  --smart-radius-panel: 32px;
+  --smart-radius-section: 40px;
 }
 
 body {
@@ -157,6 +190,54 @@ body {
 }
 .border-muted {
   border-color: var(--color-muted);
+}
+
+/* Smart Agency Brand Utility Classes */
+.smart-section-light {
+  background:
+    radial-gradient(circle at 10% 10%, rgba(0, 128, 128, 0.08), transparent 34%),
+    radial-gradient(circle at 90% 20%, rgba(0, 179, 179, 0.07), transparent 32%),
+    linear-gradient(180deg, var(--smart-bg-soft) 0%, var(--smart-bg-light) 100%);
+  color: var(--smart-text-main);
+}
+
+.smart-section-dark {
+  background:
+    radial-gradient(circle at 12% 10%, rgba(0, 179, 179, 0.18), transparent 34%),
+    radial-gradient(circle at 88% 24%, rgba(0, 128, 128, 0.16), transparent 30%),
+    linear-gradient(180deg, var(--smart-bg-dark) 0%, var(--smart-bg-dark-soft) 100%);
+  color: var(--smart-text-on-dark);
+}
+
+.smart-container {
+  width: min(1180px, calc(100% - 32px));
+  margin-inline: auto;
+}
+
+.smart-card-light {
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid var(--smart-border-light);
+  box-shadow: var(--smart-shadow-soft);
+  backdrop-filter: blur(18px);
+}
+
+.smart-card-dark {
+  background: var(--smart-bg-dark-card);
+  border: 1px solid var(--smart-border-dark);
+  box-shadow: var(--smart-shadow-dark);
+  backdrop-filter: blur(18px);
+}
+
+.smart-text-gradient {
+  background: linear-gradient(90deg, var(--smart-primary), var(--smart-primary-light));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.smart-focus-ring {
+  outline: 2px solid rgba(0, 179, 179, 0.35);
+  outline-offset: 3px;
 }
 
 @theme inline {
@@ -233,11 +314,59 @@ body {
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+.smart-section-light {
+  background:
+    radial-gradient(circle at 10% 10%, rgba(0, 128, 128, 0.08), transparent 34%),
+    radial-gradient(circle at 90% 20%, rgba(0, 179, 179, 0.07), transparent 32%),
+    linear-gradient(180deg, var(--smart-bg-soft) 0%, var(--smart-bg-light) 100%);
+  color: var(--smart-text-main);
+}
+
+.smart-section-dark {
+  background:
+    radial-gradient(circle at 12% 10%, rgba(0, 179, 179, 0.18), transparent 34%),
+    radial-gradient(circle at 88% 24%, rgba(0, 128, 128, 0.16), transparent 30%),
+    linear-gradient(180deg, var(--smart-bg-dark) 0%, var(--smart-bg-dark-soft) 100%);
+  color: var(--smart-text-on-dark);
+}
+
+.smart-container {
+  width: min(1180px, calc(100% - 32px));
+  margin-inline: auto;
+}
+
+.smart-card-light {
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid var(--smart-border-light);
+  box-shadow: var(--smart-shadow-soft);
+  backdrop-filter: blur(18px);
+}
+
+.smart-card-dark {
+  background: var(--smart-bg-dark-card);
+  border: 1px solid var(--smart-border-dark);
+  box-shadow: var(--smart-shadow-dark);
+  backdrop-filter: blur(18px);
+}
+
+.smart-text-gradient {
+  background: linear-gradient(90deg, var(--smart-primary), var(--smart-primary-light));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.smart-focus-ring {
+  outline: 2px solid rgba(0, 179, 179, 0.35);
+  outline-offset: 3px;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
   html {
+    scroll-behavior: smooth;
     font-family: "Cairo", ui-sans-serif, system-ui, sans-serif,
       "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
       "Noto Color Emoji";
@@ -248,16 +377,6 @@ body {
       "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
       "Noto Color Emoji";
   }
-}
-
-/* Hide main browser scrollbar for scroll-snap-container */
-.scroll-snap-container::-webkit-scrollbar {
-  display: none;
-}
-
-.scroll-snap-container {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
 }
 
 /* Footer Background Patterns */

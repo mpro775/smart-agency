@@ -17,6 +17,7 @@ import {
   FiAward,
   FiBox,
 } from "react-icons/fi";
+import { SectionShell } from "./brand";
 import { publicHostingPackagesService } from "../services/hosting-packages.service";
 import type { HostingPackage } from "../services/hosting-packages.service";
 import PackageSelectionModal from "./PackageSelectionModal";
@@ -230,26 +231,22 @@ export default function HostingPackages() {
   // --- حالات التحميل والخطأ ---
   if (loading)
     return (
-      <div className="py-32 flex justify-center bg-gray-50">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>
+      <SectionShell tone="light" pattern="dots" id="hosting">
+        <div className="flex justify-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--smart-primary)]"></div>
+        </div>
+      </SectionShell>
     );
   if (error)
     return (
-      <div className="py-32 text-center text-red-500 bg-gray-50">{error}</div>
+      <SectionShell tone="light" pattern="dots" id="hosting">
+        <div className="text-center text-red-500">{error}</div>
+      </SectionShell>
     );
   if (packages.length === 0) return null;
 
   return (
-    <section
-      id="hosting"
-      className="relative overflow-hidden py-24 bg-[radial-gradient(circle_at_top_right,rgba(0,128,128,0.10),transparent_35%),linear-gradient(180deg,#ffffff_0%,#f8fafc_100%)]"
-    >
-      {/* خلفية زخرفية */}
-      <div className="absolute top-20 right-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-10 left-10 w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute inset-0 opacity-[0.035] bg-[linear-gradient(to_right,#0f766e_1px,transparent_1px),linear-gradient(to_bottom,#0f766e_1px,transparent_1px)] bg-[size:42px_42px] pointer-events-none" />
-
+    <SectionShell tone="light" pattern="dots" id="hosting" withContainer={false}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* رأس القسم */}
         <motion.div
@@ -668,6 +665,6 @@ export default function HostingPackages() {
           isEnterprise={isEnterpriseModal}
         />
       </div>
-    </section>
+    </SectionShell>
   );
 }

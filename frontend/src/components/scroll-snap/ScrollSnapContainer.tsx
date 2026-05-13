@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 interface Section {
   id: string;
   label: string;
+  tone?: "light" | "dark";
 }
 
 interface ScrollSnapContainerProps {
@@ -23,7 +24,6 @@ const ScrollSnapContainer = ({
   const [snapEnabled, setSnapEnabled] = useState(true);
   const snapRestoreTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // ── Screen size detection ──
   useEffect(() => {
     const check = () => setIsDesktop(window.innerWidth >= 1024);
     check();
@@ -31,23 +31,19 @@ const ScrollSnapContainer = ({
     return () => window.removeEventListener("resize", check);
   }, []);
 
-  // ── IntersectionObserver: accurate active-section tracking ──
   useEffect(() => {
     if (!isDesktop) return;
     const container = containerRef.current;
     if (!container) return;
 
-    // Track intersection ratios for all observed sections
     const ratios = new Map<string, number>();
 
     const observer = new IntersectionObserver(
       (entries) => {
-        // Update ratio map
         for (const entry of entries) {
           ratios.set(entry.target.id, entry.isIntersecting ? entry.intersectionRatio : 0);
         }
 
-        // Find section with highest intersection ratio
         let maxRatio = 0;
         let activeId = "";
         for (const [id, ratio] of ratios) {
@@ -61,7 +57,6 @@ const ScrollSnapContainer = ({
           const index = sections.findIndex((s) => s.id === activeId);
           if (index !== -1) {
             setActiveSection(index);
-            // Discrete progress for connector line fill
             setScrollProgress(index / Math.max(sections.length - 1, 1));
           }
         }
@@ -72,7 +67,6 @@ const ScrollSnapContainer = ({
       }
     );
 
-    // Observe each section by its DOM id
     for (const section of sections) {
       const el = document.getElementById(section.id);
       if (el) observer.observe(el);
@@ -84,7 +78,6 @@ const ScrollSnapContainer = ({
     };
   }, [isDesktop, sections]);
 
-  // ── Scroll event: continuous progress for connector line fill ──
   useEffect(() => {
     if (!isDesktop) return;
     const container = containerRef.current;
@@ -97,14 +90,11 @@ const ScrollSnapContainer = ({
       }
     };
 
-    // Initial calculation
     handleScroll();
-
     container.addEventListener("scroll", handleScroll, { passive: true });
     return () => container.removeEventListener("scroll", handleScroll);
   }, [isDesktop]);
 
-  // ── Navigate using actual element position (scrollIntoView) ──
   const navigateToSection = useCallback(
     (index: number) => {
       if (isScrolling) return;
@@ -113,16 +103,12 @@ const ScrollSnapContainer = ({
       if (!target) return;
 
       setIsScrolling(true);
-
-      // Temporarily disable snap for smooth programmatic scroll
       setSnapEnabled(false);
 
       target.scrollIntoView({ behavior: "smooth", block: "start" });
 
-      // Clear any pending restore
       if (snapRestoreTimer.current) clearTimeout(snapRestoreTimer.current);
 
-      // Restore scroll-snap after animation settles
       snapRestoreTimer.current = setTimeout(() => {
         setSnapEnabled(true);
         setIsScrolling(false);
@@ -132,14 +118,12 @@ const ScrollSnapContainer = ({
     [isScrolling, sections]
   );
 
-  // Cleanup timer on unmount
   useEffect(() => {
     return () => {
       if (snapRestoreTimer.current) clearTimeout(snapRestoreTimer.current);
     };
   }, []);
 
-  // ── Keyboard navigation ──
   useEffect(() => {
     if (!isDesktop) return;
 
@@ -157,21 +141,21 @@ const ScrollSnapContainer = ({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isDesktop, activeSection, sections.length, navigateToSection]);
 
-  // ── Mobile: plain children ──
   if (!isDesktop) {
     return <>{children}</>;
   }
 
-  // ── Helper ──
   const getStepState = (index: number) => {
     if (index === activeSection) return "active";
     if (index < activeSection) return "completed";
     return "upcoming";
   };
 
+  const activeTone = sections[activeSection]?.tone ?? "light";
+  const isDarkStepper = activeTone === "dark";
+
   return (
     <>
-      {/* ═══ Main scroll container ═══ */}
       <div
         ref={containerRef}
         className="scroll-snap-container"
@@ -185,7 +169,6 @@ const ScrollSnapContainer = ({
         {children}
       </div>
 
-      {/* ═══ Vertical Stepper Navigation ═══ */}
       <AnimatePresence>
         <motion.nav
           initial={{ opacity: 0, x: 20 }}
@@ -195,10 +178,8 @@ const ScrollSnapContainer = ({
           className="fixed right-8 top-1/2 -translate-y-1/2 z-[60]"
           dir="rtl"
         >
-          {/* Buttons + connector line */}
           <div className="relative">
-            {/* Vertical progress line */}
-            <div className="absolute right-5 top-2 bottom-2 w-0.5 bg-white/10 rounded-full overflow-hidden">
+            <div className={`absolute right-5 top-2 bottom-2 w-0.5 rounded-full overflow-hidden ${isDarkStepper ? "bg-white/10" : "bg-slate-900/10"}`}>
               <motion.div
                 className="absolute top-0 left-0 right-0 bg-gradient-to-b from-[#008080] to-[#00b3b3] rounded-full origin-top"
                 animate={{ scaleY: Math.max(scrollProgress, 0) }}
@@ -206,95 +187,106 @@ const ScrollSnapContainer = ({
               />
             </div>
 
-            {/* Step buttons */}
-            <div className="flex flex-col gap-0 relative z-[1]">
-              {sections.map((section, index) => {
-                const state = getStepState(index);
+            <div
+              className={`relative rounded-3xl border p-3 backdrop-blur-2xl shadow-2xl transition-colors duration-500 ${
+                isDarkStepper
+                  ? "border-white/10 bg-white/[0.055]"
+                  : "border-black/10 bg-white/78"
+              }`}
+            >
+              <div className="flex flex-col gap-0 relative z-[1]">
+                {sections.map((section, index) => {
+                  const state = getStepState(index);
 
-                return (
-                  <motion.button
-                    key={section.id}
-                    onClick={() => navigateToSection(index)}
-                    className="group flex items-center gap-4 py-1.5 cursor-pointer bg-transparent border-0 outline-none w-full text-right"
-                    whileHover={{ x: -2 }}
-                    whileTap={{ scale: 0.98 }}
-                    aria-label={`${section.label} — ${
-                      state === "active"
-                        ? "القسم الحالي"
-                        : state === "completed"
-                        ? "تمت زيارته"
-                        : ""
-                    }`.trim()}
-                  >
-                    {/* Circle with number / checkmark */}
-                    <div className="relative flex-shrink-0 z-10">
-                      <motion.div
-                        className={`w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold transition-colors duration-300 ${
-                          state === "active"
-                            ? "bg-gradient-to-br from-[#008080] to-[#00b3b3] text-white shadow-lg shadow-[#008080]/50"
-                            : state === "completed"
-                            ? "bg-[#008080]/20 border-2 border-[#008080]/60 text-[#00b3b3]"
-                            : "bg-white/5 border-2 border-white/15 text-white/35"
-                        }`}
-                        animate={{ scale: state === "active" ? 1.15 : 1 }}
-                        transition={{ duration: 0.25, ease: "easeOut" }}
-                      >
-                        {state === "completed" ? (
-                          <motion.svg
-                            initial={{ scale: 0, rotate: -45 }}
-                            animate={{ scale: 1, rotate: 0 }}
-                            className="w-4 h-4"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth={3}
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <polyline points="20 6 9 17 4 12" />
-                          </motion.svg>
-                        ) : (
-                          <span>{String(index + 1).padStart(2, "0")}</span>
-                        )}
-
-                        {/* Pulse ring (active step only) */}
-                        {state === "active" && (
-                          <motion.div
-                            className="absolute inset-0 rounded-full bg-[#008080]/40 pointer-events-none"
-                            animate={{
-                              scale: [1, 1.6, 1.6],
-                              opacity: [0.5, 0, 0],
-                            }}
-                            transition={{
-                              duration: 2,
-                              repeat: Infinity,
-                              ease: "easeOut",
-                            }}
-                          />
-                        )}
-                      </motion.div>
-                    </div>
-
-                    {/* Label — always visible */}
-                    <motion.span
-                      className={`text-sm whitespace-nowrap transition-all duration-300 select-none ${
+                  return (
+                    <motion.button
+                      key={section.id}
+                      onClick={() => navigateToSection(index)}
+                      className="group flex items-center gap-4 py-1.5 cursor-pointer bg-transparent border-0 outline-none w-full text-right"
+                      whileHover={{ x: -2 }}
+                      whileTap={{ scale: 0.98 }}
+                      aria-label={`${section.label} — ${
                         state === "active"
-                          ? "text-[#00b3b3] font-bold"
+                          ? "القسم الحالي"
                           : state === "completed"
-                          ? "text-white/70 font-medium"
-                          : "text-white/40"
-                      }`}
-                      animate={{ x: state === "active" ? 4 : 0 }}
+                          ? "تمت زيارته"
+                          : ""
+                      }`.trim()}
                     >
-                      {section.label}
-                    </motion.span>
-                  </motion.button>
-                );
-              })}
+                      <div className="relative flex-shrink-0 z-10">
+                        <motion.div
+                          className={`w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold transition-colors duration-300 ${
+                            state === "active"
+                              ? "bg-gradient-to-br from-[#008080] to-[#00b3b3] text-white shadow-lg shadow-[#008080]/50"
+                              : state === "completed"
+                              ? "bg-[#008080]/20 border-2 border-[#008080]/60 text-[#00b3b3]"
+                              : isDarkStepper
+                              ? "bg-white/5 border-2 border-white/15 text-white/35"
+                              : "bg-slate-900/5 border-2 border-slate-900/15 text-slate-500"
+                          }`}
+                          animate={{ scale: state === "active" ? 1.15 : 1 }}
+                          transition={{ duration: 0.25, ease: "easeOut" }}
+                        >
+                          {state === "completed" ? (
+                            <motion.svg
+                              initial={{ scale: 0, rotate: -45 }}
+                              animate={{ scale: 1, rotate: 0 }}
+                              className="w-4 h-4"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth={3}
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <polyline points="20 6 9 17 4 12" />
+                            </motion.svg>
+                          ) : (
+                            <span>{String(index + 1).padStart(2, "0")}</span>
+                          )}
+
+                          {state === "active" && (
+                            <motion.div
+                              className="absolute inset-0 rounded-full bg-[#008080]/40 pointer-events-none"
+                              animate={{
+                                scale: [1, 1.6, 1.6],
+                                opacity: [0.5, 0, 0],
+                              }}
+                              transition={{
+                                duration: 2,
+                                repeat: Infinity,
+                                ease: "easeOut",
+                              }}
+                            />
+                          )}
+                        </motion.div>
+                      </div>
+
+                      <motion.span
+                        className={`text-sm whitespace-nowrap transition-all duration-300 select-none ${
+                          state === "active"
+                            ? isDarkStepper
+                              ? "text-white font-bold"
+                              : "text-[#008080] font-bold"
+                            : state === "completed"
+                            ? isDarkStepper
+                              ? "text-white/70 font-medium"
+                              : "text-slate-600 font-medium"
+                            : isDarkStepper
+                            ? "text-white/40"
+                            : "text-slate-400"
+                        }`}
+                        animate={{ x: state === "active" ? 4 : 0 }}
+                      >
+                        {section.label}
+                      </motion.span>
+                    </motion.button>
+                  );
+                })}
+              </div>
             </div>
           </div>
 
-          {/* Section counter — outside the line area */}
           <motion.div
             className="mt-5 text-right pr-[22px]"
             key={activeSection}
@@ -302,16 +294,15 @@ const ScrollSnapContainer = ({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.2 }}
           >
-            <span className="text-xs font-mono text-white/35 tracking-wider">
+            <span className={`text-xs font-mono tracking-wider ${isDarkStepper ? "text-white/35" : "text-slate-400"}`}>
               {String(activeSection + 1).padStart(2, "0")}
-              <span className="mx-1 text-white/15">/</span>
+              <span className={`mx-1 ${isDarkStepper ? "text-white/15" : "text-slate-200"}`}>/</span>
               {String(sections.length).padStart(2, "0")}
             </span>
           </motion.div>
         </motion.nav>
       </AnimatePresence>
 
-      {/* ═══ Scroll-down indicator (hero only) ═══ */}
       <AnimatePresence>
         {activeSection === 0 && (
           <motion.div

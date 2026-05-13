@@ -132,35 +132,13 @@ export default function Footer() {
 
   return (
     <>
-      {/* Pre-Footer CTA Section */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
         viewport={{ once: true }}
-        className="relative py-12 mt-16 overflow-hidden"
-        style={{
-          background:
-            "linear-gradient(to bottom, #1f2937 0%, #111827 50%, #111827 100%)",
-        }}
+        className="relative py-12 mt-16 overflow-hidden smart-section-dark"
       >
-        {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-5">
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage: `radial-gradient(circle at 2px 2px, rgba(255,255,255,0.15) 1px, transparent 0)`,
-              backgroundSize: "40px 40px",
-            }}
-          />
-        </div>
-
-        {/* Gradient Overlays */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-0 left-0 w-full h-1/3 bg-gradient-to-b from-primary/10 to-transparent" />
-          <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-gradient-to-t from-primary/5 to-transparent" />
-        </div>
-
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-4xl mx-auto">
             <motion.h2
@@ -224,40 +202,9 @@ export default function Footer() {
       </motion.div>
 
       <footer
-        className="relative text-white pt-24 pb-10 overflow-hidden"
-        style={{
-          background:
-            "linear-gradient(to bottom, #111827 0%, #111827 50%, #111827 100%)",
-        }}
+        id="footer"
+        className="relative text-white pt-24 pb-10 overflow-hidden smart-section-dark"
       >
-        {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-5">
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage: `radial-gradient(circle at 2px 2px, rgba(255,255,255,0.15) 1px, transparent 0)`,
-              backgroundSize: "40px 40px",
-            }}
-          />
-        </div>
-
-        {/* Gradient Overlays */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-0 left-0 w-full h-1/3 bg-gradient-to-b from-primary/10 to-transparent" />
-          <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-gradient-to-t from-primary/5 to-transparent" />
-          <motion.div
-            className="absolute top-1/4 right-1/4 w-96 h-96 rounded-full bg-primary/10 blur-3xl"
-            animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
-            transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-          />
-          <motion.div
-            className="absolute bottom-1/4 left-1/4 w-80 h-80 rounded-full bg-primary/8 blur-3xl"
-            animate={{ scale: [1.2, 1, 1.2], opacity: [0.2, 0.4, 0.2] }}
-            transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-          />
-        </div>
-
-        {/* المحتوى الرئيسي */}
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-10 mb-16">
             {/* النبذة التعريفية + السوشيال ميديا - أكبر عمود */}

@@ -19,6 +19,7 @@ import {
   FiArrowUpLeft,
 } from "react-icons/fi";
 import { FaWhatsapp } from "react-icons/fa";
+import { SectionShell } from "./brand";
 import { publicFaqsService } from "../services/faqs.service";
 import type { FAQ } from "../services/faqs.service";
 
@@ -87,15 +88,6 @@ const getCategoryIcon = (category?: string, question?: string) => {
 
 const formatIndex = (index: number) => String(index + 1).padStart(2, "0");
 
-function BackgroundEffects() {
-  return (
-    <>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(20,184,166,0.18),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(20,184,166,0.10),transparent_35%)]" />
-      <div className="absolute inset-0 opacity-[0.06] bg-[linear-gradient(to_right,#fff_1px,transparent_1px),linear-gradient(to_bottom,#fff_1px,transparent_1px)] bg-[size:56px_56px]" />
-    </>
-  );
-}
-
 function SmartAdvisoryCard() {
   const steps = [
     { num: "01", text: "تحليل الفكرة" },
@@ -109,9 +101,9 @@ function SmartAdvisoryCard() {
       whileInView={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.6 }}
       viewport={{ once: true }}
-      className="sticky top-24 rounded-3xl border border-white/10 bg-white/[0.04] backdrop-blur-sm p-8 overflow-hidden"
+      className="sticky top-24 rounded-3xl border border-[var(--smart-border-dark)] bg-[var(--smart-bg-dark-card)] backdrop-blur-sm p-8 overflow-hidden"
     >
-      <div className="absolute top-0 right-0 h-1 w-full bg-gradient-to-l from-primary to-transparent" />
+      <div className="absolute top-0 right-0 h-1 w-full bg-gradient-to-l from-[var(--smart-primary-light)] to-transparent" />
 
       <h3 className="text-xl font-bold text-white mb-2">هل لديك فكرة مشروع؟</h3>
       <p className="text-white/60 text-sm mb-6 leading-relaxed">
@@ -301,34 +293,22 @@ export default function FAQs() {
 
   if (loading) {
     return (
-      <section
-        className="py-24 bg-[#061317] text-white relative overflow-hidden"
-        id="faqs"
-      >
-        <BackgroundEffects />
-        <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-            <p className="mt-4 text-white/60">جاري تحميل مركز المساعدة...</p>
-          </div>
+      <SectionShell tone="dark" pattern="grid" id="faqs">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--smart-primary-light)]"></div>
+          <p className="mt-4 text-[var(--smart-text-muted-on-dark)]">جاري تحميل مركز المساعدة...</p>
         </div>
-      </section>
+      </SectionShell>
     );
   }
 
   if (error) {
     return (
-      <section
-        className="py-24 bg-[#061317] text-white relative overflow-hidden"
-        id="faqs"
-      >
-        <BackgroundEffects />
-        <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center rounded-2xl border border-white/10 bg-white/[0.04] p-8">
-            <p className="text-red-400">{error}</p>
-          </div>
+      <SectionShell tone="dark" pattern="grid" id="faqs">
+        <div className="text-center rounded-2xl border border-[var(--smart-border-dark)] bg-[var(--smart-bg-dark-card)] p-8">
+          <p className="text-red-400">{error}</p>
         </div>
-      </section>
+      </SectionShell>
     );
   }
 
@@ -337,13 +317,7 @@ export default function FAQs() {
   }
 
   return (
-    <section
-      className="py-24 bg-[#061317] text-white relative overflow-hidden"
-      id="faqs"
-      dir="rtl"
-    >
-      <BackgroundEffects />
-
+    <SectionShell tone="dark" pattern="grid" id="faqs" withContainer={false}>
       <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header Section */}
         <motion.div
@@ -557,6 +531,6 @@ export default function FAQs() {
         {/* Trust Bar */}
         <TrustBar />
       </div>
-    </section>
+    </SectionShell>
   );
 }

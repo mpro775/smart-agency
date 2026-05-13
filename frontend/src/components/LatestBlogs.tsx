@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
+import { SectionShell } from "./brand";
 import { publicBlogService } from "../services/blog.service";
 import type { Blog } from "../admin/types";
 import BlogInsightCard from "./blog/BlogInsightCard";
@@ -33,21 +34,21 @@ export default function LatestBlogs() {
   }, []);
 
   return (
-    <section className="bg-gradient-to-b from-white to-slate-50 py-20" id="blog" dir="rtl">
+    <SectionShell tone="light" pattern="grid" id="blog" withContainer={false}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-12 flex flex-col justify-between gap-4 md:flex-row md:items-end">
           <div>
-            <span className="rounded-full bg-primary/10 px-4 py-2 text-sm font-semibold text-primary">
+            <span className="inline-flex items-center gap-2 rounded-full border border-[var(--smart-border-light)] bg-white/70 px-4 py-2 text-sm font-bold text-[var(--smart-primary)] backdrop-blur-xl">
               مركز المعرفة
             </span>
-            <h2 className="mt-5 text-4xl font-bold text-slate-950 md:text-5xl">
+            <h2 className="mt-5 text-3xl md:text-5xl font-black tracking-tight text-slate-950">
               أحدث رؤى Smart Agency
             </h2>
             <p className="mt-4 max-w-2xl text-slate-600">
-              محتوى عملي حول بناء المواقع، المتاجر، الأتمتة، وتجارب المستخدم التي تصنع فرقاً في النمو.
+              محتوى عملي حول بناء المواقع، المتاجر، الأتمتة، وتجربة المستخدم التي تصنع فرقاً في النمو.
             </p>
           </div>
-          <Link to="/blog" className="inline-flex items-center gap-2 font-semibold text-primary hover:text-primaryDark">
+          <Link to="/blog" className="inline-flex items-center gap-2 font-semibold text-[var(--smart-primary)] hover:text-[var(--smart-primary-dark)]">
             عرض كل المقالات
             <ArrowLeft className="h-4 w-4" />
           </Link>
@@ -77,6 +78,6 @@ export default function LatestBlogs() {
           </div>
         )}
       </div>
-    </section>
+    </SectionShell>
   );
 }

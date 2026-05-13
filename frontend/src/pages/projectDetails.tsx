@@ -8,7 +8,6 @@ import {
   FiChevronRight,
   FiExternalLink,
   FiGlobe,
-  FiImage,
   FiLayers,
   FiTag,
   FiUser,
@@ -105,8 +104,8 @@ export default function ProjectDetailsPage() {
   const currentImage =
     selectedImageIndex !== null ? displayImages[selectedImageIndex] : null;
   const features = project?.features ?? [];
-  const projectTypes = getProjectTypes(project);
-  const categoryLabels = getCategoryLabels(project);
+  const projectTypes = project ? getProjectTypes(project) : [];
+  const categoryLabels = project ? getCategoryLabels(project) : [];
 
   const groupedTechnologies = useMemo(() => {
     if (!Array.isArray(project?.technologies)) return {};

@@ -15,7 +15,7 @@ import ScrollToTop from "./components/ScrollToTop";
 import BotLanding from "./pages/bot";
 import ContactPage from "./pages/contact";
 
-// Conditional Footer: hides on home page (handled inside ScrollSnapContainer)
+// Conditional Footer: hides on home page (homepage has its own Footer)
 function LayoutFooter() {
   const { pathname } = useLocation();
   if (pathname === "/") return null;

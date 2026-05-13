@@ -10,12 +10,18 @@
   --color-muted: #e5e7eb;
 }
 
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 0;
+}
+
 body {
   background-color: var(--color-background);
   font-family: 'Cairo', sans-serif;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
 }
 
-/* ألوان الهوية كـ Utilities */
 .text-primary {
   color: var(--color-primary);
 }
@@ -47,11 +53,7 @@ body {
   border-color: var(--color-muted);
 }
 
-/* =====================================================
-   SCROLL SNAPPING - Full Page Scroll Effect
-   ===================================================== */
-
-/* Main scroll container - Desktop only */
+/* Scroll Snap - Only for explicit use via ScrollSnapContainer component */
 @media (min-width: 1024px) {
   .scroll-snap-container {
     height: 100vh;
@@ -69,7 +71,6 @@ body {
     position: relative;
   }
 
-  /* Hide default scrollbar on scroll snap container */
   .scroll-snap-container::-webkit-scrollbar {
     display: none;
   }
@@ -80,7 +81,6 @@ body {
   }
 }
 
-/* Mobile fallback - normal scrolling */
 @media (max-width: 1023px) {
   .scroll-snap-container {
     height: auto;
@@ -94,30 +94,6 @@ body {
   }
 }
 
-/* Smooth reveal animations for scroll snap sections */
-.scroll-snap-section > * {
-  animation: fadeInUp 0.6s ease-out forwards;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Staggered animation delays for child elements */
-.scroll-snap-section > *:nth-child(1) { animation-delay: 0.1s; }
-.scroll-snap-section > *:nth-child(2) { animation-delay: 0.2s; }
-.scroll-snap-section > *:nth-child(3) { animation-delay: 0.3s; }
-.scroll-snap-section > *:nth-child(4) { animation-delay: 0.4s; }
-.scroll-snap-section > *:nth-child(5) { animation-delay: 0.5s; }
-
-/* Premium Gradient Animation */
 @keyframes gradient-x {
   0%, 100% {
     background-size: 200% 200%;
@@ -133,7 +109,6 @@ body {
   animation: gradient-x 3s ease infinite;
 }
 
-/* Blob Animation for Background */
 @keyframes blob {
   0%, 100% {
     transform: translate(0, 0) scale(1);
@@ -157,4 +132,3 @@ body {
 .animation-delay-4000 {
   animation-delay: 4s;
 }
-

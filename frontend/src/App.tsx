@@ -8,69 +8,112 @@ import Technologies from "./components/Technologies";
 import Testimonials from "./components/Testimonials";
 import FAQs from "./components/FAQs";
 import HostingPackages from "./components/HostingPackages";
-import { ScrollSnapContainer, ScrollSnapSection } from "./components/scroll-snap";
+import Footer from "./components/Footer";
+import FloatingSectionNav from "./components/layout/FloatingSectionNav";
+import { motion } from "framer-motion";
 
-// تعريف الأقسام للتنقل
-const sections = [
-  { id: "hero", label: "الرئيسية" },
-  { id: "services", label: "خدماتنا" },
-  { id: "projects", label: "أعمالنا" },
-  { id: "technologies", label: "التقنيات" },
-  { id: "team", label: "فريقنا" },
-  { id: "testimonials", label: "آراء العملاء" },
-  { id: "hosting", label: "باقات الاستضافة" },
-  { id: "faqs", label: "الأسئلة الشائعة" },
-  { id: "blogs", label: "المدونة" },
-];
+const sectionVariants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.7, ease: [0.6, 0.05, 0.01, 0.9] as const },
+  },
+};
 
 function App() {
   return (
-    <ScrollSnapContainer sections={sections}>
-        {/* Hero Section - Fast animation */}
-        <ScrollSnapSection id="hero" animationStyle="fast">
+    <div className="relative">
+      <FloatingSectionNav />
+
+      <main className="relative overflow-hidden">
+        <section id="hero">
           <Hero />
-        </ScrollSnapSection>
-        
-        {/* Services Section - Wave animation for smooth reveal */}
-        <ScrollSnapSection id="services" animationStyle="wave">
+        </section>
+
+        <motion.section
+          id="services"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.1 }}
+          variants={sectionVariants}
+        >
           <Services />
-        </ScrollSnapSection>
-        
-        {/* Projects Section - Fast stagger for dynamic feel */}
-        <ScrollSnapSection id="projects" animationStyle="fast">
+        </motion.section>
+
+        <motion.section
+          id="projects"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.1 }}
+          variants={sectionVariants}
+        >
           <Projects />
-        </ScrollSnapSection>
-        
-        {/* Technologies Section - Slow for elegant reveal */}
-        <ScrollSnapSection id="technologies" animationStyle="slow">
+        </motion.section>
+
+        <motion.section
+          id="technologies"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.1 }}
+          variants={sectionVariants}
+        >
           <Technologies />
-        </ScrollSnapSection>
-        
-        {/* Team Section - Standard stagger */}
-        <ScrollSnapSection id="team" animationStyle="stagger">
+        </motion.section>
+
+        <motion.section
+          id="team"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.1 }}
+          variants={sectionVariants}
+        >
           <Team />
-        </ScrollSnapSection>
-        
-        {/* Testimonials Section - Wave for smooth cards */}
-        <ScrollSnapSection id="testimonials" animationStyle="wave">
+        </motion.section>
+
+        <motion.section
+          id="testimonials"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.1 }}
+          variants={sectionVariants}
+        >
           <Testimonials />
-        </ScrollSnapSection>
-        
-        {/* Hosting Packages - Fast for pricing cards */}
-        <ScrollSnapSection id="hosting" animationStyle="fast">
+        </motion.section>
+
+        <motion.section
+          id="hosting"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.1 }}
+          variants={sectionVariants}
+        >
           <HostingPackages />
-        </ScrollSnapSection>
-        
-        {/* FAQs Section - Stagger for accordion effect */}
-        <ScrollSnapSection id="faqs" animationStyle="stagger">
+        </motion.section>
+
+        <motion.section
+          id="faqs"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.1 }}
+          variants={sectionVariants}
+        >
           <FAQs />
-        </ScrollSnapSection>
-        
-        {/* Blogs Section - Wave animation */}
-        <ScrollSnapSection id="blogs" animationStyle="wave">
+        </motion.section>
+
+        <motion.section
+          id="blogs"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.1 }}
+          variants={sectionVariants}
+        >
           <LatestBlogs />
-        </ScrollSnapSection>
-      </ScrollSnapContainer>
+        </motion.section>
+      </main>
+
+      <Footer />
+    </div>
   );
 }
 
