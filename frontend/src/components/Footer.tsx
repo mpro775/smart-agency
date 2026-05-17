@@ -56,7 +56,7 @@ export default function Footer() {
       setTimeout(() => setSubmitSuccess(false), 5000);
     } catch (error) {
       setSubmitError(
-        error instanceof Error ? error.message : "حدث خطأ أثناء الاشتراك"
+        error instanceof Error ? error.message : "حدث خطأ أثناء الاشتراك",
       );
     } finally {
       setIsSubmitting(false);
@@ -111,10 +111,10 @@ export default function Footer() {
     },
     {
       icon: <FaPhone />,
-      text: companyInfo?.phone || "+967 778 032 532",
+      text: companyInfo?.phone || "+967 775 019 485",
       link: companyInfo?.phone
         ? `tel:${companyInfo.phone.replace(/\s/g, "")}`
-        : "tel:+967778032532",
+        : "tel:+967775019485",
     },
     {
       icon: <FaEnvelope />,
@@ -125,7 +125,7 @@ export default function Footer() {
     },
     {
       icon: <FaClock />,
-      text: companyInfo?.workingHours || "الأحد - الخميس: 8 ص - 5 م",
+      text: companyInfo?.workingHours || "السبت - الخميس: 8 ص - 5 م",
       link: "#",
     },
   ];
@@ -215,11 +215,12 @@ export default function Footer() {
               viewport={{ once: true }}
               className="lg:col-span-4"
             >
-              <Link
-                to="/"
-                className="inline-flex mb-6 group"
-              >
-                <img src="/logo2.png" alt="وكالة سمارت" className="h-12 w-auto brightness-0 invert" />
+              <Link to="/" className="inline-flex mb-6 group">
+                <img
+                  src="/logo2.png"
+                  alt="وكالة سمارت"
+                  className="h-12 w-auto brightness-0 invert"
+                />
               </Link>
 
               <p className="text-gray-300 leading-relaxed text-sm mb-6">
@@ -295,7 +296,10 @@ export default function Footer() {
                         {info.icon}
                       </span>
                     </div>
-                    <span className="text-gray-300 group-hover:text-white transition-colors duration-300 text-sm pt-1" dir={index === 1 ? "ltr" : "auto"}>
+                    <span
+                      className="text-gray-300 group-hover:text-white transition-colors duration-300 text-sm pt-1"
+                      dir={index === 1 ? "ltr" : "auto"}
+                    >
                       {info.text}
                     </span>
                   </motion.a>
