@@ -31,30 +31,31 @@ export function AboutProcess({ steps }: AboutProcessProps) {
   const sortedSteps = [...steps].sort((a, b) => a.step - b.step);
 
   return (
-    <section className="py-24 bg-gray-50 px-4 sm:px-6 lg:px-8">
+    <section className="py-28 px-4 sm:px-6 lg:px-8 border-t border-slate-900/60" dir="rtl">
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeInUp}
-          className="text-center mb-16"
+          className="text-center mb-24"
         >
-          <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-semibold mb-4">
+          <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-semibold mb-4">
             طريقة العمل
           </span>
-          <h2 className="text-3xl md:text-4xl font-black text-gray-900">
+          <h2 className="text-3xl md:text-5xl font-black text-white">
             من الفكرة إلى الإطلاق
           </h2>
-          <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="mt-6 text-lg text-slate-400 max-w-2xl mx-auto font-medium">
             منهجية واضحة ومجربة لضمان تسليم مشروعك بأعلى جودة
           </p>
         </motion.div>
 
         <div className="relative">
-          <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-px bg-gray-200 md:-translate-x-px" />
+          {/* Timeline Center Line */}
+          <div className="absolute right-8 md:right-1/2 top-0 bottom-0 w-[2px] bg-slate-800 md:translate-x-[1px]" />
 
-          <div className="space-y-12">
+          <div className="space-y-16">
             {sortedSteps.map((step, index) => (
               <motion.div
                 key={step.step}
@@ -67,28 +68,31 @@ export function AboutProcess({ steps }: AboutProcessProps) {
                   index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
                 }`}
               >
-                <div className="absolute left-8 md:left-1/2 w-4 h-4 rounded-full bg-primary border-4 border-white shadow-md -translate-x-1/2 z-10" />
+                {/* Timeline Node Badge */}
+                <div className="absolute right-8 md:right-1/2 w-4 h-4 rounded-full bg-primary border-4 border-slate-950 shadow-lg shadow-primary/50 translate-x-1/2 z-10" />
 
-                <div className={`ml-16 md:ml-0 md:w-1/2 ${index % 2 === 0 ? "md:pr-16 md:text-right" : "md:pl-16"}`}>
-                  <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-                    <div className={`flex items-center gap-3 mb-3 ${index % 2 === 0 ? "md:flex-row-reverse" : ""}`}>
-                      <span className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-primary/10 text-primary font-bold text-sm">
+                <div className={`mr-16 md:mr-0 md:w-1/2 ${index % 2 === 0 ? "md:pl-16 text-right" : "md:pr-16 text-right"}`}>
+                  <div className="bg-slate-900/40 backdrop-blur-md rounded-3xl p-8 border border-slate-800 hover:border-primary/45 hover:bg-slate-900/80 transition-all duration-300 shadow-2xl relative group">
+                    <div className="flex items-center gap-4 mb-4 justify-start">
+                      <span className="inline-flex items-center justify-center w-11 h-11 rounded-2xl bg-primary/10 border border-primary/20 text-primary font-black text-base">
                         {step.step}
                       </span>
-                      <div className="text-primary">
-                        {getIconComponent(step.icon || "FiSearch", 20)}
+                      <div className="text-primary group-hover:scale-110 transition-transform duration-300">
+                        {getIconComponent(step.icon || "FiSearch", 22)}
                       </div>
-                      <h3 className="text-lg font-bold text-gray-900">
+                      <h3 className="text-xl font-bold text-slate-100 group-hover:text-primary transition-colors">
                         {step.title}
                       </h3>
                     </div>
-                    <p className="text-gray-600 text-sm leading-relaxed mb-3">
+                    
+                    <p className="text-slate-450 text-sm leading-relaxed mb-6 font-medium">
                       {step.description}
                     </p>
+                    
                     {step.deliverable && (
-                      <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gray-50 text-xs text-gray-500 ${index % 2 === 0 ? "md:flex-row-reverse" : ""}`}>
-                        <span className="font-semibold text-primary">المخرج:</span>
-                        {step.deliverable}
+                      <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-xl bg-slate-950/80 text-xs text-slate-400 border border-slate-850">
+                        <span className="font-bold text-primary">المخرج النهائي:</span>
+                        <span className="font-semibold">{step.deliverable}</span>
                       </div>
                     )}
                   </div>
@@ -103,3 +107,4 @@ export function AboutProcess({ steps }: AboutProcessProps) {
     </section>
   );
 }
+

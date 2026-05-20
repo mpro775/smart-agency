@@ -29,19 +29,19 @@ export function AboutThinking({ items }: AboutThinkingProps) {
   if (!items || items.length === 0) return null;
 
   return (
-    <section className="py-24 bg-gray-50 px-4 sm:px-6 lg:px-8">
+    <section className="py-28 px-4 sm:px-6 lg:px-8 relative border-t border-slate-900/60" dir="rtl">
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeInUp}
-          className="text-center mb-16"
+          className="text-center mb-20"
         >
-          <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-semibold mb-4">
+          <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-semibold mb-4">
             منهجيتنا
           </span>
-          <h2 className="text-3xl md:text-4xl font-black text-gray-900">
+          <h2 className="text-3xl md:text-5xl font-black text-white">
             كيف نفكر في كل مشروع؟
           </h2>
         </motion.div>
@@ -55,21 +55,26 @@ export function AboutThinking({ items }: AboutThinkingProps) {
               viewport={{ once: true }}
               variants={fadeInUp}
               transition={{ delay: index * 0.1 }}
-              className="group bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+              className="group bg-slate-900/30 backdrop-blur-md rounded-3xl p-8 border border-slate-800/80 hover:border-primary/40 hover:bg-slate-900/80 transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between"
             >
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center text-primary mb-5 group-hover:from-primary group-hover:to-primary-dark group-hover:text-white transition-all duration-300">
-                {getIconComponent(item.icon, 28) || <FiIcons.FiSearch size={28} />}
+              <div>
+                <div className="w-14 h-14 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary mb-6 group-hover:from-primary group-hover:to-primary-dark group-hover:text-white transition-all duration-300">
+                  {getIconComponent(item.icon, 28) || <FiIcons.FiSearch size={28} />}
+                </div>
+                <h3 className="text-xl font-bold text-slate-100 mb-3 group-hover:text-primary transition-colors">
+                  {item.title}
+                </h3>
+                <p className="text-slate-400 text-sm leading-relaxed mb-6 font-medium">
+                  {item.description}
+                </p>
               </div>
-              <h3 className="text-lg font-bold text-gray-900 mb-3">
-                {item.title}
-              </h3>
-              <p className="text-gray-600 text-sm leading-relaxed mb-4">
-                {item.description}
-              </p>
+              
               {item.result && (
-                <span className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold">
-                  {item.result}
-                </span>
+                <div className="mt-auto pt-2">
+                  <span className="inline-block px-3 py-1.5 rounded-xl bg-primary/10 border border-primary/20 text-primary text-xs font-bold">
+                    {item.result}
+                  </span>
+                </div>
               )}
             </motion.div>
           ))}
@@ -78,3 +83,4 @@ export function AboutThinking({ items }: AboutThinkingProps) {
     </section>
   );
 }
+

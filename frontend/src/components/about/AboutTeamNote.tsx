@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { type TeamNoteSection } from "../../services/about.service";
+import { Check } from "lucide-react";
 
 interface AboutTeamNoteProps {
   teamNote: TeamNoteSection;
@@ -12,39 +13,37 @@ const fadeInUp = {
 
 export function AboutTeamNote({ teamNote }: AboutTeamNoteProps) {
   return (
-    <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <section className="py-28 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" dir="rtl">
       <motion.div
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
         variants={fadeInUp}
-        className="relative bg-gradient-to-br from-gray-50 to-white rounded-3xl border border-gray-100 overflow-hidden"
+        className="relative bg-slate-900/30 backdrop-blur-md rounded-3xl border border-slate-800 overflow-hidden shadow-2xl"
       >
-        <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
+        <div className="absolute top-0 right-0 w-80 h-80 bg-primary/5 rounded-full blur-[100px]" />
+        <div className="absolute bottom-0 left-0 w-80 h-80 bg-primary/5 rounded-full blur-[100px]" />
 
-        <div className="relative z-10 grid lg:grid-cols-2 gap-12 p-8 md:p-12 items-center">
-          <div>
-            <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-semibold mb-4">
-              الفريق
+        <div className="relative z-10 grid lg:grid-cols-2 gap-16 p-8 md:p-14 items-center">
+          <div className="text-right">
+            <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-semibold mb-6">
+              فريق العمل
             </span>
-            <h2 className="text-2xl md:text-3xl font-black text-gray-900 mb-4">
+            <h2 className="text-3xl md:text-4xl font-black text-white mb-6">
               {teamNote.title}
             </h2>
-            <p className="text-gray-600 leading-relaxed mb-6">
+            <p className="text-slate-300 leading-relaxed mb-8 font-medium text-base">
               {teamNote.description}
             </p>
 
             {teamNote.highlights && teamNote.highlights.length > 0 && (
-              <ul className="space-y-3">
+              <ul className="space-y-4">
                 {teamNote.highlights.map((highlight, index) => (
-                  <li key={index} className="flex items-center gap-3">
-                    <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                      <svg className="w-3.5 h-3.5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                      </svg>
+                  <li key={index} className="flex items-center gap-3 justify-start">
+                    <div className="w-6 h-6 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0 text-primary">
+                      <Check className="w-3.5 h-3.5 stroke-[3]" />
                     </div>
-                    <span className="text-gray-700 text-sm font-medium">
+                    <span className="text-slate-300 text-sm font-semibold">
                       {highlight}
                     </span>
                   </li>
@@ -54,12 +53,12 @@ export function AboutTeamNote({ teamNote }: AboutTeamNoteProps) {
           </div>
 
           {teamNote.image && (
-            <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-primary/10 rounded-2xl blur-xl" />
+            <div className="relative group">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-teal-500/10 rounded-2xl blur-xl opacity-70 group-hover:opacity-100 transition-opacity duration-500" />
               <img
                 src={teamNote.image}
                 alt={teamNote.title}
-                className="relative rounded-2xl w-full h-64 md:h-80 object-cover shadow-lg"
+                className="relative rounded-2xl w-full h-72 md:h-96 object-cover shadow-2xl border border-slate-800/80 transform transition-transform duration-700 group-hover:scale-[1.02]"
               />
             </div>
           )}
@@ -68,3 +67,4 @@ export function AboutTeamNote({ teamNote }: AboutTeamNoteProps) {
     </section>
   );
 }
+

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { Inbox, Loader2 } from "lucide-react";
 import {
   aboutService,
   type About as AboutType,
@@ -46,95 +47,127 @@ export default function AboutPage() {
     fetchAboutData();
   }, []);
 
+  // SEO Management
+  useEffect(() => {
+    if (!aboutData) return;
+    const title = aboutData.seo?.metaTitle || "من نحن | Smart Agency";
+    const description = aboutData.seo?.metaDescription || "تعرف على وكالة سمارت ورؤيتنا وقصتنا في تقديم الحلول الرقمية المبتكرة.";
+    const keywords = aboutData.seo?.keywords?.join(", ") || "وكالة سمارت, حلول رقمية, تطوير مواقع, تصميم واجهات";
+    
+    const previousTitle = document.title;
+    document.title = title;
+    
+    const upsertMeta = (selector: string, attrs: Record<string, string>) => {
+      let element = document.head.querySelector(selector) as HTMLMetaElement | null;
+      if (!element) {
+        element = document.createElement("meta");
+        document.head.appendChild(element);
+      }
+      Object.entries(attrs).forEach(([key, value]) => element?.setAttribute(key, value));
+      return element;
+    };
+    
+    const descriptionMeta = upsertMeta('meta[name="description"]', { name: "description", content: description });
+    const keywordsMeta = upsertMeta('meta[name="keywords"]', { name: "keywords", content: keywords });
+    const ogTitle = upsertMeta('meta[property="og:title"]', { property: "og:title", content: title });
+    const ogDescription = upsertMeta('meta[property="og:description"]', { property: "og:description", content: description });
+    
+    let ogImageMeta: HTMLMetaElement | null = null;
+    if (aboutData.seo?.ogImage) {
+      ogImageMeta = upsertMeta('meta[property="og:image"]', { property: "og:image", content: aboutData.seo.ogImage });
+    }
+    
+    return () => {
+      document.title = previousTitle;
+      descriptionMeta.remove();
+      keywordsMeta.remove();
+      ogTitle.remove();
+      ogDescription.remove();
+      if (ogImageMeta) ogImageMeta.remove();
+    };
+  }, [aboutData]);
+
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-50 via-white to-gray-50 relative overflow-hidden">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-slate-950 relative overflow-hidden">
+        {/* Abstract glowing background */}
         <motion.div
-          animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
-          transition={{ duration: 3, repeat: Infinity }}
-          className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl"
+          animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.3, 0.15] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-primary/20 rounded-full blur-[100px]"
         />
         <motion.div
-          animate={{ scale: [1.2, 1, 1.2], opacity: [0.6, 0.3, 0.6] }}
-          transition={{ duration: 3, repeat: Infinity }}
-          className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary/10 rounded-full blur-3xl"
+          animate={{ scale: [1.2, 1, 1.2], opacity: [0.3, 0.15, 0.3] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-primary/10 rounded-full blur-[100px]"
         />
 
-        <div className="relative">
+        <div className="relative flex flex-col items-center z-10" dir="rtl">
           <motion.div
             animate={{ rotate: 360 }}
-            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-            className="w-20 h-20 border-4 border-primary/20 border-t-primary rounded-full mb-6"
-          />
+            transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+            className="mb-6 text-primary"
+          >
+            <Loader2 className="w-16 h-16 animate-pulse" />
+          </motion.div>
+
+          <motion.p
+            animate={{ opacity: [0.5, 1, 0.5] }}
+            transition={{ duration: 2, repeat: Infinity }}
+            className="text-slate-300 font-bold text-lg tracking-wider"
+          >
+            جاري تحضير البيانات...
+          </motion.p>
         </div>
+      </div>
+    );
+  }
 
-        <motion.p
-          animate={{ opacity: [0.5, 1, 0.5] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          className="text-gray-600 font-bold text-lg"
-        >
-          جاري تحضير البيانات...
-        </motion.p>
-
+  if (!aboutData) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-950 px-4">
         <motion.div
-          className="mt-4 flex gap-2"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="text-center p-8 md:p-12 bg-slate-900/50 backdrop-blur-md rounded-3xl border border-slate-800 max-w-md w-full"
+          dir="rtl"
         >
-          {[...Array(3)].map((_, i) => (
-            <motion.div
-              key={i}
-              animate={{ y: [0, -10, 0] }}
-              transition={{ duration: 1, repeat: Infinity, delay: i * 0.2 }}
-              className="w-2 h-2 bg-primary rounded-full"
-            />
-          ))}
+          <div className="w-16 h-16 bg-slate-800/80 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-slate-700 text-slate-400">
+            <Inbox className="w-8 h-8" />
+          </div>
+          <h3 className="text-xl font-bold text-slate-100 mb-2">لا توجد بيانات متاحة</h3>
+          <p className="text-slate-400 text-sm">نواجه مشكلة في عرض تفاصيل هذه الصفحة حالياً.</p>
         </motion.div>
       </div>
     );
   }
 
-  if (!aboutData)
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-white">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="text-center p-12 bg-white rounded-3xl shadow-2xl border border-gray-100"
-        >
-          <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <span className="text-3xl">📭</span>
-          </div>
-          <p className="text-gray-600 font-bold text-lg">لا توجد بيانات متاحة</p>
-        </motion.div>
-      </div>
-    );
-
   return (
-    <main className="relative bg-gradient-to-br from-gray-50 via-white to-gray-50 min-h-screen selection:bg-primary/20 selection:text-primary-dark overflow-hidden">
+    <main className="relative bg-slate-950 min-h-screen selection:bg-primary/20 selection:text-primary-dark overflow-hidden">
       <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
+        {/* Soft glowing ambient backgrounds */}
         <motion.div
-          animate={{ scale: [1, 1.3, 1], x: [0, 50, 0], y: [0, 30, 0] }}
+          animate={{ scale: [1, 1.15, 1], x: [0, 20, 0], y: [0, 15, 0] }}
           transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-gradient-to-br from-primary/10 via-primary/5 to-transparent rounded-full blur-3xl"
+          className="absolute top-0 left-1/4 w-[800px] h-[800px] bg-gradient-to-br from-primary/10 via-primary/5 to-transparent rounded-full blur-[130px]"
         />
         <motion.div
-          animate={{ scale: [1.3, 1, 1.3], x: [0, -50, 0], y: [0, 50, 0] }}
+          animate={{ scale: [1.15, 1, 1.15], x: [0, -20, 0], y: [0, 25, 0] }}
           transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-0 right-1/4 w-[600px] h-[600px] bg-gradient-to-bl from-secondary/10 via-secondary/5 to-transparent rounded-full blur-3xl"
+          className="absolute top-0 right-1/4 w-[800px] h-[800px] bg-gradient-to-bl from-teal-500/10 via-teal-500/5 to-transparent rounded-full blur-[130px]"
         />
 
         {particles.map((particle, index) => (
           <motion.div
             key={index}
-            className="absolute w-1 h-1 bg-primary/20 rounded-full"
+            className="absolute w-1.5 h-1.5 bg-primary/20 rounded-full"
             style={{ top: particle.top, left: particle.left }}
-            animate={{ y: [0, -100, 0], opacity: [0, 1, 0], scale: [0, 1.5, 0] }}
+            animate={{ y: [0, -120, 0], opacity: [0, 0.8, 0], scale: [0, 1.2, 0] }}
             transition={{
               duration: particle.duration,
               repeat: Infinity,
               delay: particle.delay,
+              ease: "linear",
             }}
           />
         ))}
@@ -170,3 +203,4 @@ export default function AboutPage() {
     </main>
   );
 }
+
