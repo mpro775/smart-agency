@@ -21,17 +21,17 @@ export default function ProjectTechTags({
   const remaining = names.length - max;
 
   return (
-    <div className={`flex flex-wrap gap-2 ${className}`} dir="rtl">
+    <div className={`flex flex-wrap gap-1.5 ${className}`} dir="rtl">
       {visible.map((name, i) => (
         <span
           key={i}
-          className="inline-block px-2.5 py-1 bg-gray-50 text-gray-600 text-xs font-medium rounded-lg border border-gray-100 hover:border-primary/25 hover:text-primary hover:bg-primary/[0.03] transition-all duration-300 cursor-default"
+          className="inline-block px-2 py-0.5 bg-slate-50 text-slate-600 text-[11px] font-medium rounded-md border border-slate-100 hover:border-primary/25 hover:text-primary hover:bg-primary/[0.03] transition-all duration-300 cursor-default"
         >
           {name}
         </span>
       ))}
       {remaining > 0 && (
-        <span className="inline-flex items-center justify-center px-2.5 py-1 bg-gray-50 text-gray-400 text-xs font-medium rounded-lg border border-gray-100">
+        <span className="inline-flex items-center justify-center px-2 py-0.5 bg-slate-50 text-slate-400 text-[11px] font-medium rounded-md border border-slate-100">
           +{remaining}
         </span>
       )}

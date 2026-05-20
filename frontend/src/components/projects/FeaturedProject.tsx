@@ -71,40 +71,41 @@ export default function FeaturedProject({ project }: FeaturedProjectProps) {
       transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
       viewport={{ once: true }}
       onMouseMove={handleMouseMove}
-      className="group relative overflow-hidden rounded-[32px] border border-teal-900/10 bg-white/80 shadow-[0_20px_80px_rgba(0,0,0,0.06)] backdrop-blur-xl transition-all duration-500 hover:shadow-[0_30px_100px_rgba(0,128,120,0.18)] mb-10"
+      className="group relative overflow-hidden rounded-2xl border border-slate-200/70 bg-white shadow-sm hover:shadow-xl transition-shadow duration-500 mb-10"
       data-cursor="hover"
     >
       <div
         className="absolute inset-0 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
         style={{
           background:
-            "radial-gradient(600px circle at var(--fmx) var(--fmy), rgba(0,128,120,0.15), transparent 50%)",
+            "radial-gradient(600px circle at var(--fmx) var(--fmy), rgba(0,128,120,0.10), transparent 50%)",
         }}
       />
 
       <div className="flex flex-col lg:flex-row">
-        <div className="relative lg:w-7/12 overflow-hidden bg-gray-100 shrink-0 min-h-[280px] lg:min-h-[400px]">
+        {/* Image side */}
+        <div className="relative lg:w-7/12 overflow-hidden bg-slate-100 shrink-0 min-h-[260px] lg:min-h-[420px]">
           <img
             src={projectImage}
             alt={project.title}
-            className="w-full h-full object-cover transition-all duration-700 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:scale-105 group-hover:brightness-105"
+            className="w-full h-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:scale-105"
             loading="lazy"
           />
 
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent lg:bg-gradient-to-l lg:from-transparent lg:via-transparent lg:to-white/20 pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent lg:bg-gradient-to-l lg:from-transparent lg:via-transparent lg:to-white/10 pointer-events-none" />
 
           {project.clientLogo && (
-            <div className="absolute top-6 left-6 z-10">
+            <div className="absolute top-5 left-5 z-10">
               <img
                 src={project.clientLogo}
                 alt={project.clientName || ""}
-                className="h-10 w-auto bg-white/90 backdrop-blur-sm rounded-xl p-1.5 shadow-lg"
+                className="h-9 w-auto bg-white/90 backdrop-blur-sm rounded-lg px-2 py-1 shadow-sm"
               />
             </div>
           )}
 
-          <div className="absolute top-6 right-6 z-10 flex flex-col gap-2" dir="rtl">
-            <span className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-xl text-white text-sm font-semibold rounded-2xl border border-white/30 shadow-lg">
+          <div className="absolute top-5 right-5 z-10 flex flex-col gap-2" dir="rtl">
+            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-white/20 backdrop-blur-xl text-white text-sm font-semibold rounded-xl border border-white/30 shadow-sm">
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
@@ -118,16 +119,17 @@ export default function FeaturedProject({ project }: FeaturedProjectProps) {
           </div>
         </div>
 
-        <div className="lg:w-5/12 p-6 md:p-8 lg:p-10 flex flex-col justify-center" dir="rtl">
-          <div className="flex items-center gap-3 mb-4 flex-wrap">
+        {/* Content side */}
+        <div className="lg:w-5/12 p-6 md:p-8 flex flex-col justify-center" dir="rtl">
+          <div className="flex items-center gap-3 mb-3 flex-wrap">
             {categoryLabels.length > 0 && (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary/[0.06] text-primary text-sm font-semibold rounded-xl border border-primary/10">
-                <span className="w-2 h-2 rounded-full bg-primary shadow-[0_0_6px_rgba(0,128,128,0.4)]" />
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary/[0.06] text-primary text-sm font-semibold rounded-lg border border-primary/10">
+                <span className="w-2 h-2 rounded-full bg-primary" />
                 {categoryLabels.join(" / ")}
               </span>
             )}
             {project.isFeatured && (
-              <span className="inline-flex items-center gap-1 px-3 py-1.5 bg-amber-50 text-amber-600 text-sm font-semibold rounded-xl border border-amber-200">
+              <span className="inline-flex items-center gap-1 px-3 py-1.5 bg-amber-50 text-amber-600 text-sm font-semibold rounded-lg border border-amber-200">
                 <svg className="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor">
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                 </svg>
@@ -136,17 +138,17 @@ export default function FeaturedProject({ project }: FeaturedProjectProps) {
             )}
           </div>
 
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-gray-900 mb-4 leading-tight">
+          <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 mb-3 leading-tight">
             {project.title}
           </h2>
 
-          <p className="text-gray-600 leading-relaxed mb-5 text-base md:text-lg">
+          <p className="text-slate-600 leading-relaxed mb-5 text-base">
             {project.summary}
           </p>
 
           {techNames.length > 0 && (
-            <div className="mb-6">
-              <p className="text-xs text-gray-400 font-medium mb-2">
+            <div className="mb-5">
+              <p className="text-xs text-slate-400 font-medium mb-2">
                 التقنيات المستخدمة
               </p>
               <ProjectTechTags technologies={project.technologies} max={4} />
@@ -154,14 +156,14 @@ export default function FeaturedProject({ project }: FeaturedProjectProps) {
           )}
 
           {project.stats && project.stats.length > 0 && (
-            <div className="mb-6 p-4 bg-gray-50/80 rounded-2xl border border-gray-100">
+            <div className="mb-5 p-4 bg-slate-50/80 rounded-xl border border-slate-100">
               <div className="flex flex-wrap gap-6" dir="rtl">
                 {project.stats.slice(0, 3).map((stat, i) => (
                   <div key={i} className="text-center">
-                    <span className="block text-xl font-bold text-gray-900">
+                    <span className="block text-xl font-bold text-slate-900">
                       {stat.value}
                     </span>
-                    <span className="text-xs text-gray-500">
+                    <span className="text-xs text-slate-500">
                       {stat.label}
                     </span>
                   </div>
@@ -170,10 +172,10 @@ export default function FeaturedProject({ project }: FeaturedProjectProps) {
             </div>
           )}
 
-          <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 mb-6" dir="rtl">
+          <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500 mb-6" dir="rtl">
             {project.industry && (
               <span className="inline-flex items-center gap-1.5">
-                <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <svg className="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                 </svg>
                 {project.industry}
@@ -183,7 +185,7 @@ export default function FeaturedProject({ project }: FeaturedProjectProps) {
             {project.duration && <span>{project.duration}</span>}
             {project.clientName && (
               <span className="inline-flex items-center gap-1.5">
-                <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <svg className="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
                 {project.clientName}
@@ -194,7 +196,7 @@ export default function FeaturedProject({ project }: FeaturedProjectProps) {
           <div className="flex flex-wrap items-center gap-3" dir="rtl">
             <Link
               to={detailUrl}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[linear-gradient(to_right,var(--color-primary),var(--color-primary-dark))] text-white font-semibold shadow-lg hover:shadow-xl transition-all hover:scale-105"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[linear-gradient(to_right,var(--color-primary),var(--color-primary-dark))] text-white font-semibold shadow-md hover:shadow-lg transition-all hover:scale-[1.02]"
             >
               <FaSearchPlus className="w-4 h-4" />
               عرض دراسة الحالة
@@ -205,7 +207,7 @@ export default function FeaturedProject({ project }: FeaturedProjectProps) {
                 href={project.projectUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-teal-900/15 bg-white text-gray-700 font-semibold hover:bg-gray-50 hover:border-teal-900/25 transition-all hover:scale-105 shadow-sm"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-700 font-semibold hover:bg-slate-50 hover:border-slate-300 transition-all hover:scale-[1.02] shadow-sm"
               >
                 <FiExternalLink className="w-4 h-4" />
                 زيارة المشروع
