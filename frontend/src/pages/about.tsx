@@ -89,17 +89,17 @@ export default function AboutPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-slate-950 relative overflow-hidden">
-        {/* Abstract glowing background */}
+      <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50 relative overflow-hidden">
+        {/* Soft ambient background */}
         <motion.div
-          animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.3, 0.15] }}
+          animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-primary/20 rounded-full blur-[100px]"
+          className="absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-primary/10 rounded-full blur-[100px]"
         />
         <motion.div
-          animate={{ scale: [1.2, 1, 1.2], opacity: [0.3, 0.15, 0.3] }}
+          animate={{ scale: [1.2, 1, 1.2], opacity: [0.4, 0.2, 0.4] }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-primary/10 rounded-full blur-[100px]"
+          className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-teal-400/10 rounded-full blur-[100px]"
         />
 
         <div className="relative flex flex-col items-center z-10" dir="rtl">
@@ -108,13 +108,13 @@ export default function AboutPage() {
             transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
             className="mb-6 text-primary"
           >
-            <Loader2 className="w-16 h-16 animate-pulse" />
+            <Loader2 className="w-14 h-14" />
           </motion.div>
 
           <motion.p
             animate={{ opacity: [0.5, 1, 0.5] }}
             transition={{ duration: 2, repeat: Infinity }}
-            className="text-slate-300 font-bold text-lg tracking-wider"
+            className="text-slate-500 font-bold text-lg tracking-wide"
           >
             جاري تحضير البيانات...
           </motion.p>
@@ -125,44 +125,49 @@ export default function AboutPage() {
 
   if (!aboutData) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-950 px-4">
+      <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="text-center p-8 md:p-12 bg-slate-900/50 backdrop-blur-md rounded-3xl border border-slate-800 max-w-md w-full"
+          className="text-center p-8 md:p-12 bg-white rounded-3xl border border-slate-200 shadow-xl max-w-md w-full"
           dir="rtl"
         >
-          <div className="w-16 h-16 bg-slate-800/80 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-slate-700 text-slate-400">
+          <div className="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-slate-200 text-slate-400">
             <Inbox className="w-8 h-8" />
           </div>
-          <h3 className="text-xl font-bold text-slate-100 mb-2">لا توجد بيانات متاحة</h3>
-          <p className="text-slate-400 text-sm">نواجه مشكلة في عرض تفاصيل هذه الصفحة حالياً.</p>
+          <h3 className="text-xl font-bold text-slate-900 mb-2">لا توجد بيانات متاحة</h3>
+          <p className="text-slate-500 text-sm">نواجه مشكلة في عرض تفاصيل هذه الصفحة حالياً.</p>
         </motion.div>
       </div>
     );
   }
 
   return (
-    <main className="relative bg-slate-950 min-h-screen selection:bg-primary/20 selection:text-primary-dark overflow-hidden">
+    <main className="relative bg-slate-50 min-h-screen selection:bg-primary/10 selection:text-primary-dark overflow-hidden">
+      {/* Soft mesh gradient background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
-        {/* Soft glowing ambient backgrounds */}
         <motion.div
           animate={{ scale: [1, 1.15, 1], x: [0, 20, 0], y: [0, 15, 0] }}
           transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-0 left-1/4 w-[800px] h-[800px] bg-gradient-to-br from-primary/10 via-primary/5 to-transparent rounded-full blur-[130px]"
+          className="absolute -top-40 -left-40 w-[700px] h-[700px] bg-primary/5 rounded-full blur-[120px]"
         />
         <motion.div
           animate={{ scale: [1.15, 1, 1.15], x: [0, -20, 0], y: [0, 25, 0] }}
           transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-0 right-1/4 w-[800px] h-[800px] bg-gradient-to-bl from-teal-500/10 via-teal-500/5 to-transparent rounded-full blur-[130px]"
+          className="absolute top-1/3 right-0 w-[600px] h-[600px] bg-teal-400/5 rounded-full blur-[120px]"
+        />
+        <motion.div
+          animate={{ scale: [1, 1.1, 1], x: [0, 10, 0], y: [0, -10, 0] }}
+          transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute -bottom-40 left-1/3 w-[800px] h-[800px] bg-blue-400/5 rounded-full blur-[130px]"
         />
 
         {particles.map((particle, index) => (
           <motion.div
             key={index}
-            className="absolute w-1.5 h-1.5 bg-primary/20 rounded-full"
+            className="absolute w-1 h-1 bg-primary/30 rounded-full"
             style={{ top: particle.top, left: particle.left }}
-            animate={{ y: [0, -120, 0], opacity: [0, 0.8, 0], scale: [0, 1.2, 0] }}
+            animate={{ y: [0, -100, 0], opacity: [0, 0.6, 0], scale: [0, 1, 0] }}
             transition={{
               duration: particle.duration,
               repeat: Infinity,
@@ -203,4 +208,3 @@ export default function AboutPage() {
     </main>
   );
 }
-

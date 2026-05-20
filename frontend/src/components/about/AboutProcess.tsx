@@ -21,7 +21,7 @@ const getIconComponent = (iconName: string, size: number = 24) => {
 };
 
 const fadeInUp = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: { opacity: 0, y: 40 },
   visible: { opacity: 1, y: 0 },
 };
 
@@ -31,31 +31,31 @@ export function AboutProcess({ steps }: AboutProcessProps) {
   const sortedSteps = [...steps].sort((a, b) => a.step - b.step);
 
   return (
-    <section className="py-28 px-4 sm:px-6 lg:px-8 border-t border-slate-900/60" dir="rtl">
+    <section className="py-24 px-4 sm:px-6 lg:px-8" dir="rtl">
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeInUp}
-          className="text-center mb-24"
+          className="text-center mb-20"
         >
-          <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-semibold mb-4">
+          <span className="inline-block px-5 py-2 rounded-full bg-primary/5 border border-primary/15 text-primary text-sm font-bold mb-5 tracking-wide">
             طريقة العمل
           </span>
-          <h2 className="text-3xl md:text-5xl font-black text-white">
+          <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight">
             من الفكرة إلى الإطلاق
           </h2>
-          <p className="mt-6 text-lg text-slate-400 max-w-2xl mx-auto font-medium">
+          <p className="mt-6 text-lg text-slate-500 max-w-2xl mx-auto font-medium leading-relaxed">
             منهجية واضحة ومجربة لضمان تسليم مشروعك بأعلى جودة
           </p>
         </motion.div>
 
         <div className="relative">
           {/* Timeline Center Line */}
-          <div className="absolute right-8 md:right-1/2 top-0 bottom-0 w-[2px] bg-slate-800 md:translate-x-[1px]" />
+          <div className="absolute right-6 md:right-1/2 top-0 bottom-0 w-px bg-slate-200 md:translate-x-[0.5px]" />
 
-          <div className="space-y-16">
+          <div className="space-y-14">
             {sortedSteps.map((step, index) => (
               <motion.div
                 key={step.step}
@@ -64,33 +64,33 @@ export function AboutProcess({ steps }: AboutProcessProps) {
                 viewport={{ once: true }}
                 variants={fadeInUp}
                 transition={{ delay: index * 0.1 }}
-                className={`relative flex items-start gap-8 md:gap-0 ${
+                className={`relative flex items-start gap-6 md:gap-0 ${
                   index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
                 }`}
               >
                 {/* Timeline Node Badge */}
-                <div className="absolute right-8 md:right-1/2 w-4 h-4 rounded-full bg-primary border-4 border-slate-950 shadow-lg shadow-primary/50 translate-x-1/2 z-10" />
+                <div className="absolute right-6 md:right-1/2 w-3 h-3 rounded-full bg-primary border-[3px] border-white shadow-md shadow-primary/20 translate-x-1/2 z-10 mt-6" />
 
-                <div className={`mr-16 md:mr-0 md:w-1/2 ${index % 2 === 0 ? "md:pl-16 text-right" : "md:pr-16 text-right"}`}>
-                  <div className="bg-slate-900/40 backdrop-blur-md rounded-3xl p-8 border border-slate-800 hover:border-primary/45 hover:bg-slate-900/80 transition-all duration-300 shadow-2xl relative group">
+                <div className={`mr-12 md:mr-0 md:w-1/2 ${index % 2 === 0 ? "md:pl-12 text-right" : "md:pr-12 text-right"}`}>
+                  <div className="bg-white rounded-3xl p-7 border border-slate-200/80 hover:border-primary/25 hover:shadow-xl hover:shadow-slate-200/40 transition-all duration-300 relative group">
                     <div className="flex items-center gap-4 mb-4 justify-start">
-                      <span className="inline-flex items-center justify-center w-11 h-11 rounded-2xl bg-primary/10 border border-primary/20 text-primary font-black text-base">
+                      <span className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-primary/5 border border-primary/15 text-primary font-black text-sm">
                         {step.step}
                       </span>
                       <div className="text-primary group-hover:scale-110 transition-transform duration-300">
-                        {getIconComponent(step.icon || "FiSearch", 22)}
+                        {getIconComponent(step.icon || "FiSearch", 20)}
                       </div>
-                      <h3 className="text-xl font-bold text-slate-100 group-hover:text-primary transition-colors">
+                      <h3 className="text-lg font-bold text-slate-900 group-hover:text-primary transition-colors tracking-tight">
                         {step.title}
                       </h3>
                     </div>
                     
-                    <p className="text-slate-450 text-sm leading-relaxed mb-6 font-medium">
+                    <p className="text-slate-500 text-sm leading-[1.8] mb-5 font-medium">
                       {step.description}
                     </p>
                     
                     {step.deliverable && (
-                      <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-xl bg-slate-950/80 text-xs text-slate-400 border border-slate-850">
+                      <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-xl bg-slate-50 text-xs text-slate-600 border border-slate-200">
                         <span className="font-bold text-primary">المخرج النهائي:</span>
                         <span className="font-semibold">{step.deliverable}</span>
                       </div>
@@ -107,4 +107,3 @@ export function AboutProcess({ steps }: AboutProcessProps) {
     </section>
   );
 }
-
