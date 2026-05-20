@@ -55,14 +55,14 @@ export default function RelatedProjects({ relatedProjects }: RelatedProjectsProp
                 className="group flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white hover:border-teal-500/30 hover:shadow-xl hover:-translate-y-1.5 transition-all duration-500 h-full"
               >
                 {/* Card Thumbnail */}
-                <div className="h-48 overflow-hidden relative">
+                <div className="h-48 overflow-hidden relative bg-[#f4f8f8]">
                   <img
                     src={related.images?.cover || related.images?.gallery?.[0] || "https://via.placeholder.com/800x600"}
                     alt={related.title}
-                    className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
+                    className="h-full w-full object-contain p-3 transition duration-700 group-hover:scale-105"
                     loading="lazy"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-slate-900/20 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/30 via-transparent to-transparent pointer-events-none" />
                   <div className="absolute bottom-4 right-4 left-4">
                     <span className="inline-block px-3 py-1.5 bg-white/20 backdrop-blur-md text-white text-xs font-semibold rounded-xl border border-white/20 shadow-sm">
                       {(related.projectTypes?.length ? related.projectTypes : [related.category]).join(" + ")}

@@ -1,5 +1,5 @@
 "use client";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import type { Project } from "../../admin/types";
 import ProjectCard from "./ProjectCard";
 import type { CardVariant } from "./ProjectCard";
@@ -20,23 +20,16 @@ function getVariant(project: Project, index: number): CardVariant {
     return "standard";
   }
 
-  // Occasional wide cards for variety, but keep layout stable
   if (index === 0) return "wide";
-  if (index % 7 === 0) return "wide";
+  if (index % 5 === 0) return "wide";
   return "standard";
 }
 
 function getGridSpanClass(variant: CardVariant): string {
-  switch (variant) {
-    case "case_study":
-      return "md:col-span-2 lg:col-span-2";
-    case "wide":
-      return "md:col-span-2 lg:col-span-2";
-    case "compact":
-      return "col-span-1";
-    default:
-      return "col-span-1";
+  if (variant === "wide" || variant === "case_study") {
+    return "md:col-span-2";
   }
+  return "col-span-1";
 }
 
 export default function ProjectBentoGrid({
@@ -55,17 +48,25 @@ export default function ProjectBentoGrid({
   }
 
   return (
-    <AnimatePresence mode="popLayout">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-auto">
+      <AnimatePresence mode="popLayout">
         {projects.map((project, index) => {
           const variant = getVariant(project, index);
           return (
-            <div key={project._id} className={getGridSpanClass(variant)}>
+            <motion.div
+              key={project._id}
+              layout
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+              className={`min-h-0 ${getGridSpanClass(variant)}`}
+            >
               <ProjectCard project={project} variant={variant} />
-            </div>
+            </motion.div>
           );
         })}
-      </div>
-    </AnimatePresence>
+      </AnimatePresence>
+    </div>
   );
 }
