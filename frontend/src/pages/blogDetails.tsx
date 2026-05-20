@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { ArrowRight, Share2 } from "lucide-react";
+import { ArrowRight, Share2, Sparkles } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import { publicBlogService } from "../services/blog.service";
 import type { Blog } from "../admin/types";
@@ -122,18 +122,26 @@ export default function BlogDetailsPage() {
 
   if (loading) {
     return (
-      <main className="px-4 py-24 text-center" dir="rtl">
-        <div className="mx-auto h-12 w-12 animate-spin rounded-full border-b-2 border-primary" />
-        <p className="mt-4 text-slate-600">جاري تحميل المقال...</p>
+      <main className="flex min-h-[60vh] flex-col items-center justify-center px-4 py-24" dir="rtl">
+        <div className="relative mx-auto h-14 w-14">
+          <div className="absolute inset-0 animate-spin rounded-full border-4 border-slate-200" />
+          <div className="absolute inset-0 animate-spin rounded-full border-4 border-transparent border-t-primary" />
+        </div>
+        <p className="mt-6 text-lg font-medium text-slate-600">جاري تحميل المقال...</p>
       </main>
     );
   }
 
   if (error || !blog) {
     return (
-      <main className="px-4 py-24 text-center" dir="rtl">
-        <p className="mb-6 text-red-600">{error || "المقال غير موجود"}</p>
-        <Link to="/blog" className="inline-flex items-center gap-2 text-primary">
+      <main className="flex min-h-[60vh] flex-col items-center justify-center px-4 py-24" dir="rtl">
+        <div className="mb-6 rounded-full bg-red-50 p-4 text-red-600">
+          <p className="text-lg font-semibold">{error || "المقال غير موجود"}</p>
+        </div>
+        <Link
+          to="/blog"
+          className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-primary/20 transition hover:bg-primary-dark"
+        >
           <ArrowRight className="h-4 w-4" />
           العودة إلى المدونة
         </Link>
@@ -146,35 +154,48 @@ export default function BlogDetailsPage() {
       <ReadingProgressBar />
       <ArticleHero blog={blog} />
 
-      <section className="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[1fr_280px] lg:px-8" dir="rtl">
+      <section className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[1fr_300px] lg:px-8" dir="rtl">
         <article className="min-w-0">
-          <div className="mb-8 flex flex-wrap items-center justify-between gap-3">
-            <Link to="/blog" className="inline-flex items-center gap-2 text-sm font-semibold text-primary">
+          {/* Top toolbar */}
+          <div className="mb-10 flex flex-wrap items-center justify-between gap-3">
+            <Link
+              to="/blog"
+              className="inline-flex items-center gap-2 rounded-full bg-slate-50 px-4 py-2 text-sm font-semibold text-slate-600 ring-1 ring-slate-200 transition hover:bg-slate-100 hover:text-primary"
+            >
               <ArrowRight className="h-4 w-4" />
               العودة إلى المدونة
             </Link>
             <button
               onClick={handleShare}
-              className="inline-flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2 text-sm text-slate-600 hover:text-primary"
+              className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-2 text-sm font-medium text-slate-600 shadow-sm transition hover:border-primary/30 hover:text-primary"
             >
               <Share2 className="h-4 w-4" />
               مشاركة
             </button>
           </div>
 
+          {/* Quick summary */}
           {blog.summaryPoints && blog.summaryPoints.length > 0 && (
-            <div className="mb-10 rounded-2xl bg-primary/5 p-6">
-              <h2 className="mb-3 font-bold text-slate-950">ملخص سريع</h2>
-              <ul className="space-y-2 text-slate-700">
+            <div className="relative mb-12 overflow-hidden rounded-3xl bg-gradient-to-br from-primary/5 to-primary/[0.02] p-7 ring-1 ring-primary/10">
+              <div className="absolute -left-6 -top-6 h-24 w-24 rounded-full bg-primary/5 blur-2xl" />
+              <div className="relative flex items-center gap-2 text-primary">
+                <Sparkles className="h-5 w-5" />
+                <h2 className="text-base font-bold">ملخص سريع</h2>
+              </div>
+              <ul className="relative mt-4 space-y-3 text-slate-700">
                 {blog.summaryPoints.map((point) => (
-                  <li key={point}>• {point}</li>
+                  <li key={point} className="flex items-start gap-3">
+                    <span className="mt-1.5 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                    <span className="leading-7">{point}</span>
+                  </li>
                 ))}
               </ul>
             </div>
           )}
 
+          {/* Article body */}
           <div
-            className="prose prose-lg max-w-none prose-headings:scroll-mt-24 prose-headings:text-slate-950 prose-p:leading-8 prose-p:text-slate-700 prose-a:text-primary prose-img:rounded-2xl"
+            className="article-content max-w-none"
             dangerouslySetInnerHTML={{ __html: articleHtml }}
           />
 

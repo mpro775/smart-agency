@@ -16,8 +16,11 @@ export default function ReadingProgressBar() {
   }, []);
 
   return (
-    <div className="fixed inset-x-0 top-0 z-50 h-1 bg-transparent">
-      <div className="h-full bg-primary transition-[width]" style={{ width: `${progress}%` }} />
+    <div className="fixed inset-x-0 top-0 z-50 h-1.5 bg-slate-200/30 backdrop-blur-sm">
+      <div
+        className="h-full bg-gradient-to-l from-primary to-primary-dark transition-[width] duration-150 ease-out shadow-[0_0_10px_rgba(0,128,128,0.5)]"
+        style={{ width: `${progress}%` }}
+      />
     </div>
   );
 }
