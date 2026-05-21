@@ -44,7 +44,7 @@ const teamSchema = z.object({
   showOnAbout: z.boolean(),
   isActive: z.boolean(),
   sortOrder: z.number(),
-  projectsCount: z.coerce.number().min(0).default(0),
+  projectsCount: z.any(),
   joinedAt: z.string().nullish(),
 });
 
