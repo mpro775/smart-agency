@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { Briefcase, BarChart3, Mail, Github, Linkedin, Globe, ExternalLink } from "lucide-react";
+import { Briefcase, BarChart3, Mail, Github, Linkedin, Globe, ExternalLink, Lightbulb } from "lucide-react";
 import type { TeamMember } from "../../services/team.service";
 import { getDepartmentLabel, truncateText } from "./team-utils";
 
@@ -61,6 +61,15 @@ export default function FeaturedTeamMember({ member, onOpenProfile }: Props) {
               </p>
             )}
 
+            {member.funFact && (
+              <div className="mb-7 rounded-2xl border border-amber-400/20 bg-amber-400/5 backdrop-blur-sm p-4 flex items-start gap-3">
+                <Lightbulb className="text-amber-400 shrink-0 mt-0.5" size={20} />
+                <p className="text-amber-200/90 text-sm leading-7 italic">
+                  {member.funFact}
+                </p>
+              </div>
+            )}
+
             {skills.length > 0 && (
               <div className="mb-7">
                 <h4 className="text-cyan-300 font-semibold mb-3">المهارات الأساسية</h4>
@@ -105,10 +114,10 @@ export default function FeaturedTeamMember({ member, onOpenProfile }: Props) {
               <button
                 type="button"
                 onClick={() => onOpenProfile(member)}
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-cyan-300 text-gray-950 font-bold px-6 py-3 hover:bg-cyan-200 transition-colors shadow-lg shadow-cyan-500/20"
+                className="inline-flex items-center justify-center h-10 w-10 rounded-full bg-cyan-300 text-gray-950 hover:bg-cyan-200 transition-colors shadow-lg shadow-cyan-500/20"
+                aria-label="عرض الملف المهني"
               >
-                عرض الملف المهني
-                <ExternalLink size={17} />
+                <ExternalLink size={18} />
               </button>
             </div>
           </div>

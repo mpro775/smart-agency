@@ -44,6 +44,8 @@ const teamSchema = z.object({
   showOnAbout: z.boolean(),
   isActive: z.boolean(),
   sortOrder: z.number(),
+  projectsCount: z.coerce.number().min(0).default(0),
+  joinedAt: z.string().nullish(),
 });
 
 type TeamFormData = z.infer<typeof teamSchema>;
@@ -99,6 +101,8 @@ export default function TeamForm() {
       showOnAbout: true,
       isActive: true,
       sortOrder: 0,
+      projectsCount: 0,
+      joinedAt: "",
     },
   });
 
@@ -121,6 +125,8 @@ export default function TeamForm() {
         showOnAbout: !!member.showOnAbout,
         isActive: !!member.isActive,
         sortOrder: member.sortOrder || 0,
+        projectsCount: member.projectsCount || 0,
+        joinedAt: member.joinedAt ? new Date(member.joinedAt).toISOString().split("T")[0] : "",
       });
     }
   }, [member, reset]);
@@ -446,6 +452,25 @@ export default function TeamForm() {
                   <Input
                     type="number"
                     {...register("sortOrder", { valueAsNumber: true })}
+                    className="bg-slate-700/50 border-slate-600 text-white"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-slate-200">عدد المشاريع المكتملة</Label>
+                  <Input
+                    type="number"
+                    {...register("projectsCount", { valueAsNumber: true })}
+                    className="bg-slate-700/50 border-slate-600 text-white"
+                    min="0"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-slate-200">تاريخ الانضمام</Label>
+                  <Input
+                    type="date"
+                    {...register("joinedAt")}
                     className="bg-slate-700/50 border-slate-600 text-white"
                   />
                 </div>
