@@ -361,6 +361,14 @@ body {
   outline-offset: 3px;
 }
 
+.smart-primary {
+  background-color: #008080;
+}
+
+.smart-primary:hover {
+  background-color: #006666;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

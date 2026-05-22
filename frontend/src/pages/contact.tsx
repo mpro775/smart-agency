@@ -177,15 +177,7 @@ export default function ContactPage() {
       dir="rtl"
     >
       {/* Hero Section */}
-      <section className="relative overflow-hidden py-20 md:py-28 px-4">
-        {/* Background */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%)",
-          }}
-        />
+      <section className="relative overflow-hidden py-20 md:py-28 px-4 smart-section-dark">
         <div className="absolute inset-0 opacity-[0.03]">
           <div
             className="absolute inset-0"
@@ -196,8 +188,9 @@ export default function ContactPage() {
             }}
           />
         </div>
-        <div className="absolute top-1/4 right-1/4 w-96 h-96 rounded-full bg-[#008080]/10 blur-3xl" />
-        <div className="absolute bottom-1/4 left-1/4 w-80 h-80 rounded-full bg-[#008080]/5 blur-3xl" />
+        <div className="absolute top-1/4 right-1/4 w-96 h-96 rounded-full bg-[#008080]/10 blur-3xl animate-blob" />
+        <div className="absolute bottom-1/4 left-1/4 w-80 h-80 rounded-full bg-[#008080]/5 blur-3xl animate-blob animation-delay-2000" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-gradient-to-r from-[#008080]/5 to-transparent blur-3xl" />
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div
@@ -206,9 +199,19 @@ export default function ContactPage() {
             transition={{ duration: 0.8 }}
             className="text-center max-w-3xl mx-auto"
           >
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.6 }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full smart-card-dark mb-6"
+            >
+              <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+              <span className="text-gray-300 text-sm">فريقنا جاهز للاستجابة</span>
+            </motion.div>
+
             <h1 className="text-3xl md:text-5xl font-bold text-white mb-6 leading-tight">
               تواصل معنا —{" "}
-              <span className="text-[#008080]">نحب سماع الأفكار الجادة</span>
+              <span className="smart-text-gradient">نحب سماع الأفكار الجادة</span>
             </h1>
             <p className="text-gray-300 text-lg md:text-xl mb-8 leading-relaxed">
               سواء كنت تريد بناء منتج رقمي، تطوير موقع، متجر إلكتروني، أو تحتاج
@@ -228,7 +231,7 @@ export default function ContactPage() {
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.3 + i * 0.1 }}
-                  className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-gray-300 text-sm backdrop-blur-sm"
+                  className="px-4 py-2 rounded-full smart-card-dark text-gray-300 text-sm backdrop-blur-sm border border-white/5"
                 >
                   <FiCheck className="inline-block ml-1 text-[#008080]" />{" "}
                   {badge}
@@ -242,17 +245,18 @@ export default function ContactPage() {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.98 }}
-                  className="flex items-center gap-2 px-8 py-3.5 rounded-xl bg-[#008080] text-white font-semibold shadow-lg shadow-[#008080]/20 hover:shadow-xl transition-all"
+                  className="flex items-center gap-2 px-8 py-3.5 rounded-xl smart-primary text-white font-semibold shadow-lg shadow-[#008080]/30 hover:shadow-xl hover:shadow-[#008080]/40 transition-all relative overflow-hidden group"
                 >
-                  <Rocket size={18} />
-                  ابدأ مشروعك
+                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-gradient-x transition-opacity" />
+                  <Rocket size={18} className="relative z-10" />
+                  <span className="relative z-10">ابدأ مشروعك</span>
                 </motion.button>
               </Link>
               <motion.a
                 href="#contact-form"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.98 }}
-                className="flex items-center gap-2 px-8 py-3.5 rounded-xl bg-white/10 backdrop-blur-md text-white font-semibold border border-white/20 hover:bg-white/20 transition-all"
+                className="flex items-center gap-2 px-8 py-3.5 rounded-xl smart-card-dark backdrop-blur-md text-white font-semibold border border-white/10 hover:border-[#008080]/30 hover:bg-[#008080]/5 transition-all"
               >
                 <FiMessageCircle size={18} />
                 راسلنا الآن
@@ -263,89 +267,137 @@ export default function ContactPage() {
       </section>
 
       {/* Contact Channels Grid */}
-      <section className="py-16 px-4 bg-white">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
+      <section className="py-20 px-4 smart-section-dark relative overflow-hidden">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-[#008080]/5 rounded-full blur-3xl" />
+
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">
+              كيف يمكننا مساعدتك؟
+            </h2>
+            <p className="text-gray-400">
+              اختر الطريقة المناسبة للتواصل معنا
+            </p>
+          </motion.div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* WhatsApp Card */}
             <motion.a
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              whileHover={{ y: -5 }}
-              className="group p-6 rounded-2xl border border-gray-200 hover:border-[#008080]/30 hover:shadow-lg transition-all bg-white"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              whileHover={{ y: -8, scale: 1.02 }}
+              transition={{ duration: 0.3 }}
+              className="group p-8 rounded-2xl smart-card-dark backdrop-blur-md border border-white/5 hover:border-green-500/20 hover:shadow-xl hover:shadow-green-500/5 transition-all"
             >
-              <div className="w-12 h-12 rounded-xl bg-green-50 flex items-center justify-center mb-4 group-hover:bg-green-100 transition-colors">
-                <FaWhatsapp className="text-green-600 text-2xl" />
-              </div>
-              <h3 className="font-semibold text-gray-900 mb-2">
-                تحدث معنا عبر واتساب
+              <motion.div
+                whileHover={{ scale: 1.1, rotate: 5 }}
+                className="w-14 h-14 rounded-2xl bg-gradient-to-br from-green-500/20 to-green-500/5 flex items-center justify-center mb-5 group-hover:shadow-lg group-hover:shadow-green-500/20 transition-all"
+              >
+                <FaWhatsapp className="text-green-500 text-2xl" />
+              </motion.div>
+              <h3 className="font-bold text-white text-lg mb-2">
+                واتساب
               </h3>
-              <p className="text-gray-500 text-sm mb-4">
-                للاستفسارات السريعة ومناقشة الفكرة بشكل أولي.
+              <p className="text-gray-400 text-sm mb-4 leading-relaxed">
+                للاستفسارات السريعة ومناقشة الفكرة بشكل أولي
               </p>
-              <span className="text-[#008080] text-sm font-medium group-hover:underline">
-                فتح واتساب ←
+              <span className="text-green-500 text-sm font-medium group-hover:translate-x-[-4px] inline-flex items-center gap-1 transition-all">
+                فتح المحادثة
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
               </span>
             </motion.a>
 
             {/* Email Card */}
             <motion.a
               href={emailLink}
-              whileHover={{ y: -5 }}
-              className="group p-6 rounded-2xl border border-gray-200 hover:border-[#008080]/30 hover:shadow-lg transition-all bg-white"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              whileHover={{ y: -8, scale: 1.02 }}
+              className="group p-8 rounded-2xl smart-card-dark backdrop-blur-md border border-white/5 hover:border-blue-500/20 hover:shadow-xl hover:shadow-blue-500/5 transition-all"
             >
-              <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center mb-4 group-hover:bg-blue-100 transition-colors">
-                <FiMail className="text-blue-600 text-xl" />
-              </div>
-              <h3 className="font-semibold text-gray-900 mb-2">
-                راسلنا عبر البريد
+              <motion.div
+                whileHover={{ scale: 1.1, rotate: -5 }}
+                className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500/20 to-blue-500/5 flex items-center justify-center mb-5 group-hover:shadow-lg group-hover:shadow-blue-500/20 transition-all"
+              >
+                <FiMail className="text-blue-500 text-xl" />
+              </motion.div>
+              <h3 className="font-bold text-white text-lg mb-2">
+                البريد الإلكتروني
               </h3>
-              <p className="text-gray-500 text-sm mb-4">
-                للعروض، الشراكات، والطلبات التي تحتاج تفاصيل أو ملفات.
+              <p className="text-gray-400 text-sm mb-4 leading-relaxed">
+                للعروض، الشراكات، والطلبات التي تحتاج ملفات
               </p>
-              <span className="text-[#008080] text-sm font-medium group-hover:underline">
-                إرسال بريد ←
+              <span className="text-blue-500 text-sm font-medium group-hover:translate-x-[-4px] inline-flex items-center gap-1 transition-all">
+                إرسال بريد
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
               </span>
             </motion.a>
 
             {/* Start Project Card */}
             <motion.div
-              whileHover={{ y: -5 }}
-              className="group p-6 rounded-2xl border border-gray-200 hover:border-[#008080]/30 hover:shadow-lg transition-all bg-white"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              whileHover={{ y: -8, scale: 1.02 }}
+              className="group p-8 rounded-2xl smart-card-dark backdrop-blur-md border border-white/5 hover:border-[#008080]/30 hover:shadow-xl hover:shadow-[#008080]/10 transition-all"
             >
-              <div className="w-12 h-12 rounded-xl bg-[#008080]/10 flex items-center justify-center mb-4 group-hover:bg-[#008080]/20 transition-colors">
-                <Rocket className="text-[#008080]" size={20} />
-              </div>
-              <h3 className="font-semibold text-gray-900 mb-2">
-                احجز بداية مشروع
+              <motion.div
+                whileHover={{ scale: 1.1 }}
+                className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#008080]/20 to-[#008080]/5 flex items-center justify-center mb-5 group-hover:shadow-lg group-hover:shadow-[#008080]/20 transition-all"
+              >
+                <Rocket className="text-[#008080]" size={24} />
+              </motion.div>
+              <h3 className="font-bold text-white text-lg mb-2">
+                ابدأ مشروعك
               </h3>
-              <p className="text-gray-500 text-sm mb-4">
-                إذا لديك فكرة جادة وتريد تحويلها إلى خطة واضحة.
+              <p className="text-gray-400 text-sm mb-4 leading-relaxed">
+                إذا لديك فكرة جادة وتحتاج خطة واضحة
               </p>
               <Link to="/quote">
-                <span className="text-[#008080] text-sm font-medium group-hover:underline">
-                  ابدأ مشروعك ←
+                <span className="text-[#008080] text-sm font-medium group-hover:translate-x-[-4px] inline-flex items-center gap-1 transition-all">
+                  ابدأ الآن
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                 </span>
               </Link>
             </motion.div>
 
             {/* Location Card */}
             <motion.div
-              whileHover={{ y: -5 }}
-              className="group p-6 rounded-2xl border border-gray-200 hover:border-[#008080]/30 hover:shadow-lg transition-all bg-white"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+              whileHover={{ y: -8, scale: 1.02 }}
+              className="group p-8 rounded-2xl smart-card-dark backdrop-blur-md border border-white/5 hover:border-purple-500/20 hover:shadow-xl hover:shadow-purple-500/5 transition-all"
             >
-              <div className="w-12 h-12 rounded-xl bg-purple-50 flex items-center justify-center mb-4 group-hover:bg-purple-100 transition-colors">
-                <FiMapPin className="text-purple-600 text-xl" />
-              </div>
-              <h3 className="font-semibold text-gray-900 mb-2">
-                موقعنا وساعات العمل
+              <motion.div
+                whileHover={{ scale: 1.1, rotate: 5 }}
+                className="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500/20 to-purple-500/5 flex items-center justify-center mb-5 group-hover:shadow-lg group-hover:shadow-purple-500/20 transition-all"
+              >
+                <FiMapPin className="text-purple-500 text-xl" />
+              </motion.div>
+              <h3 className="font-bold text-white text-lg mb-2">
+                موقعنا
               </h3>
-              <p className="text-gray-500 text-sm mb-4">
-                نعمل من اليمن ونخدم العملاء عن بُعد.
+              <p className="text-gray-400 text-sm mb-4 leading-relaxed">
+                نعمل من اليمن ونخدم العملاء عن بُعد
               </p>
               <a href="#location">
-                <span className="text-[#008080] text-sm font-medium group-hover:underline">
-                  عرض التفاصيل ←
+                <span className="text-purple-500 text-sm font-medium group-hover:translate-x-[-4px] inline-flex items-center gap-1 transition-all">
+                  عرض التفاصيل
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                 </span>
               </a>
             </motion.div>
@@ -354,56 +406,77 @@ export default function ContactPage() {
       </section>
 
       {/* Decision Guide */}
-      <section className="py-16 px-4 bg-gray-50">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
-          <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-900 mb-10">
-            أي طريق تختار؟
-          </h2>
+      <section className="py-20 px-4 smart-section-dark relative">
+        <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-[#008080]/5 rounded-full blur-3xl" />
+
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">
+              أي طريق تختار؟
+            </h2>
+            <p className="text-gray-400 text-sm">
+              حددنا لك السيناريوهات الأكثر شيوعًا
+            </p>
+          </motion.div>
+
           <div className="space-y-4">
             {decisionGuide.map((item, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, x: 20 }}
+                initial={{ opacity: 0, x: 30 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.1 }}
                 viewport={{ once: true }}
               >
                 {item.external ? (
-                  <a
+                  <motion.a
                     href={item.link}
                     target={item.external ? "_blank" : undefined}
                     rel={item.external ? "noopener noreferrer" : undefined}
-                    className="flex items-center justify-between p-5 rounded-xl bg-white border border-gray-200 hover:border-[#008080]/30 hover:shadow-md transition-all group"
+                    whileHover={{ x: -4 }}
+                    className="flex items-center justify-between p-6 rounded-2xl smart-card-dark backdrop-blur-md border border-white/5 hover:border-[#008080]/30 hover:shadow-xl transition-all group"
                   >
-                    <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 rounded-lg bg-[#008080]/10 flex items-center justify-center text-[#008080]">
+                    <div className="flex items-center gap-5">
+                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#008080]/20 to-[#008080]/5 flex items-center justify-center text-[#008080] group-hover:scale-110 transition-transform">
                         {item.icon}
                       </div>
-                      <span className="text-gray-700 font-medium">
+                      <span className="text-gray-200 font-medium text-lg">
                         {item.condition}
                       </span>
                     </div>
-                    <span className="text-[#008080] font-medium text-sm group-hover:underline">
+                    <span className="text-[#008080] font-semibold text-sm flex items-center gap-2 group-hover:gap-3 transition-all">
                       {item.action}
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                     </span>
-                  </a>
+                  </motion.a>
                 ) : (
-                  <Link
-                    to={item.link}
-                    className="flex items-center justify-between p-5 rounded-xl bg-white border border-gray-200 hover:border-[#008080]/30 hover:shadow-md transition-all group"
+                  <motion.div
+                    whileHover={{ x: -4 }}
+                    className="flex-1"
                   >
-                    <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 rounded-lg bg-[#008080]/10 flex items-center justify-center text-[#008080]">
-                        {item.icon}
+                    <Link
+                      to={item.link}
+                      className="flex items-center justify-between p-6 rounded-2xl smart-card-dark backdrop-blur-md border border-white/5 hover:border-[#008080]/30 hover:shadow-xl transition-all group"
+                    >
+                      <div className="flex items-center gap-5">
+                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#008080]/20 to-[#008080]/5 flex items-center justify-center text-[#008080] group-hover:scale-110 transition-transform">
+                          {item.icon}
+                        </div>
+                        <span className="text-gray-200 font-medium text-lg">
+                          {item.condition}
+                        </span>
                       </div>
-                      <span className="text-gray-700 font-medium">
-                        {item.condition}
+                      <span className="text-[#008080] font-semibold text-sm flex items-center gap-2 group-hover:gap-3 transition-all">
+                        {item.action}
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                       </span>
-                    </div>
-                    <span className="text-[#008080] font-medium text-sm group-hover:underline">
-                      {item.action}
-                    </span>
-                  </Link>
+                    </Link>
+                  </motion.div>
                 )}
               </motion.div>
             ))}
@@ -412,7 +485,7 @@ export default function ContactPage() {
       </section>
 
       {/* Quick Contact Form */}
-      <section id="contact-form" className="py-16 px-4 bg-white">
+      <section id="contact-form" className="py-16 px-4 smart-section-dark">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-2xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -420,10 +493,10 @@ export default function ContactPage() {
             viewport={{ once: true }}
             className="text-center mb-10"
           >
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">
               أرسل لنا رسالة سريعة
             </h2>
-            <p className="text-gray-500">
+            <p className="text-gray-400">
               نموذج بسيط للاستفسارات العامة. لطلب مشروع مفصل، استخدم صفحة
               "ابدأ مشروعك".
             </p>
@@ -432,24 +505,31 @@ export default function ContactPage() {
           {/* Success Message */}
           {submitSuccess && (
             <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="mb-8 p-6 rounded-2xl bg-green-50 border border-green-200 text-center"
+              initial={{ opacity: 0, scale: 0.9, y: -20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: -20 }}
+              className="mb-8 p-8 rounded-2xl bg-gradient-to-br from-green-500/10 to-green-500/5 border border-green-500/20 text-center relative overflow-hidden"
             >
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-green-100 flex items-center justify-center">
-                <FiCheck className="text-green-600 text-2xl" />
-              </div>
-              <h3 className="text-green-800 font-semibold text-lg mb-2">
+              <div className="absolute inset-0 bg-gradient-to-r from-green-500/5 via-transparent to-green-500/5" />
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: "spring", stiffness: 200, damping: 15 }}
+                className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-green-500/20 to-green-500/10 flex items-center justify-center relative"
+              >
+                <FiCheck className="text-green-500 text-3xl relative z-10" />
+              </motion.div>
+              <h3 className="text-green-400 font-bold text-xl mb-2 relative z-10">
                 وصلتنا رسالتك بنجاح
               </h3>
-              <p className="text-green-700 text-sm">
+              <p className="text-green-400/70 text-sm relative z-10">
                 سنراجعها ونرد عليك خلال 24 ساعة عمل. إذا كان الأمر عاجلًا يمكنك
                 التواصل معنا مباشرة عبر{" "}
                 <a
                   href={whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="underline font-medium"
+                  className="underline font-medium text-green-400 hover:text-green-300 transition-colors"
                 >
                   واتساب
                 </a>
@@ -463,7 +543,7 @@ export default function ContactPage() {
             <motion.div
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mb-8 p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-center"
+              className="mb-8 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-center"
             >
               {submitError}
             </motion.div>
@@ -471,63 +551,75 @@ export default function ContactPage() {
 
           <motion.form
             onSubmit={handleSubmit}
-            className="space-y-6 bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-gray-100"
+            className="space-y-6 smart-card-dark backdrop-blur-md p-8 sm:p-10 rounded-2xl border border-white/5"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block mb-2 text-sm font-medium text-gray-700">
-                  الاسم الكامل *
-                </label>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="relative group">
                 <input
                   type="text"
                   name="fullName"
                   value={formData.fullName}
                   onChange={handleChange}
                   required
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#008080] focus:border-transparent transition-all text-sm"
+                  id="fullName"
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 pt-6 focus:outline-none focus:ring-2 focus:ring-[#008080] focus:border-transparent transition-all text-sm text-white placeholder-transparent peer"
                   placeholder="أدخل اسمك الكامل"
                 />
-              </div>
-              <div>
-                <label className="block mb-2 text-sm font-medium text-gray-700">
-                  البريد الإلكتروني *
+                <label
+                  htmlFor="fullName"
+                  className="absolute right-4 top-4 text-gray-500 text-sm transition-all peer-placeholder-shown:text-gray-400 peer-focus:text-[#008080] peer-focus:text-xs peer-focus:-top-1 peer-focus:pr-0"
+                >
+                  الاسم الكامل *
                 </label>
+              </div>
+              <div className="relative group">
                 <input
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#008080] focus:border-transparent transition-all text-sm"
+                  id="email"
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 pt-6 focus:outline-none focus:ring-2 focus:ring-[#008080] focus:border-transparent transition-all text-sm text-white placeholder-transparent peer"
                   placeholder="you@example.com"
                 />
+                <label
+                  htmlFor="email"
+                  className="absolute right-4 top-4 text-gray-500 text-sm transition-all peer-placeholder-shown:text-gray-400 peer-focus:text-[#008080] peer-focus:text-xs peer-focus:-top-1 peer-focus:pr-0"
+                >
+                  البريد الإلكتروني *
+                </label>
               </div>
             </div>
 
-            <div>
-              <label className="block mb-2 text-sm font-medium text-gray-700">
-                رقم الهاتف (اختياري)
-              </label>
+            <div className="relative group">
               <input
                 type="tel"
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#008080] focus:border-transparent transition-all text-sm"
+                id="phone"
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 pt-6 focus:outline-none focus:ring-2 focus:ring-[#008080] focus:border-transparent transition-all text-sm text-white placeholder-transparent peer"
                 placeholder="+967 7XX XXX XXX"
               />
+              <label
+                htmlFor="phone"
+                className="absolute right-4 top-4 text-gray-500 text-sm transition-all peer-placeholder-shown:text-gray-400 peer-focus:text-[#008080] peer-focus:text-xs peer-focus:-top-1 peer-focus:pr-0"
+              >
+                رقم الهاتف (اختياري)
+              </label>
             </div>
 
             <div>
-              <label className="block mb-2 text-sm font-medium text-gray-700">
+              <label className="block mb-3 text-sm font-medium text-gray-300">
                 سبب التواصل *
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
                 {contactReasons.map((reason) => (
-                  <button
+                  <motion.button
                     key={reason.value}
                     type="button"
                     onClick={() =>
@@ -536,48 +628,63 @@ export default function ContactPage() {
                         contactReason: reason.value,
                       }))
                     }
-                    className={`p-3 rounded-lg border text-sm font-medium transition-all ${
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className={`p-3 rounded-xl border text-sm font-medium transition-all ${
                       formData.contactReason === reason.value
-                        ? "border-[#008080] bg-[#008080]/5 text-[#008080]"
-                        : "border-gray-200 text-gray-600 hover:border-gray-300"
+                        ? "border-[#008080] bg-[#008080]/10 text-[#008080] shadow-lg shadow-[#008080]/10"
+                        : "border-white/10 text-gray-400 hover:border-white/20 bg-white/5 hover:bg-white/10"
                     }`}
                   >
-                    <span className="block text-lg mb-1">{reason.icon}</span>
+                    <span className="block text-xl mb-1.5">{reason.icon}</span>
                     {reason.label}
-                  </button>
+                  </motion.button>
                 ))}
               </div>
             </div>
 
-            <div>
-              <label className="block mb-2 text-sm font-medium text-gray-700">
-                رسالتك *
-              </label>
+            <div className="relative group">
               <textarea
                 name="message"
                 rows={5}
                 value={formData.message}
                 onChange={handleChange}
                 required
-                className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#008080] focus:border-transparent transition-all text-sm resize-none"
+                id="message"
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 pt-6 focus:outline-none focus:ring-2 focus:ring-[#008080] focus:border-transparent transition-all text-sm resize-none text-white placeholder-transparent peer"
                 placeholder="اكتب رسالتك هنا..."
               />
+              <label
+                htmlFor="message"
+                className="absolute right-4 top-4 text-gray-500 text-sm transition-all peer-placeholder-shown:text-gray-400 peer-focus:text-[#008080] peer-focus:text-xs peer-focus:-top-1 peer-focus:pr-0"
+              >
+                رسالتك *
+              </label>
             </div>
 
-            <div className="flex justify-end pt-2">
+            <div className="flex items-center justify-between pt-4">
+              <p className="text-gray-500 text-xs">
+                * حقول مطلوبة
+              </p>
               <motion.button
                 type="submit"
                 disabled={isSubmitting}
                 whileHover={!isSubmitting ? { scale: 1.02 } : {}}
                 whileTap={!isSubmitting ? { scale: 0.98 } : {}}
-                className={`flex items-center gap-2 px-8 py-3 rounded-xl text-sm font-semibold transition-all ${
+                className={`flex items-center gap-2 px-8 py-3.5 rounded-xl text-sm font-semibold transition-all ${
                   isSubmitting
-                    ? "bg-gray-400 cursor-not-allowed text-gray-200"
-                    : "bg-[#008080] hover:bg-[#006666] text-white shadow-md hover:shadow-lg"
+                    ? "bg-gray-600 cursor-not-allowed text-gray-400"
+                    : "smart-primary hover:opacity-90 text-white shadow-lg hover:shadow-xl shadow-[#008080]/20"
                 }`}
               >
                 {isSubmitting ? (
-                  "جاري الإرسال..."
+                  <>
+                    <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    </svg>
+                    جاري الإرسال...
+                  </>
                 ) : (
                   <>
                     إرسال الرسالة
@@ -591,56 +698,84 @@ export default function ContactPage() {
       </section>
 
       {/* Location & Working Hours */}
-      <section id="location" className="py-16 px-4 bg-gray-50">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
+      <section id="location" className="py-20 px-4 smart-section-dark relative overflow-hidden">
+        <div className="absolute top-1/4 right-0 w-[300px] h-[300px] bg-purple-500/5 rounded-full blur-3xl" />
+
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">
+              معلومات إضافية
+            </h2>
+            <p className="text-gray-400 text-sm">
+              لمعلومات عن موقعنا وساعات العمل
+            </p>
+          </motion.div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <motion.div
-              initial={{ opacity: 0, x: 20 }}
+              initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="p-8 rounded-2xl bg-white border border-gray-200"
+              className="p-8 rounded-2xl smart-card-dark backdrop-blur-md border border-white/5"
             >
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 rounded-lg bg-[#008080]/10 flex items-center justify-center">
-                  <FiMapPin className="text-[#008080]" size={20} />
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#008080]/20 to-[#008080]/5 flex items-center justify-center">
+                  <FiMapPin className="text-[#008080]" size={22} />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900">موقعنا</h3>
+                <h3 className="text-xl font-bold text-white">موقعنا</h3>
               </div>
-              <div className="space-y-4 text-gray-600">
-                <p className="flex items-center gap-2">
-                  <FiMapPin className="text-[#008080] flex-shrink-0" />
-                  <span>صنعاء، اليمن</span>
-                </p>
-                <p className="flex items-center gap-2">
-                  <FiMessageCircle className="text-[#008080] flex-shrink-0" />
-                  <span>نطاق العمل: اليمن + عملاء عن بُعد</span>
-                </p>
+              <div className="space-y-4">
+                <div className="flex items-start gap-3">
+                  <FiMapPin className="text-[#008080] mt-1 flex-shrink-0" />
+                  <div>
+                    <p className="text-white font-medium">صنعاء، اليمن</p>
+                    <p className="text-gray-500 text-sm">الموقع الرئيسي</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <FiMessageCircle className="text-[#008080] mt-1 flex-shrink-0" />
+                  <div>
+                    <p className="text-white font-medium">نطاق العمل</p>
+                    <p className="text-gray-500 text-sm">اليمن + عملاء عن بُعد</p>
+                  </div>
+                </div>
               </div>
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, x: -20 }}
+              initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="p-8 rounded-2xl bg-white border border-gray-200"
+              className="p-8 rounded-2xl smart-card-dark backdrop-blur-md border border-white/5"
             >
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 rounded-lg bg-[#008080]/10 flex items-center justify-center">
-                  <FiClock className="text-[#008080]" size={20} />
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#008080]/20 to-[#008080]/5 flex items-center justify-center">
+                  <FiClock className="text-[#008080]" size={22} />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900">
+                <h3 className="text-xl font-bold text-white">
                   ساعات العمل
                 </h3>
               </div>
-              <div className="space-y-4 text-gray-600">
-                <p className="flex items-center gap-2">
-                  <FiClock className="text-[#008080] flex-shrink-0" />
-                  <span>الأحد - الخميس: 9:00 ص - 5:00 م</span>
-                </p>
-                <p className="flex items-center gap-2">
-                  <FiMail className="text-[#008080] flex-shrink-0" />
-                  <span>متوسط الرد: خلال 24 ساعة عمل</span>
-                </p>
+              <div className="space-y-4">
+                <div className="flex items-start gap-3">
+                  <FiClock className="text-[#008080] mt-1 flex-shrink-0" />
+                  <div>
+                    <p className="text-white font-medium">الأحد - الخميس</p>
+                    <p className="text-gray-500 text-sm">9:00 ص - 5:00 م</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <FiMail className="text-[#008080] mt-1 flex-shrink-0" />
+                  <div>
+                    <p className="text-white font-medium">متوسط الرد</p>
+                    <p className="text-gray-500 text-sm">خلال 24 ساعة عمل</p>
+                  </div>
+                </div>
               </div>
             </motion.div>
           </div>
@@ -648,11 +783,21 @@ export default function ContactPage() {
       </section>
 
       {/* Mini FAQ */}
-      <section className="py-16 px-4 bg-white">
+      <section className="py-16 px-4 smart-section-dark">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl">
-          <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-900 mb-10">
-            أسئلة شائعة قبل التواصل
-          </h2>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-10"
+          >
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">
+              أسئلة شائعة قبل التواصل
+            </h2>
+            <p className="text-gray-400 text-sm">
+              إجابات سريعة لأكثر الأسئلة تكرارًا
+            </p>
+          </motion.div>
           <div className="space-y-4">
             {faqItems.map((faq, i) => (
               <motion.div
@@ -661,26 +806,40 @@ export default function ContactPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.1 }}
                 viewport={{ once: true }}
-                className="border border-gray-200 rounded-xl overflow-hidden"
+                className="rounded-xl overflow-hidden smart-card-dark backdrop-blur-md border border-white/5"
               >
-                <button
+                <motion.button
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                  className="w-full flex items-center justify-between p-5 text-right hover:bg-gray-50 transition-colors"
+                  whileHover={{ backgroundColor: "rgba(255,255,255,0.03)" }}
+                  className="w-full flex items-center justify-between p-5 text-right transition-colors"
                 >
-                  <span className="font-medium text-gray-900">
+                  <span className="font-medium text-white text-right flex-1 ml-4">
                     {faq.question}
                   </span>
-                  {openFaq === i ? (
-                    <FiChevronUp className="text-[#008080] flex-shrink-0" />
-                  ) : (
-                    <FiChevronDown className="text-gray-400 flex-shrink-0" />
-                  )}
-                </button>
-                {openFaq === i && (
-                  <div className="px-5 pb-5 text-gray-600 text-sm leading-relaxed border-t border-gray-100 pt-4">
+                  <motion.div
+                    animate={{ rotate: openFaq === i ? 180 : 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    {openFaq === i ? (
+                      <FiChevronUp className="text-[#008080] flex-shrink-0" />
+                    ) : (
+                      <FiChevronDown className="text-gray-500 flex-shrink-0" />
+                    )}
+                  </motion.div>
+                </motion.button>
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{
+                    height: openFaq === i ? "auto" : 0,
+                    opacity: openFaq === i ? 1 : 0
+                  }}
+                  transition={{ duration: 0.3 }}
+                  className="overflow-hidden"
+                >
+                  <div className="px-5 pb-5 text-gray-400 text-sm leading-relaxed border-t border-white/5 pt-4 mt-2">
                     {faq.answer}
                   </div>
-                )}
+                </motion.div>
               </motion.div>
             ))}
           </div>
@@ -688,35 +847,73 @@ export default function ContactPage() {
       </section>
 
       {/* Final CTA */}
-      <section className="py-16 px-4">
+      <section className="py-16 px-4 relative">
         <div
-          className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl rounded-3xl p-10 md:p-14 text-center relative overflow-hidden"
-          style={{
-            background:
-              "linear-gradient(135deg, #0f172a 0%, #1e293b 100%)",
-          }}
+          className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl rounded-3xl p-10 md:p-16 text-center relative overflow-hidden smart-section-dark"
         >
-          <div className="absolute top-0 right-0 w-64 h-64 rounded-full bg-[#008080]/10 blur-3xl" />
-          <div className="absolute bottom-0 left-0 w-48 h-48 rounded-full bg-[#008080]/5 blur-3xl" />
-          <div className="relative z-10">
-            <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
+          <div className="absolute inset-0 opacity-[0.03]">
+            <div
+              className="absolute inset-0"
+              style={{
+                backgroundImage:
+                  "linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)",
+                backgroundSize: "40px 40px",
+              }}
+            />
+          </div>
+          <div className="absolute top-0 right-0 w-80 h-80 rounded-full bg-[#008080]/15 blur-3xl" />
+          <div className="absolute bottom-0 left-0 w-60 h-60 rounded-full bg-[#008080]/10 blur-3xl" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-gradient-to-r from-[#008080]/10 to-transparent blur-3xl" />
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="relative z-10"
+          >
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              whileInView={{ scale: 1, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#008080]/20 to-[#008080]/5 flex items-center justify-center mx-auto mb-6 border border-[#008080]/20"
+            >
+              <Rocket className="text-[#008080] text-3xl" />
+            </motion.div>
+
+            <h2 className="text-2xl md:text-4xl font-bold text-white mb-4">
               جاهز لتحويل فكرتك إلى واقع؟
             </h2>
-            <p className="text-gray-300 mb-8 max-w-xl mx-auto">
+            <p className="text-gray-300 mb-8 max-w-xl mx-auto text-lg">
               ابدأ مشروعك معنا اليوم واحصل على استشارة مجانية وتصوّر أولي خلال
               24 ساعة.
             </p>
-            <Link to="/quote">
-              <motion.button
+
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Link to="/quote">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="flex items-center gap-2 px-10 py-4 rounded-xl smart-primary text-white font-semibold text-lg shadow-lg shadow-[#008080]/30 hover:shadow-xl hover:shadow-[#008080]/40 transition-all relative overflow-hidden group"
+                >
+                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <Rocket size={20} className="relative z-10" />
+                  <span className="relative z-10">ابدأ مشروعك الآن</span>
+                </motion.button>
+              </Link>
+              <motion.a
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.98 }}
-                className="flex items-center gap-2 px-10 py-4 rounded-xl bg-[#008080] text-white font-semibold text-lg shadow-lg shadow-[#008080]/30 hover:shadow-xl transition-all mx-auto"
+                className="flex items-center gap-2 px-8 py-4 rounded-xl smart-card-dark backdrop-blur-md text-white font-semibold border border-white/10 hover:border-green-500/30 hover:bg-green-500/5 transition-all"
               >
-                <Rocket size={20} />
-                ابدأ مشروعك الآن
-              </motion.button>
-            </Link>
-          </div>
+                <FaWhatsapp size={20} className="text-green-500" />
+                تواصل واتساب
+              </motion.a>
+            </div>
+          </motion.div>
         </div>
       </section>
     </motion.main>
