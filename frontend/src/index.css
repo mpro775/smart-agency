@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
 @import "tailwindcss";
 
 :root {
@@ -17,7 +16,8 @@ html {
 
 body {
   background-color: var(--color-background);
-  font-family: 'Cairo', sans-serif;
+  font-family: "Alexandria", sans-serif;
+  font-optical-sizing: auto;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
 }
