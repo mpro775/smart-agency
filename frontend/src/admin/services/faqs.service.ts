@@ -28,7 +28,7 @@ export const faqsService = {
     if (filters?.isActive !== undefined) params.append('isActive', String(filters.isActive));
     if (filters?.search) params.append('search', filters.search);
 
-    const response = await api.get<ApiResponse<FAQ[]>>(`/faqs?${params.toString()}`);
+    const response = await api.get<ApiResponse<FAQ[]>>(`/faqs/admin?${params.toString()}`);
     return {
       data: response.data.data,
       meta: response.data.meta!,

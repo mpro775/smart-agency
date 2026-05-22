@@ -1,17 +1,17 @@
 #!/bin/bash
 
-# Script لتسهيل عملية النشر
-# استخدام: ./deploy.sh [build|start|stop|restart|logs]
+# Usage: ./deploy.sh [build|start|stop|restart|logs|rebuild|status]
 
-set -e
+set -euo pipefail
 
-# الألوان للرسائل
+COMPOSE_FILE="docker-compose.unified.prod.yml"
+ENV_FILE="${ENV_FILE:-.env.unified}"
+
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 RED='\033[0;31m'
-NC='\033[0m' # No Color
+NC='\033[0m'
 
-# دالة للطباعة الملونة
 print_info() {
     echo -e "${GREEN}[INFO]${NC} $1"
 }
@@ -24,82 +24,72 @@ print_error() {
     echo -e "${RED}[ERROR]${NC} $1"
 }
 
-# التحقق من وجود Docker و Docker Compose
-if ! command -v docker &> /dev/null; then
-    print_error "Docker غير مثبت. يرجى تثبيت Docker أولاً."
+if ! command -v docker >/dev/null 2>&1; then
+    print_error "Docker is not installed or is not available in PATH."
     exit 1
 fi
 
-if ! command -v docker-compose &> /dev/null; then
-    print_error "Docker Compose غير مثبت. يرجى تثبيت Docker Compose أولاً."
+if ! docker compose version >/dev/null 2>&1; then
+    print_error "Docker Compose v2 is not available. Install Docker Compose or update Docker Desktop."
     exit 1
 fi
 
-# التحقق من وجود ملف .env
-if [ ! -f "./backend/.env" ]; then
-    print_warn "ملف .env غير موجود في مجلد backend"
-    print_info "يرجى إنشاء ملف .env قبل المتابعة"
+if [ ! -f "$COMPOSE_FILE" ]; then
+    print_error "Compose file not found: $COMPOSE_FILE"
+    exit 1
 fi
 
-# التحقق من وجود شهادات SSL
-if [ ! -f "./nginx/ssl/smartagency-ye.com/fullchain.pem" ] || [ ! -f "./nginx/ssl/smartagency-ye.com/privkey.pem" ]; then
-    print_warn "شهادات SSL للدومين الرئيسي غير موجودة"
-    print_info "يرجى مراجعة nginx/README.md لإعداد الشهادات"
+compose_args=(-f "$COMPOSE_FILE")
+if [ -f "$ENV_FILE" ]; then
+    compose_args=(--env-file "$ENV_FILE" -f "$COMPOSE_FILE")
+elif [ -f ".env" ]; then
+    compose_args=(--env-file ".env" -f "$COMPOSE_FILE")
+else
+    print_warn "No .env.unified or .env file found. Compose will use shell environment variables and defaults."
 fi
 
-if [ ! -f "./nginx/ssl/api.smartagency-ye.com/fullchain.pem" ] || [ ! -f "./nginx/ssl/api.smartagency-ye.com/privkey.pem" ]; then
-    print_warn "شهادات SSL للـ API subdomain غير موجودة"
-    print_info "يرجى مراجعة nginx/README.md لإعداد الشهادات"
-fi
+compose() {
+    docker compose "${compose_args[@]}" "$@"
+}
 
-# معالجة الأوامر
 case "${1:-build}" in
     build)
-        print_info "بناء الصور..."
-        docker-compose build
-        print_info "تم بناء الصور بنجاح"
+        print_info "Building Docker images..."
+        compose build
+        print_info "Images built successfully."
         ;;
     start)
-        print_info "تشغيل الحاويات..."
-        docker-compose up -d
-        print_info "تم تشغيل الحاويات بنجاح"
-        print_info "Frontend: https://smartagency-ye.com"
-        print_info "Backend API: https://api.smartagency-ye.com/api"
+        print_info "Starting containers with rebuild..."
+        compose up -d --build
+        print_info "Containers started successfully."
+        print_info "Frontend: https://${FRONTEND_HOST:-smartagency-ye.com}"
+        print_info "Backend API: https://${API_HOST:-api.smartagency-ye.com}/api"
         ;;
     stop)
-        print_info "إيقاف الحاويات..."
-        docker-compose down
-        print_info "تم إيقاف الحاويات"
+        print_info "Stopping containers..."
+        compose down
+        print_info "Containers stopped."
         ;;
     restart)
-        print_info "إعادة تشغيل الحاويات..."
-        docker-compose restart
-        print_info "تم إعادة التشغيل"
+        print_info "Restarting containers..."
+        compose restart
+        print_info "Containers restarted."
         ;;
     logs)
-        print_info "عرض السجلات (اضغط Ctrl+C للخروج)..."
-        docker-compose logs -f
+        print_info "Streaming logs. Press Ctrl+C to exit."
+        compose logs -f
         ;;
     rebuild)
-        print_info "إعادة بناء وتشغيل..."
-        docker-compose up -d --build
-        print_info "تم إعادة البناء والتشغيل"
+        print_info "Rebuilding and starting containers..."
+        compose up -d --build
+        print_info "Containers rebuilt and started."
         ;;
     status)
-        print_info "حالة الحاويات:"
-        docker-compose ps
+        print_info "Container status:"
+        compose ps
         ;;
     *)
-        echo "الاستخدام: ./deploy.sh [build|start|stop|restart|logs|rebuild|status]"
-        echo ""
-        echo "الأوامر المتاحة:"
-        echo "  build    - بناء صور Docker"
-        echo "  start    - تشغيل الحاويات"
-        echo "  stop     - إيقاف الحاويات"
-        echo "  restart  - إعادة تشغيل الحاويات"
-        echo "  logs     - عرض السجلات"
-        echo "  rebuild  - إعادة بناء وتشغيل"
-        echo "  status   - عرض حالة الحاويات"
+        echo "Usage: ./deploy.sh [build|start|stop|restart|logs|rebuild|status]"
         exit 1
         ;;
 esac

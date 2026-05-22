@@ -48,7 +48,7 @@ chmod +x run-create-admin.sh
 
 - **الاسم**: Admin
 - **البريد الإلكتروني**: admin@smartagency.com
-- **كلمة المرور**: admin123456
+- **كلمة المرور**: set via `SEED_ADMIN_PASSWORD`
 - **الدور**: admin
 
 ## مثال على الاستخدام
@@ -70,13 +70,13 @@ npm run create-admin
 📋 Admin Details:
    Name: Admin
    Email: admin@smartagency.com
-   Password: admin123456
+   Password: not printed
    Role: admin
 
 🔑 Use these credentials to login to the admin panel:
    URL: http://localhost:5173/admin/login
    Email: admin@smartagency.com
-   Password: admin123456
+   Password: not printed
 🔌 Database connection closed
 ```
 
@@ -91,7 +91,7 @@ npm run create-admin -- --interactive
 =====================================
 Enter admin name (default: Admin): أحمد محمد
 Enter admin email (default: admin@smartagency.com): ahmed@smartagency.com
-Enter admin password (default: admin123456): mySecurePass123
+Enter admin password: mySecurePass123
 Enter role (admin/editor, default: admin): admin
 ```
 
@@ -105,18 +105,21 @@ npm run create-admin -- --help
 🆘 Create Admin User Script
 ===========================
 Usage:
-  node scripts/create-admin.js                 # Create default admin
+  SEED_ADMIN_PASSWORD=... node scripts/create-admin.js
   node scripts/create-admin.js --interactive   # Interactive mode
   node scripts/create-admin.js --help          # Show this help
 
 Default Admin Credentials:
   Name: Admin
   Email: admin@smartagency.com
-  Password: admin123456
+  Password: set via SEED_ADMIN_PASSWORD
   Role: admin
 
 Environment Variables:
-  MONGODB_URI - MongoDB connection string (default: mongodb://127.0.0.1:27017/smart-agency)
+  MONGODB_URI - MongoDB connection string
+  SEED_ADMIN_EMAIL - Admin email
+  SEED_ADMIN_PASSWORD - Admin password
+  SEED_ADMIN_NAME - Admin name
 ```
 
 ## متغيرات البيئة

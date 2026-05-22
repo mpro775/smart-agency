@@ -370,13 +370,27 @@ function TechValueGrid() {
   );
 }
 
-export default function Technologies() {
-  const [allTechnologies, setAllTechnologies] = useState<Technology[]>([]);
-  const [loading, setLoading] = useState(true);
+interface TechnologiesProps {
+  initialTechnologies?: Technology[];
+}
+
+export default function Technologies({
+  initialTechnologies,
+}: TechnologiesProps) {
+  const [allTechnologies, setAllTechnologies] = useState<Technology[]>(
+    initialTechnologies || [],
+  );
+  const [loading, setLoading] = useState(!initialTechnologies);
   const [error, setError] = useState<string | null>(null);
   const [activeCategory, setActiveCategory] = useState<string>("");
 
   useEffect(() => {
+    if (initialTechnologies) {
+      setAllTechnologies(initialTechnologies);
+      setLoading(false);
+      return;
+    }
+
     const fetchTechnologies = async () => {
       try {
         setLoading(true);
@@ -391,7 +405,7 @@ export default function Technologies() {
       }
     };
     fetchTechnologies();
-  }, []);
+  }, [initialTechnologies]);
 
   const { grouped, categoryNames } = useMemo(() => {
     const groupedMap: Record<string, Technology[]> = {};

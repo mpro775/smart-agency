@@ -1,4 +1,5 @@
 import publicApi from "./api";
+import type { ApiResponse } from "@/types/api";
 
 export interface NewsletterSubscription {
   email: string;
@@ -13,7 +14,7 @@ export interface NewsletterResponse {
 export const newsletterService = {
   async subscribe(data: NewsletterSubscription): Promise<NewsletterResponse> {
     try {
-      const response = await publicApi.post<NewsletterResponse>(
+      const response = await publicApi.post<ApiResponse<NewsletterResponse>>(
         "/newsletter/subscribe",
         {
           ...data,
@@ -21,7 +22,7 @@ export const newsletterService = {
         }
       );
 
-      return response.data;
+      return response.data.data;
     } catch (error: any) {
       // Handle specific error cases
       if (error.response?.status === 409) {
@@ -40,14 +41,14 @@ export const newsletterService = {
 
   async unsubscribe(email: string): Promise<NewsletterResponse> {
     try {
-      const response = await publicApi.post<NewsletterResponse>(
+      const response = await publicApi.post<ApiResponse<NewsletterResponse>>(
         "/newsletter/unsubscribe",
         {
           email,
         }
       );
 
-      return response.data;
+      return response.data.data;
     } catch (error: any) {
       if (error.response?.status === 404) {
         throw new Error("هذا البريد الإلكتروني غير موجود في قائمتنا");

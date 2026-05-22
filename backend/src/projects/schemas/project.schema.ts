@@ -175,6 +175,7 @@ export const ProjectSchema = SchemaFactory.createForClass(Project);
 ProjectSchema.index({ slug: 1 }, { unique: true });
 ProjectSchema.index({ isFeatured: 1 });
 ProjectSchema.index({ category: 1 });
+ProjectSchema.index({ category: 1, isPublished: 1 });
 ProjectSchema.index({ categoryId: 1 });
 ProjectSchema.index({ categoryIds: 1 });
 ProjectSchema.index({ projectTypes: 1 });
@@ -182,5 +183,6 @@ ProjectSchema.index({ isPublished: 1 });
 ProjectSchema.index({ technologies: 1 });
 ProjectSchema.index({ sortOrder: 1 });
 ProjectSchema.index({ featuredOrder: 1 });
+ProjectSchema.index({ isPublished: 1, isFeatured: 1, sortOrder: 1 });
 ProjectSchema.index({ createdAt: -1 });
 

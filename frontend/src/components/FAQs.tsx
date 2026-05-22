@@ -200,16 +200,45 @@ function EmptyResults() {
   );
 }
 
-export default function FAQs() {
-  const [faqs, setFaqs] = useState<FAQ[]>([]);
-  const [categories, setCategories] = useState<string[]>([]);
+interface FAQsProps {
+  initialFaqs?: FAQ[];
+}
+
+export default function FAQs({ initialFaqs }: FAQsProps) {
+  const [faqs, setFaqs] = useState<FAQ[]>(initialFaqs || []);
+  const [categories, setCategories] = useState<string[]>(
+    initialFaqs
+      ? Array.from(
+          new Set(
+            initialFaqs
+              .map((faq) => faq.category)
+              .filter((category): category is string => Boolean(category)),
+          ),
+        )
+      : [],
+  );
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [expandedId, setExpandedId] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!initialFaqs);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>("");
 
   useEffect(() => {
+    if (initialFaqs) {
+      setFaqs(initialFaqs);
+      setCategories(
+        Array.from(
+          new Set(
+            initialFaqs
+              .map((faq) => faq.category)
+              .filter((category): category is string => Boolean(category)),
+          ),
+        ),
+      );
+      setLoading(false);
+      return;
+    }
+
     const fetchData = async () => {
       try {
         setLoading(true);
@@ -229,7 +258,7 @@ export default function FAQs() {
     };
 
     fetchData();
-  }, []);
+  }, [initialFaqs]);
 
   useEffect(() => {
     if (faqs.length === 0) return;

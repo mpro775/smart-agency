@@ -1,5 +1,10 @@
 import publicApi from "./api";
-import type { ApiResponse } from "../admin/types";
+import type { ApiResponse } from "@/types/api";
+import {
+  LeadType,
+  publicLeadsService,
+  ServiceType,
+} from "./leads.service";
 
 export interface HostingPackage {
   _id: string;
@@ -82,10 +87,30 @@ export const publicHostingPackagesService = {
     selectionData: PackageSelectionRequest
   ): Promise<{ message: string }> => {
     const { packageId } = selectionData;
-    const response = await publicApi.post<{ message: string }>(
+
+    if (packageId === "enterprise-custom" || packageId === "custom") {
+      await publicLeadsService.create({
+        fullName: selectionData.fullName,
+        email: selectionData.email,
+        phone: selectionData.phone,
+        companyName: selectionData.companyName,
+        message:
+          selectionData.message ||
+          `Custom hosting request (${selectionData.billingCycle})`,
+        leadType: LeadType.PACKAGE_REQUEST,
+        source: "Enterprise Custom Hosting",
+        serviceType: ServiceType.OTHER,
+      });
+
+      return {
+        message: "Thank you for your interest! We will contact you soon.",
+      };
+    }
+
+    const response = await publicApi.post<ApiResponse<{ message: string }>>(
       `/hosting-packages/${packageId}/select`,
       selectionData
     );
-    return response.data;
+    return response.data.data;
   },
 };

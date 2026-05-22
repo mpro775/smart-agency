@@ -1,10 +1,5 @@
 import { publicApi } from "./api";
-
-export interface ApiResponse<T> {
-  statusCode: number;
-  message: string;
-  data: T;
-}
+import type { ApiResponse } from "@/types/api";
 
 export interface HeroSection {
   title: string;

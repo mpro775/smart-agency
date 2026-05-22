@@ -1,4 +1,5 @@
 import publicApi from "./api";
+import type { ApiResponse } from "@/types/api";
 
 export interface CompanyInfo {
   _id: string;
@@ -18,16 +19,10 @@ export interface CompanyInfo {
   updatedAt: string;
 }
 
-export interface CompanyInfoResponse {
-  success: boolean;
-  message: string;
-  data: CompanyInfo | null;
-}
-
 export const companyInfoService = {
   async get(): Promise<CompanyInfo | null> {
     try {
-      const response = await publicApi.get<CompanyInfoResponse>(
+      const response = await publicApi.get<ApiResponse<CompanyInfo | null>>(
         "/company-info"
       );
       return response.data.data;

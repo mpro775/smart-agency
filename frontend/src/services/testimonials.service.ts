@@ -1,5 +1,6 @@
 import publicApi from "./api";
-import type { ApiResponse, Project } from "../admin/types";
+import type { Project } from "../admin/types";
+import type { ApiResponse } from "@/types/api";
 
 export interface Testimonial {
   _id: string;

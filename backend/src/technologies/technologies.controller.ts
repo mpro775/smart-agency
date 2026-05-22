@@ -21,16 +21,20 @@ import { CreateTechnologyDto } from './dto/create-technology.dto';
 import { UpdateTechnologyDto } from './dto/update-technology.dto';
 import { TechnologyCategory } from './schemas/technology.schema';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
 import { Public } from '../auth/decorators/public.decorator';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { UserRole } from '../users/schemas/user.schema';
 import { ResponseMessage } from '../common/decorators';
 
 @ApiTags('Technologies')
 @Controller('technologies')
+@Roles(UserRole.ADMIN, UserRole.EDITOR)
 export class TechnologiesController {
   constructor(private readonly technologiesService: TechnologiesService) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Create a new technology' })
   @ApiResponse({ status: 201, description: 'Technology created successfully' })
@@ -66,7 +70,7 @@ export class TechnologiesController {
   }
 
   @Patch(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Update a technology' })
   @ApiResponse({ status: 200, description: 'Technology updated successfully' })
@@ -81,7 +85,7 @@ export class TechnologiesController {
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Delete a technology' })
   @ApiResponse({ status: 200, description: 'Technology deleted successfully' })

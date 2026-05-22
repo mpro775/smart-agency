@@ -44,4 +44,5 @@ export const ServiceSchema = SchemaFactory.createForClass(Service);
 // Indexes
 ServiceSchema.index({ isActive: 1 });
 ServiceSchema.index({ sortOrder: 1 });
+ServiceSchema.index({ isActive: 1, sortOrder: 1 });
 ServiceSchema.index({ slug: 1 }, { unique: true });

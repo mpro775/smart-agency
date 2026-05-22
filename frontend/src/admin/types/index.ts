@@ -1,11 +1,12 @@
 // User & Auth Types
 export interface User {
   _id: string;
+  name: string;
   email: string;
-  fullName: string;
-  role: "admin" | "user";
+  role: "admin" | "editor";
+  isActive?: boolean;
   createdAt: string;
-  updatedAt: string;
+  updatedAt?: string;
 }
 
 export interface AuthResponse {
@@ -18,25 +19,11 @@ export interface LoginCredentials {
   password: string;
 }
 
-// Pagination Types
-export interface PaginationMeta {
-  page: number;
-  limit: number;
-  total: number;
-  totalPages: number;
-}
-
-export interface PaginatedResponse<T> {
-  data: T[];
-  meta: PaginationMeta;
-}
-
-export interface ApiResponse<T> {
-  success: boolean;
-  message: string;
-  data: T;
-  meta?: PaginationMeta;
-}
+export type {
+  ApiResponse,
+  PaginatedResponse,
+  PaginationMeta,
+} from "../../types/api";
 
 // Project Types
 export enum ProjectCategory {

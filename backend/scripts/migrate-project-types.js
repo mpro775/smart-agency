@@ -1,8 +1,7 @@
 const mongoose = require('mongoose');
 
 const MONGODB_URI =
-  process.env.MONGODB_URI ||
-  'mongodb://root:Smart-7780@84.247.184.154:27017/smart-agency?authSource=admin&directConnection=true';
+  process.env.MONGODB_URI;
 
 const projectSchema = new mongoose.Schema(
   {
@@ -20,6 +19,10 @@ const Project = mongoose.model('Project', projectSchema);
 
 async function migrateProjectTypes() {
   try {
+    if (!MONGODB_URI) {
+      throw new Error('MONGODB_URI is required');
+    }
+
     console.log('🔄 جاري الاتصال بقاعدة البيانات...');
     await mongoose.connect(MONGODB_URI);
     console.log('✅ تم الاتصال بقاعدة البيانات بنجاح\n');

@@ -15,19 +15,36 @@ import ProjectBentoGrid from "./ProjectBentoGrid";
 
 interface ProjectsShowcaseProps {
   showViewAllLink?: boolean;
+  initialProjects?: Project[];
+  initialCategories?: { value: string; label: string; count?: number }[];
 }
 
 export default function ProjectsShowcase({
   showViewAllLink = true,
+  initialProjects,
+  initialCategories,
 }: ProjectsShowcaseProps) {
   const [selectedCategory, setSelectedCategory] = useState("all");
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [categories, setCategories] = useState<FilterCategory[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [categoriesLoading, setCategoriesLoading] = useState(true);
+  const [projects, setProjects] = useState<Project[]>(initialProjects || []);
+  const [categories, setCategories] = useState<FilterCategory[]>(
+    initialCategories
+      ? [
+          { value: "all", label: "الكل", count: 0 },
+          ...initialCategories.map((c) => ({
+            value: c.value,
+            label: c.label,
+            count: c.count || 0,
+          })),
+        ]
+      : [],
+  );
+  const [loading, setLoading] = useState(!initialProjects);
+  const [categoriesLoading, setCategoriesLoading] = useState(!initialCategories);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (initialCategories) return;
+
     const fetchCategories = async () => {
       try {
         setCategoriesLoading(true);
@@ -57,9 +74,15 @@ export default function ProjectsShowcase({
     };
 
     fetchCategories();
-  }, []);
+  }, [initialCategories]);
 
   useEffect(() => {
+    if (initialProjects && selectedCategory === "all") {
+      setProjects(initialProjects);
+      setLoading(false);
+      return;
+    }
+
     const fetchProjects = async () => {
       try {
         setLoading(true);
@@ -79,7 +102,7 @@ export default function ProjectsShowcase({
     };
 
     fetchProjects();
-  }, [selectedCategory]);
+  }, [initialProjects, selectedCategory]);
 
   const { featuredProject, gridProjects } = useMemo(() => {
     if (projects.length === 0) return { featuredProject: null, gridProjects: [] };

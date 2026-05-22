@@ -138,10 +138,12 @@ export const BlogSchema = SchemaFactory.createForClass(Blog);
 // Indexes
 BlogSchema.index({ slug: 1 }, { unique: true });
 BlogSchema.index({ isPublished: 1 });
+BlogSchema.index({ isPublished: 1, publishedAt: -1 });
 BlogSchema.index({ category: 1 });
 BlogSchema.index({ contentType: 1 });
 BlogSchema.index({ tags: 1 });
 BlogSchema.index({ isFeatured: 1, featuredOrder: 1 });
+BlogSchema.index({ isFeatured: 1, isPublished: 1 });
 BlogSchema.index({ views: -1 });
 BlogSchema.index({ publishedAt: -1 });
 BlogSchema.index({ createdAt: -1 });

@@ -18,11 +18,15 @@ import {
 import { FaqsService } from './faqs.service';
 import { CreateFaqDto, UpdateFaqDto, FilterFaqDto } from './dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
 import { Public } from '../auth/decorators/public.decorator';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { UserRole } from '../users/schemas/user.schema';
 import { ResponseMessage } from '../common/decorators';
 
 @ApiTags('FAQs')
 @Controller('faqs')
+@Roles(UserRole.ADMIN, UserRole.EDITOR)
 export class FaqsController {
   constructor(private readonly faqsService: FaqsService) {}
 
@@ -58,7 +62,7 @@ export class FaqsController {
   // ==================== Admin Routes ====================
 
   @Post()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Create a new FAQ (Admin)' })
   @ApiResponse({ status: 201, description: 'FAQ created successfully' })
@@ -68,7 +72,7 @@ export class FaqsController {
   }
 
   @Get('admin')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Get all FAQs including inactive (Admin)' })
   @ApiResponse({ status: 200, description: 'Returns all FAQs' })
@@ -78,7 +82,7 @@ export class FaqsController {
   }
 
   @Get(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Get a FAQ by ID (Admin)' })
   @ApiResponse({ status: 200, description: 'Returns the FAQ' })
@@ -89,7 +93,7 @@ export class FaqsController {
   }
 
   @Patch(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Update a FAQ (Admin)' })
   @ApiResponse({ status: 200, description: 'FAQ updated successfully' })
@@ -100,7 +104,7 @@ export class FaqsController {
   }
 
   @Patch(':id/toggle')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Toggle FAQ active status (Admin)' })
   @ApiResponse({ status: 200, description: 'FAQ status toggled' })
@@ -111,7 +115,7 @@ export class FaqsController {
   }
 
   @Patch('reorder')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Reorder FAQs (Admin)' })
   @ApiResponse({ status: 200, description: 'FAQs reordered successfully' })
@@ -121,7 +125,7 @@ export class FaqsController {
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Delete a FAQ (Admin)' })
   @ApiResponse({ status: 200, description: 'FAQ deleted successfully' })

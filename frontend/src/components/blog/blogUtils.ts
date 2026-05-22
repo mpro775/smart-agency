@@ -22,7 +22,7 @@ export function getAuthorName(blog: Blog) {
   const author = blog.author as User | string | undefined;
   if (!author) return "فريق Smart Agency";
   if (typeof author === "string") return author;
-  return author.fullName || "فريق Smart Agency";
+  return author.name || "فريق Smart Agency";
 }
 
 export function getReadingTime(blog: Blog) {

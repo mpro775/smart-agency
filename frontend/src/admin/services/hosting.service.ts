@@ -42,7 +42,7 @@ export const hostingService = {
     if (filters?.isActive !== undefined) params.append('isActive', String(filters.isActive));
     if (filters?.isPopular !== undefined) params.append('isPopular', String(filters.isPopular));
 
-    const response = await api.get<ApiResponse<HostingPackage[]>>(`/hosting-packages?${params.toString()}`);
+    const response = await api.get<ApiResponse<HostingPackage[]>>(`/hosting-packages/admin?${params.toString()}`);
     return {
       data: response.data.data,
       meta: response.data.meta!,

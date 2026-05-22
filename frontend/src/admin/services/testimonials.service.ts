@@ -32,7 +32,7 @@ export const testimonialsService = {
     if (filters?.isActive !== undefined) params.append('isActive', String(filters.isActive));
     if (filters?.isFeatured !== undefined) params.append('isFeatured', String(filters.isFeatured));
 
-    const response = await api.get<ApiResponse<Testimonial[]>>(`/testimonials?${params.toString()}`);
+    const response = await api.get<ApiResponse<Testimonial[]>>(`/testimonials/admin?${params.toString()}`);
     return {
       data: response.data.data,
       meta: response.data.meta!,

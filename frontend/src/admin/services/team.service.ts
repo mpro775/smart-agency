@@ -50,7 +50,7 @@ export const teamService = {
       params.append("showOnHome", String(filters.showOnHome));
 
     const response = await api.get<ApiResponse<TeamMember[]>>(
-      `/team?${params.toString()}`
+      `/team/admin?${params.toString()}`
     );
     return {
       data: response.data.data,

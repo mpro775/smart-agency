@@ -3,8 +3,7 @@ const bcrypt = require('bcrypt');
 
 // MongoDB connection string - يمكن تعديلها حسب الحاجة
 const MONGODB_URI =
-  process.env.MONGODB_URI ||
-  'mongodb+srv://smartagencyyem_db_user:P93OOGZBO9gSaXBL@cluster0.sma4e8a.mongodb.net/smart-agency?retryWrites=true&w=majority';
+  process.env.MONGODB_URI;
 
 // User schema definition (مطابق للـ schema في النظام)
 const userSchema = new mongoose.Schema(
@@ -25,15 +24,22 @@ const User = mongoose.model('User', userSchema);
 
 // Admin user data
 const adminData = {
-  name: 'Admin',
-  email: 'admin@smartagency.com',
-  password: 'admin123456',
+  name: process.env.SEED_ADMIN_NAME || 'Admin',
+  email: process.env.SEED_ADMIN_EMAIL || 'admin@smartagency.com',
+  password: process.env.SEED_ADMIN_PASSWORD || '',
   role: 'admin',
   isActive: true,
 };
 
 async function createAdmin() {
   try {
+    if (!MONGODB_URI) {
+      throw new Error('MONGODB_URI is required');
+    }
+    if (!adminData.password) {
+      throw new Error('SEED_ADMIN_PASSWORD is required');
+    }
+
     console.log('🔄 Connecting to MongoDB...');
     await mongoose.connect(MONGODB_URI);
     console.log('✅ Connected to MongoDB');
@@ -67,13 +73,11 @@ async function createAdmin() {
     console.log('📋 Admin Details:');
     console.log(`   Name: ${adminData.name}`);
     console.log(`   Email: ${adminData.email}`);
-    console.log(`   Password: ${adminData.password}`);
     console.log(`   Role: ${adminData.role}`);
     console.log('');
     console.log('🔑 Use these credentials to login to the admin panel:');
     console.log(`   URL: http://localhost:3001/admin/login`);
     console.log(`   Email: ${adminData.email}`);
-    console.log(`   Password: ${adminData.password}`);
   } catch (error) {
     console.error('❌ Error creating admin user:', error.message);
 
@@ -107,9 +111,14 @@ function interactiveMode() {
         adminData.email = email.trim() || 'admin@smartagency.com';
 
         rl.question(
-          'Enter admin password (default: admin123456): ',
+          'Enter admin password: ',
           (password) => {
-            adminData.password = password.trim() || 'admin123456';
+            adminData.password = password.trim();
+            if (!adminData.password) {
+              console.error('Password is required.');
+              rl.close();
+              return;
+            }
 
             rl.question(
               'Enter role (admin/editor, default: admin): ',
@@ -138,9 +147,7 @@ if (args.includes('--interactive') || args.includes('-i')) {
   console.log('===========================');
   console.log('');
   console.log('Usage:');
-  console.log(
-    '  node scripts/create-admin.js                 # Create default admin',
-  );
+  console.log('  SEED_ADMIN_PASSWORD=... node scripts/create-admin.js');
   console.log(
     '  node scripts/create-admin.js --interactive   # Interactive mode',
   );
@@ -148,16 +155,13 @@ if (args.includes('--interactive') || args.includes('-i')) {
     '  node scripts/create-admin.js --help          # Show this help',
   );
   console.log('');
-  console.log('Default Admin Credentials:');
-  console.log('  Name: Admin');
-  console.log('  Email: admin@smartagency.com');
-  console.log('  Password: admin123456');
-  console.log('  Role: admin');
-  console.log('');
   console.log('Environment Variables:');
   console.log(
-    '  MONGODB_URI - MongoDB connection string (default: mongodb://localhost:27017/smart-agency)',
+    '  MONGODB_URI - MongoDB connection string',
   );
+  console.log('  SEED_ADMIN_EMAIL - Admin email');
+  console.log('  SEED_ADMIN_PASSWORD - Admin password');
+  console.log('  SEED_ADMIN_NAME - Admin name');
 } else {
   createAdmin();
 }

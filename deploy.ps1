@@ -1,13 +1,14 @@
-# PowerShell Script لتسهيل عملية النشر على Windows
-# استخدام: .\deploy.ps1 [build|start|stop|restart|logs]
+# Usage: .\deploy.ps1 [build|start|stop|restart|logs|rebuild|status]
 
 param(
-    [Parameter(Position=0)]
+    [Parameter(Position = 0)]
     [ValidateSet("build", "start", "stop", "restart", "logs", "rebuild", "status")]
     [string]$Action = "build"
 )
 
-# دالة للطباعة الملونة
+$ComposeFile = "docker-compose.unified.prod.yml"
+$EnvFile = if ($env:ENV_FILE) { $env:ENV_FILE } else { ".env.unified" }
+
 function Write-Info {
     param([string]$Message)
     Write-Host "[INFO] $Message" -ForegroundColor Green
@@ -18,89 +19,80 @@ function Write-Warn {
     Write-Host "[WARN] $Message" -ForegroundColor Yellow
 }
 
-function Write-Error {
+function Write-Fail {
     param([string]$Message)
     Write-Host "[ERROR] $Message" -ForegroundColor Red
 }
 
-# التحقق من وجود Docker و Docker Compose
 if (-not (Get-Command docker -ErrorAction SilentlyContinue)) {
-    Write-Error "Docker غير مثبت. يرجى تثبيت Docker أولاً."
+    Write-Fail "Docker is not installed or is not available in PATH."
     exit 1
 }
 
-if (-not (Get-Command docker-compose -ErrorAction SilentlyContinue)) {
-    Write-Error "Docker Compose غير مثبت. يرجى تثبيت Docker Compose أولاً."
+docker compose version *> $null
+if ($LASTEXITCODE -ne 0) {
+    Write-Fail "Docker Compose v2 is not available. Install Docker Compose or update Docker Desktop."
     exit 1
 }
 
-# التحقق من وجود ملف .env
-if (-not (Test-Path "./backend/.env")) {
-    Write-Warn "ملف .env غير موجود في مجلد backend"
-    Write-Info "يرجى إنشاء ملف .env قبل المتابعة"
+if (-not (Test-Path $ComposeFile)) {
+    Write-Fail "Compose file not found: $ComposeFile"
+    exit 1
 }
 
-# التحقق من وجود شهادات SSL
-if (-not (Test-Path "./nginx/ssl/smartagency-ye.com/fullchain.pem") -or 
-    -not (Test-Path "./nginx/ssl/smartagency-ye.com/privkey.pem")) {
-    Write-Warn "شهادات SSL للدومين الرئيسي غير موجودة"
-    Write-Info "يرجى مراجعة nginx/README.md لإعداد الشهادات"
+$ComposeArgs = @("-f", $ComposeFile)
+if (Test-Path $EnvFile) {
+    $ComposeArgs = @("--env-file", $EnvFile, "-f", $ComposeFile)
+} elseif (Test-Path ".env") {
+    $ComposeArgs = @("--env-file", ".env", "-f", $ComposeFile)
+} else {
+    Write-Warn "No .env.unified or .env file found. Compose will use shell environment variables and defaults."
 }
 
-if (-not (Test-Path "./nginx/ssl/api.smartagency-ye.com/fullchain.pem") -or 
-    -not (Test-Path "./nginx/ssl/api.smartagency-ye.com/privkey.pem")) {
-    Write-Warn "شهادات SSL للـ API subdomain غير موجودة"
-    Write-Info "يرجى مراجعة nginx/README.md لإعداد الشهادات"
+function Invoke-Compose {
+    param([string[]]$ComposeCommandArgs)
+    & docker compose @ComposeArgs @ComposeCommandArgs
+    if ($LASTEXITCODE -ne 0) {
+        exit $LASTEXITCODE
+    }
 }
 
-# معالجة الأوامر
 switch ($Action) {
     "build" {
-        Write-Info "بناء الصور..."
-        docker-compose build
-        Write-Info "تم بناء الصور بنجاح"
+        Write-Info "Building Docker images..."
+        Invoke-Compose @("build")
+        Write-Info "Images built successfully."
     }
     "start" {
-        Write-Info "تشغيل الحاويات..."
-        docker-compose up -d
-        Write-Info "تم تشغيل الحاويات بنجاح"
-        Write-Info "Frontend: https://smartagency-ye.com"
-        Write-Info "Backend API: https://api.smartagency-ye.com/api"
+        Write-Info "Starting containers with rebuild..."
+        Invoke-Compose @("up", "-d", "--build")
+        Write-Info "Containers started successfully."
+        $FrontendHost = if ($env:FRONTEND_HOST) { $env:FRONTEND_HOST } else { "smartagency-ye.com" }
+        $ApiHost = if ($env:API_HOST) { $env:API_HOST } else { "api.smartagency-ye.com" }
+        Write-Info "Frontend: https://$FrontendHost"
+        Write-Info "Backend API: https://$ApiHost/api"
     }
     "stop" {
-        Write-Info "إيقاف الحاويات..."
-        docker-compose down
-        Write-Info "تم إيقاف الحاويات"
+        Write-Info "Stopping containers..."
+        Invoke-Compose @("down")
+        Write-Info "Containers stopped."
     }
     "restart" {
-        Write-Info "إعادة تشغيل الحاويات..."
-        docker-compose restart
-        Write-Info "تم إعادة التشغيل"
+        Write-Info "Restarting containers..."
+        Invoke-Compose @("restart")
+        Write-Info "Containers restarted."
     }
     "logs" {
-        Write-Info "عرض السجلات (اضغط Ctrl+C للخروج)..."
-        docker-compose logs -f
+        Write-Info "Streaming logs. Press Ctrl+C to exit."
+        Invoke-Compose @("logs", "-f")
     }
     "rebuild" {
-        Write-Info "إعادة بناء وتشغيل..."
-        docker-compose up -d --build
-        Write-Info "تم إعادة البناء والتشغيل"
+        Write-Info "Rebuilding and starting containers..."
+        Invoke-Compose @("up", "-d", "--build")
+        Write-Info "Containers rebuilt and started."
     }
     "status" {
-        Write-Info "حالة الحاويات:"
-        docker-compose ps
-    }
-    default {
-        Write-Host "الاستخدام: .\deploy.ps1 [build|start|stop|restart|logs|rebuild|status]"
-        Write-Host ""
-        Write-Host "الأوامر المتاحة:"
-        Write-Host "  build    - بناء صور Docker"
-        Write-Host "  start    - تشغيل الحاويات"
-        Write-Host "  stop     - إيقاف الحاويات"
-        Write-Host "  restart  - إعادة تشغيل الحاويات"
-        Write-Host "  logs     - عرض السجلات"
-        Write-Host "  rebuild  - إعادة بناء وتشغيل"
-        Write-Host "  status   - عرض حالة الحاويات"
-        exit 1
+        Write-Info "Container status:"
+        Invoke-Compose @("ps")
     }
 }

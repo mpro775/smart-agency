@@ -12,7 +12,7 @@ Backend API for Smart Agency built with NestJS, MongoDB, and TypeScript.
 - **Hosting Packages**: Dynamic pricing packages management
 - **Testimonials**: Client testimonials with project linking
 - **Team Members**: Team management with department organization
-- **File Uploads**: Cloudinary integration for image uploads
+- **File Uploads**: Cloudflare R2/S3-compatible image uploads
 - **FAQs**: Dynamic FAQs for SEO and reducing support load
 - **API Documentation**: Swagger/OpenAPI documentation
 
@@ -21,7 +21,7 @@ Backend API for Smart Agency built with NestJS, MongoDB, and TypeScript.
 - **Framework**: NestJS
 - **Database**: MongoDB (Mongoose ODM)
 - **Authentication**: Passport.js + JWT
-- **File Storage**: Cloudinary
+- **File Storage**: Cloudflare R2 or another S3-compatible provider
 - **Documentation**: Swagger/OpenAPI
 - **Validation**: class-validator
 
@@ -29,7 +29,7 @@ Backend API for Smart Agency built with NestJS, MongoDB, and TypeScript.
 
 - Node.js 18+
 - MongoDB Atlas account (or local MongoDB)
-- Cloudinary account (for file uploads)
+- Cloudflare R2 or another S3-compatible storage account (optional until uploads are used)
 
 ## Installation
 
@@ -59,10 +59,12 @@ MONGODB_URI=mongodb+srv://...
 JWT_SECRET=your-secret-key
 JWT_EXPIRES_IN=7d
 
-# Cloudinary
-CLOUDINARY_CLOUD_NAME=your-cloud-name
-CLOUDINARY_API_KEY=your-api-key
-CLOUDINARY_API_SECRET=your-api-secret
+# Cloudflare R2 / S3-compatible uploads (optional at startup)
+R2_ENDPOINT=
+R2_ACCESS_KEY_ID=
+R2_SECRET_ACCESS_KEY=
+R2_BUCKET_NAME=
+R2_PUBLIC_DOMAIN=
 
 # n8n Webhook (Optional)
 N8N_WEBHOOK_URL=https://...
@@ -87,11 +89,9 @@ npm run start:prod
 Once the server is running, visit:
 - **Swagger UI**: http://localhost:3000/api/docs
 
-## Default Admin User
+## Admin User
 
-On first run, a default admin user is created:
-- **Email**: admin@smartagency.com
-- **Password**: admin123
+No default admin user is created automatically. To seed one intentionally, set `SEED_ADMIN=true` with `SEED_ADMIN_EMAIL`, `SEED_ADMIN_PASSWORD`, and `SEED_ADMIN_NAME`.
 
 ⚠️ **Change this password immediately after first login!**
 

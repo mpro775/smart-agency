@@ -167,9 +167,11 @@ export const LeadSchema = SchemaFactory.createForClass(Lead);
 
 // Indexes
 LeadSchema.index({ status: 1 });
+LeadSchema.index({ status: 1, createdAt: -1 });
 LeadSchema.index({ serviceType: 1 });
 LeadSchema.index({ createdAt: -1 });
 LeadSchema.index({ email: 1 });
+LeadSchema.index({ email: 1, createdAt: -1 });
 LeadSchema.index({ leadType: 1 });
 LeadSchema.index({ priority: 1 });
 LeadSchema.index({ timeline: 1 });

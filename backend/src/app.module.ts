@@ -22,6 +22,7 @@ import { ProjectCategoriesModule } from './project-categories/project-categories
 import { NewsletterModule } from './newsletter/newsletter.module';
 import { CompanyInfoModule } from './company-info/company-info.module';
 import { AboutModule } from './about/about.module';
+import { PublicHomepageModule } from './public-homepage/public-homepage.module';
 
 @Module({
   imports: [
@@ -71,6 +72,7 @@ import { AboutModule } from './about/about.module';
     NewsletterModule,
     CompanyInfoModule,
     AboutModule,
+    PublicHomepageModule,
   ],
   controllers: [AppController],
   providers: [AppService],

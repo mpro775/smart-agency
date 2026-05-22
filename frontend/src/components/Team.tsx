@@ -62,12 +62,20 @@ function TeamErrorState({ error, onRetry }: { error: string; onRetry: () => void
   );
 }
 
-export default function Team() {
-  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
-  const [activeMember, setActiveMember] = useState<TeamMember | null>(null);
+interface TeamProps {
+  initialMembers?: TeamMember[];
+}
+
+export default function Team({ initialMembers }: TeamProps) {
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>(
+    initialMembers || [],
+  );
+  const [activeMember, setActiveMember] = useState<TeamMember | null>(
+    initialMembers?.[0] ?? null,
+  );
   const [profileMember, setProfileMember] = useState<TeamMember | null>(null);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!initialMembers);
   const [error, setError] = useState<string | null>(null);
 
   const fetchTeamMembers = async () => {
@@ -86,8 +94,15 @@ export default function Team() {
   };
 
   useEffect(() => {
+    if (initialMembers) {
+      setTeamMembers(initialMembers);
+      setActiveMember(initialMembers[0] ?? null);
+      setLoading(false);
+      return;
+    }
+
     fetchTeamMembers();
-  }, []);
+  }, [initialMembers]);
 
   const handleOpenProfile = (member: TeamMember) => {
     setProfileMember(member);

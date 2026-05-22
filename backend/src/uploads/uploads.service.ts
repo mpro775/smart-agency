@@ -1,4 +1,9 @@
-import { Injectable, BadRequestException, Logger } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  Logger,
+  ServiceUnavailableException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
   DeleteObjectCommand,
@@ -16,18 +21,28 @@ export interface UploadOptions {
 export class UploadsService {
   private readonly logger = new Logger(UploadsService.name);
   private readonly defaultFolder = 'smart-agency';
-  private readonly bucketName: string;
-  private readonly publicBaseUrl: string;
-  private readonly s3Client: S3Client;
+  private readonly bucketName?: string;
+  private readonly publicBaseUrl?: string;
+  private readonly s3Client?: S3Client;
+  private readonly isStorageConfigured: boolean;
 
   constructor(private readonly configService: ConfigService) {
-    const endpoint = this.configService.getOrThrow<string>('R2_ENDPOINT');
-    const accessKeyId =
-      this.configService.getOrThrow<string>('R2_ACCESS_KEY_ID');
-    const secretAccessKey = this.configService.getOrThrow<string>(
+    const endpoint = this.configService.get<string>('R2_ENDPOINT');
+    const accessKeyId = this.configService.get<string>('R2_ACCESS_KEY_ID');
+    const secretAccessKey = this.configService.get<string>(
       'R2_SECRET_ACCESS_KEY',
     );
-    const bucketName = this.configService.getOrThrow<string>('R2_BUCKET_NAME');
+    const bucketName = this.configService.get<string>('R2_BUCKET_NAME');
+
+    if (!endpoint || !accessKeyId || !secretAccessKey || !bucketName) {
+      this.isStorageConfigured = false;
+      this.logger.warn(
+        'R2 storage is not configured. Upload endpoints will fail until env vars are provided.',
+      );
+      return;
+    }
+
+    this.isStorageConfigured = true;
 
     this.bucketName = bucketName;
 
@@ -44,8 +59,12 @@ export class UploadsService {
       this.configService.get<string>('R2_PUBLIC_DOMAIN') || undefined;
     const endpointHost = this.getEndpointHost(endpoint);
     this.publicBaseUrl =
-      customDomain ||
-      (endpointHost ? `https://${this.bucketName}.${endpointHost}` : endpoint);
+      this.normalizeBaseUrl(
+        customDomain ||
+          (endpointHost
+            ? `https://${this.bucketName}.${endpointHost}`
+            : endpoint),
+      );
   }
 
   async uploadFile(
@@ -55,6 +74,7 @@ export class UploadsService {
     if (!file) {
       throw new BadRequestException('No file provided');
     }
+    this.assertStorageConfigured();
 
     const allowedMimeTypes = [
       'image/jpeg',
@@ -79,9 +99,9 @@ export class UploadsService {
 
     try {
       const upload: Upload = new Upload({
-        client: this.s3Client,
+        client: this.s3Client!,
         params: {
-          Bucket: this.bucketName,
+          Bucket: this.bucketName!,
           Key: key,
           Body: file.buffer,
           ContentType: file.mimetype,
@@ -115,11 +135,12 @@ export class UploadsService {
     if (!publicId) {
       throw new BadRequestException('Public ID is required');
     }
+    this.assertStorageConfigured();
 
     try {
-      await this.s3Client.send(
+      await this.s3Client!.send(
         new DeleteObjectCommand({
-          Bucket: this.bucketName,
+          Bucket: this.bucketName!,
           Key: publicId,
         }),
       );
@@ -135,11 +156,12 @@ export class UploadsService {
     if (!publicIds?.length) {
       return;
     }
+    this.assertStorageConfigured();
 
     try {
-      await this.s3Client.send(
+      await this.s3Client!.send(
         new DeleteObjectsCommand({
-          Bucket: this.bucketName,
+          Bucket: this.bucketName!,
           Delete: {
             Objects: publicIds.map((key) => ({ Key: key })),
           },
@@ -173,6 +195,18 @@ export class UploadsService {
     } catch {
       return null;
     }
+  }
+
+  private assertStorageConfigured(): void {
+    if (!this.isStorageConfigured || !this.s3Client || !this.bucketName) {
+      throw new ServiceUnavailableException(
+        'File upload storage is not configured',
+      );
+    }
+  }
+
+  private normalizeBaseUrl(url: string): string {
+    return url.replace(/\/$/, '');
   }
 
   private getErrorMessage(error: unknown): string {

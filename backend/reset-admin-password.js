@@ -2,8 +2,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
 const MONGODB_URI =
-  process.env.MONGODB_URI ||
-  'mongodb+srv://smartagencyyem_db_user:P93OOGZBO9gSaXBL@cluster0.sma4e8a.mongodb.net/smart-agency?retryWrites=true&w=majority';
+  process.env.MONGODB_URI;
 
 // User schema definition
 const userSchema = new mongoose.Schema(
@@ -23,12 +22,21 @@ const User = mongoose.model('User', userSchema);
 
 async function resetAdminPassword() {
   try {
+    if (!MONGODB_URI) {
+      throw new Error('MONGODB_URI is required');
+    }
+    const adminEmail = process.env.SEED_ADMIN_EMAIL || 'admin@smartagency.com';
+    const newPassword = process.env.SEED_ADMIN_PASSWORD;
+    if (!newPassword) {
+      throw new Error('SEED_ADMIN_PASSWORD is required');
+    }
+
     console.log('🔄 Connecting to MongoDB...');
     await mongoose.connect(MONGODB_URI);
     console.log('✅ Connected to MongoDB');
 
     // Find the admin user
-    const adminUser = await User.findOne({ email: 'admin@smartagency.com' });
+    const adminUser = await User.findOne({ email: adminEmail });
 
     if (!adminUser) {
       console.log('❌ Admin user not found!');
@@ -42,7 +50,6 @@ async function resetAdminPassword() {
     });
 
     // Reset password to default
-    const newPassword = 'admin123456';
     console.log('🔐 Hashing new password...');
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
@@ -53,7 +60,6 @@ async function resetAdminPassword() {
     console.log('✅ Admin password reset successfully!');
     console.log('📋 New Admin Credentials:');
     console.log(`   Email: ${adminUser.email}`);
-    console.log(`   Password: ${newPassword}`);
     console.log('');
 
     // Verify the new password works

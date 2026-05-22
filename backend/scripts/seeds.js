@@ -3,8 +3,7 @@ const bcrypt = require('bcrypt');
 
 // MongoDB connection string
 const MONGODB_URI =
-  process.env.MONGODB_URI ||
-  'mongodb://root:Smart-7780@84.247.184.154:27017/smart-agency?authSource=admin&directConnection=true';
+  process.env.MONGODB_URI;
 // ==================== SCHEMAS ====================
 
 // User Schema
@@ -482,13 +481,17 @@ const About = mongoose.model('About', aboutSchema);
 // ==================== SEED FUNCTIONS ====================
 
 async function seedUsers() {
+  if (!process.env.SEED_ADMIN_PASSWORD) {
+    throw new Error('SEED_ADMIN_PASSWORD is required to seed the admin user');
+  }
+
   console.log('🌱 جاري زرع بيانات المستخدمين...');
 
   const usersData = [
     {
       name: 'أحمد محمد',
-      email: 'admin@smartagency.com',
-      password: await bcrypt.hash('admin123', 10),
+      email: process.env.SEED_ADMIN_EMAIL || 'admin@smartagency.com',
+      password: await bcrypt.hash(process.env.SEED_ADMIN_PASSWORD, 10),
       role: 'admin',
       isActive: true,
     },
@@ -2113,6 +2116,10 @@ async function seedAbout() {
 
 async function seedAll() {
   try {
+    if (!MONGODB_URI) {
+      throw new Error('MONGODB_URI is required');
+    }
+
     console.log('🔄 جاري الاتصال بقاعدة البيانات...');
     await mongoose.connect(MONGODB_URI);
     console.log('✅ تم الاتصال بقاعدة البيانات بنجاح\n');

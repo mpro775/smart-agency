@@ -1,4 +1,5 @@
-import { useEditor, EditorContent, BubbleMenu } from "@tiptap/react";
+import { useEditor, EditorContent } from "@tiptap/react";
+import { BubbleMenu } from "@tiptap/react/menus";
 import { useEffect, useState, useCallback, useRef } from "react";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
@@ -10,13 +11,13 @@ import Underline from "@tiptap/extension-underline";
 import Subscript from "@tiptap/extension-subscript";
 import Superscript from "@tiptap/extension-superscript";
 import Youtube from "@tiptap/extension-youtube";
-import Table from "@tiptap/extension-table";
+import { Table } from "@tiptap/extension-table";
 import TableRow from "@tiptap/extension-table-row";
 import TableHeader from "@tiptap/extension-table-header";
 import TableCell from "@tiptap/extension-table-cell";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import CharacterCount from "@tiptap/extension-character-count";
-import TextStyle from "@tiptap/extension-text-style";
+import { TextStyle } from "@tiptap/extension-text-style";
 import Color from "@tiptap/extension-color";
 import { createLowlight, common } from "lowlight";
 import {
@@ -44,18 +45,14 @@ import {
   Youtube as YoutubeIcon,
   Table as TableIcon,
   Plus,
-  Minus,
   Trash2,
-  Columns,
   Rows3,
-  Type,
   Save,
   Eye,
   EyeOff,
   ChevronDown,
   Palette,
   FileCode,
-  Sparkles,
   Strikethrough,
   PanelTopOpen,
   Minus as DividerIcon,
@@ -109,7 +106,7 @@ export function RichTextEditor({
   placeholder = "ابدأ الكتابة...",
   className,
 }: RichTextEditorProps) {
-  const [editorState, setEditorState] = useState(0);
+  const [, setEditorState] = useState(0);
   const [showHtml, setShowHtml] = useState(false);
   const [htmlContent, setHtmlContent] = useState("");
   const [showTemplates, setShowTemplates] = useState(false);
@@ -120,7 +117,7 @@ export function RichTextEditor({
   const [youtubeUrl, setYoutubeUrl] = useState("");
   const [showYoutube, setShowYoutube] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const autoSaveRef = useRef<ReturnType<typeof setInterval>>();
+  const autoSaveRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const editor = useEditor({
     extensions: [
@@ -170,7 +167,7 @@ export function RichTextEditor({
         dir: "rtl",
         class: "prose prose-invert prose-emerald max-w-none p-4 min-h-[400px] bg-slate-700/30 [&_.ProseMirror]:outline-none [&_.ProseMirror]:min-h-[350px] [&_.ProseMirror]:text-white [&_.ProseMirror_h1]:text-white [&_.ProseMirror_h2]:text-white [&_.ProseMirror_h3]:text-white [&_.ProseMirror_p]:text-slate-200 [&_.ProseMirror_ul]:text-slate-200 [&_.ProseMirror_ol]:text-slate-200 [&_.ProseMirror_li]:text-slate-200 [&_.ProseMirror_li]:mb-1 [&_.ProseMirror_li]:leading-relaxed [&_.ProseMirror_blockquote]:text-slate-300 [&_.ProseMirror_blockquote]:border-r-4 [&_.ProseMirror_blockquote]:border-emerald-500 [&_.ProseMirror_blockquote]:pr-4 [&_.ProseMirror_blockquote]:bg-slate-800/50 [&_.ProseMirror_blockquote]:p-4 [&_.ProseMirror_blockquote]:rounded-lg [&_.ProseMirror_code]:text-slate-100 [&_.ProseMirror_code]:bg-slate-800 [&_.ProseMirror_code]:px-1.5 [&_.ProseMirror_code]:py-0.5 [&_.ProseMirror_code]:rounded [&_.ProseMirror_pre]:bg-slate-900 [&_.ProseMirror_pre]:p-4 [&_.ProseMirror_pre]:rounded-lg [&_.ProseMirror_pre]:my-4 [&_.ProseMirror_pre_code]:bg-transparent [&_.ProseMirror_pre_code]:text-slate-100 [&_.ProseMirror_pre_code]:font-mono [&_.ProseMirror_pre_code]:text-sm [&_.ProseMirror_hr]:border-slate-600 [&_.ProseMirror_hr]:my-8 [&_.ProseMirror_hr]:border-t-2 [&_.ProseMirror_table]:w-full [&_.ProseMirror_table]:border-collapse [&_.ProseMirror_table]:my-4 [&_.ProseMirror_th]:bg-slate-700 [&_.ProseMirror_th]:text-white [&_.ProseMirror_th]:p-3 [&_.ProseMirror_th]:text-right [&_.ProseMirror_th]:border [&_.ProseMirror_th]:border-slate-600 [&_.ProseMirror_td]:p-3 [&_.ProseMirror_td]:text-slate-200 [&_.ProseMirror_td]:text-right [&_.ProseMirror_td]:border [&_.ProseMirror_td]:border-slate-600 [&_.ProseMirror_td]:bg-slate-800/30 [&_.prose-rtl]:direction-rtl [&_.prose-rtl_h1]:text-right [&_.prose-rtl_h2]:text-right [&_.prose-rtl_h3]:text-right [&_.prose-rtl_p]:text-right [&_.prose-rtl_ul]:text-right [&_.prose-rtl_ol]:text-right [&_.prose-rtl_li]:text-right [&_.prose-rtl_blockquote]:text-right [&_.ProseMirror_p.is-editor-empty:first-child::before]:content-[attr(data-placeholder)] [&_.ProseMirror_p.is-editor-empty:first-child::before]:text-slate-500 [&_.ProseMirror_p.is-editor-empty:first-child::before]:pointer-events-none",
       },
-      handleDrop: (view, event, slice, moved) => {
+      handleDrop: (view, event, _slice, moved) => {
         if (!moved && event.dataTransfer?.files?.length) {
           const files = Array.from(event.dataTransfer.files);
           files.forEach((file) => {
@@ -884,7 +881,6 @@ export function RichTextEditor({
       {editor && (
         <BubbleMenu
           editor={editor}
-          tippyOptions={{ duration: 100 }}
           className="flex items-center gap-0.5 bg-slate-800 border border-slate-600 rounded-lg shadow-xl p-1"
         >
           <ToolbarButton

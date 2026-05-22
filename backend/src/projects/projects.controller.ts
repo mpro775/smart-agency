@@ -20,16 +20,20 @@ import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { FilterProjectsDto } from './dto/filter-projects.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
 import { Public } from '../auth/decorators/public.decorator';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { UserRole } from '../users/schemas/user.schema';
 import { ResponseMessage } from '../common/decorators';
 
 @ApiTags('Projects')
 @Controller('projects')
+@Roles(UserRole.ADMIN, UserRole.EDITOR)
 export class ProjectsController {
   constructor(private readonly projectsService: ProjectsService) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Create a new project' })
   @ApiResponse({ status: 201, description: 'Project created successfully' })
@@ -50,7 +54,7 @@ export class ProjectsController {
   }
 
   @Get('admin')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Get all projects including unpublished (Admin)' })
   @ApiResponse({ status: 200, description: 'Projects fetched successfully' })
@@ -61,7 +65,7 @@ export class ProjectsController {
   }
 
   @Get('admin/:id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Get a project by ID (Admin - includes unpublished)' })
   @ApiResponse({ status: 200, description: 'Project found' })
@@ -117,7 +121,7 @@ export class ProjectsController {
   }
 
   @Patch(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Update a project' })
   @ApiResponse({ status: 200, description: 'Project updated successfully' })
@@ -130,7 +134,7 @@ export class ProjectsController {
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Delete a project' })
   @ApiResponse({ status: 200, description: 'Project deleted successfully' })

@@ -20,16 +20,20 @@ import { CreateTestimonialDto } from './dto/create-testimonial.dto';
 import { UpdateTestimonialDto } from './dto/update-testimonial.dto';
 import { PaginationDto } from '../common/dto/pagination.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
 import { Public } from '../auth/decorators/public.decorator';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { UserRole } from '../users/schemas/user.schema';
 import { ResponseMessage } from '../common/decorators';
 
 @ApiTags('Testimonials')
 @Controller('testimonials')
+@Roles(UserRole.ADMIN, UserRole.EDITOR)
 export class TestimonialsController {
   constructor(private readonly testimonialsService: TestimonialsService) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Create a new testimonial' })
   @ApiResponse({ status: 201, description: 'Testimonial created successfully' })
@@ -49,7 +53,7 @@ export class TestimonialsController {
   }
 
   @Get('admin')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Get all testimonials including inactive (Admin)' })
   @ApiResponse({ status: 200, description: 'Testimonials fetched successfully' })
@@ -69,7 +73,7 @@ export class TestimonialsController {
   }
 
   @Get('stats')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Get testimonial statistics' })
   @ApiResponse({ status: 200, description: 'Stats fetched successfully' })
@@ -99,7 +103,7 @@ export class TestimonialsController {
   }
 
   @Patch(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Update a testimonial' })
   @ApiResponse({ status: 200, description: 'Testimonial updated successfully' })
@@ -111,7 +115,7 @@ export class TestimonialsController {
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Delete a testimonial' })
   @ApiResponse({ status: 200, description: 'Testimonial deleted successfully' })

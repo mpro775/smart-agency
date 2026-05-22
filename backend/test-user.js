@@ -2,8 +2,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
 const MONGODB_URI =
-  process.env.MONGODB_URI ||
-  'mongodb+srv://smartagencyyem_db_user:P93OOGZBO9gSaXBL@cluster0.sma4e8a.mongodb.net/smart-agency?retryWrites=true&w=majority';
+  process.env.MONGODB_URI;
 
 // User schema definition
 const userSchema = new mongoose.Schema(
@@ -23,12 +22,18 @@ const User = mongoose.model('User', userSchema);
 
 async function checkUser() {
   try {
+    if (!MONGODB_URI) {
+      throw new Error('MONGODB_URI is required');
+    }
+    const adminEmail = process.env.SEED_ADMIN_EMAIL || 'admin@smartagency.com';
+    const testPassword = process.env.SEED_ADMIN_PASSWORD;
+
     console.log('🔄 Connecting to MongoDB...');
     await mongoose.connect(MONGODB_URI);
     console.log('✅ Connected to MongoDB');
 
     // Find the admin user
-    const user = await User.findOne({ email: 'admin@smartagency.com' });
+    const user = await User.findOne({ email: adminEmail });
     console.log('👤 Admin user found:', user ? {
       _id: user._id,
       name: user.name,
@@ -40,9 +45,10 @@ async function checkUser() {
 
     if (user) {
       // Test password comparison
-      const testPassword = 'admin123456';
+      if (!testPassword) {
+        throw new Error('SEED_ADMIN_PASSWORD is required to verify a password');
+      }
       console.log('\n🔐 Testing password comparison...');
-      console.log('Test password:', testPassword);
       console.log('Stored hash:', user.password);
 
       const isValid = await bcrypt.compare(testPassword, user.password);

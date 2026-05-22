@@ -54,6 +54,9 @@ export class AuthService {
     if (!user) {
       throw new UnauthorizedException('Invalid email or password');
     }
+    if (!user.isActive) {
+      throw new UnauthorizedException('Account is disabled');
+    }
 
     // Compare passwords
     const isPasswordValid = await bcrypt.compare(password, user.password);

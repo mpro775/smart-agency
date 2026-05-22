@@ -20,11 +20,15 @@ import { CreateLeadDto } from './dto/create-lead.dto';
 import { UpdateLeadDto } from './dto/update-lead.dto';
 import { FilterLeadsDto } from './dto/filter-leads.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
 import { Public } from '../auth/decorators/public.decorator';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { UserRole } from '../users/schemas/user.schema';
 import { ResponseMessage } from '../common/decorators';
 
 @ApiTags('Leads')
 @Controller('leads')
+@Roles(UserRole.ADMIN)
 export class LeadsController {
   constructor(private readonly leadsService: LeadsService) {}
 
@@ -38,7 +42,7 @@ export class LeadsController {
   }
 
   @Get()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Get all leads with filtering (Admin)' })
   @ApiResponse({ status: 200, description: 'Leads fetched successfully' })
@@ -49,7 +53,7 @@ export class LeadsController {
   }
 
   @Get('stats')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Get leads statistics (Admin)' })
   @ApiResponse({ status: 200, description: 'Stats fetched successfully' })
@@ -60,7 +64,7 @@ export class LeadsController {
   }
 
   @Get(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Get a lead by ID (Admin)' })
   @ApiResponse({ status: 200, description: 'Lead found' })
@@ -72,7 +76,7 @@ export class LeadsController {
   }
 
   @Patch(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Update lead status/notes (Admin)' })
   @ApiResponse({ status: 200, description: 'Lead updated successfully' })
@@ -84,7 +88,7 @@ export class LeadsController {
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Delete a lead (Admin)' })
   @ApiResponse({ status: 200, description: 'Lead deleted successfully' })

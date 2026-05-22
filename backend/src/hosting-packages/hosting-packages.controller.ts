@@ -21,18 +21,22 @@ import { UpdateHostingPackageDto } from './dto/update-hosting-package.dto';
 import { FilterHostingPackageDto } from './dto/filter-hosting-package.dto';
 import { CreatePackageSelectionDto } from './dto/create-package-selection.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
 import { Public } from '../auth/decorators/public.decorator';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { UserRole } from '../users/schemas/user.schema';
 import { ResponseMessage } from '../common/decorators';
 
 @ApiTags('Hosting Packages')
 @Controller('hosting-packages')
+@Roles(UserRole.ADMIN, UserRole.EDITOR)
 export class HostingPackagesController {
   constructor(
     private readonly hostingPackagesService: HostingPackagesService,
   ) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Create a new hosting package' })
   @ApiResponse({ status: 201, description: 'Package created successfully' })
@@ -52,7 +56,7 @@ export class HostingPackagesController {
   }
 
   @Get('admin')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Get all hosting packages including inactive (Admin)' })
   @ApiResponse({ status: 200, description: 'Packages fetched successfully' })
@@ -82,7 +86,7 @@ export class HostingPackagesController {
   }
 
   @Patch(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Update a hosting package' })
   @ApiResponse({ status: 200, description: 'Package updated successfully' })
@@ -94,7 +98,7 @@ export class HostingPackagesController {
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Delete a hosting package' })
   @ApiResponse({ status: 200, description: 'Package deleted successfully' })
@@ -106,7 +110,7 @@ export class HostingPackagesController {
   }
 
   @Patch('sort/order')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Update sort order of packages' })
   @ApiResponse({ status: 200, description: 'Sort order updated' })

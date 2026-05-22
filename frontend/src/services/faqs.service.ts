@@ -1,5 +1,5 @@
 import publicApi from "./api";
-import type { ApiResponse } from "../admin/types";
+import type { ApiResponse } from "@/types/api";
 
 export interface FAQ {
   _id: string;

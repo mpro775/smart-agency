@@ -1,11 +1,14 @@
 const bcrypt = require('bcrypt');
 
 async function testPassword() {
-  const plainPassword = 'admin123456';
-  const hashedPassword = '$2b$10$BotlfXw1/UqpqJMi0EYGjuSxqMcdk2yPsOqnJEqggObTX5g9s4wbS';
+  const plainPassword = process.env.TEST_PASSWORD;
+  const hashedPassword = process.env.TEST_PASSWORD_HASH;
+
+  if (!plainPassword || !hashedPassword) {
+    throw new Error('TEST_PASSWORD and TEST_PASSWORD_HASH are required');
+  }
 
   console.log('Testing password verification...');
-  console.log('Plain password:', plainPassword);
   console.log('Hashed password:', hashedPassword);
 
   try {

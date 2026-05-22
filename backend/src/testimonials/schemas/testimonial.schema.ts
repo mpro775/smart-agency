@@ -48,6 +48,7 @@ export const TestimonialSchema = SchemaFactory.createForClass(Testimonial);
 // Indexes
 TestimonialSchema.index({ isActive: 1 });
 TestimonialSchema.index({ isFeatured: 1 });
+TestimonialSchema.index({ isActive: 1, isFeatured: 1, sortOrder: 1 });
 TestimonialSchema.index({ sortOrder: 1 });
 TestimonialSchema.index({ rating: -1 });
 

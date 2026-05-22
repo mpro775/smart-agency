@@ -6,12 +6,22 @@ import { publicBlogService } from "../services/blog.service";
 import type { Blog } from "../admin/types";
 import BlogInsightCard from "./blog/BlogInsightCard";
 
-export default function LatestBlogs() {
-  const [blogs, setBlogs] = useState<Blog[]>([]);
-  const [loading, setLoading] = useState(true);
+interface LatestBlogsProps {
+  initialBlogs?: Blog[];
+}
+
+export default function LatestBlogs({ initialBlogs }: LatestBlogsProps) {
+  const [blogs, setBlogs] = useState<Blog[]>(initialBlogs || []);
+  const [loading, setLoading] = useState(!initialBlogs);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (initialBlogs) {
+      setBlogs(initialBlogs);
+      setLoading(false);
+      return;
+    }
+
     const loadBlogs = async () => {
       try {
         setLoading(true);
@@ -31,7 +41,7 @@ export default function LatestBlogs() {
     };
 
     loadBlogs();
-  }, []);
+  }, [initialBlogs]);
 
   return (
     <SectionShell tone="light" pattern="grid" id="blog" withContainer={false}>

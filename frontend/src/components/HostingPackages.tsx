@@ -133,9 +133,17 @@ const valuePoints = [
   { label: "جاهز للتوسع", icon: FiLayers },
 ];
 
-export default function HostingPackages() {
-  const [packages, setPackages] = useState<HostingPackage[]>([]);
-  const [loading, setLoading] = useState(true);
+interface HostingPackagesProps {
+  initialPackages?: HostingPackage[];
+}
+
+export default function HostingPackages({
+  initialPackages,
+}: HostingPackagesProps) {
+  const [packages, setPackages] = useState<HostingPackage[]>(
+    initialPackages || [],
+  );
+  const [loading, setLoading] = useState(!initialPackages);
   const [error, setError] = useState<string | null>(null);
   const [billingCycle, setBillingCycle] = useState<BillingCycle>("Monthly");
   const [modalOpen, setModalOpen] = useState(false);
@@ -208,6 +216,12 @@ export default function HostingPackages() {
   };
 
   useEffect(() => {
+    if (initialPackages) {
+      setPackages(initialPackages);
+      setLoading(false);
+      return;
+    }
+
     const fetchPackages = async () => {
       try {
         setLoading(true);
@@ -221,7 +235,7 @@ export default function HostingPackages() {
       }
     };
     fetchPackages();
-  }, []);
+  }, [initialPackages]);
 
   // ترتيب الباقات حسب sortOrder
   const sortedPackages = [...packages].sort(

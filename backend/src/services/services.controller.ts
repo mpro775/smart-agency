@@ -20,16 +20,20 @@ import { CreateServiceDto } from './dto/create-service.dto';
 import { UpdateServiceDto } from './dto/update-service.dto';
 import { FilterServiceDto } from './dto/filter-service.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
 import { Public } from '../auth/decorators/public.decorator';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { UserRole } from '../users/schemas/user.schema';
 import { ResponseMessage } from '../common/decorators';
 
 @ApiTags('Services')
 @Controller('services')
+@Roles(UserRole.ADMIN, UserRole.EDITOR)
 export class ServicesController {
   constructor(private readonly servicesService: ServicesService) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Create a new service' })
   @ApiResponse({ status: 201, description: 'Service created successfully' })
@@ -46,6 +50,17 @@ export class ServicesController {
   @ApiResponse({ status: 200, description: 'Services fetched successfully' })
   @ResponseMessage('Services fetched successfully')
   findAll(@Query() filterDto: FilterServiceDto) {
+    return this.servicesService.findAll(filterDto);
+  }
+
+  @Get('admin')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @ApiBearerAuth('JWT-auth')
+  @ApiOperation({ summary: 'Get all services including inactive (Admin)' })
+  @ApiResponse({ status: 200, description: 'Services fetched successfully' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ResponseMessage('Services fetched successfully')
+  findAllAdmin(@Query() filterDto: FilterServiceDto) {
     return this.servicesService.findAll(filterDto);
   }
 
@@ -82,7 +97,7 @@ export class ServicesController {
   }
 
   @Patch(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Update a service' })
   @ApiResponse({ status: 200, description: 'Service updated successfully' })
@@ -95,7 +110,7 @@ export class ServicesController {
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Delete a service' })
   @ApiResponse({ status: 200, description: 'Service deleted successfully' })

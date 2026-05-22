@@ -94,29 +94,46 @@ const servicesData = [
   },
 ];
 
-export default function Services() {
-  const [services, setServices] = useState<Service[]>([]);
+type ServiceCardData = {
+  id: string | number;
+  title: string;
+  description?: string;
+  icon?: string;
+  iconType?: string;
+  side: "left" | "right";
+  hasCheck: boolean;
+};
+
+interface ServicesProps {
+  initialServices?: Service[];
+}
+
+export default function Services({ initialServices }: ServicesProps) {
+  const [services, setServices] = useState<Service[]>(initialServices || []);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  console.log(services);
 
   useEffect(() => {
+    if (initialServices) {
+      setServices(initialServices);
+      setLoading(false);
+      return;
+    }
+
     const fetchServices = async () => {
       try {
         setLoading(true);
         const data = await publicServicesService.getAll();
         setServices(data);
-        setError(null);
       } catch (err) {
-        console.error("Error fetching services:", err);
-        setError("فشل تحميل الخدمات. يرجى المحاولة مرة أخرى.");
+        console.warn("Falling back to static services because API failed.", err);
+        setServices([]);
       } finally {
         setLoading(false);
       }
     };
 
     fetchServices();
-  }, []);
+  }, [initialServices]);
 
   if (loading) {
     return (
@@ -133,15 +150,17 @@ export default function Services() {
     );
   }
 
-  if (error) {
-    return (
-      <SectionShell tone="light" pattern="dots" id="services">
-        <div className="text-center">
-          <p className="text-red-600">{error}</p>
-        </div>
-      </SectionShell>
-    );
-  }
+  const displayedServices: ServiceCardData[] = services.length
+    ? services.map((service, index) => ({
+        id: service._id,
+        title: service.title,
+        description: service.shortDescription || service.description,
+        icon: service.icon,
+        iconType: service.iconType,
+        side: index % 2 === 0 ? "right" : "left",
+        hasCheck: index === 0 || index === 3,
+      }))
+    : (servicesData as ServiceCardData[]);
 
   return (
     <SectionShell tone="light" pattern="dots" id="services">
@@ -196,7 +215,7 @@ export default function Services() {
 
           <div className="flex flex-col lg:flex-row items-start justify-between gap-8 lg:gap-12">
             <div className="flex-1 space-y-5">
-              {servicesData
+              {displayedServices
                 .filter((s) => s.side === "left")
                 .map((service, index) => (
                   <ServiceCard
@@ -263,7 +282,7 @@ export default function Services() {
             </motion.div>
 
             <div className="flex-1 space-y-5">
-              {servicesData
+              {displayedServices
                 .filter((s) => s.side === "right")
                 .map((service, index) => (
                   <ServiceCard
@@ -332,7 +351,7 @@ function ServiceCard({
   index,
   side,
 }: {
-  service: (typeof servicesData)[0];
+  service: ServiceCardData;
   index: number;
   side: "left" | "right";
 }) {

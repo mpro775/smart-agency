@@ -1,9 +1,10 @@
 import api from "./api";
 import type { AuthResponse, LoginCredentials, User } from "../types";
+import type { ApiResponse } from "@/types/api";
 
 export const authService = {
   login: async (credentials: LoginCredentials): Promise<AuthResponse> => {
-    const response = await api.post<{ data: AuthResponse }>(
+    const response = await api.post<ApiResponse<AuthResponse>>(
       "/auth/login",
       credentials
     );
@@ -23,7 +24,7 @@ export const authService = {
   },
 
   getProfile: async (): Promise<User> => {
-    const response = await api.get<{ data: User }>("/auth/profile");
+    const response = await api.get<ApiResponse<User>>("/auth/profile");
     return response.data.data;
   },
 

@@ -189,11 +189,25 @@ function TrustStats({ testimonials }: { testimonials: Testimonial[] }) {
   );
 }
 
-export default function Testimonials() {
-  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
-  const [loading, setLoading] = useState(true);
+interface TestimonialsProps {
+  initialTestimonials?: Testimonial[];
+}
+
+export default function Testimonials({
+  initialTestimonials,
+}: TestimonialsProps) {
+  const [testimonials, setTestimonials] = useState<Testimonial[]>(
+    initialTestimonials || [],
+  );
+  const [loading, setLoading] = useState(!initialTestimonials);
 
   useEffect(() => {
+    if (initialTestimonials) {
+      setTestimonials(initialTestimonials);
+      setLoading(false);
+      return;
+    }
+
     async function fetchTestimonials() {
       try {
         const featured = await publicTestimonialsService.getFeatured();
@@ -203,7 +217,7 @@ export default function Testimonials() {
       } catch (error) { console.error(error); } finally { setLoading(false); }
     }
     fetchTestimonials();
-  }, []);
+  }, [initialTestimonials]);
 
   if (loading) return <TestimonialsSkeleton />;
   if (!testimonials.length) return null;

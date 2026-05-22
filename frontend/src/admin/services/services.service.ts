@@ -51,7 +51,7 @@ export const servicesService = {
     if (filters?.search) params.append("search", filters.search);
 
     const response = await api.get<ApiResponse<Service[]>>(
-      `/services?${params.toString()}`
+      `/services/admin?${params.toString()}`
     );
     return {
       data: response.data.data,

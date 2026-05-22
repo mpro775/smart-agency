@@ -20,16 +20,20 @@ import { CreateTeamMemberDto } from './dto/create-team-member.dto';
 import { UpdateTeamMemberDto } from './dto/update-team-member.dto';
 import { FilterTeamDto } from './dto/filter-team.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
 import { Public } from '../auth/decorators/public.decorator';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { UserRole } from '../users/schemas/user.schema';
 import { ResponseMessage } from '../common/decorators';
 
 @ApiTags('Team')
 @Controller('team')
+@Roles(UserRole.ADMIN, UserRole.EDITOR)
 export class TeamController {
   constructor(private readonly teamService: TeamService) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Add a new team member' })
   @ApiResponse({ status: 201, description: 'Team member added successfully' })
@@ -49,7 +53,7 @@ export class TeamController {
   }
 
   @Get('admin')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Get all team members including inactive (Admin)' })
   @ApiResponse({ status: 200, description: 'Team members fetched successfully' })
@@ -69,7 +73,7 @@ export class TeamController {
   }
 
   @Get('stats')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Get team statistics' })
   @ApiResponse({ status: 200, description: 'Stats fetched successfully' })
@@ -99,7 +103,7 @@ export class TeamController {
   }
 
   @Patch('sort/order')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Update sort order of team members' })
   @ApiResponse({ status: 200, description: 'Sort order updated' })
@@ -110,7 +114,7 @@ export class TeamController {
   }
 
   @Patch(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Update a team member' })
   @ApiResponse({ status: 200, description: 'Team member updated successfully' })
@@ -122,7 +126,7 @@ export class TeamController {
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Remove a team member' })
   @ApiResponse({ status: 200, description: 'Team member removed successfully' })

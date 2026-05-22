@@ -3,8 +3,7 @@ const bcrypt = require('bcrypt');
 
 // MongoDB connection string
 const MONGODB_URI =
-  process.env.MONGODB_URI ||
-  'mongodb+srv://smartagencyyem_db_user:P93OOGZBO9gSaXBL@cluster0.sma4e8a.mongodb.net/smart-agency?retryWrites=true&w=majority';
+  process.env.MONGODB_URI;
 
 // User Schema
 const userSchema = new mongoose.Schema(
@@ -22,12 +21,20 @@ const User = mongoose.model('User', userSchema);
 
 async function resetAdmin() {
   try {
+    if (!MONGODB_URI) {
+      throw new Error('MONGODB_URI is required');
+    }
+
     console.log('🔄 جاري الاتصال بقاعدة البيانات...');
     await mongoose.connect(MONGODB_URI);
     console.log('✅ تم الاتصال بقاعدة البيانات بنجاح\n');
 
-    const adminEmail = 'admin@smartagency.com';
-    const adminPassword = 'admin123';
+    const adminEmail = process.env.SEED_ADMIN_EMAIL || 'admin@smartagency.com';
+    const adminPassword = process.env.SEED_ADMIN_PASSWORD;
+
+    if (!adminPassword) {
+      throw new Error('SEED_ADMIN_PASSWORD is required');
+    }
 
     // Find admin user
     let admin = await User.findOne({ email: adminEmail.toLowerCase() });
@@ -59,7 +66,6 @@ async function resetAdmin() {
     console.log('\n📋 معلومات تسجيل الدخول:');
     console.log('===========================================');
     console.log(`البريد الإلكتروني: ${adminEmail}`);
-    console.log(`كلمة المرور: ${adminPassword}`);
     console.log(
       `التحقق من كلمة المرور: ${testPassword ? '✅ صحيح' : '❌ خطأ'}`,
     );

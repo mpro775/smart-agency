@@ -1,5 +1,6 @@
 import publicApi from "./api";
-import type { Blog, ApiResponse, PaginatedResponse } from "../admin/types";
+import type { Blog } from "../admin/types";
+import type { ApiResponse, PaginatedResponse } from "@/types/api";
 
 export interface BlogFilters {
   page?: number;

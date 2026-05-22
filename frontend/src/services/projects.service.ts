@@ -1,5 +1,6 @@
 import publicApi from "./api";
-import type { Project, ApiResponse, PaginatedResponse } from "../admin/types";
+import type { Project } from "../admin/types";
+import type { ApiResponse, PaginatedResponse } from "@/types/api";
 
 export interface ProjectFilters {
   page?: number;

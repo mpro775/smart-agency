@@ -21,12 +21,16 @@ import {
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { UploadsService } from './uploads.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { UserRole } from '../users/schemas/user.schema';
 import { ResponseMessage } from '../common/decorators';
 import { UploadResponseDto } from './dto/upload-response.dto';
 
 @ApiTags('Uploads')
 @Controller('uploads')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(UserRole.ADMIN, UserRole.EDITOR)
 @ApiBearerAuth('JWT-auth')
 export class UploadsController {
   constructor(private readonly uploadsService: UploadsService) {}

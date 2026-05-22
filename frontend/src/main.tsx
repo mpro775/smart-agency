@@ -1,4 +1,4 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import App from "./App";
@@ -24,32 +24,58 @@ function LayoutFooter() {
 
 // Admin imports
 import { QueryProvider, AuthProvider } from "./admin/context";
-import { AdminLayout, PrivateRoute } from "./admin/components";
-import {
-  Dashboard,
-  LoginPage,
-  ProjectsList,
-  ProjectForm,
-  BlogList,
-  BlogForm,
-  LeadsList,
-  TeamList,
-  TeamForm,
-  TestimonialsList,
-  TestimonialForm,
-  TechnologiesList,
-  TechnologyForm,
-  HostingList,
-  HostingForm,
-  FAQsList,
-  FAQForm,
-  ServicesList,
-  ServiceForm,
-  ProjectCategoriesList,
-  ProjectCategoryForm,
-  CompanyInfoForm,
-  AboutForm,
-} from "./admin/pages";
+import { PrivateRoute } from "./admin/components/PrivateRoute";
+
+const AdminLayout = lazy(() =>
+  import("./admin/components/layout/AdminLayout").then((module) => ({
+    default: module.AdminLayout,
+  })),
+);
+const LoginPage = lazy(() => import("./admin/pages/Login"));
+const Dashboard = lazy(() => import("./admin/pages/Dashboard"));
+const ProjectsList = lazy(() => import("./admin/pages/projects/ProjectsList"));
+const ProjectForm = lazy(() => import("./admin/pages/projects/ProjectForm"));
+const BlogList = lazy(() => import("./admin/pages/blog/BlogList"));
+const BlogForm = lazy(() => import("./admin/pages/blog/BlogForm"));
+const LeadsList = lazy(() => import("./admin/pages/leads/LeadsList"));
+const TeamList = lazy(() => import("./admin/pages/team/TeamList"));
+const TeamForm = lazy(() => import("./admin/pages/team/TeamForm"));
+const TestimonialsList = lazy(
+  () => import("./admin/pages/testimonials/TestimonialsList"),
+);
+const TestimonialForm = lazy(
+  () => import("./admin/pages/testimonials/TestimonialForm"),
+);
+const TechnologiesList = lazy(
+  () => import("./admin/pages/technologies/TechnologiesList"),
+);
+const TechnologyForm = lazy(
+  () => import("./admin/pages/technologies/TechnologyForm"),
+);
+const HostingList = lazy(() => import("./admin/pages/hosting/HostingList"));
+const HostingForm = lazy(() => import("./admin/pages/hosting/HostingForm"));
+const FAQsList = lazy(() => import("./admin/pages/faqs/FAQsList"));
+const FAQForm = lazy(() => import("./admin/pages/faqs/FAQForm"));
+const ServicesList = lazy(() => import("./admin/pages/services/ServicesList"));
+const ServiceForm = lazy(() => import("./admin/pages/services/ServiceForm"));
+const ProjectCategoriesList = lazy(
+  () => import("./admin/pages/project-categories/ProjectCategoriesList"),
+);
+const ProjectCategoryForm = lazy(
+  () => import("./admin/pages/project-categories/ProjectCategoryForm"),
+);
+const CompanyInfoForm = lazy(
+  () => import("./admin/pages/company-info/CompanyInfoForm"),
+);
+const AboutForm = lazy(() => import("./admin/pages/about/AboutForm"));
+
+function RouteFallback() {
+  return (
+    <div className="min-h-[50vh] flex items-center justify-center text-slate-500">
+      جاري التحميل...
+    </div>
+  );
+}
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -60,6 +86,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           <CustomCursor />
 
           <ScrollToTop />
+          <Suspense fallback={<RouteFallback />}>
           <Routes>
             {/* Public Routes */}
             <Route
@@ -172,6 +199,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               <Route path="about" element={<AboutForm />} />
             </Route>
           </Routes>
+          </Suspense>
         </BrowserRouter>
       </AuthProvider>
     </QueryProvider>

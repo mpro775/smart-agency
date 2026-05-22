@@ -8,11 +8,15 @@ import {
 import { CompanyInfoService } from './company-info.service';
 import { UpdateCompanyInfoDto } from './dto/update-company-info.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
 import { Public } from '../auth/decorators/public.decorator';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { UserRole } from '../users/schemas/user.schema';
 import { ResponseMessage } from '../common/decorators';
 
 @ApiTags('Company Info')
 @Controller('company-info')
+@Roles(UserRole.ADMIN, UserRole.EDITOR)
 export class CompanyInfoController {
   constructor(private readonly companyInfoService: CompanyInfoService) {}
 
@@ -29,7 +33,7 @@ export class CompanyInfoController {
   }
 
   @Patch()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Update company information (Admin only)' })
   @ApiResponse({

@@ -20,17 +20,21 @@ import { CreateBlogDto } from './dto/create-blog.dto';
 import { UpdateBlogDto } from './dto/update-blog.dto';
 import { FilterBlogDto } from './dto/filter-blog.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
 import { Public } from '../auth/decorators/public.decorator';
+import { Roles } from '../auth/decorators/roles.decorator';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import { UserRole } from '../users/schemas/user.schema';
 import { ResponseMessage } from '../common/decorators';
 
 @ApiTags('Blog')
 @Controller('blog')
+@Roles(UserRole.ADMIN, UserRole.EDITOR)
 export class BlogController {
   constructor(private readonly blogService: BlogService) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Create a new blog post' })
   @ApiResponse({ status: 201, description: 'Blog post created successfully' })
@@ -54,7 +58,7 @@ export class BlogController {
   }
 
   @Get('admin')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Get all blog posts including drafts (Admin)' })
   @ApiResponse({ status: 200, description: 'Blog posts fetched successfully' })
@@ -121,7 +125,7 @@ export class BlogController {
   }
 
   @Get(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Get a blog post by ID (Admin)' })
   @ApiResponse({ status: 200, description: 'Blog post found' })
@@ -133,7 +137,7 @@ export class BlogController {
   }
 
   @Patch(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Update a blog post' })
   @ApiResponse({ status: 200, description: 'Blog post updated successfully' })
@@ -146,7 +150,7 @@ export class BlogController {
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Delete a blog post' })
   @ApiResponse({ status: 200, description: 'Blog post deleted successfully' })
