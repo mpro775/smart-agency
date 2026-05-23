@@ -1,0 +1,210 @@
+2026-May-23 18:45:07.266250 Docker 29.3.1 with BuildKit and Buildx detected on deployment server (apps-01).
+2026-May-23 18:45:07.323571 Starting deployment of mpro775/smart-agency:main to apps-01.
+2026-May-23 18:45:07.833437 Preparing container with helper image: ghcr.io/coollabsio/coolify-helper:1.0.13
+2026-May-23 18:45:08.281149 [DEBUG] [CMD]: docker stop -t 30 v13e84ekqnfpyrrjuu1tnz1z
+2026-May-23 18:45:08.281149 [DEBUG] Error response from daemon: No such container: v13e84ekqnfpyrrjuu1tnz1z
+2026-May-23 18:45:09.081828 [DEBUG] [CMD]: docker run -d --network 'coolify' --name v13e84ekqnfpyrrjuu1tnz1z  --rm -v /var/run/docker.sock:/var/run/docker.sock ghcr.io/coollabsio/coolify-helper:1.0.13
+2026-May-23 18:45:09.081828 [DEBUG] dd5fd8f853717c7ad2708c552a8d1ad504b0904dbc837f40964039f4fedd29ab
+2026-May-23 18:45:11.261590 [DEBUG] [CMD]: docker exec v13e84ekqnfpyrrjuu1tnz1z bash -c 'GIT_SSH_COMMAND="ssh -o ConnectTimeout=30 -p 22 -o Port=22 -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" git ls-remote https://github.com/mpro775/smart-agency refs/heads/main'
+2026-May-23 18:<REDACTED>@\(.*\):#https://\1/#g" '\''/artifacts/v13e84ekqnfpyrrjuu1tnz1z'\''/.gitmodules || true && git submodule sync && GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" git submodule update --init --recursive --depth=1; fi && cd '\''/artifacts/v13e84ekqnfpyrrjuu1tnz1z'\'' && GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" git lfs pull'
+2026-May-23 18:<REDACTED>@84.247.184.154:27017/smart-agency?authSource=admin&directConnection=true
+2026-May-23 18:45:20.449331 [DEBUG] ARG COOLIFY_URL=https://smartagency-ye.com
+2026-May-23 18:<REDACTED>@84.247.184.154:27017/smart-agency?authSource=admin&directConnection=true
+2026-May-23 18:45:20.449331 [DEBUG] ARG COOLIFY_URL=https://smartagency-ye.com
+2026-May-23 18:<REDACTED>@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
+2026-May-23 18:45:24.292377 [DEBUG] #6 resolve docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293 0.2s done
+2026-May-23 18:45:24.292377 [DEBUG] #6 DONE 0.2s
+2026-May-23 18:45:24.292377 [DEBUG] 
+2026-May-23 18:45:24.292377 [DEBUG] #7 [stage-1 1/3] FROM docker.io/library/nginx:alpine@sha256:7e8ff0a32da368869608f285124b4375b901401d88f5027865d8f88984d35d38
+2026-May-23 18:45:24.292377 [DEBUG] #7 resolve docker.io/library/nginx:alpine@sha256:7e8ff0a32da368869608f285124b4375b901401d88f5027865d8f88984d35d38 0.2s done
+2026-May-23 18:45:24.292377 [DEBUG] #7 DONE 0.2s
+2026-May-23 18:45:24.292377 [DEBUG] 
+2026-May-23 18:45:24.292377 [DEBUG] #5 [internal] load build context
+2026-May-23 18:45:24.520679 [DEBUG] #5 transferring context: 3.17MB 0.2s done
+2026-May-23 18:45:24.520679 [DEBUG] #5 DONE 0.4s
+2026-May-23 18:45:24.520679 [DEBUG] 
+2026-May-23 18:45:24.520679 [DEBUG] #6 [builder 1/8] FROM docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
+2026-May-23 18:45:24.589571 [DEBUG] #6 DONE 0.4s
+2026-May-23 18:45:24.752132 [DEBUG] #8 [builder 2/8] WORKDIR /app
+2026-May-23 18:45:24.789809 [DEBUG] #8 DONE 0.2s
+2026-May-23 18:45:24.961200 [DEBUG] #9 [builder 3/8] COPY package*.json ./
+2026-May-23 18:45:24.990600 [DEBUG] #9 DONE 0.2s
+2026-May-23 18:45:25.147878 [DEBUG] #10 [builder 4/8] COPY tsconfig*.json ./
+2026-May-23 18:45:25.154498 [DEBUG] #10 DONE 0.2s
+2026-May-23 18:45:25.306531 [DEBUG] #11 [builder 5/8] COPY vite.config.ts ./
+2026-May-23 18:45:25.311384 [DEBUG] #11 DONE 0.2s
+2026-May-23 18:45:25.471441 [DEBUG] #12 [builder 6/8] RUN npm ci
+2026-May-23 18:45:49.592147 [DEBUG] #12 24.28
+2026-May-23 18:45:49.592147 [DEBUG] #12 24.28 added 270 packages, and audited 271 packages in 24s
+2026-May-23 18:45:49.592147 [DEBUG] #12 24.28
+2026-May-23 18:45:49.592147 [DEBUG] #12 24.28 69 packages are looking for funding
+2026-May-23 18:45:49.592147 [DEBUG] #12 24.28   run `npm fund` for details
+2026-May-23 18:45:49.828897 [DEBUG] #12 24.36
+2026-May-23 18:45:49.828897 [DEBUG] #12 24.36 8 vulnerabilities (3 moderate, 5 high)
+2026-May-23 18:45:49.828897 [DEBUG] #12 24.36
+2026-May-23 18:45:49.828897 [DEBUG] #12 24.36 To address all issues, run:
+2026-May-23 18:45:49.828897 [DEBUG] #12 24.36   npm audit fix
+2026-May-23 18:45:49.828897 [DEBUG] #12 24.36
+2026-May-23 18:45:49.828897 [DEBUG] #12 24.36 Run `npm audit` for details.
+2026-May-23 18:45:49.828897 [DEBUG] #12 24.36 npm notice
+2026-May-23 18:45:49.828897 [DEBUG] #12 24.36 npm notice New major version of npm available! 10.8.2 -> 11.15.0
+2026-May-23 18:45:49.828897 [DEBUG] #12 24.36 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.15.0
+2026-May-23 18:<REDACTED>@11.15.0
+2026-May-23 18:45:49.828897 [DEBUG] #12 24.36 npm notice
+2026-May-23 18:45:51.658538 [DEBUG] #12 DONE 26.3s
+2026-May-23 18:45:51.817034 [DEBUG] #13 [builder 7/8] COPY . .
+2026-May-23 18:45:52.212785 [DEBUG] #13 DONE 0.5s
+2026-May-23 18:45:52.377351 [DEBUG] #14 [builder 8/8] RUN npm run build
+2026-May-23 18:45:52.814943 [DEBUG] #14 0.589
+2026-May-23 18:45:52.814943 [DEBUG] #14 0.589 > my-app@0.0.0 build
+2026-May-23 18:45:52.814943 [DEBUG] #14 0.589 > tsc -b && vite build
+2026-May-23 18:45:52.814943 [DEBUG] #14 0.589
+2026-May-23 18:45:52.976993 [DEBUG] #14 0.596 sh: tsc: not found
+2026-May-23 18:45:52.986171 [DEBUG] #14 ERROR: process "/bin/sh -c npm run build" did not complete successfully: exit code: 127
+2026-May-23 18:45:53.099207 [DEBUG] ------
+2026-May-23 18:45:53.099207 [DEBUG] > [builder 8/8] RUN npm run build:
+2026-May-23 18:45:53.099207 [DEBUG] 0.589
+2026-May-23 18:45:53.099207 [DEBUG] 0.589 > my-app@0.0.0 build
+2026-May-23 18:45:53.099207 [DEBUG] 0.589 > tsc -b && vite build
+2026-May-23 18:45:53.099207 [DEBUG] 0.589
+2026-May-23 18:45:53.099207 [DEBUG] 0.596 sh: tsc: not found
+2026-May-23 18:45:53.099207 [DEBUG] ------
+2026-May-23 18:45:53.105705 [DEBUG] 8 warnings found (use docker --debug to expand):
+2026-May-23 18:45:53.105705 [DEBUG] - SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "SEED_ADMIN_PASSWORD") (line 17)
+2026-May-23 18:45:53.105705 [DEBUG] - SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "JWT_SECRET") (line 53)
+2026-May-23 18:45:53.105705 [DEBUG] - SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "R2_SECRET_ACCESS_KEY") (line 58)
+2026-May-23 18:45:53.105705 [DEBUG] - SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "R2_ACCESS_KEY_ID") (line 60)
+2026-May-23 18:45:53.105705 [DEBUG] - SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "SEED_ADMIN_PASSWORD") (line 64)
+2026-May-23 18:45:53.105705 [DEBUG] - SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "JWT_SECRET") (line 6)
+2026-May-23 18:45:53.105705 [DEBUG] - SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "R2_SECRET_ACCESS_KEY") (line 11)
+2026-May-23 18:45:53.105705 [DEBUG] - SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "R2_ACCESS_KEY_ID") (line 13)
+2026-May-23 18:45:53.111781 [DEBUG] Dockerfile:46
+2026-May-23 18:45:53.111781 [DEBUG] --------------------
+2026-May-23 18:45:53.111781 [DEBUG] 44 |
+2026-May-23 18:45:53.111781 [DEBUG] 45 |     # Build the application
+2026-May-23 18:45:53.111781 [DEBUG] 46 | >>> RUN npm run build
+2026-May-23 18:45:53.111781 [DEBUG] 47 |
+2026-May-23 18:45:53.111781 [DEBUG] 48 |     # Production stage
+2026-May-23 18:45:53.111781 [DEBUG] --------------------
+2026-May-23 18:45:53.111781 [DEBUG] ERROR: failed to build: failed to solve: process "/bin/sh -c npm run build" did not complete successfully: exit code: 127
+2026-May-23 18:45:53.121429 [DEBUG] exit status 1
+2026-May-23 18:45:53.293592 ========================================
+2026-May-23 18:45:53.313385 Deployment failed: Command execution failed (exit code 1): docker exec v13e84ekqnfpyrrjuu1tnz1z bash -c 'bash /artifacts/build.sh'
+2026-May-23 18:45:53.313385 Error: #0 building with "default" instance using docker driver
+2026-May-23 18:45:53.313385 
+2026-May-23 18:45:53.313385 #1 [internal] load build definition from Dockerfile
+2026-May-23 18:45:53.313385 #1 transferring dockerfile: 2.73kB done
+2026-May-23 18:45:53.313385 #1 DONE 0.1s
+2026-May-23 18:45:53.313385 
+2026-May-23 18:45:53.313385 #2 [internal] load metadata for docker.io/library/node:20-alpine
+2026-May-23 18:45:53.313385 #2 DONE 1.2s
+2026-May-23 18:45:53.313385 
+2026-May-23 18:45:53.313385 #3 [internal] load metadata for docker.io/library/nginx:alpine
+2026-May-23 18:45:53.313385 #3 DONE 1.4s
+2026-May-23 18:45:53.313385 
+2026-May-23 18:45:53.313385 #4 [internal] load .dockerignore
+2026-May-23 18:45:53.313385 #4 transferring context: 179B done
+2026-May-23 18:45:53.313385 #4 DONE 0.1s
+2026-May-23 18:45:53.313385 
+2026-May-23 18:45:53.313385 #5 [internal] load build context
+2026-May-23 18:45:53.313385 #5 ...
+2026-May-23 18:45:53.313385 
+2026-May-23 18:45:53.313385 #6 [builder 1/8] FROM docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
+2026-May-23 18:45:53.313385 #6 resolve docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293 0.2s done
+2026-May-23 18:45:53.313385 #6 DONE 0.2s
+2026-May-23 18:45:53.313385 
+2026-May-23 18:45:53.313385 #7 [stage-1 1/3] FROM docker.io/library/nginx:alpine@sha256:7e8ff0a32da368869608f285124b4375b901401d88f5027865d8f88984d35d38
+2026-May-23 18:45:53.313385 #7 resolve docker.io/library/nginx:alpine@sha256:7e8ff0a32da368869608f285124b4375b901401d88f5027865d8f88984d35d38 0.2s done
+2026-May-23 18:45:53.313385 #7 DONE 0.2s
+2026-May-23 18:45:53.313385 
+2026-May-23 18:45:53.313385 #5 [internal] load build context
+2026-May-23 18:45:53.313385 #5 transferring context: 3.17MB 0.2s done
+2026-May-23 18:45:53.313385 #5 DONE 0.4s
+2026-May-23 18:45:53.313385 
+2026-May-23 18:45:53.313385 #6 [builder 1/8] FROM docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
+2026-May-23 18:45:53.313385 #6 DONE 0.4s
+2026-May-23 18:45:53.313385 
+2026-May-23 18:45:53.313385 #8 [builder 2/8] WORKDIR /app
+2026-May-23 18:45:53.313385 #8 DONE 0.2s
+2026-May-23 18:45:53.313385 
+2026-May-23 18:45:53.313385 #9 [builder 3/8] COPY package*.json ./
+2026-May-23 18:45:53.313385 #9 DONE 0.2s
+2026-May-23 18:45:53.313385 
+2026-May-23 18:45:53.313385 #10 [builder 4/8] COPY tsconfig*.json ./
+2026-May-23 18:45:53.313385 #10 DONE 0.2s
+2026-May-23 18:45:53.313385 
+2026-May-23 18:45:53.313385 #11 [builder 5/8] COPY vite.config.ts ./
+2026-May-23 18:45:53.313385 #11 DONE 0.2s
+2026-May-23 18:45:53.313385 
+2026-May-23 18:45:53.313385 #12 [builder 6/8] RUN npm ci
+2026-May-23 18:45:53.313385 #12 24.28
+2026-May-23 18:45:53.313385 #12 24.28 added 270 packages, and audited 271 packages in 24s
+2026-May-23 18:45:53.313385 #12 24.28
+2026-May-23 18:45:53.313385 #12 24.28 69 packages are looking for funding
+2026-May-23 18:45:53.313385 #12 24.28   run `npm fund` for details
+2026-May-23 18:45:53.313385 #12 24.36
+2026-May-23 18:45:53.313385 #12 24.36 8 vulnerabilities (3 moderate, 5 high)
+2026-May-23 18:45:53.313385 #12 24.36
+2026-May-23 18:45:53.313385 #12 24.36 To address all issues, run:
+2026-May-23 18:45:53.313385 #12 24.36   npm audit fix
+2026-May-23 18:45:53.313385 #12 24.36
+2026-May-23 18:45:53.313385 #12 24.36 Run `npm audit` for details.
+2026-May-23 18:45:53.313385 #12 24.36 npm notice
+2026-May-23 18:45:53.313385 #12 24.36 npm notice New major version of npm available! 10.8.2 -> 11.15.0
+2026-May-23 18:45:53.313385 #12 24.36 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.15.0
+2026-May-23 18:<REDACTED>@11.15.0
+2026-May-23 18:45:53.313385 #12 24.36 npm notice
+2026-May-23 18:45:53.313385 #12 DONE 26.3s
+2026-May-23 18:45:53.313385 
+2026-May-23 18:45:53.313385 #13 [builder 7/8] COPY . .
+2026-May-23 18:45:53.313385 #13 DONE 0.5s
+2026-May-23 18:45:53.313385 
+2026-May-23 18:45:53.313385 #14 [builder 8/8] RUN npm run build
+2026-May-23 18:45:53.313385 #14 0.589
+2026-May-23 18:45:53.313385 #14 0.589 > my-app@0.0.0 build
+2026-May-23 18:45:53.313385 #14 0.589 > tsc -b && vite build
+2026-May-23 18:45:53.313385 #14 0.589
+2026-May-23 18:45:53.313385 #14 0.596 sh: tsc: not found
+2026-May-23 18:45:53.313385 #14 ERROR: process "/bin/sh -c npm run build" did not complete successfully: exit code: 127
+2026-May-23 18:45:53.313385 ------
+2026-May-23 18:45:53.313385 > [builder 8/8] RUN npm run build:
+2026-May-23 18:45:53.313385 0.589
+2026-May-23 18:45:53.313385 0.589 > my-app@0.0.0 build
+2026-May-23 18:45:53.313385 0.589 > tsc -b && vite build
+2026-May-23 18:45:53.313385 0.589
+2026-May-23 18:45:53.313385 0.596 sh: tsc: not found
+2026-May-23 18:45:53.313385 ------
+2026-May-23 18:45:53.313385 
+2026-May-23 18:45:53.313385 8 warnings found (use docker --debug to expand):
+2026-May-23 18:45:53.313385 - SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "SEED_ADMIN_PASSWORD") (line 17)
+2026-May-23 18:45:53.313385 - SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "JWT_SECRET") (line 53)
+2026-May-23 18:45:53.313385 - SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "R2_SECRET_ACCESS_KEY") (line 58)
+2026-May-23 18:45:53.313385 - SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "R2_ACCESS_KEY_ID") (line 60)
+2026-May-23 18:45:53.313385 - SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "SEED_ADMIN_PASSWORD") (line 64)
+2026-May-23 18:45:53.313385 - SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "JWT_SECRET") (line 6)
+2026-May-23 18:45:53.313385 - SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "R2_SECRET_ACCESS_KEY") (line 11)
+2026-May-23 18:45:53.313385 - SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "R2_ACCESS_KEY_ID") (line 13)
+2026-May-23 18:45:53.313385 Dockerfile:46
+2026-May-23 18:45:53.313385 --------------------
+2026-May-23 18:45:53.313385 44 |
+2026-May-23 18:45:53.313385 45 |     # Build the application
+2026-May-23 18:45:53.313385 46 | >>> RUN npm run build
+2026-May-23 18:45:53.313385 47 |
+2026-May-23 18:45:53.313385 48 |     # Production stage
+2026-May-23 18:45:53.313385 --------------------
+2026-May-23 18:45:53.313385 ERROR: failed to build: failed to solve: process "/bin/sh -c npm run build" did not complete successfully: exit code: 127
+2026-May-23 18:45:53.313385 exit status 1
+2026-May-23 18:45:53.331917 [DEBUG] Error type: App\Exceptions\DeploymentException
+2026-May-23 18:45:53.361413 [DEBUG] Error code: 0
+2026-May-23 18:45:53.383897 [DEBUG] Location: /var/www/html/app/Traits/ExecuteRemoteCommand.php:242
+2026-May-23 18:45:53.411954 [DEBUG] Stack trace (first 5 lines):
+2026-May-23 18:45:53.429465 [DEBUG] #0 /var/www/html/app/Traits/ExecuteRemoteCommand.php(106): App\Jobs\ApplicationDeploymentJob->executeCommandWithProcess()
+2026-May-23 18:45:53.446834 [DEBUG] #1 /var/www/html/vendor/laravel/framework/src/Illuminate/Collections/Traits/EnumeratesValues.php(275): App\Jobs\ApplicationDeploymentJob->{closure:App\Traits\ExecuteRemoteCommand::execute_remote_command():72}()
+2026-May-23 18:45:53.468083 [DEBUG] #2 /var/www/html/app/Traits/ExecuteRemoteCommand.php(72): Illuminate\Support\Collection->each()
+2026-May-23 18:45:53.488495 [DEBUG] #3 /var/www/html/app/Jobs/ApplicationDeploymentJob.php(3290): App\Jobs\ApplicationDeploymentJob->execute_remote_command()
+2026-May-23 18:45:53.503731 [DEBUG] #4 /var/www/html/app/Jobs/ApplicationDeploymentJob.php(898): App\Jobs\ApplicationDeploymentJob->build_image()
+2026-May-23 18:45:53.525491 ========================================
+2026-May-23 18:45:53.543073 Deployment failed. Removing the new version of your application.
+2026-May-23 18:45:54.432722 Gracefully shutting down build container: v13e84ekqnfpyrrjuu1tnz1z
+2026-May-23 18:45:55.441370 [DEBUG] [CMD]: docker stop -t 30 v13e84ekqnfpyrrjuu1tnz1z
+2026-May-23 18:45:55.441370 [DEBUG] v13e84ekqnfpyrrjuu1tnz1z
