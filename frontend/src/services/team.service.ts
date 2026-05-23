@@ -41,7 +41,7 @@ export const publicTeamService = {
     const response = await publicApi.get<ApiResponse<TeamMember[]>>(
       `/team?${params.toString()}`
     );
-    return response.data.data;
+    return response.data.data ?? [];
   },
 
   // Get team members for homepage
@@ -49,7 +49,7 @@ export const publicTeamService = {
     const response = await publicApi.get<ApiResponse<TeamMember[]>>(
       "/team/homepage"
     );
-    return response.data.data;
+    return response.data.data ?? [];
   },
 
   // Get team member by ID
@@ -65,6 +65,6 @@ export const publicTeamService = {
     const response = await publicApi.get<ApiResponse<TeamMember[]>>(
       `/team/department/${department}`
     );
-    return response.data.data;
+    return response.data.data ?? [];
   },
 };

@@ -35,7 +35,7 @@ export const publicTestimonialsService = {
     const response = await publicApi.get<ApiResponse<Testimonial[]>>(
       `/testimonials?${params.toString()}`
     );
-    return response.data.data;
+    return response.data.data ?? [];
   },
 
   // Get featured testimonials
@@ -43,7 +43,7 @@ export const publicTestimonialsService = {
     const response = await publicApi.get<ApiResponse<Testimonial[]>>(
       "/testimonials/featured"
     );
-    return response.data.data;
+    return response.data.data ?? [];
   },
 
   // Get testimonial by ID

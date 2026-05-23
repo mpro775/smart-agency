@@ -27,7 +27,7 @@ export const publicFaqsService = {
     const response = await publicApi.get<ApiResponse<FAQ[]>>(
       `/faqs?${params.toString()}`
     );
-    return response.data.data;
+    return response.data.data ?? [];
   },
 
   // Get FAQs by category
@@ -35,7 +35,7 @@ export const publicFaqsService = {
     const response = await publicApi.get<ApiResponse<FAQ[]>>(
       `/faqs/category/${category}`
     );
-    return response.data.data;
+    return response.data.data ?? [];
   },
 
   // Get all categories
@@ -43,6 +43,6 @@ export const publicFaqsService = {
     const response = await publicApi.get<ApiResponse<string[]>>(
       "/faqs/categories"
     );
-    return response.data.data;
+    return response.data.data ?? [];
   },
 };

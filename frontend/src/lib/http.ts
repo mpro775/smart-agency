@@ -23,7 +23,19 @@ http.interceptors.request.use((config) => {
 });
 
 http.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    if (
+      response.data &&
+      typeof response.data === "object" &&
+      "data" in response.data &&
+      response.data.data === undefined
+    ) {
+      response.data.data = Array.isArray(response.data.items)
+        ? response.data.items
+        : null;
+    }
+    return response;
+  },
   (error) => {
     if (error.response?.status === 401) {
       localStorage.removeItem("accessToken");

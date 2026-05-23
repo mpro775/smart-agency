@@ -25,7 +25,7 @@ export const publicTechnologiesService = {
     const response = await publicApi.get<ApiResponse<Technology[]>>(
       `/technologies?${params.toString()}`
     );
-    return response.data.data;
+    return response.data.data ?? [];
   },
 
   // Get technology by ID

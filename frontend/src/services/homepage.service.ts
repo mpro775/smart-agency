@@ -26,6 +26,17 @@ export const homepageService = {
   async get(): Promise<HomepageData> {
     const response =
       await publicApi.get<ApiResponse<HomepageData>>("/public/homepage");
-    return response.data.data;
+    return response.data.data ?? {
+      services: [],
+      featuredProjects: [],
+      projectCategories: [],
+      technologies: [],
+      teamMembers: [],
+      testimonials: [],
+      hostingPackages: [],
+      faqs: [],
+      latestBlogs: [],
+      companyInfo: null,
+    };
   },
 };

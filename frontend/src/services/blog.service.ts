@@ -32,8 +32,8 @@ export const publicBlogService = {
       `/blog?${params.toString()}`
     );
     return {
-      data: response.data.data,
-      meta: response.data.meta!,
+      data: response.data.data ?? [],
+      meta: response.data.meta ?? { total: 0, page: 1, limit: 10, totalPages: 0 },
     };
   },
 
@@ -56,34 +56,34 @@ export const publicBlogService = {
     const response = await publicApi.get<
       ApiResponse<BlogTaxonomyItem[]>
     >("/blog/tags");
-    return response.data.data;
+    return response.data.data ?? [];
   },
 
   getCategories: async (): Promise<BlogTaxonomyItem[]> => {
     const response = await publicApi.get<ApiResponse<BlogTaxonomyItem[]>>(
       "/blog/categories"
     );
-    return response.data.data;
+    return response.data.data ?? [];
   },
 
   getFeatured: async (limit = 3): Promise<Blog[]> => {
     const response = await publicApi.get<ApiResponse<Blog[]>>(
       `/blog/featured?limit=${limit}`
     );
-    return response.data.data;
+    return response.data.data ?? [];
   },
 
   getPopular: async (limit = 5): Promise<Blog[]> => {
     const response = await publicApi.get<ApiResponse<Blog[]>>(
       `/blog/popular?limit=${limit}`
     );
-    return response.data.data;
+    return response.data.data ?? [];
   },
 
   getRelated: async (slug: string, limit = 3): Promise<Blog[]> => {
     const response = await publicApi.get<ApiResponse<Blog[]>>(
       `/blog/related/${slug}?limit=${limit}`
     );
-    return response.data.data;
+    return response.data.data ?? [];
   },
 };

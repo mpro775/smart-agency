@@ -45,8 +45,8 @@ export const publicProjectsService = {
       `/projects?${params.toString()}`
     );
     return {
-      data: response.data.data,
-      meta: response.data.meta!,
+      data: response.data.data ?? [],
+      meta: response.data.meta ?? { total: 0, page: 1, limit: 10, totalPages: 0 },
     };
   },
 
@@ -55,7 +55,7 @@ export const publicProjectsService = {
     const response = await publicApi.get<ApiResponse<Project[]>>(
       "/projects/featured"
     );
-    return response.data.data;
+    return response.data.data ?? [];
   },
 
   // Get project by slug
@@ -81,7 +81,7 @@ export const publicProjectsService = {
     const response = await publicApi.get<
       ApiResponse<{ value: string; label: string; count: number }[]>
     >("/projects/categories");
-    return response.data.data;
+    return response.data.data ?? [];
   },
 
   getProjects(filters?: ProjectFilters) {

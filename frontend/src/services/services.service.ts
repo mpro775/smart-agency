@@ -23,7 +23,7 @@ export const publicServicesService = {
     const response = await publicApi.get<ApiResponse<Service[]>>(
       "/services/active"
     );
-    return response.data.data;
+    return response.data.data ?? [];
   },
 
   // Get a service by slug

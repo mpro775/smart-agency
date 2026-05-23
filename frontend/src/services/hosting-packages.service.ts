@@ -63,7 +63,7 @@ export const publicHostingPackagesService = {
     const response = await publicApi.get<ApiResponse<HostingPackage[]>>(
       `/hosting-packages?${params.toString()}`
     );
-    return response.data.data;
+    return response.data.data ?? [];
   },
 
   // Get packages by category
@@ -71,7 +71,7 @@ export const publicHostingPackagesService = {
     const response = await publicApi.get<ApiResponse<HostingPackage[]>>(
       `/hosting-packages/category/${category}`
     );
-    return response.data.data;
+    return response.data.data ?? [];
   },
 
   // Get package by ID
