@@ -7,8 +7,8 @@ WORKDIR /app
 COPY package*.json ./
 COPY tsconfig.json ./
 
-# Install dependencies
-RUN npm ci
+# Install dependencies (force devDependencies for build tools like nest CLI)
+RUN NODE_ENV=development npm ci
 
 # Copy source code
 COPY . .
