@@ -15,4 +15,3 @@ import { Testimonial, TestimonialSchema } from './schemas/testimonial.schema';
   exports: [TestimonialsService],
 })
 export class TestimonialsModule {}
-

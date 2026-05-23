@@ -26,8 +26,8 @@ export const companyInfoService = {
         "/company-info"
       );
       return response.data.data;
-    } catch (error: any) {
-      console.error("Error fetching company info:", error);
+    } catch {
+      console.error("Error fetching company info:");
       return null;
     }
   },

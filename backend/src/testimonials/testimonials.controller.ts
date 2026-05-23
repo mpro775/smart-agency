@@ -46,7 +46,10 @@ export class TestimonialsController {
   @Get()
   @Public()
   @ApiOperation({ summary: 'Get all active testimonials' })
-  @ApiResponse({ status: 200, description: 'Testimonials fetched successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Testimonials fetched successfully',
+  })
   @ResponseMessage('Testimonials fetched successfully')
   findAll(@Query() paginationDto: PaginationDto) {
     return this.testimonialsService.findAll(paginationDto, false);
@@ -56,7 +59,10 @@ export class TestimonialsController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Get all testimonials including inactive (Admin)' })
-  @ApiResponse({ status: 200, description: 'Testimonials fetched successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Testimonials fetched successfully',
+  })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ResponseMessage('Testimonials fetched successfully')
   findAllAdmin(@Query() paginationDto: PaginationDto) {
@@ -86,7 +92,10 @@ export class TestimonialsController {
   @Get('project/:projectId')
   @Public()
   @ApiOperation({ summary: 'Get testimonials for a specific project' })
-  @ApiResponse({ status: 200, description: 'Testimonials fetched successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Testimonials fetched successfully',
+  })
   @ResponseMessage('Project testimonials fetched successfully')
   findByProject(@Param('projectId') projectId: string) {
     return this.testimonialsService.findByProject(projectId);
@@ -126,4 +135,3 @@ export class TestimonialsController {
     return this.testimonialsService.remove(id);
   }
 }
-

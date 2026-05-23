@@ -278,12 +278,15 @@ export default function QuotePage() {
 
       setIsSubmitting(false);
       setSubmitSuccess(true);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error submitting project brief:", error);
       setIsSubmitting(false);
-      setSubmitError(
-        error.response?.data?.message || "فشل إرسال الطلب. يرجى المحاولة مرة أخرى."
-      );
+      let message = "فشل إرسال الطلب. يرجى المحاولة مرة أخرى.";
+      if (error && typeof error === "object" && "response" in error) {
+        const resp = (error as { response?: { data?: { message?: string } } }).response;
+        message = resp?.data?.message || message;
+      }
+      setSubmitError(message);
     }
   };
 

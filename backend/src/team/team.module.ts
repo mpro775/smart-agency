@@ -15,4 +15,3 @@ import { TeamMember, TeamMemberSchema } from './schemas/team-member.schema';
   exports: [TeamService],
 })
 export class TeamModule {}
-

@@ -5,7 +5,7 @@
 
 import { useInView } from "framer-motion";
 import { useRef } from "react";
-import type { MutableRefObject } from "react";
+import type { RefObject } from "react";
 
 interface UseScrollAnimationOptions {
     /**
@@ -31,7 +31,7 @@ interface UseScrollAnimationReturn {
     /**
      * Ref to attach to the element
      */
-    ref: MutableRefObject<any>;
+    ref: RefObject<HTMLElement | null>;
 
     /**
      * Whether element is in view

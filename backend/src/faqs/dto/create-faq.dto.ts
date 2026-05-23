@@ -19,7 +19,8 @@ export class CreateFaqDto {
 
   @ApiProperty({
     description: 'The answer (supports rich text/HTML)',
-    example: '<p>We offer web development, mobile apps, and hosting services.</p>',
+    example:
+      '<p>We offer web development, mobile apps, and hosting services.</p>',
   })
   @IsString()
   @IsNotEmpty()

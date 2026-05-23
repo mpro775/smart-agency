@@ -30,7 +30,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
       } else if (typeof exceptionResponse === 'object') {
         const responseObj = exceptionResponse as Record<string, unknown>;
         message = (responseObj.message as string) || message;
-        
+
         // Handle validation errors
         if (Array.isArray(responseObj.message)) {
           errors = responseObj.message;
@@ -56,4 +56,3 @@ export class AllExceptionsFilter implements ExceptionFilter {
     });
   }
 }
-

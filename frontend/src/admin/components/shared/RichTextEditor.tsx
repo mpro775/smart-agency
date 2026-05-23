@@ -249,6 +249,18 @@ export function RichTextEditor({
     }
   }, [editor, value]);
 
+  const addLink = useCallback(() => {
+    if (!editor) return;
+    const previousUrl = editor.getAttributes("link").href;
+    const url = window.prompt("أدخل الرابط:", previousUrl || "https://");
+    if (url === null) return;
+    if (url === "") {
+      editor.chain().focus().extendMarkRange("link").unsetLink().run();
+      return;
+    }
+    editor.chain().focus().extendMarkRange("link").setLink({ href: url }).run();
+  }, [editor]);
+
   // Keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -289,19 +301,7 @@ export function RichTextEditor({
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [editor]);
-
-  const addLink = useCallback(() => {
-    if (!editor) return;
-    const previousUrl = editor.getAttributes("link").href;
-    const url = window.prompt("أدخل الرابط:", previousUrl || "https://");
-    if (url === null) return;
-    if (url === "") {
-      editor.chain().focus().extendMarkRange("link").unsetLink().run();
-      return;
-    }
-    editor.chain().focus().extendMarkRange("link").setLink({ href: url }).run();
-  }, [editor]);
+  }, [editor, addLink]);
 
   const insertImage = useCallback(() => {
     if (!editor || !imageUrl) return;

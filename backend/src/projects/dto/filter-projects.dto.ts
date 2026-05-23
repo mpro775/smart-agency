@@ -1,5 +1,11 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsOptional, IsString, IsBoolean, IsEnum, IsMongoId } from 'class-validator';
+import {
+  IsOptional,
+  IsString,
+  IsBoolean,
+  IsEnum,
+  IsMongoId,
+} from 'class-validator';
 import { Transform } from 'class-transformer';
 import { PaginationDto } from '../../common/dto/pagination.dto';
 import { DisplayVariant, ProjectCategory } from '../schemas/project.schema';
@@ -74,7 +80,8 @@ export class FilterProjectsDto extends PaginationDto {
   isFeatured?: boolean;
 
   @ApiPropertyOptional({
-    description: 'Filter by published status (only works when includeUnpublished is true)',
+    description:
+      'Filter by published status (only works when includeUnpublished is true)',
   })
   @IsOptional()
   @Transform(({ value }) => value === 'true' || value === true)

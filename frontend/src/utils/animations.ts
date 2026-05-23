@@ -341,16 +341,21 @@ export const createStaggerVariant = (
 export const withDelay = (
     baseVariant: Variants,
     delay: number
-): Variants => ({
-    hidden: baseVariant.hidden,
-    visible: {
-        ...baseVariant.visible,
-        transition: {
-            ...(baseVariant.visible as any).transition,
-            delay,
+): Variants => {
+    const visibleObj = typeof baseVariant.visible === "object" && baseVariant.visible !== null
+        ? baseVariant.visible as Record<string, unknown>
+        : {} as Record<string, unknown>;
+    return {
+        hidden: baseVariant.hidden,
+        visible: {
+            ...visibleObj,
+            transition: {
+                ...(typeof visibleObj.transition === "object" && visibleObj.transition !== null ? visibleObj.transition as Record<string, unknown> : {}),
+                delay,
+            },
         },
-    },
-});
+    };
+};
 
 /**
  * Animation presets by section type

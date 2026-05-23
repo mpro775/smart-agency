@@ -13,18 +13,22 @@ export class NewsletterService {
     private newsletterModel: Model<NewsletterDocument>,
   ) {}
 
-  async subscribe(subscribeDto: SubscribeNewsletterDto): Promise<{ message: string; success: boolean }> {
+  async subscribe(
+    subscribeDto: SubscribeNewsletterDto,
+  ): Promise<{ message: string; success: boolean }> {
     try {
       const { email, source = 'footer' } = subscribeDto;
 
       // التحقق من وجود البريد الإلكتروني بالفعل
       const existingSubscription = await this.newsletterModel.findOne({
         email: email.toLowerCase().trim(),
-        isActive: true
+        isActive: true,
       });
 
       if (existingSubscription) {
-        throw new ConflictException('This email is already subscribed to our newsletter');
+        throw new ConflictException(
+          'This email is already subscribed to our newsletter',
+        );
       }
 
       // إنشاء اشتراك جديد
@@ -40,11 +44,15 @@ export class NewsletterService {
       this.logger.log(`New newsletter subscription: ${email} from ${source}`);
 
       return {
-        message: 'Thank you for subscribing to our newsletter! You will receive the latest updates and offers.',
+        message:
+          'Thank you for subscribing to our newsletter! You will receive the latest updates and offers.',
         success: true,
       };
     } catch (error) {
-      this.logger.error(`Newsletter subscription error: ${error.message}`, error.stack);
+      this.logger.error(
+        `Newsletter subscription error: ${error.message}`,
+        error.stack,
+      );
 
       if (error instanceof ConflictException) {
         throw error;
@@ -54,15 +62,17 @@ export class NewsletterService {
     }
   }
 
-  async unsubscribe(email: string): Promise<{ message: string; success: boolean }> {
+  async unsubscribe(
+    email: string,
+  ): Promise<{ message: string; success: boolean }> {
     try {
       const result = await this.newsletterModel.findOneAndUpdate(
         { email: email.toLowerCase().trim(), isActive: true },
         {
           isActive: false,
-          unsubscribedAt: new Date()
+          unsubscribedAt: new Date(),
         },
-        { new: true }
+        { new: true },
       );
 
       if (!result) {
@@ -76,8 +86,13 @@ export class NewsletterService {
         success: true,
       };
     } catch (error) {
-      this.logger.error(`Newsletter unsubscription error: ${error.message}`, error.stack);
-      throw new Error('Failed to unsubscribe from newsletter. Please try again.');
+      this.logger.error(
+        `Newsletter unsubscription error: ${error.message}`,
+        error.stack,
+      );
+      throw new Error(
+        'Failed to unsubscribe from newsletter. Please try again.',
+      );
     }
   }
 
@@ -91,16 +106,16 @@ export class NewsletterService {
       {
         $group: {
           _id: '$source',
-          count: { $sum: 1 }
-        }
+          count: { $sum: 1 },
+        },
       },
       {
         $project: {
           source: '$_id',
           count: 1,
-          _id: 0
-        }
-      }
+          _id: 0,
+        },
+      },
     ]);
   }
 }

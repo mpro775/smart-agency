@@ -58,13 +58,12 @@ export class UploadsService {
     const customDomain =
       this.configService.get<string>('R2_PUBLIC_DOMAIN') || undefined;
     const endpointHost = this.getEndpointHost(endpoint);
-    this.publicBaseUrl =
-      this.normalizeBaseUrl(
-        customDomain ||
-          (endpointHost
-            ? `https://${this.bucketName}.${endpointHost}`
-            : endpoint),
-      );
+    this.publicBaseUrl = this.normalizeBaseUrl(
+      customDomain ||
+        (endpointHost
+          ? `https://${this.bucketName}.${endpointHost}`
+          : endpoint),
+    );
   }
 
   async uploadFile(

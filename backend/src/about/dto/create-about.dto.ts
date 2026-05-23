@@ -22,7 +22,8 @@ class HeroSectionDto {
 
   @ApiProperty({
     description: 'Hero section subtitle',
-    example: 'سمارت وكالة تقنية تجمع بين الاستراتيجية، تجربة المستخدم، التصميم، البرمجة، والذكاء الاصطناعي',
+    example:
+      'سمارت وكالة تقنية تجمع بين الاستراتيجية، تجربة المستخدم، التصميم، البرمجة، والذكاء الاصطناعي',
   })
   @IsString()
   @IsNotEmpty({ message: 'Hero subtitle is required' })
@@ -97,7 +98,8 @@ class StorySectionDto {
 
   @ApiPropertyOptional({
     description: 'Story description',
-    example: 'كثير من المشاريع لا تفشل بسبب ضعف الفكرة، بل بسبب ضعف تحويلها إلى تجربة واضحة',
+    example:
+      'كثير من المشاريع لا تفشل بسبب ضعف الفكرة، بل بسبب ضعف تحويلها إلى تجربة واضحة',
   })
   @IsOptional()
   @IsString()
@@ -403,7 +405,8 @@ class SEOSectionDto {
 
   @ApiPropertyOptional({
     description: 'Meta description for SEO',
-    example: 'تعرف على وكالة سمارت: شريك تقني يساعد الشركات على بناء مواقع وتطبيقات',
+    example:
+      'تعرف على وكالة سمارت: شريك تقني يساعد الشركات على بناء مواقع وتطبيقات',
   })
   @IsOptional()
   @IsString()
@@ -446,7 +449,8 @@ export class CreateAboutDto {
 
   @ApiProperty({
     description: 'Mission text',
-    example: 'مهمتنا هي مساعدة المشاريع على الانتقال من فكرة مبعثرة إلى منتج رقمي واضح',
+    example:
+      'مهمتنا هي مساعدة المشاريع على الانتقال من فكرة مبعثرة إلى منتج رقمي واضح',
   })
   @IsString()
   @IsNotEmpty({ message: 'Mission is required' })

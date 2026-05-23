@@ -40,7 +40,7 @@ export function ImageUpload({
         const url = await uploadFile(file);
         onChange(url);
         toast.success('تم رفع الصورة بنجاح');
-      } catch (error) {
+      } catch {
         toast.error('فشل رفع الصورة');
       } finally {
         setIsUploading(false);
@@ -179,7 +179,7 @@ export function GalleryUpload({
         const urls = await uploadFiles(validFiles);
         onChange([...value, ...urls]);
         toast.success(`تم رفع ${urls.length} صورة`);
-      } catch (error) {
+      } catch {
         toast.error('فشل رفع الصور');
       } finally {
         setIsUploading(false);

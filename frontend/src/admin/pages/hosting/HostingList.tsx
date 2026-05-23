@@ -7,6 +7,7 @@ import { DataTable, type Column, PageHeader, ConfirmDialog } from '../../compone
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
+import { ErrorState } from '@/components/ui/StateViews';
 import type { HostingPackage } from '../../types';
 import { formatCurrency } from '../../utils/format';
 
@@ -15,7 +16,7 @@ export default function HostingList() {
   const [page, setPage] = useState(1);
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['hosting', page],
     queryFn: () => hostingService.getAll({ page, limit: 10 }),
   });
@@ -90,6 +91,8 @@ export default function HostingList() {
       ),
     },
   ];
+
+  if (error) return <ErrorState message="فشل تحميل باقات الاستضافة" onRetry={() => refetch()} />;
 
   return (
     <div>

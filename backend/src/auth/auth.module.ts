@@ -29,4 +29,3 @@ import { getJwtSecret } from './jwt-secret';
   exports: [AuthService, JwtModule],
 })
 export class AuthModule {}
-

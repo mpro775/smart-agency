@@ -11,7 +11,10 @@ import {
   Min,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { BillingCycle, PackageCategory } from '../schemas/hosting-package.schema';
+import {
+  BillingCycle,
+  PackageCategory,
+} from '../schemas/hosting-package.schema';
 
 export class CreateHostingPackageDto {
   @ApiProperty({
@@ -203,4 +206,3 @@ export class CreateHostingPackageDto {
   @IsOptional()
   benefitHints?: { [key: string]: string };
 }
-

@@ -42,12 +42,17 @@ export class FaqsService {
 
     const total = await this.faqModel.countDocuments(query).exec();
 
-    const faqs = await this.faqModel
+    const faqsQuery: any = this.faqModel
       .find(query)
       .sort({ order: 1, createdAt: -1 })
       .skip((page - 1) * limit)
-      .limit(limit)
-      .exec();
+      .limit(limit);
+
+    if (!includeInactive) {
+      faqsQuery.select('question answer category order isActive').lean();
+    }
+
+    const faqs = await faqsQuery.exec();
 
     return new PaginatedResponseDto(faqs, total, page, limit);
   }

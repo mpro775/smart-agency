@@ -58,7 +58,9 @@ export class HostingPackagesController {
   @Get('admin')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
-  @ApiOperation({ summary: 'Get all hosting packages including inactive (Admin)' })
+  @ApiOperation({
+    summary: 'Get all hosting packages including inactive (Admin)',
+  })
   @ApiResponse({ status: 200, description: 'Packages fetched successfully' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ResponseMessage('Hosting packages fetched successfully')
@@ -122,8 +124,13 @@ export class HostingPackagesController {
 
   @Post(':id/select')
   @Public()
-  @ApiOperation({ summary: 'Select a hosting package and submit contact information' })
-  @ApiResponse({ status: 201, description: 'Package selection submitted successfully' })
+  @ApiOperation({
+    summary: 'Select a hosting package and submit contact information',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'Package selection submitted successfully',
+  })
   @ApiResponse({ status: 400, description: 'Invalid request data' })
   @ApiResponse({ status: 404, description: 'Package not found' })
   @ResponseMessage('Thank you for your interest! We will contact you soon.')
@@ -131,7 +138,9 @@ export class HostingPackagesController {
     @Param('id') packageId: string,
     @Body() createPackageSelectionDto: CreatePackageSelectionDto,
   ) {
-    return this.hostingPackagesService.handlePackageSelection(packageId, createPackageSelectionDto);
+    return this.hostingPackagesService.handlePackageSelection(
+      packageId,
+      createPackageSelectionDto,
+    );
   }
 }
-

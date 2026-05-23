@@ -70,10 +70,15 @@ export class ServicesService {
   }
 
   async findActive(): Promise<ServiceDocument[]> {
-    return this.serviceModel
+    const results = await this.serviceModel
       .find({ isActive: true })
       .sort({ sortOrder: 1, createdAt: -1 })
+      .select(
+        'title slug shortDescription description icon features order isActive',
+      )
+      .lean()
       .exec();
+    return results as unknown as ServiceDocument[];
   }
 
   async findOne(id: string): Promise<ServiceDocument> {

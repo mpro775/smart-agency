@@ -89,7 +89,10 @@ export class BlogController {
   @Get('featured')
   @Public()
   @ApiOperation({ summary: 'Get featured blog posts' })
-  @ApiResponse({ status: 200, description: 'Featured posts fetched successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Featured posts fetched successfully',
+  })
   @ResponseMessage('Featured posts fetched successfully')
   getFeatured(@Query('limit') limit?: string) {
     return this.blogService.getFeatured(limit ? Number(limit) : 3);
@@ -98,7 +101,10 @@ export class BlogController {
   @Get('popular')
   @Public()
   @ApiOperation({ summary: 'Get popular blog posts' })
-  @ApiResponse({ status: 200, description: 'Popular posts fetched successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Popular posts fetched successfully',
+  })
   @ResponseMessage('Popular posts fetched successfully')
   getPopular(@Query('limit') limit?: string) {
     return this.blogService.getPopular(limit ? Number(limit) : 5);
@@ -107,7 +113,10 @@ export class BlogController {
   @Get('related/:slug')
   @Public()
   @ApiOperation({ summary: 'Get related blog posts' })
-  @ApiResponse({ status: 200, description: 'Related posts fetched successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Related posts fetched successfully',
+  })
   @ApiResponse({ status: 404, description: 'Blog post not found' })
   @ResponseMessage('Related posts fetched successfully')
   getRelated(@Param('slug') slug: string, @Query('limit') limit?: string) {

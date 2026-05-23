@@ -25,7 +25,13 @@ export class TechnologiesService {
 
   async findAll(category?: TechnologyCategory): Promise<TechnologyDocument[]> {
     const query = category ? { category } : {};
-    return this.technologyModel.find(query).sort({ name: 1 }).exec();
+    const results = await this.technologyModel
+      .find(query)
+      .sort({ name: 1 })
+      .select('name icon category order isActive')
+      .lean()
+      .exec();
+    return results as unknown as TechnologyDocument[];
   }
 
   async findOne(id: string): Promise<TechnologyDocument> {
@@ -62,4 +68,3 @@ export class TechnologiesService {
     }
   }
 }
-

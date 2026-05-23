@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException, Inject, forwardRef } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  Inject,
+  forwardRef,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import {
@@ -33,7 +38,14 @@ export class HostingPackagesService {
     filterDto: FilterHostingPackageDto,
     includeInactive = false,
   ): Promise<PaginatedResponseDto<HostingPackageDocument>> {
-    const { page = 1, limit = 10, category, billingCycle, isActive, isPopular } = filterDto;
+    const {
+      page = 1,
+      limit = 10,
+      category,
+      billingCycle,
+      isActive,
+      isPopular,
+    } = filterDto;
 
     // Build query
     const query: any = {};
@@ -60,12 +72,19 @@ export class HostingPackagesService {
     const total = await this.hostingPackageModel.countDocuments(query).exec();
 
     // Get paginated results
-    const packages = await this.hostingPackageModel
+    const packagesQuery: any = this.hostingPackageModel
       .find(query)
       .sort({ sortOrder: 1, price: 1 })
       .skip((page - 1) * limit)
-      .limit(limit)
-      .exec();
+      .limit(limit);
+
+    if (!includeInactive) {
+      packagesQuery
+        .select('name slug description price features isPopular isActive order')
+        .lean();
+    }
+
+    const packages = await packagesQuery.exec();
 
     return new PaginatedResponseDto(packages, total, page, limit);
   }
@@ -150,4 +169,3 @@ export class HostingPackagesService {
     };
   }
 }
-

@@ -129,6 +129,7 @@ export default function BlogForm() {
     reset,
     formState: { errors },
   } = useForm<BlogFormData>({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolver: zodResolver(blogSchema) as any,
     defaultValues,
   });

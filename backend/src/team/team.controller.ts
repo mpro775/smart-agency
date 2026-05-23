@@ -46,7 +46,10 @@ export class TeamController {
   @Get()
   @Public()
   @ApiOperation({ summary: 'Get all active team members' })
-  @ApiResponse({ status: 200, description: 'Team members fetched successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Team members fetched successfully',
+  })
   @ResponseMessage('Team members fetched successfully')
   findAll(@Query() filterDto: FilterTeamDto) {
     return this.teamService.findAll(filterDto, false);
@@ -56,7 +59,10 @@ export class TeamController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Get all team members including inactive (Admin)' })
-  @ApiResponse({ status: 200, description: 'Team members fetched successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Team members fetched successfully',
+  })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ResponseMessage('Team members fetched successfully')
   findAllAdmin(@Query() filterDto: FilterTeamDto) {
@@ -66,7 +72,10 @@ export class TeamController {
   @Get('homepage')
   @Public()
   @ApiOperation({ summary: 'Get team members for homepage display' })
-  @ApiResponse({ status: 200, description: 'Team members fetched successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Team members fetched successfully',
+  })
   @ResponseMessage('Team members fetched successfully')
   findForHomepage() {
     return this.teamService.findForHomepage();
@@ -86,7 +95,10 @@ export class TeamController {
   @Get('department/:department')
   @Public()
   @ApiOperation({ summary: 'Get team members by department' })
-  @ApiResponse({ status: 200, description: 'Team members fetched successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Team members fetched successfully',
+  })
   @ResponseMessage('Team members fetched successfully')
   findByDepartment(@Param('department') department: string) {
     return this.teamService.findByDepartment(department);
@@ -137,4 +149,3 @@ export class TeamController {
     return this.teamService.remove(id);
   }
 }
-

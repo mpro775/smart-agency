@@ -2,7 +2,10 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsOptional, IsEnum, IsBoolean } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { PaginationDto } from '../../common/dto/pagination.dto';
-import { PackageCategory, BillingCycle } from '../schemas/hosting-package.schema';
+import {
+  PackageCategory,
+  BillingCycle,
+} from '../schemas/hosting-package.schema';
 
 export class FilterHostingPackageDto extends PaginationDto {
   @ApiPropertyOptional({
@@ -37,4 +40,3 @@ export class FilterHostingPackageDto extends PaginationDto {
   @IsBoolean()
   isPopular?: boolean;
 }
-

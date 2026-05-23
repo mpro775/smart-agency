@@ -29,7 +29,8 @@ export class CreateTechnologyDto {
 
   @ApiPropertyOptional({
     description: 'Technology description',
-    example: 'A progressive Node.js framework for building server-side applications',
+    example:
+      'A progressive Node.js framework for building server-side applications',
   })
   @IsOptional()
   @IsString()
@@ -43,4 +44,3 @@ export class CreateTechnologyDto {
   @IsString()
   tooltip?: string;
 }
-

@@ -102,7 +102,8 @@ export class HostingPackage {
   updatedAt?: Date;
 }
 
-export const HostingPackageSchema = SchemaFactory.createForClass(HostingPackage);
+export const HostingPackageSchema =
+  SchemaFactory.createForClass(HostingPackage);
 
 // Indexes
 HostingPackageSchema.index({ category: 1 });
@@ -110,4 +111,3 @@ HostingPackageSchema.index({ isActive: 1 });
 HostingPackageSchema.index({ isPopular: 1 });
 HostingPackageSchema.index({ sortOrder: 1 });
 HostingPackageSchema.index({ price: 1 });
-

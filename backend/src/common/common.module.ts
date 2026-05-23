@@ -18,4 +18,3 @@ import { AllExceptionsFilter } from './filters/http-exception.filter';
   exports: [],
 })
 export class CommonModule {}
-

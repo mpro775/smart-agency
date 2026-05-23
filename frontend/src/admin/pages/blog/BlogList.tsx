@@ -8,6 +8,7 @@ import { ConfirmDialog, DataTable, type Column, PageHeader } from "../../compone
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { ErrorState } from "@/components/ui/StateViews";
 import type { Blog } from "../../types";
 import { formatDate } from "../../utils/format";
 
@@ -21,7 +22,7 @@ export default function BlogList() {
   const [featured, setFeatured] = useState("all");
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["blogs", page, search, status, category, contentType, featured],
     queryFn: () =>
       blogService.getAll({
@@ -150,6 +151,8 @@ export default function BlogList() {
       className: "w-32",
     },
   ];
+
+  if (error) return <ErrorState message="فشل تحميل المقالات" onRetry={() => refetch()} />;
 
   return (
     <div dir="rtl">

@@ -10,6 +10,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
+import { EmptyState, ErrorState } from '@/components/ui/StateViews';
 import type { FAQ } from '../../types';
 
 export default function FAQsList() {
@@ -20,7 +21,7 @@ export default function FAQsList() {
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['faqs', page, category, search],
     queryFn: () => faqsService.getAll({ page, limit: 20, category: category !== 'all' ? category : undefined, search: search || undefined }),
   });
@@ -36,6 +37,8 @@ export default function FAQsList() {
   });
 
   const categories = [...new Set(data?.data.map((faq) => faq.category) || [])];
+
+  if (error) return <ErrorState message="فشل تحميل الأسئلة الشائعة" onRetry={() => refetch()} />;
 
   return (
     <div>
@@ -89,12 +92,7 @@ export default function FAQsList() {
             </Card>
           ))}
           {!data?.data.length && (
-            <Card className="bg-slate-800/50 border-slate-700">
-              <CardContent className="p-8 text-center text-slate-500">
-                <HelpCircle className="h-12 w-12 mx-auto mb-3 opacity-50" />
-                <p>لا توجد أسئلة شائعة</p>
-              </CardContent>
-            </Card>
+            <EmptyState title="لا توجد أسئلة شائعة" description="ابدأ بإضافة سؤال جديد" actionLabel="إضافة سؤال" onAction={() => window.location.href = '/admin/faqs/new'} />
           )}
         </div>
       )}

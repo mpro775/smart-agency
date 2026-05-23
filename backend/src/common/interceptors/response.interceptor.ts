@@ -23,7 +23,10 @@ export interface ApiResponse<T> {
 export const RESPONSE_MESSAGE_KEY = 'response_message';
 
 @Injectable()
-export class ResponseInterceptor<T> implements NestInterceptor<T, ApiResponse<T>> {
+export class ResponseInterceptor<T> implements NestInterceptor<
+  T,
+  ApiResponse<T>
+> {
   constructor(private reflector: Reflector) {}
 
   intercept(
@@ -40,7 +43,12 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, ApiResponse<T>
         const statusCode = response.statusCode;
 
         // Check if data has pagination info
-        if (data && typeof data === 'object' && 'items' in data && 'meta' in data) {
+        if (
+          data &&
+          typeof data === 'object' &&
+          'items' in data &&
+          'meta' in data
+        ) {
           return {
             statusCode,
             message,
@@ -58,4 +66,3 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, ApiResponse<T>
     );
   }
 }
-

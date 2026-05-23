@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Blog, BlogDocument } from './schemas/blog.schema';
@@ -112,22 +116,35 @@ export class BlogService {
     const total = await this.blogModel.countDocuments(query).exec();
 
     // Get paginated results
-    const blogs = await this.blogModel
+    const blogsQuery: any = this.blogModel
       .find(query)
       .populate('author', 'name email')
       .sort(sortQuery)
       .skip((page - 1) * limit)
-      .limit(limit)
-      .exec();
+      .limit(limit);
+
+    if (!includeUnpublished) {
+      blogsQuery
+        .select(
+          'title slug excerpt coverImage category tags readingTime publishedAt isFeatured',
+        )
+        .lean();
+    }
+
+    const blogs = await blogsQuery.exec();
 
     return new PaginatedResponseDto(blogs, total, page, limit);
   }
 
   async findBySlug(slug: string): Promise<BlogDocument> {
-    const blog = await this.blogModel
+    const blog = (await this.blogModel
       .findOne({ slug: slug.toLowerCase(), isPublished: true })
       .populate('author', 'name email')
-      .exec();
+      .select(
+        'title slug excerpt content coverImage category tags readingTime publishedAt seo',
+      )
+      .lean()
+      .exec()) as BlogDocument | null;
 
     if (!blog) {
       throw new NotFoundException('Blog post not found');
@@ -152,7 +169,10 @@ export class BlogService {
     return blog;
   }
 
-  async update(id: string, updateBlogDto: UpdateBlogDto): Promise<BlogDocument> {
+  async update(
+    id: string,
+    updateBlogDto: UpdateBlogDto,
+  ): Promise<BlogDocument> {
     // If slug is being updated, check for conflicts
     if (updateBlogDto.slug) {
       const existingBlog = await this.blogModel
@@ -176,11 +196,7 @@ export class BlogService {
       updateData.readingTime = this.calculateReadingTime(updateBlogDto.content);
     }
 
-    if (
-      updateBlogDto.isPublished &&
-      currentBlog &&
-      !currentBlog.isPublished
-    ) {
+    if (updateBlogDto.isPublished && currentBlog && !currentBlog.isPublished) {
       updateData.publishedAt = new Date();
     }
 

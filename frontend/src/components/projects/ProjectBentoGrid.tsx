@@ -1,5 +1,5 @@
 "use client";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import type { Project } from "../../admin/types";
 import ProjectCard from "./ProjectCard";
 import type { CardVariant } from "./ProjectCard";
@@ -10,7 +10,7 @@ interface ProjectBentoGridProps {
   onResetFilter?: () => void;
 }
 
-function getVariant(project: Project, _index: number): CardVariant {
+function getVariant(project: Project): CardVariant {
   // All cards are now standard - same size, same layout
   if (project.displayVariant && project.displayVariant === "compact") {
     return "compact";
@@ -22,6 +22,8 @@ export default function ProjectBentoGrid({
   projects,
   onResetFilter,
 }: ProjectBentoGridProps) {
+  const shouldReduceMotion = useReducedMotion();
+
   if (projects.length === 0) {
     return (
       <ProjectEmptyState
@@ -36,16 +38,16 @@ export default function ProjectBentoGrid({
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <AnimatePresence mode="popLayout">
-        {projects.map((project, index) => (
-          <motion.div
+{projects.map((project) => (
+<motion.div
             key={project._id}
             layout
-            initial={{ opacity: 0, y: 20 }}
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+            exit={shouldReduceMotion ? undefined : { opacity: 0, scale: 0.95 }}
+            transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
           >
-            <ProjectCard project={project} variant={getVariant(project, index)} />
+            <ProjectCard project={project} variant={getVariant(project)} />
           </motion.div>
         ))}
       </AnimatePresence>

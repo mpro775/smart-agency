@@ -20,4 +20,3 @@ import { LeadsModule } from '../leads/leads.module';
   exports: [HostingPackagesService],
 })
 export class HostingPackagesModule {}
-

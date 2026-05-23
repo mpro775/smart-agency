@@ -94,9 +94,14 @@ export default function TechnologyForm() {
       toast.success(isEdit ? "تم تحديث التقنية" : "تم إضافة التقنية");
       navigate("/admin/technologies");
     },
-    onError: (error: any) => {
-      const errorMessage =
-        error?.response?.data?.message || error?.message || "حدث خطأ";
+    onError: (error: unknown) => {
+      let errorMessage = "حدث خطأ";
+      if (error && typeof error === "object" && "response" in error) {
+        const resp = (error as { response?: { data?: { message?: string } } }).response;
+        errorMessage = resp?.data?.message || errorMessage;
+      } else if (error instanceof Error) {
+        errorMessage = error.message;
+      }
       toast.error(`${isEdit ? "فشل التحديث" : "فشل الإضافة"}: ${errorMessage}`);
     },
   });

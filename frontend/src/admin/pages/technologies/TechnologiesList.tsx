@@ -8,13 +8,14 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "sonner";
+import { EmptyState, ErrorState } from "@/components/ui/StateViews";
 import type { Technology } from "../../types";
 
 export default function TechnologiesList() {
   const queryClient = useQueryClient();
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
-  const { data: technologies, isLoading } = useQuery({
+  const { data: technologies, isLoading, error, refetch } = useQuery({
     queryKey: ["technologies"],
     queryFn: () => technologiesService.getAll(),
   });
@@ -37,6 +38,8 @@ export default function TechnologiesList() {
       return acc;
     }, {} as Record<string, Technology[]>) || {};
 
+  if (error) return <ErrorState message="فشل تحميل التقنيات" onRetry={() => refetch()} />;
+
   return (
     <div dir="rtl">
       <PageHeader
@@ -57,7 +60,9 @@ export default function TechnologiesList() {
             </Card>
           ))}
         </div>
-      ) : (
+      ) : Object.keys(groupedByCategory).length === 0 ? (
+          <EmptyState title="لا توجد تقنيات" description="ابدأ بإضافة تقنية جديدة" actionLabel="إضافة تقنية" onAction={() => window.location.href = '/admin/technologies/new'} />
+        ) : (
         <div className="space-y-8">
           {Object.entries(groupedByCategory).map(([category, techs]) => (
             <div key={category}>

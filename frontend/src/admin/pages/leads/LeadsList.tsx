@@ -27,6 +27,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { ErrorState } from "@/components/ui/StateViews";
 import type { Lead, LeadStatus, ServiceType, LeadType, LeadPriority } from "../../types";
 import { formatDate, formatRelativeDate } from "../../utils/format";
 
@@ -131,7 +132,7 @@ export default function LeadsList() {
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [notes, setNotes] = useState("");
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["leads", page, statusFilter, serviceFilter, leadTypeFilter, priorityFilter, searchFilter],
     queryFn: () =>
       leadsService.getAll({
@@ -362,6 +363,8 @@ export default function LeadsList() {
       className: "w-24",
     },
   ];
+
+  if (error) return <ErrorState message="فشل تحميل بيانات العملاء" onRetry={() => refetch()} />;
 
   return (
     <div>

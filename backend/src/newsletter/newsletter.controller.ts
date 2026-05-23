@@ -1,7 +1,23 @@
-import { Controller, Post, Body, HttpCode, HttpStatus, UseGuards, Get, Query, Param, Delete } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  Controller,
+  Post,
+  Body,
+  HttpCode,
+  HttpStatus,
+  UseGuards,
+  Get,
+} from '@nestjs/common';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { NewsletterService } from './newsletter.service';
-import { SubscribeNewsletterDto, NewsletterResponseDto } from './dto/subscribe-newsletter.dto';
+import {
+  SubscribeNewsletterDto,
+  NewsletterResponseDto,
+} from './dto/subscribe-newsletter.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
@@ -21,12 +37,14 @@ export class NewsletterController {
   @ApiResponse({
     status: 201,
     description: 'Successfully subscribed to newsletter',
-    type: NewsletterResponseDto
+    type: NewsletterResponseDto,
   })
   @ApiResponse({ status: 409, description: 'Email already subscribed' })
   @ApiResponse({ status: 400, description: 'Invalid request data' })
   @ResponseMessage('Thank you for subscribing to our newsletter!')
-  async subscribe(@Body() subscribeDto: SubscribeNewsletterDto): Promise<NewsletterResponseDto> {
+  async subscribe(
+    @Body() subscribeDto: SubscribeNewsletterDto,
+  ): Promise<NewsletterResponseDto> {
     return this.newsletterService.subscribe(subscribeDto);
   }
 
@@ -37,11 +55,13 @@ export class NewsletterController {
   @ApiResponse({
     status: 200,
     description: 'Successfully unsubscribed from newsletter',
-    type: NewsletterResponseDto
+    type: NewsletterResponseDto,
   })
   @ApiResponse({ status: 404, description: 'Email not found' })
   @ResponseMessage('You have been unsubscribed from our newsletter.')
-  async unsubscribe(@Body('email') email: string): Promise<NewsletterResponseDto> {
+  async unsubscribe(
+    @Body('email') email: string,
+  ): Promise<NewsletterResponseDto> {
     return this.newsletterService.unsubscribe(email);
   }
 
@@ -50,7 +70,10 @@ export class NewsletterController {
   @Roles(UserRole.ADMIN)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Get newsletter statistics (Admin only)' })
-  @ApiResponse({ status: 200, description: 'Newsletter statistics retrieved successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Newsletter statistics retrieved successfully',
+  })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden - Admin only' })
   async getStats() {

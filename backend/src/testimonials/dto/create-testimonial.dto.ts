@@ -8,7 +8,6 @@ import {
   IsMongoId,
   Min,
   Max,
-  IsUrl,
 } from 'class-validator';
 
 export class CreateTestimonialDto {
@@ -103,4 +102,3 @@ export class CreateTestimonialDto {
   @IsNumber()
   sortOrder?: number;
 }
-

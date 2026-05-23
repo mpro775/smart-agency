@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import type { ComponentType } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import * as FaIcons from "react-icons/fa";
 import {
   Sparkles,
@@ -9,10 +9,13 @@ import {
   Shield,
   Headphones,
   UserCheck,
+  ArrowLeft,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 import { SectionShell } from "./brand";
 import { publicServicesService } from "../services/services.service";
 import type { Service } from "../services/services.service";
+import { LoadingSpinner, ErrorState } from "./ui/StateViews";
 
 const getIconComponent = (iconName?: string, iconType?: string) => {
   if (!iconName || !iconType) return null;
@@ -33,76 +36,104 @@ const getIconComponent = (iconName?: string, iconType?: string) => {
   return null;
 };
 
-const servicesData = [
+const fallbackServices = [
   {
-    id: 1,
+    _id: "fallback-1",
     title: "تطوير تطبيقات الجوال",
-    description: "تطبيقات iOS و Android عالية الأداء بتجربة مستخدم استثنائية",
+    shortDescription:
+      "تطبيقات iOS و Android عالية الأداء بتجربة مستخدم استثنائية",
     icon: "FaMobileAlt",
     iconType: "react-icon",
-    side: "right",
-    hasCheck: true,
+    features: [
+      "تطبيقات أصلية ومتعددة المنصات",
+      "تصميم واجهات مستخدم متفاعلة",
+      "تحسين الأداء وتجربة المستخدم",
+    ],
+    isActive: true,
+    slug: "mobile-app-development",
+    sortOrder: 1,
   },
   {
-    id: 2,
+    _id: "fallback-2",
     title: "التسويق الرقمي",
-    description:
+    shortDescription:
       "استراتيجيات تسويق رقمية متكاملة لزيادة الظهور وجذب العملاء وتحقيق النمو",
     icon: "FaBullhorn",
     iconType: "react-icon",
-    side: "right",
-    hasCheck: false,
+    features: [
+      "تحسين محركات البحث SEO",
+      "إدارة حملات الإعلانات المدفوعة",
+      "تحليلات وتقارير الأداء",
+    ],
+    isActive: true,
+    slug: "digital-marketing",
+    sortOrder: 2,
   },
   {
-    id: 3,
+    _id: "fallback-3",
     title: "الاستشارات التقنية",
-    description:
+    shortDescription:
       "نقدم لك الخبرة التقنية اللازمة لتحويل فكرتك إلى مشروع ناجح ومستدام",
     icon: "FaComments",
     iconType: "react-icon",
-    side: "right",
-    hasCheck: false,
+    features: [
+      "تحليل المتطلبات وتخطيط المشاريع",
+      "تقييم البنية التحتية التقنية",
+      "وضع خارطة طريق رقمية",
+    ],
+    isActive: true,
+    slug: "tech-consulting",
+    sortOrder: 3,
   },
   {
-    id: 4,
+    _id: "fallback-4",
     title: "تصميم وتطوير مواقع الويب",
-    description:
+    shortDescription:
       "مواقع احترافية سريعة، متجاوبة، ومحسنة لتجربة المستخدم ومحركات البحث",
     icon: "FaCode",
     iconType: "react-icon",
-    side: "left",
-    hasCheck: true,
+    features: [
+      "مواقع سريعة ومتجاوبة",
+      "تصميم واجهات مخصصة",
+      "تحسين SEO وأمان الموقع",
+    ],
+    isActive: true,
+    slug: "web-development",
+    sortOrder: 4,
   },
   {
-    id: 5,
+    _id: "fallback-5",
     title: "تصميم الهوية البصرية",
-    description: "نبني هوية بصرية قوية تعكس قيم علامتك وتتميز بك في السوق",
+    shortDescription:
+      "نبني هوية بصرية قوية تعكس قيم علامتك وتتميز بك في السوق",
     icon: "FaLightbulb",
     iconType: "react-icon",
-    side: "left",
-    hasCheck: false,
+    features: [
+      "تصميم الشعارات والهوية البصرية",
+      "دليل الهوية البصرية",
+      "تصميم مواد تسويقية",
+    ],
+    isActive: true,
+    slug: "brand-identity",
+    sortOrder: 5,
   },
   {
-    id: 6,
+    _id: "fallback-6",
     title: "الأنظمة ولوحات التحكم",
-    description:
+    shortDescription:
       "أنظمة مخصصة ولوحات تحكم ذكية لإدارة العمليات واتخاذ قرارات أدق",
     icon: "FaChartBar",
     iconType: "react-icon",
-    side: "left",
-    hasCheck: false,
+    features: [
+      "لوحات تحكم مخصصة",
+      "أنظمة إدارة المحتوى",
+      "تقارير ورسوم بيانية تفاعلية",
+    ],
+    isActive: true,
+    slug: "dashboards-systems",
+    sortOrder: 6,
   },
 ];
-
-type ServiceCardData = {
-  id: string | number;
-  title: string;
-  description?: string;
-  icon?: string;
-  iconType?: string;
-  side: "left" | "right";
-  hasCheck: boolean;
-};
 
 interface ServicesProps {
   initialServices?: Service[];
@@ -110,7 +141,8 @@ interface ServicesProps {
 
 export default function Services({ initialServices }: ServicesProps) {
   const [services, setServices] = useState<Service[]>(initialServices || []);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!initialServices);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (initialServices) {
@@ -122,11 +154,13 @@ export default function Services({ initialServices }: ServicesProps) {
     const fetchServices = async () => {
       try {
         setLoading(true);
+        setError(null);
         const data = await publicServicesService.getAll();
         setServices(data);
       } catch (err) {
-        console.warn("Falling back to static services because API failed.", err);
-        setServices([]);
+        console.warn("API failed, using static fallback.", err);
+        setError("تعذر تحميل الخدمات من الخادم");
+        setServices(fallbackServices as Service[]);
       } finally {
         setLoading(false);
       }
@@ -138,29 +172,24 @@ export default function Services({ initialServices }: ServicesProps) {
   if (loading) {
     return (
       <SectionShell tone="light" pattern="dots" id="services">
-        <div className="text-center">
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-            className="inline-block rounded-full h-12 w-12 border-2 border-[var(--smart-primary)] border-t-transparent"
-          />
-          <p className="mt-4 text-[var(--smart-text-muted)]">جاري تحميل الخدمات...</p>
-        </div>
+        <LoadingSpinner />
       </SectionShell>
     );
   }
 
-  const displayedServices: ServiceCardData[] = services.length
-    ? services.map((service, index) => ({
-        id: service._id,
-        title: service.title,
-        description: service.shortDescription || service.description,
-        icon: service.icon,
-        iconType: service.iconType,
-        side: index % 2 === 0 ? "right" : "left",
-        hasCheck: index === 0 || index === 3,
-      }))
-    : (servicesData as ServiceCardData[]);
+  const activeServices = services.filter((s) => s.isActive !== false);
+
+  if (activeServices.length === 0) {
+    return (
+      <SectionShell tone="light" pattern="dots" id="services">
+        <ErrorState
+          title="لا توجد خدمات متاحة"
+          message={error || "لم نتمكن من تحميل الخدمات"}
+          onRetry={() => window.location.reload()}
+        />
+      </SectionShell>
+    );
+  }
 
   return (
     <SectionShell tone="light" pattern="dots" id="services">
@@ -190,9 +219,7 @@ export default function Services({ initialServices }: ServicesProps) {
             className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-slate-950 mb-4 leading-tight"
           >
             خدمات رقمية{" "}
-            <span className="smart-text-gradient">
-              تصنع النمو
-            </span>
+            <span className="smart-text-gradient">تصنع النمو</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -213,86 +240,14 @@ export default function Services({ initialServices }: ServicesProps) {
             <div className="w-12 h-0.5 bg-[var(--smart-border-light-strong)]" />
           </div>
 
-          <div className="flex flex-col lg:flex-row items-start justify-between gap-8 lg:gap-12">
-            <div className="flex-1 space-y-5">
-              {displayedServices
-                .filter((s) => s.side === "left")
-                .map((service, index) => (
-                  <ServiceCard
-                    key={service.id}
-                    service={service}
-                    index={index}
-                    side="left"
-                  />
-                ))}
-            </div>
-
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              viewport={{ once: true }}
-              className="flex-shrink-0 w-full lg:w-auto order-first lg:order-none mb-8 lg:mb-0"
-            >
-              <div className="relative smart-card-light rounded-[var(--smart-radius-card)] p-8 text-center max-w-sm mx-auto">
-                <div className="relative w-48 h-48 mx-auto mb-6">
-                  <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[var(--smart-primary)]/10 to-[var(--smart-primary-light)]/5" />
-                  <div className="absolute inset-4 rounded-full bg-gradient-to-br from-[var(--smart-primary)]/15 to-[var(--smart-primary-light)]/10" />
-                  <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-end gap-3">
-                    <div className="w-6 h-12 rounded-t bg-[var(--smart-primary)]/30" />
-                    <div className="w-6 h-16 rounded-t bg-[var(--smart-primary)]/50" />
-                    <div className="w-6 h-24 rounded-t bg-[var(--smart-primary)]/70" />
-                  </div>
-                  <svg
-                    className="absolute top-4 right-4 w-16 h-16"
-                    viewBox="0 0 64 64"
-                    fill="none"
-                  >
-                    <path
-                      d="M8 48 L24 32 L36 38 L56 12"
-                      stroke="var(--smart-primary)"
-                      strokeWidth="4"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M44 12 L56 12 L56 24"
-                      stroke="var(--smart-primary)"
-                      strokeWidth="4"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                  <div className="absolute top-8 left-8 w-3 h-3 rounded-full bg-[var(--smart-primary)]/30" />
-                  <div className="absolute top-16 right-12 w-2 h-2 rounded-full bg-[var(--smart-primary-light)]/40" />
-                  <div className="absolute bottom-12 left-4 w-2 h-2 rounded-full bg-[var(--smart-primary)]/20" />
-                </div>
-                <h3 className="text-2xl font-bold text-[var(--smart-text-main)] mb-3">
-                  محرك النمو الرقمي
-                </h3>
-                <p className="text-[var(--smart-text-muted)] text-sm leading-relaxed mb-4">
-                  حلول تقنية وتسويقية متكاملة تدفع أعمالك للأمام وتضاعف أثرها في
-                  السوق.
-                </p>
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--smart-primary)]/10 text-[var(--smart-primary)] text-sm font-medium">
-                  <BarChart3 size={16} />
-                  نتائج قابلة للقياس
-                </div>
-              </div>
-            </motion.div>
-
-            <div className="flex-1 space-y-5">
-              {displayedServices
-                .filter((s) => s.side === "right")
-                .map((service, index) => (
-                  <ServiceCard
-                    key={service.id}
-                    service={service}
-                    index={index}
-                    side="right"
-                  />
-                ))}
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {activeServices.map((service, index) => (
+              <ServiceCard
+                key={service._id}
+                service={service}
+                index={index}
+              />
+            ))}
           </div>
         </div>
 
@@ -324,15 +279,6 @@ export default function Services({ initialServices }: ServicesProps) {
             <div className="hidden md:block w-px h-8 bg-[var(--smart-border-light)]" />
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-[var(--smart-primary)]/10 flex items-center justify-center">
-                <Shield size={20} className="text-[var(--smart-primary)]" />
-              </div>
-              <span className="text-[var(--smart-text-main)] font-medium text-sm">
-                تقنيات حديثة وآمنة
-              </span>
-            </div>
-            <div className="hidden md:block w-px h-8 bg-[var(--smart-border-light)]" />
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-[var(--smart-primary)]/10 flex items-center justify-center">
                 <Headphones size={20} className="text-[var(--smart-primary)]" />
               </div>
               <span className="text-[var(--smart-text-main)] font-medium text-sm">
@@ -349,65 +295,63 @@ export default function Services({ initialServices }: ServicesProps) {
 function ServiceCard({
   service,
   index,
-  side,
 }: {
-  service: ServiceCardData;
+  service: Service;
   index: number;
-  side: "left" | "right";
 }) {
+  const shouldReduceMotion = useReducedMotion();
   const iconComponent = getIconComponent(service.icon, service.iconType);
+  const slug = service.slug || service._id;
+  const features = service.features?.slice(0, 3) || [];
 
-  return (
+  const content = (
     <motion.div
-      initial={{ opacity: 0, x: side === "left" ? -40 : 40 }}
-      whileInView={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.6, delay: index * 0.15 }}
-      viewport={{ once: true }}
-      className={`relative group smart-card-light rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--smart-shadow-brand)] ${
-        service.hasCheck
-          ? "border-[var(--smart-border-light-strong)]"
-          : ""
-      }`}
+      initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.5, delay: index * 0.1 }}
+      className="relative group smart-card-light rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--smart-shadow-brand)] h-full flex flex-col"
       data-cursor="hover"
     >
-      {service.hasCheck && (
-        <div className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-[var(--smart-primary)] flex items-center justify-center shadow-md">
-          <svg
-            className="w-4 h-4 text-white"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={3}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M5 13l4 4L19 7"
-            />
-          </svg>
+      <div className="flex items-center gap-4 mb-4">
+        <div className="flex-shrink-0 w-14 h-14 rounded-2xl bg-gradient-to-br from-[var(--smart-primary)]/10 to-[var(--smart-primary-light)]/5 flex items-center justify-center group-hover:from-[var(--smart-primary)] group-hover:to-[var(--smart-primary-light)] transition-colors">
+          {iconComponent ? (
+            <span className="text-xl text-[var(--smart-primary)] group-hover:text-white transition-colors">
+              {iconComponent}
+            </span>
+          ) : (
+            <BarChart3 className="text-xl text-[var(--smart-primary)] group-hover:text-white transition-colors" />
+          )}
         </div>
+        <h3 className="text-lg font-bold text-[var(--smart-text-main)] group-hover:text-[var(--smart-primary)] transition-colors">
+          {service.title}
+        </h3>
+      </div>
+
+      <p className="text-[var(--smart-text-muted)] text-sm leading-relaxed mb-4 flex-1">
+        {service.shortDescription || service.description}
+      </p>
+
+      {features.length > 0 && (
+        <ul className="space-y-2 mb-5">
+          {features.map((feature, i) => (
+            <li key={i} className="flex items-start gap-2 text-sm text-[var(--smart-text-muted)]">
+              <Shield size={14} className="text-[var(--smart-primary)] mt-0.5 flex-shrink-0" />
+              <span>{feature}</span>
+            </li>
+          ))}
+        </ul>
       )}
 
-      <div className="flex items-center gap-5">
-        <div
-          className={`flex-shrink-0 w-14 h-14 rounded-full flex items-center justify-center ${
-            service.hasCheck
-              ? "bg-gradient-to-br from-[var(--smart-primary)] to-[var(--smart-primary-light)] text-white shadow-lg shadow-[var(--smart-shadow-brand)]"
-              : "bg-white text-[var(--smart-primary)] shadow-md border border-[var(--smart-border-light)]"
-          }`}
-        >
-          {iconComponent && <span className="text-xl">{iconComponent}</span>}
-        </div>
-
-        <div className="flex-1">
-          <h3 className="text-lg font-bold text-[var(--smart-text-main)] mb-1.5 group-hover:text-[var(--smart-primary)] transition-colors">
-            {service.title}
-          </h3>
-          <p className="text-[var(--smart-text-muted)] text-sm leading-relaxed">
-            {service.description}
-          </p>
-        </div>
-      </div>
+      <span className="inline-flex items-center gap-1 text-sm font-semibold text-[var(--smart-primary)] group-hover:gap-2 transition-all">
+        اكتشف المزيد
+        <ArrowLeft size={16} />
+      </span>
     </motion.div>
+  );
+
+  return (
+    <Link to={`/services/${slug}`} className="block">
+      {content}
+    </Link>
   );
 }

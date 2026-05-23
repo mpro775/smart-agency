@@ -11,7 +11,6 @@ import {
   IsMongoId,
   ValidateIf,
   IsNumber,
-  IsIn,
 } from 'class-validator';
 import { Transform, Type } from 'class-transformer';
 import { ProjectCategory, DisplayVariant } from '../schemas/project.schema';
@@ -148,7 +147,10 @@ export class CreateProjectDto {
   @IsMongoId({ each: true })
   technologies?: string[];
 
-  @ApiPropertyOptional({ description: 'Project images', type: ProjectImagesDto })
+  @ApiPropertyOptional({
+    description: 'Project images',
+    type: ProjectImagesDto,
+  })
   @IsOptional()
   @ValidateNested()
   @Type(() => ProjectImagesDto)
@@ -159,7 +161,7 @@ export class CreateProjectDto {
     example: 'https://rim-store.com',
   })
   @IsOptional()
-  @Transform(({ value }) =>
+  @Transform(({ value }: { value: unknown }) =>
     typeof value === 'string' ? value.trim() : value,
   )
   @ValidateIf((_, value) => value !== '')
@@ -318,4 +320,3 @@ export class CreateProjectDto {
   @IsBoolean()
   isPublished?: boolean;
 }
-

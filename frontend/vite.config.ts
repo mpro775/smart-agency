@@ -11,4 +11,20 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('@tiptap') || id.includes('prosemirror')) return 'editor';
+            if (id.includes('framer-motion')) return 'motion';
+            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router')) return 'react-vendor';
+            if (id.includes('@tanstack/react-query') || id.includes('axios')) return 'data-vendor';
+            if (id.includes('lucide-react')) return 'icons';
+            return 'vendor';
+          }
+        },
+      },
+    },
+  },
 })

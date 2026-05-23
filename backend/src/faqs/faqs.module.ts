@@ -11,4 +11,3 @@ import { Faq, FaqSchema } from './schemas/faq.schema';
   exports: [FaqsService],
 })
 export class FaqsModule {}
-

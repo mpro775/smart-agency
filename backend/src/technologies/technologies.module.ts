@@ -15,4 +15,3 @@ import { Technology, TechnologySchema } from './schemas/technology.schema';
   exports: [TechnologiesService],
 })
 export class TechnologiesModule {}
-

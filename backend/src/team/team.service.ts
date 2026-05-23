@@ -23,7 +23,13 @@ export class TeamService {
     filterDto: FilterTeamDto,
     includeInactive = false,
   ): Promise<PaginatedResponseDto<TeamMemberDocument>> {
-    const { page = 1, limit = 20, department, showOnHome, isActive } = filterDto;
+    const {
+      page = 1,
+      limit = 20,
+      department,
+      showOnHome,
+      isActive,
+    } = filterDto;
 
     // Build query
     const query: any = {};
@@ -44,12 +50,19 @@ export class TeamService {
 
     const total = await this.teamMemberModel.countDocuments(query).exec();
 
-    const members = await this.teamMemberModel
+    const membersQuery: any = this.teamMemberModel
       .find(query)
       .sort({ sortOrder: 1, createdAt: -1 })
       .skip((page - 1) * limit)
-      .limit(limit)
-      .exec();
+      .limit(limit);
+
+    if (!includeInactive) {
+      membersQuery
+        .select('name role bio avatar socialLinks order isActive')
+        .lean();
+    }
+
+    const members = await membersQuery.exec();
 
     return new PaginatedResponseDto(members, total, page, limit);
   }
@@ -101,7 +114,11 @@ export class TeamService {
     }
   }
 
-  async getStats(): Promise<any> {
+  async getStats(): Promise<{
+    total: number;
+    active: number;
+    byDepartment: Record<string, number>;
+  }> {
     const [total, active, byDepartment] = await Promise.all([
       this.teamMemberModel.countDocuments().exec(),
       this.teamMemberModel.countDocuments({ isActive: true }).exec(),
@@ -117,8 +134,11 @@ export class TeamService {
     return {
       total,
       active,
-      byDepartment: byDepartment.reduce(
-        (acc, curr) => ({ ...acc, [curr._id]: curr.count }),
+      byDepartment: byDepartment.reduce<Record<string, number>>(
+        (acc, curr: { _id: string; count: number }) => ({
+          ...acc,
+          [curr._id]: curr.count,
+        }),
         {},
       ),
     };
@@ -137,4 +157,3 @@ export class TeamService {
     await this.teamMemberModel.bulkWrite(bulkOps);
   }
 }
-

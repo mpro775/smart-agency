@@ -180,15 +180,19 @@ export default function AboutForm() {
     },
   });
 
-  const { fields: valueFields, append: appendValue, remove: removeValue } = useFieldArray({ control, name: "values" as any });
-  const { fields: statFields, append: appendStat, remove: removeStat } = useFieldArray({ control, name: "stats" as any });
-  const { fields: thinkingFields, append: appendThinking, remove: removeThinking } = useFieldArray({ control, name: "thinking" as any });
-  const { fields: diffFields, append: appendDiff, remove: removeDiff } = useFieldArray({ control, name: "differentiators" as any });
-  const { fields: processFields, append: appendProcess, remove: removeProcess } = useFieldArray({ control, name: "process" as any });
-  const { fields: painPointFields, append: appendPainPoint, remove: removePainPoint } = useFieldArray({ control, name: "story.painPoints" as any });
-  const { fields: highlightFields, append: appendHighlight, remove: removeHighlight } = useFieldArray({ control, name: "teamNote.highlights" as any });
-  const { fields: trustBadgeFields, append: appendTrustBadge, remove: removeTrustBadge } = useFieldArray({ control, name: "hero.trustBadges" as any });
-  const { fields: keywordFields, append: appendKeyword, remove: removeKeyword } = useFieldArray({ control, name: "seo.keywords" as any });
+  const { fields: valueFields, append: appendValue, remove: removeValue } = useFieldArray({ control, name: "values" });
+  const { fields: statFields, append: appendStat, remove: removeStat } = useFieldArray({ control, name: "stats" });
+  const { fields: thinkingFields, append: appendThinking, remove: removeThinking } = useFieldArray({ control, name: "thinking" });
+  const { fields: diffFields, append: appendDiff, remove: removeDiff } = useFieldArray({ control, name: "differentiators" });
+  const { fields: processFields, append: appendProcess, remove: removeProcess } = useFieldArray({ control, name: "process" });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { fields: painPointFields, append: appendPainPoint, remove: removePainPoint } = useFieldArray({ control, name: "story.painPoints" } as any);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { fields: highlightFields, append: appendHighlight, remove: removeHighlight } = useFieldArray({ control, name: "teamNote.highlights" } as any);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { fields: trustBadgeFields, append: appendTrustBadge, remove: removeTrustBadge } = useFieldArray({ control, name: "hero.trustBadges" } as any);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { fields: keywordFields, append: appendKeyword, remove: removeKeyword } = useFieldArray({ control, name: "seo.keywords" } as any);
 
   useEffect(() => {
     if (about) {

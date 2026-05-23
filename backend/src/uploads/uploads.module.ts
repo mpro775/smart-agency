@@ -10,4 +10,3 @@ import { UploadsController } from './uploads.controller';
   exports: [UploadsService],
 })
 export class UploadsModule {}
-

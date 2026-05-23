@@ -8,7 +8,6 @@ import {
   IsEnum,
   IsNumber,
   IsEmail,
-  IsUrl,
   IsDate,
 } from 'class-validator';
 import { Type } from 'class-transformer';

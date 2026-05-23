@@ -23,7 +23,7 @@ export class LeadsService {
     const savedLead = await lead.save();
 
     // Send to n8n webhook (fire and forget)
-    this.sendToWebhook(savedLead);
+    void this.sendToWebhook(savedLead);
 
     return savedLead;
   }
@@ -50,10 +50,12 @@ export class LeadsService {
         createdAt: lead.createdAt,
       });
 
-      this.logger.log(`Lead ${lead._id} sent to webhook successfully`);
+      this.logger.log(
+        `Lead ${lead._id.toString()} sent to webhook successfully`,
+      );
     } catch (error) {
       this.logger.error(
-        `Failed to send lead ${lead._id} to webhook: ${error.message}`,
+        `Failed to send lead ${lead._id.toString()} to webhook: ${error.message}`,
       );
       // Don't throw - webhook failure shouldn't affect lead creation
     }
@@ -62,7 +64,17 @@ export class LeadsService {
   async findAll(
     filterDto: FilterLeadsDto,
   ): Promise<PaginatedResponseDto<LeadDocument>> {
-    const { page = 1, limit = 10, status, serviceType, search, leadType, priority, timeline, preferredContactMethod } = filterDto;
+    const {
+      page = 1,
+      limit = 10,
+      status,
+      serviceType,
+      search,
+      leadType,
+      priority,
+      timeline,
+      preferredContactMethod,
+    } = filterDto;
 
     // Build query
     const query: any = {};
@@ -127,7 +139,10 @@ export class LeadsService {
     return lead;
   }
 
-  async update(id: string, updateLeadDto: UpdateLeadDto): Promise<LeadDocument> {
+  async update(
+    id: string,
+    updateLeadDto: UpdateLeadDto,
+  ): Promise<LeadDocument> {
     const lead = await this.leadModel
       .findByIdAndUpdate(id, updateLeadDto, { new: true })
       .exec();
@@ -146,22 +161,26 @@ export class LeadsService {
     }
   }
 
-  async getStats(): Promise<any> {
-    const [
-      total,
-      newLeads,
-      contacted,
-      proposalSent,
-      won,
-      lost,
-    ] = await Promise.all([
-      this.leadModel.countDocuments().exec(),
-      this.leadModel.countDocuments({ status: 'New' }).exec(),
-      this.leadModel.countDocuments({ status: 'Contacted' }).exec(),
-      this.leadModel.countDocuments({ status: 'Proposal Sent' }).exec(),
-      this.leadModel.countDocuments({ status: 'Closed-Won' }).exec(),
-      this.leadModel.countDocuments({ status: 'Closed-Lost' }).exec(),
-    ]);
+  async getStats(): Promise<{
+    total: number;
+    byStatus: {
+      new: number;
+      contacted: number;
+      proposalSent: number;
+      won: number;
+      lost: number;
+    };
+    conversionRate: string;
+  }> {
+    const [total, newLeads, contacted, proposalSent, won, lost] =
+      await Promise.all([
+        this.leadModel.countDocuments().exec(),
+        this.leadModel.countDocuments({ status: 'New' }).exec(),
+        this.leadModel.countDocuments({ status: 'Contacted' }).exec(),
+        this.leadModel.countDocuments({ status: 'Proposal Sent' }).exec(),
+        this.leadModel.countDocuments({ status: 'Closed-Won' }).exec(),
+        this.leadModel.countDocuments({ status: 'Closed-Lost' }).exec(),
+      ]);
 
     return {
       total,
@@ -176,4 +195,3 @@ export class LeadsService {
     };
   }
 }
-

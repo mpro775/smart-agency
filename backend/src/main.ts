@@ -23,9 +23,15 @@ async function bootstrap() {
     .filter(Boolean) || ['http://localhost:5173'];
 
   app.enableCors({
-    origin: (origin, callback) => {
+    origin: (
+      origin: string | undefined,
+      callback: (err: Error | null, allow?: boolean) => void,
+    ) => {
       // Allow requests with no origin (e.g. Postman or same-origin requests)
-      if (!origin) return callback(null, true);
+      if (!origin) {
+        callback(null, true);
+        return;
+      }
 
       if (allowedOrigins.includes(origin)) {
         callback(null, true);
@@ -83,4 +89,4 @@ async function bootstrap() {
   console.log(`🚀 Application is running on port ${port}`);
   console.log(`📚 Swagger docs available at: /api/docs`);
 }
-bootstrap();
+void bootstrap();

@@ -6,6 +6,7 @@ import { projectsService } from '../../services/projects.service';
 import { DataTable, type Column, PageHeader, ConfirmDialog } from '../../components/shared';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { ErrorState } from '@/components/ui/StateViews';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
@@ -40,7 +41,7 @@ export default function ProjectsList() {
   const [search, setSearch] = useState('');
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['projects', page, category, displayVariant, publishedFilter, featuredFilter, search],
     queryFn: () =>
       projectsService.getAll({
@@ -227,6 +228,8 @@ export default function ProjectsList() {
       className: 'w-48',
     },
   ];
+
+  if (error) return <ErrorState message="فشل تحميل المشاريع" onRetry={() => refetch()} />;
 
   return (
     <div>

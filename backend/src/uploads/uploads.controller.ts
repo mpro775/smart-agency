@@ -124,4 +124,3 @@ export class UploadsController {
     return { deleted: result };
   }
 }
-

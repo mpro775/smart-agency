@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
+import { ErrorState } from '@/components/ui/StateViews';
 import type { TeamMember, Department } from '../../types';
 
 const departmentOptions: { value: Department; label: string }[] = [
@@ -28,7 +29,7 @@ export default function TeamList() {
   const [department, setDepartment] = useState<string>('all');
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['team', page, department],
     queryFn: () =>
       teamService.getAll({
@@ -141,6 +142,8 @@ export default function TeamList() {
       className: 'w-24',
     },
   ];
+
+  if (error) return <ErrorState message="فشل تحميل بيانات الفريق" onRetry={() => refetch()} />;
 
   return (
     <div>

@@ -23,6 +23,7 @@ import { NewsletterModule } from './newsletter/newsletter.module';
 import { CompanyInfoModule } from './company-info/company-info.module';
 import { AboutModule } from './about/about.module';
 import { PublicHomepageModule } from './public-homepage/public-homepage.module';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 @Module({
   imports: [
@@ -35,7 +36,7 @@ import { PublicHomepageModule } from './public-homepage/public-homepage.module';
     // MongoDB Connection
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
+      useFactory: (configService: ConfigService) => ({
         uri: configService.get<string>('MONGODB_URI'),
       }),
       inject: [ConfigService],
@@ -73,6 +74,7 @@ import { PublicHomepageModule } from './public-homepage/public-homepage.module';
     CompanyInfoModule,
     AboutModule,
     PublicHomepageModule,
+    DashboardModule,
   ],
   controllers: [AppController],
   providers: [AppService],

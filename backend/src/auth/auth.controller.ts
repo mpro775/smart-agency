@@ -73,8 +73,9 @@ export class AuthController {
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ResponseMessage('Profile fetched successfully')
-  async getProfile(@CurrentUser('userId') userId: string): Promise<UserResponseDto> {
+  async getProfile(
+    @CurrentUser('userId') userId: string,
+  ): Promise<UserResponseDto> {
     return this.authService.getProfile(userId);
   }
 }
-

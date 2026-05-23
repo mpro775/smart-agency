@@ -28,9 +28,7 @@ import { ResponseMessage } from '../common/decorators';
 @Controller('project-categories')
 @Roles(UserRole.ADMIN, UserRole.EDITOR)
 export class ProjectCategoriesController {
-  constructor(
-    private readonly categoriesService: ProjectCategoriesService,
-  ) {}
+  constructor(private readonly categoriesService: ProjectCategoriesService) {}
 
   @Post()
   @UseGuards(JwtAuthGuard, RolesGuard)

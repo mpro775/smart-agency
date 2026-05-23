@@ -13,4 +13,3 @@ import { Lead, LeadSchema } from './schemas/lead.schema';
   exports: [LeadsService],
 })
 export class LeadsModule {}
-

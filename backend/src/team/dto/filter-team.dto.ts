@@ -29,4 +29,3 @@ export class FilterTeamDto extends PaginationDto {
   @IsBoolean()
   isActive?: boolean;
 }
-

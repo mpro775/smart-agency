@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Pencil, Trash2, Settings } from 'lucide-react';
+import { Pencil, Trash2 } from 'lucide-react';
 import { servicesService } from '../../services/services.service';
 import { PageHeader, ConfirmDialog } from '../../components/shared';
 import { Button } from '@/components/ui/button';
@@ -10,6 +10,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { toast } from 'sonner';
+import { EmptyState, ErrorState } from '@/components/ui/StateViews';
 import type { Service } from '../../services/services.service';
 
 export default function ServicesList() {
@@ -18,7 +19,7 @@ export default function ServicesList() {
   const [search, setSearch] = useState('');
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['services', page, search],
     queryFn: () =>
       servicesService.getAll({
@@ -47,6 +48,8 @@ export default function ServicesList() {
     },
     onError: () => toast.error('فشل تحديث حالة الخدمة'),
   });
+
+  if (error) return <ErrorState message="فشل تحميل الخدمات" onRetry={() => refetch()} />;
 
   return (
     <div>
@@ -158,12 +161,7 @@ export default function ServicesList() {
             </Card>
           ))}
           {!data?.data.length && (
-            <Card className="bg-slate-800/50 border-slate-700 col-span-full">
-              <CardContent className="p-8 text-center text-slate-500">
-                <Settings className="h-12 w-12 mx-auto mb-3 opacity-50" />
-                <p>لا توجد خدمات</p>
-              </CardContent>
-            </Card>
+            <EmptyState title="لا توجد خدمات" description="ابدأ بإضافة خدمة جديدة" actionLabel="إضافة خدمة" onAction={() => window.location.href = '/admin/services/new'} />
           )}
         </div>
       )}

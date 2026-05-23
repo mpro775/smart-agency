@@ -13,4 +13,3 @@ import { Project, ProjectSchema } from './schemas/project.schema';
   exports: [ProjectsService],
 })
 export class ProjectsModule {}
-

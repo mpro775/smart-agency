@@ -20,4 +20,3 @@ export class UpdateLeadDto extends PartialType(CreateLeadDto) {
   @IsString()
   notes?: string;
 }
-

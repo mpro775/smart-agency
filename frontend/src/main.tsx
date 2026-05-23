@@ -2,18 +2,19 @@ import React, { lazy, Suspense } from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import App from "./App";
-import About from "./pages/about";
-import Projects from "./pages/project";
-import ProjectDetailsPage from "./pages/projectDetails";
-import QuotePage from "./pages/quote";
-import BlogPage from "./pages/blog";
-import BlogDetailsPage from "./pages/blogDetails";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import CustomCursor from "./components/CustomCursor";
 import ScrollToTop from "./components/ScrollToTop";
-import BotLanding from "./pages/bot";
-import ContactPage from "./pages/contact";
+
+const About = lazy(() => import("./pages/about"));
+const Projects = lazy(() => import("./pages/project"));
+const ProjectDetailsPage = lazy(() => import("./pages/projectDetails"));
+const QuotePage = lazy(() => import("./pages/quote"));
+const BlogPage = lazy(() => import("./pages/blog"));
+const BlogDetailsPage = lazy(() => import("./pages/blogDetails"));
+const BotLanding = lazy(() => import("./pages/bot"));
+const ContactPage = lazy(() => import("./pages/contact"));
 
 // Conditional Footer: hides on home page (homepage has its own Footer)
 function LayoutFooter() {

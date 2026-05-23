@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import type { TeamMember } from "../../services/team.service";
 import { getDepartmentAccent, getDepartmentLabel } from "./team-utils";
 
@@ -9,6 +9,8 @@ interface Props {
 }
 
 export default function TeamMemberRail({ members, activeMember, onSelect }: Props) {
+  const shouldReduceMotion = useReducedMotion();
+
   return (
     <div className="flex lg:flex-col gap-3 overflow-x-auto lg:overflow-visible pb-2 lg:pb-0" dir="rtl">
       {members.map((member, index) => {
@@ -18,10 +20,9 @@ export default function TeamMemberRail({ members, activeMember, onSelect }: Prop
           <motion.button
             key={member._id}
             type="button"
-            initial={{ opacity: 0, x: 20 }}
+            initial={shouldReduceMotion ? false : { opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
-            transition={{ delay: index * 0.05, duration: 0.4 }}
-            viewport={{ once: true }}
+            transition={shouldReduceMotion ? { duration: 0 } : { delay: index * 0.05, duration: 0.4 }}
             onClick={() => onSelect(member)}
             className={`relative min-w-[260px] lg:min-w-0 w-full text-right rounded-2xl border p-3 transition-all duration-300 group ${
               isActive

@@ -4,7 +4,10 @@ import { Model } from 'mongoose';
 import { Testimonial, TestimonialDocument } from './schemas/testimonial.schema';
 import { CreateTestimonialDto } from './dto/create-testimonial.dto';
 import { UpdateTestimonialDto } from './dto/update-testimonial.dto';
-import { PaginationDto, PaginatedResponseDto } from '../common/dto/pagination.dto';
+import {
+  PaginationDto,
+  PaginatedResponseDto,
+} from '../common/dto/pagination.dto';
 
 @Injectable()
 export class TestimonialsService {
@@ -31,13 +34,20 @@ export class TestimonialsService {
 
     const total = await this.testimonialModel.countDocuments(query).exec();
 
-    const testimonials = await this.testimonialModel
+    const testimonialsQuery: any = this.testimonialModel
       .find(query)
       .populate('linkedProject', 'title slug images')
       .sort({ sortOrder: 1, createdAt: -1 })
       .skip((page - 1) * limit)
-      .limit(limit)
-      .exec();
+      .limit(limit);
+
+    if (!includeInactive) {
+      testimonialsQuery
+        .select('name role company avatar rating content isFeatured order')
+        .lean();
+    }
+
+    const testimonials = await testimonialsQuery.exec();
 
     return new PaginatedResponseDto(testimonials, total, page, limit);
   }
@@ -115,4 +125,3 @@ export class TestimonialsService {
     };
   }
 }
-

@@ -1,3 +1,4 @@
+import axios from "axios";
 import publicApi from "./api";
 import type { ApiResponse } from "@/types/api";
 
@@ -23,18 +24,18 @@ export const newsletterService = {
       );
 
       return response.data.data;
-    } catch (error: any) {
-      // Handle specific error cases
-      if (error.response?.status === 409) {
-        throw new Error(
-          "هذا البريد الإلكتروني مشترك بالفعل في النشرة البريدية"
-        );
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response) {
+        const status = error.response.status;
+        if (status === 409) {
+          throw new Error(
+            "هذا البريد الإلكتروني مشترك بالفعل في النشرة البريدية"
+          );
+        }
+        if (status === 400) {
+          throw new Error("يرجى إدخال بريد إلكتروني صحيح");
+        }
       }
-
-      if (error.response?.status === 400) {
-        throw new Error("يرجى إدخال بريد إلكتروني صحيح");
-      }
-
       throw new Error("حدث خطأ أثناء الاشتراك. يرجى المحاولة مرة أخرى");
     }
   },
@@ -49,11 +50,10 @@ export const newsletterService = {
       );
 
       return response.data.data;
-    } catch (error: any) {
-      if (error.response?.status === 404) {
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response?.status === 404) {
         throw new Error("هذا البريد الإلكتروني غير موجود في قائمتنا");
       }
-
       throw new Error("حدث خطأ أثناء إلغاء الاشتراك. يرجى المحاولة مرة أخرى");
     }
   },

@@ -9,7 +9,6 @@ import {
   Project,
   ProjectDocument,
   ProjectCategory,
-  DisplayVariant,
 } from './schemas/project.schema';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
@@ -31,19 +30,17 @@ export class ProjectsService {
       throw new ConflictException('Project with this slug already exists');
     }
 
-    const normalizedProjectTypes =
-      createProjectDto.projectTypes?.length
-        ? createProjectDto.projectTypes
-        : createProjectDto.category
-          ? [createProjectDto.category]
-          : [];
+    const normalizedProjectTypes = createProjectDto.projectTypes?.length
+      ? createProjectDto.projectTypes
+      : createProjectDto.category
+        ? [createProjectDto.category]
+        : [];
 
-    const normalizedCategoryIds =
-      createProjectDto.categoryIds?.length
-        ? createProjectDto.categoryIds
-        : createProjectDto.categoryId
-          ? [createProjectDto.categoryId]
-          : [];
+    const normalizedCategoryIds = createProjectDto.categoryIds?.length
+      ? createProjectDto.categoryIds
+      : createProjectDto.categoryId
+        ? [createProjectDto.categoryId]
+        : [];
 
     const project = new this.projectModel({
       ...createProjectDto,
@@ -76,7 +73,7 @@ export class ProjectsService {
 
     // Build query
     const query: any = {};
-    
+
     // Only filter by isPublished if explicitly provided, or default to true for public access
     if (!includeUnpublished) {
       query.isPublished = true;
@@ -133,15 +130,24 @@ export class ProjectsService {
     const total = await this.projectModel.countDocuments(query).exec();
 
     // Get paginated results
-    const projects = await this.projectModel
+    const projectsQuery: any = this.projectModel
       .find(query)
       .populate('technologies', 'name icon category description tooltip')
       .populate('categoryId')
       .populate('categoryIds')
       .sort({ sortOrder: 1, createdAt: -1 })
       .skip((page - 1) * limit)
-      .limit(limit)
-      .exec();
+      .limit(limit);
+
+    if (!includeUnpublished) {
+      projectsQuery
+        .select(
+          'title slug shortDescription coverImage category technologies isFeatured order createdAt',
+        )
+        .lean();
+    }
+
+    const projects = await projectsQuery.exec();
 
     return new PaginatedResponseDto(projects, total, page, limit);
   }
@@ -158,12 +164,16 @@ export class ProjectsService {
   }
 
   async findBySlug(slug: string): Promise<ProjectDocument> {
-    const project = await this.projectModel
+    const project = (await this.projectModel
       .findOne({ slug: slug.toLowerCase(), isPublished: true })
       .populate('technologies', 'name icon category description tooltip')
       .populate('categoryId')
       .populate('categoryIds')
-      .exec();
+      .select(
+        'title slug description shortDescription coverImage gallery category technologies clientName results challenge solution duration url seo',
+      )
+      .lean()
+      .exec()) as ProjectDocument | null;
 
     if (!project) {
       throw new NotFoundException('Project not found');
@@ -188,12 +198,16 @@ export class ProjectsService {
   }
 
   async findPublicById(id: string): Promise<ProjectDocument> {
-    const project = await this.projectModel
+    const project = (await this.projectModel
       .findOne({ _id: id, isPublished: true })
       .populate('technologies', 'name icon category description tooltip')
       .populate('categoryId')
       .populate('categoryIds')
-      .exec();
+      .select(
+        'title slug description shortDescription coverImage gallery category technologies clientName results challenge solution duration url seo',
+      )
+      .lean()
+      .exec()) as ProjectDocument | null;
 
     if (!project) {
       throw new NotFoundException('Project not found');
@@ -220,19 +234,17 @@ export class ProjectsService {
       updateProjectDto.slug = updateProjectDto.slug.toLowerCase();
     }
 
-    const normalizedProjectTypes =
-      updateProjectDto.projectTypes?.length
-        ? updateProjectDto.projectTypes
-        : updateProjectDto.category
-          ? [updateProjectDto.category]
-          : undefined;
+    const normalizedProjectTypes = updateProjectDto.projectTypes?.length
+      ? updateProjectDto.projectTypes
+      : updateProjectDto.category
+        ? [updateProjectDto.category]
+        : undefined;
 
-    const normalizedCategoryIds =
-      updateProjectDto.categoryIds?.length
-        ? updateProjectDto.categoryIds
-        : updateProjectDto.categoryId
-          ? [updateProjectDto.categoryId]
-          : undefined;
+    const normalizedCategoryIds = updateProjectDto.categoryIds?.length
+      ? updateProjectDto.categoryIds
+      : updateProjectDto.categoryId
+        ? [updateProjectDto.categoryId]
+        : undefined;
 
     const hasProjectUrl = Object.prototype.hasOwnProperty.call(
       updateProjectDto,

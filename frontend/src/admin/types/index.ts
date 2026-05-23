@@ -390,13 +390,29 @@ export interface FAQ {
   updatedAt: string;
 }
 
-// Dashboard Stats Types
+export interface DashboardContentHealth {
+  inactiveServices: number;
+  unpublishedProjects: number;
+  draftBlogs: number;
+  projectsWithoutCover: number;
+}
+
+export interface DashboardRecentLead {
+  id: string;
+  name: string;
+  email: string;
+  phone?: string;
+  status: string;
+  createdAt: string;
+}
+
 export interface DashboardStats {
-  projectsCount: number;
-  blogsCount: number;
-  leadsCount: number;
-  teamMembersCount: number;
-  newLeadsCount: number;
-  publishedProjectsCount: number;
-  publishedBlogsCount: number;
+  totals: {
+    projects: number;
+    services: number;
+    leads: number;
+    blogs: number;
+  };
+  recentLeads: DashboardRecentLead[];
+  contentHealth: DashboardContentHealth;
 }

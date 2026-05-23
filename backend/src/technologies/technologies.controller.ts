@@ -53,7 +53,10 @@ export class TechnologiesController {
     enum: TechnologyCategory,
     description: 'Filter by category',
   })
-  @ApiResponse({ status: 200, description: 'Technologies fetched successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Technologies fetched successfully',
+  })
   @ResponseMessage('Technologies fetched successfully')
   findAll(@Query('category') category?: TechnologyCategory) {
     return this.technologiesService.findAll(category);
@@ -96,4 +99,3 @@ export class TechnologiesController {
     return this.technologiesService.remove(id);
   }
 }
-

@@ -10,13 +10,13 @@ export class Newsletter {
     unique: true,
     lowercase: true,
     trim: true,
-    match: [/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Please enter a valid email address']
+    match: [/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Please enter a valid email address'],
   })
   email: string;
 
   @Prop({
     default: 'footer',
-    enum: ['footer', 'blog', 'homepage', 'popup']
+    enum: ['footer', 'blog', 'homepage', 'popup'],
   })
   source: string;
 

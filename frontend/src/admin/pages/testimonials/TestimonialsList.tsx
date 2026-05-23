@@ -7,6 +7,7 @@ import { DataTable, type Column, PageHeader, ConfirmDialog } from '../../compone
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
+import { ErrorState } from '@/components/ui/StateViews';
 import type { Testimonial } from '../../types';
 
 export default function TestimonialsList() {
@@ -14,7 +15,7 @@ export default function TestimonialsList() {
   const [page, setPage] = useState(1);
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['testimonials', page],
     queryFn: () => testimonialsService.getAll({ page, limit: 10 }),
   });
@@ -116,6 +117,8 @@ export default function TestimonialsList() {
       ),
     },
   ];
+
+  if (error) return <ErrorState message="فشل تحميل آراء العملاء" onRetry={() => refetch()} />;
 
   return (
     <div>

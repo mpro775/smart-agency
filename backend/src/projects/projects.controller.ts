@@ -67,7 +67,9 @@ export class ProjectsController {
   @Get('admin/:id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
-  @ApiOperation({ summary: 'Get a project by ID (Admin - includes unpublished)' })
+  @ApiOperation({
+    summary: 'Get a project by ID (Admin - includes unpublished)',
+  })
   @ApiResponse({ status: 200, description: 'Project found' })
   @ApiResponse({ status: 404, description: 'Project not found' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })

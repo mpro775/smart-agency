@@ -1,7 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 import { Technology } from '../../technologies/schemas/technology.schema';
-import { ProjectCategory as ProjectCategoryEntity } from '../../project-categories/schemas/project-category.schema';
 
 export type ProjectDocument = Project & Document;
 
@@ -109,7 +108,10 @@ export class Project {
   @Prop({ type: Types.ObjectId, ref: 'ProjectCategory' })
   categoryId?: Types.ObjectId;
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: 'ProjectCategory' }], default: [] })
+  @Prop({
+    type: [{ type: Types.ObjectId, ref: 'ProjectCategory' }],
+    default: [],
+  })
   categoryIds?: Types.ObjectId[];
 
   @Prop({
@@ -185,4 +187,3 @@ ProjectSchema.index({ sortOrder: 1 });
 ProjectSchema.index({ featuredOrder: 1 });
 ProjectSchema.index({ isPublished: 1, isFeatured: 1, sortOrder: 1 });
 ProjectSchema.index({ createdAt: -1 });
-

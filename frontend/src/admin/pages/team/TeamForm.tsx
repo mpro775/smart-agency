@@ -44,7 +44,7 @@ const teamSchema = z.object({
   showOnAbout: z.boolean(),
   isActive: z.boolean(),
   sortOrder: z.number(),
-  projectsCount: z.any(),
+  projectsCount: z.number(),
   joinedAt: z.string().nullish(),
 });
 
@@ -149,8 +149,7 @@ export default function TeamForm() {
     mutation.mutate(data);
   };
 
-  const onFormError = (errors: any) => {
-    console.error("Form validation errors:", errors);
+  const onFormError = () => {
     toast.error("يرجى التأكد من ملء جميع الحقول المطلوبة بشكل صحيح");
   };
 

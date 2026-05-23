@@ -47,4 +47,3 @@ export class ErrorResponseDto {
   @ApiProperty({ description: 'Request path' })
   path: string;
 }
-

@@ -72,7 +72,9 @@ export class PublicHomepageService {
         .find({ isActive: true })
         .sort({ sortOrder: 1, createdAt: -1 })
         .limit(6)
-        .select('title slug shortDescription description icon iconType features sortOrder')
+        .select(
+          'title slug shortDescription description icon iconType features sortOrder',
+        )
         .lean()
         .exec(),
       this.projectModel
@@ -143,7 +145,9 @@ export class PublicHomepageService {
         .exec(),
       this.companyInfoModel
         .findOne()
-        .select('address googleMapsUrl workingHours email phone whatsappUrl socialLinks')
+        .select(
+          'address googleMapsUrl workingHours email phone whatsappUrl socialLinks',
+        )
         .lean()
         .exec(),
     ]);
