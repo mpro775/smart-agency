@@ -82,8 +82,11 @@ export class PublicHomepageService {
         .sort({ featuredOrder: 1, sortOrder: 1, createdAt: -1 })
         .limit(6)
         .select(
-          'title slug summary images category categoryId categoryIds projectTypes industry year technologies results displayVariant accentColor',
+          'title slug summary images category categoryId categoryIds projectTypes industry year technologies results displayVariant accentColor stats clientName clientLogo projectUrl',
         )
+        .populate('technologies', 'name icon category description tooltip')
+        .populate('categoryId')
+        .populate('categoryIds')
         .lean()
         .exec(),
       this.projectCategoryModel

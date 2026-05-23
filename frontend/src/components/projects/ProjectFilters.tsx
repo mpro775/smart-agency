@@ -2,6 +2,7 @@
 import { motion } from "framer-motion";
 
 export interface FilterCategory {
+  _id?: string;
   value: string;
   label: string;
   count: number;

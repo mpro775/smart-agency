@@ -76,10 +76,10 @@ export const publicProjectsService = {
 
   // Get available categories with counts
   getCategories: async (): Promise<
-    { value: string; label: string; count: number }[]
+    { _id?: string; value: string; label: string; count: number }[]
   > => {
     const response = await publicApi.get<
-      ApiResponse<{ value: string; label: string; count: number }[]>
+      ApiResponse<{ _id?: string; value: string; label: string; count: number }[]>
     >("/projects/categories");
     return response.data.data ?? [];
   },

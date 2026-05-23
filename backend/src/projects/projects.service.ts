@@ -8,8 +8,11 @@ import { Model } from 'mongoose';
 import {
   Project,
   ProjectDocument,
-  ProjectCategory,
 } from './schemas/project.schema';
+import {
+  ProjectCategory as ProjectCategoryModel,
+  ProjectCategoryDocument,
+} from '../project-categories/schemas/project-category.schema';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { FilterProjectsDto } from './dto/filter-projects.dto';
@@ -19,6 +22,8 @@ import { PaginatedResponseDto } from '../common/dto/pagination.dto';
 export class ProjectsService {
   constructor(
     @InjectModel(Project.name) private projectModel: Model<ProjectDocument>,
+    @InjectModel(ProjectCategoryModel.name)
+    private categoryModel: Model<ProjectCategoryDocument>,
   ) {}
 
   async create(createProjectDto: CreateProjectDto): Promise<ProjectDocument> {
@@ -87,11 +92,28 @@ export class ProjectsService {
     }
 
     if (category) {
-      query.category = category;
+      query.$or = [
+        { category },
+        { projectTypes: category },
+      ];
     }
 
     if (projectType) {
-      query.projectTypes = projectType;
+      const typeOr = [
+        { category: projectType },
+        { projectTypes: projectType },
+      ];
+      if (query.$or) {
+        // Merge: project must match both category AND projectType filters
+        const categoryOr = query.$or;
+        query.$and = [
+          { $or: categoryOr },
+          { $or: typeOr },
+        ];
+        delete query.$or;
+      } else {
+        query.$or = typeOr;
+      }
     }
 
     if (categoryId) {
@@ -120,10 +142,24 @@ export class ProjectsService {
     }
 
     if (search) {
-      query.$or = [
+      const searchOr = [
         { title: { $regex: search, $options: 'i' } },
         { summary: { $regex: search, $options: 'i' } },
       ];
+      if (query.$or || query.$and) {
+        // Combine search with existing filters using $and
+        if (query.$and) {
+          query.$and.push({ $or: searchOr });
+        } else {
+          query.$and = [
+            ...(query.$or ? [{ $or: query.$or }] : []),
+            { $or: searchOr },
+          ];
+          delete query.$or;
+        }
+      } else {
+        query.$or = searchOr;
+      }
     }
 
     // Get total count
@@ -142,7 +178,7 @@ export class ProjectsService {
     if (!includeUnpublished) {
       projectsQuery
         .select(
-          'title slug shortDescription coverImage category technologies isFeatured order createdAt',
+          'title slug summary shortDescription images category categoryId categoryIds projectTypes industry year technologies isFeatured order createdAt displayVariant accentColor results stats clientName clientLogo projectUrl',
         )
         .lean();
     }
@@ -306,40 +342,35 @@ export class ProjectsService {
   }
 
   async getCategories(): Promise<
-    { value: string; label: string; count: number }[]
+    { _id?: string; value: string; label: string; count: number }[]
   > {
-    const allCategories = Object.values(ProjectCategory);
+    // Get categories from the database collection
+    const dbCategories = await this.categoryModel
+      .find({ isActive: true })
+      .sort({ sortOrder: 1 })
+      .lean()
+      .exec();
 
     const categoriesWithCount = await Promise.all(
-      allCategories.map(async (category) => {
+      dbCategories.map(async (cat) => {
         const count = await this.projectModel
           .countDocuments({
             $or: [
-              { category, isPublished: true },
-              { projectTypes: category, isPublished: true },
+              { category: cat.value, isPublished: true },
+              { projectTypes: cat.value, isPublished: true },
+              { categoryIds: cat._id, isPublished: true },
             ],
           })
           .exec();
         return {
-          value: category,
-          label: this.getCategoryLabel(category),
+          _id: cat._id.toString(),
+          value: cat.value,
+          label: cat.label,
           count,
         };
       }),
     );
 
-    return categoriesWithCount.filter((cat) => cat.count > 0);
-  }
-
-  private getCategoryLabel(category: ProjectCategory): string {
-    const labels: Record<ProjectCategory, string> = {
-      [ProjectCategory.WEB_APP]: 'مواقع إلكترونية',
-      [ProjectCategory.MOBILE_APP]: 'تطبيقات الجوال',
-      [ProjectCategory.AUTOMATION]: 'أتمتة',
-      [ProjectCategory.ERP]: 'أنظمة ERP',
-      [ProjectCategory.ECOMMERCE]: 'متاجر إلكترونية',
-      [ProjectCategory.OTHER]: 'أخرى',
-    };
-    return labels[category] || category;
+    return categoriesWithCount;
   }
 }

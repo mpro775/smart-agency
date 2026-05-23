@@ -24,7 +24,7 @@ export default function ProjectsShowcase({
   initialProjects,
   initialCategories,
 }: ProjectsShowcaseProps) {
-  const [selectedCategory, setSelectedCategory] = useState("all");
+const [selectedCategory, setSelectedCategory] = useState("all");
   const [projects, setProjects] = useState<Project[]>(initialProjects || []);
   const [categories, setCategories] = useState<FilterCategory[]>(
     initialCategories
@@ -41,6 +41,7 @@ export default function ProjectsShowcase({
   const [loading, setLoading] = useState(!initialProjects);
   const [categoriesLoading, setCategoriesLoading] = useState(!initialCategories);
   const [error, setError] = useState<string | null>(null);
+  const [hasInteracted, setHasInteracted] = useState(false);
 
   useEffect(() => {
     if (initialCategories) return;
@@ -76,8 +77,8 @@ export default function ProjectsShowcase({
     fetchCategories();
   }, [initialCategories]);
 
-  useEffect(() => {
-    if (initialProjects && selectedCategory === "all") {
+useEffect(() => {
+    if (initialProjects && !hasInteracted) {
       setProjects(initialProjects);
       setLoading(false);
       return;
@@ -102,7 +103,7 @@ export default function ProjectsShowcase({
     };
 
     fetchProjects();
-  }, [initialProjects, selectedCategory]);
+  }, [initialProjects, selectedCategory, hasInteracted]);
 
   const { featuredProject, gridProjects } = useMemo(() => {
     if (projects.length === 0) return { featuredProject: null, gridProjects: [] };
@@ -136,10 +137,12 @@ export default function ProjectsShowcase({
 
   const handleCategorySelect = (value: string) => {
     setSelectedCategory(value);
+    setHasInteracted(true);
   };
 
   const handleResetFilter = () => {
     setSelectedCategory("all");
+    setHasInteracted(true);
   };
 
   return (
