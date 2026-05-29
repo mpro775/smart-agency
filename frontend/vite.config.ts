@@ -20,14 +20,13 @@ export default defineConfig({
             if (id.includes('@tiptap') || id.includes('prosemirror')) return 'editor';
             if (id.includes('framer-motion')) return 'motion';
             if (id.includes('lucide-react')) return 'icons';
-            if (id.includes('react-dom')) return 'react-vendor';
-            if (id.includes('react/')) return 'react-vendor';
             if (id.includes('@radix-ui')) return 'radix';
             if (id.includes('axios')) return 'vendor-axios';
             if (id.includes('@tanstack')) return 'query';
             if (id.includes('date-fns')) return 'vendor-date';
             if (id.includes('react-icons') || id.includes('react-icon')) return 'icons';
             if (id.includes('sonner') || id.includes('zod') || id.includes('hookform') || id.includes('cmdk')) return 'vendor-utils';
+            if (id.includes('react') || id.includes('next-themes') || id.includes('scheduler')) return 'react-vendor';
             return 'vendor';
           }
         },
