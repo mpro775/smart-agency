@@ -206,7 +206,7 @@ export class ProjectsService {
       .populate('categoryId')
       .populate('categoryIds')
       .select(
-        'title slug description shortDescription coverImage gallery category technologies clientName results challenge solution duration url seo',
+        'title slug summary challenge solution results features images technologies clientName clientLogo category categoryId categoryIds projectTypes industry duration year accentColor displayVariant previewScreens videoUrl stats projectUrl isFeatured seo',
       )
       .lean()
       .exec()) as ProjectDocument | null;
@@ -240,7 +240,7 @@ export class ProjectsService {
       .populate('categoryId')
       .populate('categoryIds')
       .select(
-        'title slug description shortDescription coverImage gallery category technologies clientName results challenge solution duration url seo',
+        'title slug summary challenge solution results features images technologies clientName clientLogo category categoryId categoryIds projectTypes industry duration year accentColor displayVariant previewScreens videoUrl stats projectUrl isFeatured seo',
       )
       .lean()
       .exec()) as ProjectDocument | null;
