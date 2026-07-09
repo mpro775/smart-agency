@@ -1,9 +1,11 @@
-import { S3Client, ListObjectsV2Command, GetObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
+import { S3Client, ListObjectsV2Command, GetObjectCommand } from '@aws-sdk/client-s3';
 import { Upload } from '@aws-sdk/lib-storage';
-import sharp from 'sharp';
 import * as fs from 'fs';
 import * as path from 'path';
 
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const sharpModule = require('sharp');
+const sharp = (sharpModule.default ?? sharpModule) as any;
 // Try to load dotenv if not already loaded
 try {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -50,9 +52,9 @@ async function streamToBuffer(stream: any): Promise<Buffer> {
 
 async function run() {
   console.log(`Starting ${isDryRun ? 'DRY RUN' : 'APPLY'}...`);
-  
+
   let continuationToken: string | undefined = undefined;
-  
+
   let totalFound = 0;
   let skippedSvg = 0;
   let skippedGif = 0;
@@ -77,7 +79,7 @@ async function run() {
 
     for (const obj of objects) {
       if (!obj.Key) continue;
-      
+
       totalFound++;
       const key = obj.Key.toLowerCase();
       const originalSize = obj.Size || 0;
@@ -118,7 +120,7 @@ async function run() {
 
         if (isApply) {
           const newKey = obj.Key.replace(/\.[^/.]+$/, "") + ".webp";
-          
+
           // Upload new file
           const upload = new Upload({
             client: s3Client,
@@ -156,7 +158,7 @@ async function run() {
   console.log(`Skipped SVG: ${skippedSvg}`);
   console.log(`Skipped GIF: ${skippedGif}`);
   console.log(`Already WebP: ${alreadyWebp}`);
-  
+
   if (errorCount > 0) {
     console.log(`Errors: ${errorCount}`);
   }

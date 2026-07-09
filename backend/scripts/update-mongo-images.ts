@@ -75,7 +75,7 @@ function traverseAndReplace(obj: any, fields: string[], currentPath: string = ''
           // Check if this array element path matches
           const itemPath = `${pathToCheck}.${i}`;
           const isItemTarget = fields.some(f => itemPath === f || itemPath.startsWith(`${f}.`));
-          
+
           // Also if the array itself is targeted like "images.gallery"
           if (isTargetField || isItemTarget) {
             const newValue = replaceUrlsInString(value[i]);
@@ -116,7 +116,11 @@ async function run() {
   const collectionsConfig: Record<string, string[]> = {
     projects: ['images.cover', 'images.gallery', 'clientLogo'],
     blogs: ['coverImage', 'seo.ogImage', 'seo.twitterImage', 'content'],
+
+    // احتفظ بالاثنين للاحتياط حسب اسم Collection الفعلي
     teams: ['photo'],
+    teammembers: ['photo'],
+
     testimonials: ['companyLogo', 'clientPhoto'],
     abouts: ['hero.image', 'teamNote.image', 'seo.ogImage'],
     services: ['icon'],
@@ -161,7 +165,7 @@ async function run() {
           }
         }
       }
-      
+
       if (collectionUpdatedCount > 0) {
         console.log(`-> ${collectionName}: ${collectionUpdatedCount} documents ${isApply ? 'updated' : 'would be updated'}.`);
       }
