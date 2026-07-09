@@ -61,6 +61,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { uploadFile } from "../../services/api";
 
 const lowlight = createLowlight(common);
 
@@ -170,18 +171,18 @@ export function RichTextEditor({
       handleDrop: (view, event, _slice, moved) => {
         if (!moved && event.dataTransfer?.files?.length) {
           const files = Array.from(event.dataTransfer.files);
-          files.forEach((file) => {
+          files.forEach(async (file) => {
             if (file.type.startsWith("image/")) {
-              const reader = new FileReader();
-              reader.onload = (e) => {
-                const src = e.target?.result as string;
+              try {
+                const src = await uploadFile(file);
                 view.dispatch(
                   view.state.tr.replaceSelectionWith(
                     view.state.schema.nodes.image.create({ src })
                   )
                 );
-              };
-              reader.readAsDataURL(file);
+              } catch (error) {
+                console.error("Failed to upload image:", error);
+              }
             }
           });
           return true;
@@ -195,19 +196,19 @@ export function RichTextEditor({
             item.type.startsWith("image/")
           );
           if (imageItems.length > 0) {
-            imageItems.forEach((item) => {
+            imageItems.forEach(async (item) => {
               const file = item.getAsFile();
               if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                  const src = e.target?.result as string;
+                try {
+                  const src = await uploadFile(file);
                   view.dispatch(
                     view.state.tr.replaceSelectionWith(
                       view.state.schema.nodes.image.create({ src })
                     )
                   );
-                };
-                reader.readAsDataURL(file);
+                } catch (error) {
+                  console.error("Failed to upload image:", error);
+                }
               }
             });
             return true;
@@ -333,16 +334,16 @@ export function RichTextEditor({
     setShowTemplates(false);
   }, [editor]);
 
-  const handleFileUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file || !editor) return;
     if (file.type.startsWith("image/")) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const src = event.target?.result as string;
+      try {
+        const src = await uploadFile(file);
         editor.chain().focus().setImage({ src }).run();
-      };
-      reader.readAsDataURL(file);
+      } catch (error) {
+        console.error("Failed to upload image:", error);
+      }
     }
   }, [editor]);
 

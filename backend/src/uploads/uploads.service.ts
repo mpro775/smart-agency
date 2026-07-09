@@ -12,6 +12,7 @@ import {
 } from '@aws-sdk/client-s3';
 import { Upload } from '@aws-sdk/lib-storage';
 import { UploadResponseDto } from './dto/upload-response.dto';
+import sharp from 'sharp';
 
 export interface UploadOptions {
   folder?: string;
@@ -89,12 +90,54 @@ export class UploadsService {
       );
     }
 
-    const maxSize = 5 * 1024 * 1024; // 5MB
-    if (file.size > maxSize) {
-      throw new BadRequestException('File size must be less than 5MB');
+    const MAX_ORIGINAL_IMAGE_SIZE = 15 * 1024 * 1024; // 15MB
+    if (file.size > MAX_ORIGINAL_IMAGE_SIZE) {
+      throw new BadRequestException('File size must be less than 15MB before compression');
     }
 
-    const key = this.buildObjectKey(file.originalname, options.folder);
+    let fileBuffer = file.buffer;
+    let mimeType = file.mimetype;
+    let fileName = file.originalname;
+    let width: number | undefined;
+    let height: number | undefined;
+
+    if (['image/jpeg', 'image/png', 'image/webp'].includes(file.mimetype)) {
+      try {
+        const { data, info } = await sharp(file.buffer)
+          .resize({
+            width: 1920,
+            height: 1920,
+            fit: 'inside',
+            withoutEnlargement: true,
+          })
+          .webp({ quality: 82 })
+          .toBuffer({ resolveWithObject: true });
+          
+        fileBuffer = data;
+        width = info.width;
+        height = info.height;
+        mimeType = 'image/webp';
+        fileName = fileName.replace(/\.[^/.]+$/, '') + '.webp';
+      } catch (err) {
+        this.logger.error('Error processing image with sharp', err);
+        throw new BadRequestException('Failed to process image');
+      }
+    } else {
+      try {
+        const metadata = await sharp(file.buffer).metadata();
+        width = metadata.width;
+        height = metadata.height;
+      } catch (err) {
+        this.logger.warn(`Could not extract metadata for ${fileName}`);
+      }
+    }
+
+    const MAX_OPTIMIZED_IMAGE_SIZE = 3 * 1024 * 1024; // 3MB
+    if (fileBuffer.length > MAX_OPTIMIZED_IMAGE_SIZE) {
+      throw new BadRequestException('File size after compression is still too large (exceeds 3MB)');
+    }
+
+    const key = this.buildObjectKey(fileName, options.folder);
 
     try {
       const upload: Upload = new Upload({
@@ -102,8 +145,9 @@ export class UploadsService {
         params: {
           Bucket: this.bucketName!,
           Key: key,
-          Body: file.buffer,
-          ContentType: file.mimetype,
+          Body: fileBuffer,
+          ContentType: mimeType,
+          CacheControl: 'public, max-age=31536000, immutable',
         },
       });
 
@@ -112,8 +156,10 @@ export class UploadsService {
       return {
         url: this.buildPublicUrl(key),
         publicId: key,
-        format: this.extractFormat(file),
-        bytes: file.size,
+        format: mimeType.split('/')[1] || 'bin',
+        bytes: fileBuffer.length,
+        width,
+        height,
       };
     } catch (error) {
       const message = this.getErrorMessage(error);

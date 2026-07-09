@@ -30,8 +30,8 @@ export function ImageUpload({
         return;
       }
 
-      if (file.size > 5 * 1024 * 1024) {
-        toast.error('حجم الصورة يجب أن يكون أقل من 5MB');
+      if (file.size > 15 * 1024 * 1024) {
+        toast.error('حجم الصورة يجب أن يكون أقل من 15MB');
         return;
       }
 
@@ -130,7 +130,7 @@ export function ImageUpload({
               <Upload className="h-6 w-6 text-slate-400" />
             </div>
             <p className="text-slate-400">{placeholder}</p>
-            <p className="text-xs text-slate-500">PNG, JPG, WEBP حتى 5MB</p>
+            <p className="text-xs text-slate-500">JPG, PNG, WEBP — يتم التحويل والضغط تلقائياً (حتى 15MB)</p>
           </>
         )}
       </div>
@@ -160,8 +160,8 @@ export function GalleryUpload({
           toast.error(`${file.name} ليس ملف صورة`);
           return false;
         }
-        if (file.size > 5 * 1024 * 1024) {
-          toast.error(`${file.name} حجمه أكبر من 5MB`);
+        if (file.size > 15 * 1024 * 1024) {
+          toast.error(`${file.name} حجمه أكبر من 15MB`);
           return false;
         }
         return true;
