@@ -23,21 +23,11 @@ function getProjectImage(project: Project): string {
   );
 }
 
-function getProjectTypes(project: Project): string[] {
-  if (project.projectTypes && project.projectTypes.length > 0) {
-    return project.projectTypes;
-  }
-  return project.category ? [project.category] : [];
-}
-
 function getCategoryLabels(project: Project): string[] {
   if (Array.isArray(project.categoryIds)) {
     return project.categoryIds
       .map((c) => (typeof c === "object" && c !== null ? (c as ProjectCategoryRef).label : null))
       .filter(Boolean) as string[];
-  }
-  if (typeof project.categoryId === "object" && project.categoryId !== null) {
-    return [(project.categoryId as ProjectCategoryRef).label];
   }
   return [];
 }
@@ -47,7 +37,6 @@ export default function FeaturedProject({ project }: FeaturedProjectProps) {
   const techNames = getTechNames(project.technologies || []);
   const projectImage = getProjectImage(project);
   const detailUrl = `/projects/${project.slug || project._id}`;
-  const projectTypes = getProjectTypes(project);
   const categoryLabels = getCategoryLabels(project);
 
   const handleMouseMove = (e: React.MouseEvent) => {
@@ -115,9 +104,9 @@ export default function FeaturedProject({ project }: FeaturedProjectProps) {
               </svg>
               دراسة حالة
             </span>
-            {projectTypes.length > 0 && (
+            {categoryLabels.length > 0 && (
               <span className="inline-block px-3.5 py-1.5 bg-black/45 backdrop-blur-md text-white text-xs font-semibold rounded-xl border border-white/15">
-                {projectTypes.join(" + ")}
+                {categoryLabels.join(" + ")}
               </span>
             )}
           </div>

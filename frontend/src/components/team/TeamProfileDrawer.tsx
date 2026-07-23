@@ -53,12 +53,12 @@ export default function TeamProfileDrawer({ member, open, onOpenChange }: Props)
 
         <div className="relative z-10 flex flex-col h-full">
           {/* الصورة والاسم */}
-          <div className="flex flex-col items-center text-center px-6 pt-12 pb-8 border-b border-white/5">
+          <div className="flex flex-col items-center text-center px-4 sm:px-6 pt-10 sm:pt-12 pb-6 sm:pb-8 border-b border-white/5">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5 }}
-              className="relative w-36 h-48 rounded-2xl overflow-hidden shadow-2xl ring-1 ring-white/10 mb-6"
+              className="relative w-28 h-36 sm:w-36 sm:h-48 rounded-2xl overflow-hidden shadow-2xl ring-1 ring-white/10 mb-4 sm:mb-6"
             >
               {member.photo ? (
                 <img
@@ -68,7 +68,7 @@ export default function TeamProfileDrawer({ member, open, onOpenChange }: Props)
                 />
               ) : (
                 <div className="w-full h-full bg-gradient-to-b from-gray-800 to-gray-900 flex items-center justify-center">
-                  <span className="text-5xl text-gray-700 font-light">
+                  <span className="text-4xl sm:text-5xl text-gray-700 font-light">
                     {member.fullName.charAt(0)}
                   </span>
                 </div>
@@ -80,24 +80,24 @@ export default function TeamProfileDrawer({ member, open, onOpenChange }: Props)
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
             >
-              <h2 className="text-2xl font-bold text-white mb-2">
+              <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">
                 {member.fullName}
               </h2>
-              <div className={`inline-flex items-center px-4 py-1.5 rounded-full ${accentBg} border ${accentBorder} mb-5`}>
-                <span className={`text-sm font-medium ${accentColor}`}>
+              <div className={`inline-flex items-center px-3 py-1 sm:px-4 sm:py-1.5 rounded-full ${accentBg} border ${accentBorder} mb-4 sm:mb-5`}>
+                <span className={`text-xs sm:text-sm font-medium ${accentColor}`}>
                   {member.role}
                 </span>
               </div>
 
-              <div className="space-y-3 text-sm text-gray-400">
+              <div className="space-y-2 sm:space-y-3 text-xs sm:text-sm text-gray-400">
                 {member.department && (
-                  <div className="flex items-center justify-center gap-3">
+                  <div className="flex items-center justify-center gap-2 sm:gap-3">
                     <span className="text-gray-300">{getDepartmentLabel(member.department)}</span>
                     <FiBriefcase className="text-gray-600 shrink-0" />
                   </div>
                 )}
                 {member.joinedAt && (
-                  <div className="flex items-center justify-center gap-3">
+                  <div className="flex items-center justify-center gap-2 sm:gap-3">
                     <span className="text-gray-300">منذ {new Date(member.joinedAt).getFullYear()}</span>
                     <FiCalendar className="text-gray-600 shrink-0" />
                   </div>
@@ -106,7 +106,7 @@ export default function TeamProfileDrawer({ member, open, onOpenChange }: Props)
             </motion.div>
 
             {/* وسائل التواصل */}
-            <div className="mt-6 flex gap-3 justify-center">
+            <div className="mt-4 sm:mt-6 flex flex-wrap gap-2.5 sm:gap-3 justify-center">
               {[
                 { icon: FiLinkedin, href: member.linkedinUrl },
                 { icon: FiGithub, href: member.githubUrl },
@@ -122,9 +122,9 @@ export default function TeamProfileDrawer({ member, open, onOpenChange }: Props)
                       target="_blank"
                       rel="noopener noreferrer"
                       whileHover={{ y: -3 }}
-                      className="p-2.5 rounded-full bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white transition-all border border-white/5 hover:border-white/20"
+                      className="p-2 sm:p-2.5 rounded-full bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white transition-all border border-white/5 hover:border-white/20"
                     >
-                      <social.icon size={18} />
+                      <social.icon className="w-4 h-4 sm:w-4 sm:h-4" />
                     </motion.a>
                   )
               )}
@@ -132,18 +132,18 @@ export default function TeamProfileDrawer({ member, open, onOpenChange }: Props)
           </div>
 
           {/* التفاصيل */}
-          <div className="flex-1 px-6 py-8 space-y-8">
+          <div className="flex-1 px-4 sm:px-6 py-6 sm:py-8 space-y-6 sm:space-y-8">
             {member.bio && (
               <motion.section
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
               >
-                <h3 className="flex items-center gap-2 text-lg font-semibold text-white mb-4">
+                <h3 className="flex items-center gap-2 text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4">
                   <FiUser className={accentColor} />
                   نبذة تعريفية
                 </h3>
-                <p className="text-gray-400 leading-relaxed text-base">
+                <p className="text-gray-400 leading-relaxed text-sm sm:text-base">
                   {member.bio}
                 </p>
               </motion.section>
@@ -155,7 +155,7 @@ export default function TeamProfileDrawer({ member, open, onOpenChange }: Props)
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
               >
-                <h3 className="flex items-center gap-2 text-lg font-semibold text-white mb-5">
+                <h3 className="flex items-center gap-2 text-base sm:text-lg font-semibold text-white mb-3 sm:mb-5">
                   <FiAward className={accentColor} />
                   المهارات والتخصصات
                 </h3>
@@ -163,7 +163,7 @@ export default function TeamProfileDrawer({ member, open, onOpenChange }: Props)
                   {member.specializations.map((spec, index) => (
                     <span
                       key={index}
-                      className="px-4 py-2 rounded-lg bg-white/[0.03] border border-white/10 text-gray-300 text-sm hover:bg-white/[0.05] hover:border-cyan-500/30 transition-colors cursor-default"
+                      className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg bg-white/[0.03] border border-white/10 text-gray-300 text-xs sm:text-sm hover:bg-white/[0.05] hover:border-cyan-500/30 transition-colors cursor-default"
                     >
                       {spec}
                     </span>
@@ -178,14 +178,14 @@ export default function TeamProfileDrawer({ member, open, onOpenChange }: Props)
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}
               >
-                <div className="relative p-6 rounded-2xl bg-gradient-to-br from-gray-800/20 to-gray-900/30 border border-white/5 overflow-hidden">
+                <div className="relative p-4 sm:p-6 rounded-2xl bg-gradient-to-br from-gray-800/20 to-gray-900/30 border border-white/5 overflow-hidden">
                   <div className="absolute top-0 right-0 p-4 opacity-10">
                     <FiAward size={80} />
                   </div>
-                  <h4 className={`text-sm font-medium ${accentColor} mb-2 uppercase tracking-wider`}>
+                  <h4 className={`text-xs sm:text-sm font-medium ${accentColor} mb-2 uppercase tracking-wider`}>
                     شيء يميز هذا العضو
                   </h4>
-                  <p className="text-gray-300 italic relative z-10 leading-relaxed">
+                  <p className="text-gray-300 text-xs sm:text-sm italic relative z-10 leading-relaxed">
                     "{member.funFact}"
                   </p>
                 </div>

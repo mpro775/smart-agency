@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Eye, Pencil, Trash2, Star, Globe, StarOff, CheckCircle, XCircle } from 'lucide-react';
 import { projectsService } from '../../services/projects.service';
+import { projectCategoriesService } from '../../services/project-categories.service';
 import { DataTable, type Column, PageHeader, ConfirmDialog } from '../../components/shared';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -10,45 +11,30 @@ import { ErrorState } from '@/components/ui/StateViews';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
-import type { Project, ProjectCategory, DisplayVariant } from '../../types';
+import type { Project, ProjectCategoryRef } from '../../types';
 import { formatDate } from '../../utils/format';
-
-const categoryOptions: { value: ProjectCategory | 'all'; label: string }[] = [
-  { value: 'all', label: 'جميع التصنيفات' },
-  { value: 'Web App' as ProjectCategory, label: 'تطبيق ويب' },
-  { value: 'Mobile App' as ProjectCategory, label: 'تطبيق موبايل' },
-  { value: 'Automation' as ProjectCategory, label: 'أتمتة' },
-  { value: 'ERP' as ProjectCategory, label: 'ERP' },
-  { value: 'E-Commerce' as ProjectCategory, label: 'متجر إلكتروني' },
-  { value: 'Other' as ProjectCategory, label: 'أخرى' },
-];
-
-const displayVariantLabels: Record<DisplayVariant, string> = {
-  standard: 'عادي',
-  featured: 'مميز',
-  wide: 'عريض',
-  compact: 'مضغوط',
-  case_study: 'دراسة حالة',
-};
 
 export default function ProjectsList() {
   const queryClient = useQueryClient();
   const [page, setPage] = useState(1);
   const [category, setCategory] = useState<string>('all');
-  const [displayVariant, setDisplayVariant] = useState<string>('all');
   const [publishedFilter, setPublishedFilter] = useState<string>('all');
   const [featuredFilter, setFeaturedFilter] = useState<string>('all');
   const [search, setSearch] = useState('');
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
+  const { data: dbCategories } = useQuery({
+    queryKey: ['project-categories'],
+    queryFn: () => projectCategoriesService.getAll(),
+  });
+
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['projects', page, category, displayVariant, publishedFilter, featuredFilter, search],
+    queryKey: ['projects', page, category, publishedFilter, featuredFilter, search],
     queryFn: () =>
       projectsService.getAll({
         page,
         limit: 10,
-        category: category !== 'all' ? category : undefined,
-        displayVariant: displayVariant !== 'all' ? displayVariant : undefined,
+        categoryIds: category !== 'all' ? [category] : undefined,
         isPublished: publishedFilter === 'all' ? undefined : publishedFilter === 'published',
         isFeatured: featuredFilter === 'all' ? undefined : featuredFilter === 'featured',
         search: search || undefined,
@@ -118,28 +104,24 @@ export default function ProjectsList() {
     {
       key: 'category',
       header: 'التصنيف',
-      cell: (project) => (
-        <Badge variant="outline" className="border-slate-600 text-slate-300">
-          {project.category}
-        </Badge>
-      ),
-    },
-    {
-      key: 'displayVariant',
-      header: 'نمط العرض',
       cell: (project) => {
-        const variant = project.displayVariant || 'standard';
-        const variantColors: Record<string, string> = {
-          standard: 'bg-slate-500/20 text-slate-400 border-slate-500/30',
-          featured: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
-          wide: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
-          compact: 'bg-purple-500/20 text-purple-400 border-purple-500/30',
-          case_study: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
-        };
+        const labels = Array.isArray(project.categoryIds)
+          ? project.categoryIds
+              .map((c) => (typeof c === 'object' && c !== null ? (c as ProjectCategoryRef).label : null))
+              .filter(Boolean) as string[]
+          : [];
         return (
-          <Badge variant="outline" className={variantColors[variant]}>
-            {displayVariantLabels[variant as DisplayVariant] || variant}
-          </Badge>
+          <div className="flex flex-wrap gap-1">
+            {labels.length > 0 ? (
+              labels.map((label, idx) => (
+                <Badge key={idx} variant="outline" className="border-slate-600 text-slate-300">
+                  {label}
+                </Badge>
+              ))
+            ) : (
+              <span className="text-slate-500 text-xs">-</span>
+            )}
+          </div>
         );
       },
     },
@@ -255,33 +237,16 @@ export default function ProjectsList() {
             <SelectValue placeholder="جميع التصنيفات" />
           </SelectTrigger>
           <SelectContent className="bg-slate-800 border-slate-700">
-            {categoryOptions.map((option) => (
-              <SelectItem
-                key={option.value}
-                value={option.value}
-                className="text-white hover:bg-slate-700"
-              >
-                {option.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-
-        <Select value={displayVariant} onValueChange={setDisplayVariant}>
-          <SelectTrigger className="w-40 bg-slate-800 border-slate-700 text-white">
-            <SelectValue placeholder="نمط العرض" />
-          </SelectTrigger>
-          <SelectContent className="bg-slate-800 border-slate-700">
             <SelectItem value="all" className="text-white hover:bg-slate-700">
-              جميع الأنماط
+              جميع التصنيفات
             </SelectItem>
-            {Object.entries(displayVariantLabels).map(([value, label]) => (
+            {dbCategories?.map((cat) => (
               <SelectItem
-                key={value}
-                value={value}
+                key={cat._id}
+                value={cat._id}
                 className="text-white hover:bg-slate-700"
               >
-                {label}
+                {cat.label}
               </SelectItem>
             ))}
           </SelectContent>

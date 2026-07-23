@@ -26,21 +26,11 @@ function getProjectImage(project: Project): string {
   );
 }
 
-function getProjectTypes(project: Project): string[] {
-  if (project.projectTypes && project.projectTypes.length > 0) {
-    return project.projectTypes;
-  }
-  return project.category ? [project.category] : [];
-}
-
 function getCategoryLabels(project: Project): string[] {
   if (Array.isArray(project.categoryIds)) {
     return project.categoryIds
       .map((c) => (typeof c === "object" && c !== null ? (c as ProjectCategoryRef).label : null))
       .filter(Boolean) as string[];
-  }
-  if (typeof project.categoryId === "object" && project.categoryId !== null) {
-    return [(project.categoryId as ProjectCategoryRef).label];
   }
   return [];
 }
@@ -54,7 +44,6 @@ export default function ProjectCard({
   const projectImage = getProjectImage(project);
   const detailUrl = `/projects/${project.slug || project._id}`;
   const showContent = variant !== "compact";
-  const projectTypes = getProjectTypes(project);
   const categoryLabels = getCategoryLabels(project);
 
   const handleMouseMove = (e: React.MouseEvent) => {
@@ -90,7 +79,9 @@ export default function ProjectCard({
             <h3 className="text-white font-bold text-base line-clamp-1 mb-1">
               {project.title}
             </h3>
-            <span className="text-white/70 text-xs">{projectTypes.join(" + ")}</span>
+            {categoryLabels.length > 0 && (
+              <span className="text-white/70 text-xs">{categoryLabels.join(" + ")}</span>
+            )}
           </div>
         </div>
       </motion.div>
@@ -170,9 +161,9 @@ export default function ProjectCard({
 
           {/* Tags on image */}
           <div className="absolute bottom-3 left-3 z-10 flex flex-wrap items-center gap-1.5" dir="rtl">
-            {projectTypes.length > 0 && (
+            {categoryLabels.length > 0 && (
               <span className="inline-block px-2 py-0.5 bg-black/50 backdrop-blur-md text-white text-[10px] font-semibold rounded-md border border-white/15">
-                {projectTypes.join(" + ")}
+                {categoryLabels.join(" + ")}
               </span>
             )}
           </div>
@@ -188,12 +179,6 @@ export default function ProjectCard({
                   <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-[var(--smart-primary)]/[0.07] text-[var(--smart-primary)] text-[11px] font-semibold rounded-md border border-[var(--smart-primary)]/15">
                     <span className="w-1.5 h-1.5 rounded-full bg-[var(--smart-primary)]" />
                     {categoryLabels[0]}
-                  </span>
-                )}
-                {projectTypes.length > 0 && categoryLabels.length === 0 && (
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-[var(--smart-primary)]/[0.07] text-[var(--smart-primary)] text-[11px] font-semibold rounded-md border border-[var(--smart-primary)]/15">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[var(--smart-primary)]" />
-                    {projectTypes[0]}
                   </span>
                 )}
               </div>

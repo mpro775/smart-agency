@@ -10,11 +10,7 @@ interface ProjectBentoGridProps {
   onResetFilter?: () => void;
 }
 
-function getVariant(project: Project): CardVariant {
-  // All cards are now standard - same size, same layout
-  if (project.displayVariant && project.displayVariant === "compact") {
-    return "compact";
-  }
+function getVariant(_project: Project): CardVariant {
   return "standard";
 }
 

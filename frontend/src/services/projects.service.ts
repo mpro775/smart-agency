@@ -5,13 +5,8 @@ import type { ApiResponse, PaginatedResponse } from "@/types/api";
 export interface ProjectFilters {
   page?: number;
   limit?: number;
-  category?: string;
-  projectType?: string;
-  projectTypes?: string[];
-  categoryId?: string;
   categoryIds?: string[];
   industry?: string;
-  displayVariant?: string;
   featured?: boolean;
   isFeatured?: boolean;
   search?: string;
@@ -26,14 +21,8 @@ export const publicProjectsService = {
     const params = new URLSearchParams();
     if (filters?.page) params.append("page", String(filters.page));
     if (filters?.limit) params.append("limit", String(filters.limit));
-    if (filters?.category) params.append("category", filters.category);
-    if (filters?.projectType) params.append("projectType", filters.projectType);
-    if (filters?.projectTypes?.length) params.append("projectTypes", filters.projectTypes.join(","));
-    if (filters?.categoryId) params.append("categoryId", filters.categoryId);
     if (filters?.categoryIds?.length) params.append("categoryIds", filters.categoryIds.join(","));
     if (filters?.industry) params.append("industry", filters.industry);
-    if (filters?.displayVariant)
-      params.append("displayVariant", filters.displayVariant);
     if (filters?.featured !== undefined)
       params.append("featured", String(filters.featured));
     if (filters?.isFeatured !== undefined)
@@ -103,17 +92,11 @@ export const publicProjectsService = {
           .filter(Boolean)
       : [];
 
-    const categoryId =
-      typeof project.categoryId === "object" && project.categoryId !== null
-        ? project.categoryId._id
-        : project.categoryId;
-
-    const primaryCategoryId = categoryIds.length > 0 ? categoryIds[0] : categoryId;
+    const primaryCategoryId = categoryIds.length > 0 ? categoryIds[0] : undefined;
 
     const response = await publicProjectsService.getAll({
       limit: 4,
-      categoryId: primaryCategoryId,
-      category: primaryCategoryId ? undefined : project.category,
+      categoryIds: primaryCategoryId ? [primaryCategoryId] : undefined,
     });
 
     return response.data.filter((item) => item._id !== project._id);

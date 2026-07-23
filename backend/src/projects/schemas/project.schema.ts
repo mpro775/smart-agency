@@ -46,23 +46,6 @@ export class ProjectStat {
   description?: string;
 }
 
-export enum ProjectCategory {
-  WEB_APP = 'Web App',
-  MOBILE_APP = 'Mobile App',
-  AUTOMATION = 'Automation',
-  ERP = 'ERP',
-  ECOMMERCE = 'E-Commerce',
-  OTHER = 'Other',
-}
-
-export enum DisplayVariant {
-  STANDARD = 'standard',
-  FEATURED = 'featured',
-  WIDE = 'wide',
-  COMPACT = 'compact',
-  CASE_STUDY = 'case_study',
-}
-
 @Schema({ timestamps: true })
 export class Project {
   @Prop({ required: true })
@@ -99,27 +82,10 @@ export class Project {
   clientName: string;
 
   @Prop({
-    type: String,
-    enum: ProjectCategory,
-    default: ProjectCategory.OTHER,
-  })
-  category: ProjectCategory;
-
-  @Prop({ type: Types.ObjectId, ref: 'ProjectCategory' })
-  categoryId?: Types.ObjectId;
-
-  @Prop({
     type: [{ type: Types.ObjectId, ref: 'ProjectCategory' }],
     default: [],
   })
   categoryIds?: Types.ObjectId[];
-
-  @Prop({
-    type: [String],
-    enum: ProjectCategory,
-    default: [],
-  })
-  projectTypes?: ProjectCategory[];
 
   @Prop()
   industry?: string;
@@ -133,24 +99,11 @@ export class Project {
   @Prop()
   clientLogo?: string;
 
-  @Prop()
-  accentColor?: string;
-
   @Prop({ default: 0 })
   sortOrder?: number;
 
   @Prop({ default: 0 })
   featuredOrder?: number;
-
-  @Prop({
-    type: String,
-    enum: DisplayVariant,
-    default: DisplayVariant.STANDARD,
-  })
-  displayVariant?: DisplayVariant;
-
-  @Prop({ type: [String], default: [] })
-  previewScreens?: string[];
 
   @Prop()
   videoUrl?: string;
@@ -176,11 +129,7 @@ export const ProjectSchema = SchemaFactory.createForClass(Project);
 // Indexes for faster queries
 ProjectSchema.index({ slug: 1 }, { unique: true });
 ProjectSchema.index({ isFeatured: 1 });
-ProjectSchema.index({ category: 1 });
-ProjectSchema.index({ category: 1, isPublished: 1 });
-ProjectSchema.index({ categoryId: 1 });
 ProjectSchema.index({ categoryIds: 1 });
-ProjectSchema.index({ projectTypes: 1 });
 ProjectSchema.index({ isPublished: 1 });
 ProjectSchema.index({ technologies: 1 });
 ProjectSchema.index({ sortOrder: 1 });

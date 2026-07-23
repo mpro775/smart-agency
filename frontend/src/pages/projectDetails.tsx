@@ -15,21 +15,58 @@ import ProjectSidebar from "../components/projects/details/ProjectSidebar";
 import RelatedProjects from "../components/projects/details/RelatedProjects";
 
 /* ─── helpers ─── */
-function getProjectTypes(project: Project): string[] {
-  if (project.projectTypes && project.projectTypes.length > 0) return project.projectTypes;
-  return project.category ? [project.category] : [];
-}
-
 function getCategoryLabels(project: Project): string[] {
   if (Array.isArray(project.categoryIds)) {
     return project.categoryIds
       .map((c) => (typeof c === "object" && c !== null ? (c as ProjectCategoryRef).label : null))
       .filter(Boolean) as string[];
   }
-  if (typeof project.categoryId === "object" && project.categoryId !== null) {
-    return [(project.categoryId as ProjectCategoryRef).label];
-  }
   return [];
+}
+
+function useProjectSeo(project: Project | null) {
+  useEffect(() => {
+    if (!project) return;
+
+    const previousTitle = document.title;
+    const title = project.seo?.metaTitle || `${project.title} | Smart Agency`;
+    const description = project.seo?.metaDescription || project.summary || "";
+    const keywords = Array.isArray(project.seo?.keywords) ? project.seo.keywords.join(", ") : "";
+    const coverImage = project.images?.cover || "";
+
+    document.title = title;
+
+    const upsertMeta = (selector: string, attrs: Record<string, string>) => {
+      let element = document.head.querySelector(selector) as HTMLMetaElement | null;
+      if (!element) {
+        element = document.createElement("meta");
+        document.head.appendChild(element);
+      }
+      Object.entries(attrs).forEach(([key, value]) => element?.setAttribute(key, value));
+      return element;
+    };
+
+    upsertMeta('meta[name="description"]', { name: "description", content: description });
+    if (keywords) {
+      upsertMeta('meta[name="keywords"]', { name: "keywords", content: keywords });
+    }
+    upsertMeta('meta[property="og:title"]', { property: "og:title", content: project.seo?.metaTitle || project.title });
+    upsertMeta('meta[property="og:description"]', { property: "og:description", content: description });
+    if (coverImage) {
+      upsertMeta('meta[property="og:image"]', { property: "og:image", content: coverImage });
+    }
+    upsertMeta('meta[property="og:type"]', { property: "og:type", content: "website" });
+    upsertMeta('meta[name="twitter:card"]', { name: "twitter:card", content: "summary_large_image" });
+    upsertMeta('meta[name="twitter:title"]', { name: "twitter:title", content: project.seo?.metaTitle || project.title });
+    upsertMeta('meta[name="twitter:description"]', { name: "twitter:description", content: description });
+    if (coverImage) {
+      upsertMeta('meta[name="twitter:image"]', { name: "twitter:image", content: coverImage });
+    }
+
+    return () => {
+      document.title = previousTitle;
+    };
+  }, [project]);
 }
 
 export default function ProjectDetailsPage() {
@@ -39,6 +76,8 @@ export default function ProjectDetailsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const heroRef = useRef<HTMLDivElement>(null);
+
+  useProjectSeo(project);
 
   const { scrollYProgress } = useScroll({
     target: heroRef,
@@ -72,15 +111,13 @@ export default function ProjectDetailsPage() {
   const displayImages = useMemo(() => {
     const images = [
       project?.images?.cover,
-      ...(project?.previewScreens ?? []),
       ...(project?.images?.gallery ?? []),
     ].filter(Boolean) as string[];
     return Array.from(new Set(images));
-  }, [project?.images?.cover, project?.images?.gallery, project?.previewScreens]);
+  }, [project?.images?.cover, project?.images?.gallery]);
 
   const heroImage = displayImages[0] ?? "https://via.placeholder.com/1200x680";
   const features = project?.features ?? [];
-  const projectTypes = project ? getProjectTypes(project) : [];
   const categoryLabels = project ? getCategoryLabels(project) : [];
 
   if (loading) {
@@ -132,7 +169,7 @@ export default function ProjectDetailsPage() {
         </motion.div>
 
         {/* Hero Section Content */}
-        <ProjectHero project={project} projectTypes={projectTypes} />
+        <ProjectHero project={project} categoryLabels={categoryLabels} />
       </div>
 
       {/* Browser Mockup / Media Section */}
@@ -173,7 +210,6 @@ export default function ProjectDetailsPage() {
           <div className="lg:col-span-4">
             <ProjectSidebar
               project={project}
-              projectTypes={projectTypes}
               categoryLabels={categoryLabels}
             />
           </div>

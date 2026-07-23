@@ -35,23 +35,9 @@ export class ProjectsService {
       throw new ConflictException('Project with this slug already exists');
     }
 
-    const normalizedProjectTypes = createProjectDto.projectTypes?.length
-      ? createProjectDto.projectTypes
-      : createProjectDto.category
-        ? [createProjectDto.category]
-        : [];
-
-    const normalizedCategoryIds = createProjectDto.categoryIds?.length
-      ? createProjectDto.categoryIds
-      : createProjectDto.categoryId
-        ? [createProjectDto.categoryId]
-        : [];
-
     const project = new this.projectModel({
       ...createProjectDto,
       slug: createProjectDto.slug.toLowerCase(),
-      projectTypes: normalizedProjectTypes,
-      categoryIds: normalizedCategoryIds,
     });
     return project.save();
   }
@@ -64,12 +50,8 @@ export class ProjectsService {
       page = 1,
       limit = 10,
       tech,
-      category,
-      projectType,
-      categoryId,
       categoryIds,
       industry,
-      displayVariant,
       featured,
       isFeatured,
       search,
@@ -85,39 +67,9 @@ export class ProjectsService {
     } else if (isPublished !== undefined) {
       query.isPublished = isPublished;
     }
-    // If includeUnpublished is true and isPublished is not specified, show all projects
 
     if (tech) {
       query.technologies = tech;
-    }
-
-    if (category) {
-      query.$or = [
-        { category },
-        { projectTypes: category },
-      ];
-    }
-
-    if (projectType) {
-      const typeOr = [
-        { category: projectType },
-        { projectTypes: projectType },
-      ];
-      if (query.$or) {
-        // Merge: project must match both category AND projectType filters
-        const categoryOr = query.$or;
-        query.$and = [
-          { $or: categoryOr },
-          { $or: typeOr },
-        ];
-        delete query.$or;
-      } else {
-        query.$or = typeOr;
-      }
-    }
-
-    if (categoryId) {
-      query.categoryId = categoryId;
     }
 
     if (categoryIds) {
@@ -129,10 +81,6 @@ export class ProjectsService {
 
     if (industry) {
       query.industry = { $regex: industry, $options: 'i' };
-    }
-
-    if (displayVariant) {
-      query.displayVariant = displayVariant;
     }
 
     // Support both 'featured' and 'isFeatured' for backward compatibility
@@ -147,7 +95,6 @@ export class ProjectsService {
         { summary: { $regex: search, $options: 'i' } },
       ];
       if (query.$or || query.$and) {
-        // Combine search with existing filters using $and
         if (query.$and) {
           query.$and.push({ $or: searchOr });
         } else {
@@ -169,7 +116,6 @@ export class ProjectsService {
     const projectsQuery: any = this.projectModel
       .find(query)
       .populate('technologies', 'name icon category description tooltip')
-      .populate('categoryId')
       .populate('categoryIds')
       .sort({ sortOrder: 1, createdAt: -1 })
       .skip((page - 1) * limit)
@@ -178,7 +124,7 @@ export class ProjectsService {
     if (!includeUnpublished) {
       projectsQuery
         .select(
-          'title slug summary shortDescription images category categoryId categoryIds projectTypes industry year technologies isFeatured order createdAt displayVariant accentColor results stats clientName clientLogo projectUrl',
+          'title slug summary shortDescription images categoryIds industry year technologies isFeatured order createdAt results stats clientName clientLogo projectUrl',
         )
         .lean();
     }
@@ -192,7 +138,6 @@ export class ProjectsService {
     return this.projectModel
       .find({ isFeatured: true, isPublished: true })
       .populate('technologies', 'name icon category description tooltip')
-      .populate('categoryId')
       .populate('categoryIds')
       .sort({ featuredOrder: 1, sortOrder: 1, createdAt: -1 })
       .limit(6)
@@ -203,10 +148,9 @@ export class ProjectsService {
     const project = (await this.projectModel
       .findOne({ slug: slug.toLowerCase(), isPublished: true })
       .populate('technologies', 'name icon category description tooltip')
-      .populate('categoryId')
       .populate('categoryIds')
       .select(
-        'title slug summary challenge solution results features images technologies clientName clientLogo category categoryId categoryIds projectTypes industry duration year accentColor displayVariant previewScreens videoUrl stats projectUrl isFeatured seo',
+        'title slug summary challenge solution results features images technologies clientName clientLogo categoryIds industry duration year videoUrl stats projectUrl isFeatured seo',
       )
       .lean()
       .exec()) as ProjectDocument | null;
@@ -222,7 +166,6 @@ export class ProjectsService {
     const project = await this.projectModel
       .findById(id)
       .populate('technologies', 'name icon category description tooltip')
-      .populate('categoryId')
       .populate('categoryIds')
       .exec();
 
@@ -237,10 +180,9 @@ export class ProjectsService {
     const project = (await this.projectModel
       .findOne({ _id: id, isPublished: true })
       .populate('technologies', 'name icon category description tooltip')
-      .populate('categoryId')
       .populate('categoryIds')
       .select(
-        'title slug summary challenge solution results features images technologies clientName clientLogo category categoryId categoryIds projectTypes industry duration year accentColor displayVariant previewScreens videoUrl stats projectUrl isFeatured seo',
+        'title slug summary challenge solution results features images technologies clientName clientLogo categoryIds industry duration year videoUrl stats projectUrl isFeatured seo',
       )
       .lean()
       .exec()) as ProjectDocument | null;
@@ -270,32 +212,12 @@ export class ProjectsService {
       updateProjectDto.slug = updateProjectDto.slug.toLowerCase();
     }
 
-    const normalizedProjectTypes = updateProjectDto.projectTypes?.length
-      ? updateProjectDto.projectTypes
-      : updateProjectDto.category
-        ? [updateProjectDto.category]
-        : undefined;
-
-    const normalizedCategoryIds = updateProjectDto.categoryIds?.length
-      ? updateProjectDto.categoryIds
-      : updateProjectDto.categoryId
-        ? [updateProjectDto.categoryId]
-        : undefined;
-
     const hasProjectUrl = Object.prototype.hasOwnProperty.call(
       updateProjectDto,
       'projectUrl',
     );
 
     const updatePayload: Record<string, unknown> = { ...updateProjectDto };
-
-    if (normalizedProjectTypes !== undefined) {
-      updatePayload.projectTypes = normalizedProjectTypes;
-    }
-
-    if (normalizedCategoryIds !== undefined) {
-      updatePayload.categoryIds = normalizedCategoryIds;
-    }
 
     const unsetPayload: Record<string, 1> = {};
 
@@ -323,7 +245,6 @@ export class ProjectsService {
     const project = await this.projectModel
       .findByIdAndUpdate(id, finalUpdatePayload, { new: true })
       .populate('technologies', 'name icon category description tooltip')
-      .populate('categoryId')
       .populate('categoryIds')
       .exec();
 
@@ -355,11 +276,8 @@ export class ProjectsService {
       dbCategories.map(async (cat) => {
         const count = await this.projectModel
           .countDocuments({
-            $or: [
-              { category: cat.value, isPublished: true },
-              { projectTypes: cat.value, isPublished: true },
-              { categoryIds: cat._id, isPublished: true },
-            ],
+            categoryIds: cat._id,
+            isPublished: true,
           })
           .exec();
         return {

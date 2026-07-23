@@ -1241,11 +1241,9 @@ async function seedProjects(users, technologies, projectCategories) {
         gallery: [
           'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800',
           'https://images.unsplash.com/photo-1556740758-90de374c12ad?w=800',
+          'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800',
         ],
       },
-      previewScreens: [
-        'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800',
-      ],
       projectUrl: 'https://example-ecommerce.com',
       clientName: 'شركة التجارة الإلكترونية',
       clientLogo: 'https://via.placeholder.com/150x50?text=E-Commerce+Co',
@@ -1254,7 +1252,6 @@ async function seedProjects(users, technologies, projectCategories) {
       industry: 'تجارة إلكترونية',
       duration: '45 يوم',
       year: '2025',
-      accentColor: '#008C84',
       isFeatured: true,
       isPublished: true,
       seo: {
@@ -1294,11 +1291,9 @@ async function seedProjects(users, technologies, projectCategories) {
           'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800',
         gallery: [
           'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800',
+          'https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800',
         ],
       },
-      previewScreens: [
-        'https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800',
-      ],
       projectUrl: 'https://example-taskapp.com',
       clientName: 'شركة الإنتاجية',
       clientLogo: 'https://via.placeholder.com/150x50?text=Productivity+Co',
@@ -1307,7 +1302,6 @@ async function seedProjects(users, technologies, projectCategories) {
       industry: 'إنتاجية',
       duration: '60 يوم',
       year: '2025',
-      accentColor: '#3B82F6',
       isFeatured: true,
       isPublished: true,
       seo: {
@@ -1349,11 +1343,10 @@ async function seedProjects(users, technologies, projectCategories) {
       images: {
         cover:
           'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800',
-        gallery: [],
+        gallery: [
+          'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800',
+        ],
       },
-      previewScreens: [
-        'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800',
-      ],
       projectUrl: 'https://example-erp.com',
       clientName: 'مصنع التصنيع المتقدم',
       clientLogo: 'https://via.placeholder.com/150x50?text=Manufacturing+Co',
@@ -1362,7 +1355,6 @@ async function seedProjects(users, technologies, projectCategories) {
       industry: 'تصنيع',
       duration: '4 أشهر',
       year: '2024',
-      accentColor: '#8B5CF6',
       isFeatured: false,
       isPublished: true,
       seo: {

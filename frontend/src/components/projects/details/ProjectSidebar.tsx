@@ -1,12 +1,11 @@
 import { useMemo } from "react";
 import { motion } from "framer-motion";
-import { Info, User, Tag, Layers, Calendar, Cpu, Zap, Bookmark, ArrowLeft } from "lucide-react";
+import { Info, User, Layers, Calendar, Cpu, Zap, Bookmark, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 import type { Project, Technology } from "../../../admin/types";
 
 interface ProjectSidebarProps {
   project: Project;
-  projectTypes: string[];
   categoryLabels: string[];
 }
 
@@ -24,7 +23,7 @@ const fadeUp = {
   transition: { duration: 0.7 },
 };
 
-export default function ProjectSidebar({ project, projectTypes, categoryLabels }: ProjectSidebarProps) {
+export default function ProjectSidebar({ project, categoryLabels }: ProjectSidebarProps) {
   const groupedTechnologies = useMemo(() => {
     if (!Array.isArray(project.technologies)) return {};
     return project.technologies.reduce((groups, tech) => {
@@ -61,18 +60,6 @@ export default function ProjectSidebar({ project, projectTypes, categoryLabels }
               <span className="font-extrabold text-slate-800 text-sm">{project.clientName}</span>
             </div>
           )}
-
-          <div className="flex items-center justify-between rounded-2xl bg-slate-50/50 border border-slate-100/80 px-4 py-3.5 hover:border-teal-200/40 hover:bg-white transition-all duration-300">
-            <span className="text-slate-500 flex items-center gap-2.5 text-sm font-bold">
-              <Tag className="w-4 h-4 text-teal-600" /> النوع
-            </span>
-            <span
-              className="font-extrabold text-slate-800 text-sm text-left truncate max-w-[170px]"
-              title={projectTypes.join(" + ")}
-            >
-              {projectTypes.join(" + ")}
-            </span>
-          </div>
 
           {categoryLabels.length > 0 && (
             <div className="flex items-center justify-between rounded-2xl bg-slate-50/50 border border-slate-100/80 px-4 py-3.5 hover:border-teal-200/40 hover:bg-white transition-all duration-300">

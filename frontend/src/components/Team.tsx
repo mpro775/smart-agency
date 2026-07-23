@@ -14,31 +14,32 @@ function TeamLoadingState() {
     <SectionShell tone="dark" pattern="mesh" id="team">
       <div className="text-center">
         <TeamSectionHeader />
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto mb-12">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-4 max-w-3xl mx-auto mb-8 sm:mb-12">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="rounded-2xl border border-[var(--smart-border-dark)] bg-[var(--smart-bg-dark-card)] px-6 py-5 animate-pulse">
-              <div className="h-7 w-16 bg-white/10 rounded mb-2" />
-              <div className="h-4 w-24 bg-white/5 rounded" />
+            <div key={i} className="rounded-2xl border border-[var(--smart-border-dark)] bg-[var(--smart-bg-dark-card)] px-4 py-4 animate-pulse">
+              <div className="h-6 w-14 bg-white/10 rounded mb-2" />
+              <div className="h-3.5 w-20 bg-white/5 rounded" />
             </div>
           ))}
         </div>
-        <div className="grid lg:grid-cols-12 gap-6">
-          <div className="lg:col-span-3 space-y-3">
-            {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="rounded-2xl border border-[var(--smart-border-dark)] bg-[var(--smart-bg-dark-card)] p-3 animate-pulse">
-                <div className="flex items-center gap-3">
-                  <div className="h-14 w-14 rounded-xl bg-white/5" />
-                  <div className="flex-1 space-y-2">
-                    <div className="h-4 w-24 bg-white/10 rounded" />
-                    <div className="h-3 w-16 bg-white/5 rounded" />
-                    <div className="h-2 w-20 bg-white/5 rounded" />
+        <div className="grid lg:grid-cols-12 gap-5 sm:gap-6">
+          <div className="lg:col-span-3 order-1 lg:order-1">
+            <div className="flex lg:flex-col gap-2.5 sm:gap-3 overflow-x-auto lg:overflow-visible pb-2 lg:pb-0">
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} className="min-w-[200px] xs:min-w-[230px] sm:min-w-[260px] lg:min-w-0 w-full rounded-2xl border border-[var(--smart-border-dark)] bg-[var(--smart-bg-dark-card)] p-2.5 sm:p-3 animate-pulse">
+                  <div className="flex items-center gap-2.5 sm:gap-3">
+                    <div className="h-11 w-11 sm:h-14 sm:w-14 rounded-xl bg-white/5 shrink-0" />
+                    <div className="flex-1 space-y-2">
+                      <div className="h-3.5 w-24 bg-white/10 rounded" />
+                      <div className="h-2.5 w-16 bg-white/5 rounded" />
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-          <div className="lg:col-span-9">
-            <div className="rounded-3xl border border-[var(--smart-border-dark)] bg-[var(--smart-bg-dark-card)] min-h-[560px] animate-pulse" />
+          <div className="lg:col-span-9 order-2 lg:order-2">
+            <div className="rounded-2xl sm:rounded-3xl border border-[var(--smart-border-dark)] bg-[var(--smart-bg-dark-card)] min-h-[360px] sm:min-h-[560px] animate-pulse" />
           </div>
         </div>
       </div>
@@ -50,10 +51,10 @@ function TeamErrorState({ error, onRetry }: { error: string; onRetry: () => void
   return (
     <SectionShell tone="dark" pattern="mesh" id="team">
       <TeamSectionHeader />
-      <div className="max-w-md mx-auto">
-        <div className="rounded-2xl border border-red-400/20 bg-red-400/5 backdrop-blur-xl p-8 text-center" dir="rtl">
-          <p className="text-red-300 mb-4">{error}</p>
-          <button type="button" onClick={onRetry} className="inline-flex items-center gap-2 rounded-xl bg-[var(--smart-primary-light)] text-[var(--smart-bg-dark)] font-bold px-6 py-3 hover:bg-[var(--smart-primary)] transition-colors">
+      <div className="max-w-md mx-auto px-4">
+        <div className="rounded-2xl border border-red-400/20 bg-red-400/5 backdrop-blur-xl p-6 sm:p-8 text-center" dir="rtl">
+          <p className="text-red-300 text-sm sm:text-base mb-4">{error}</p>
+          <button type="button" onClick={onRetry} className="inline-flex items-center gap-2 rounded-xl bg-[var(--smart-primary-light)] text-[var(--smart-bg-dark)] font-bold px-5 py-2.5 sm:px-6 sm:py-3 text-sm sm:text-base hover:bg-[var(--smart-primary)] transition-colors">
             إعادة المحاولة
           </button>
         </div>
@@ -118,12 +119,12 @@ export default function Team({ initialMembers }: TeamProps) {
       <TeamSectionHeader />
       <TeamStats members={teamMembers} />
 
-      <div className="grid lg:grid-cols-12 gap-6 items-stretch">
-        <div className="lg:col-span-3 order-2 lg:order-1">
+      <div className="grid lg:grid-cols-12 gap-5 sm:gap-6 items-stretch">
+        <div className="lg:col-span-3 order-1 lg:order-1">
           <TeamMemberRail members={teamMembers} activeMember={activeMember} onSelect={setActiveMember} />
         </div>
 
-        <div className="lg:col-span-9 order-1 lg:order-2">
+        <div className="lg:col-span-9 order-2 lg:order-2">
           <FeaturedTeamMember member={activeMember} onOpenProfile={handleOpenProfile} />
         </div>
       </div>

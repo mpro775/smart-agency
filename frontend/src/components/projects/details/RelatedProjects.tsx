@@ -63,11 +63,14 @@ export default function RelatedProjects({ relatedProjects }: RelatedProjectsProp
                     loading="lazy"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900/30 via-transparent to-transparent pointer-events-none" />
-                  <div className="absolute bottom-4 right-4 left-4">
-                    <span className="inline-block px-3 py-1.5 bg-white/20 backdrop-blur-md text-white text-xs font-semibold rounded-xl border border-white/20 shadow-sm">
-                      {(related.projectTypes?.length ? related.projectTypes : [related.category]).join(" + ")}
-                    </span>
-                  </div>
+                    {Array.isArray(related.categoryIds) && (
+                      <span className="inline-block px-3 py-1.5 bg-white/20 backdrop-blur-md text-white text-xs font-semibold rounded-xl border border-white/20 shadow-sm">
+                        {related.categoryIds
+                          .map((c) => (typeof c === "object" && c !== null ? (c as { label: string }).label : null))
+                          .filter(Boolean)
+                          .join(" + ")}
+                      </span>
+                    )}
                 </div>
 
                 {/* Card Body */}

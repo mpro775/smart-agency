@@ -53,7 +53,7 @@ const [selectedCategory, setSelectedCategory] = useState("all");
         setCategories([
           { value: "all", label: "الكل", count: 0 },
           ...data.map((c) => ({
-            value: c.value,
+            value: c._id || c.value,
             label: c.label,
             count: c.count,
           })),
@@ -62,12 +62,6 @@ const [selectedCategory, setSelectedCategory] = useState("all");
         console.error("Error fetching categories:", err);
         setCategories([
           { value: "all", label: "الكل", count: 0 },
-          { value: "Web App", label: "مواقع إلكترونية", count: 0 },
-          { value: "E-Commerce", label: "متاجر إلكترونية", count: 0 },
-          { value: "Mobile App", label: "تطبيقات الجوال", count: 0 },
-          { value: "Automation", label: "أتمتة", count: 0 },
-          { value: "ERP", label: "أنظمة ERP", count: 0 },
-          { value: "Other", label: "أخرى", count: 0 },
         ]);
       } finally {
         setCategoriesLoading(false);
@@ -77,7 +71,7 @@ const [selectedCategory, setSelectedCategory] = useState("all");
     fetchCategories();
   }, [initialCategories]);
 
-useEffect(() => {
+  useEffect(() => {
     if (initialProjects && !hasInteracted) {
       setProjects(initialProjects);
       setLoading(false);
@@ -90,8 +84,8 @@ useEffect(() => {
         setError(null);
         const response = await publicProjectsService.getAll({
           limit: 100,
-          category:
-            selectedCategory !== "all" ? selectedCategory : undefined,
+          categoryIds:
+            selectedCategory !== "all" ? [selectedCategory] : undefined,
         });
         setProjects(response.data);
       } catch (err) {
@@ -117,21 +111,17 @@ useEffect(() => {
     const totalProjects = projects.length;
     const uniqueCategories = new Set(
       projects
-        .flatMap((p) => p.projectTypes?.length ? p.projectTypes : [p.industry || p.category])
+        .flatMap((p) =>
+          Array.isArray(p.categoryIds)
+            ? p.categoryIds.map((c) => (typeof c === "object" && c !== null ? c.label : c))
+            : [p.industry]
+        )
         .filter(Boolean)
     ).size;
-    const webAppCount = projects.filter(
-      (p) => (p.projectTypes?.includes("Web App" as never) || String(p.category) === "Web App")
-    ).length;
-    const mobileCount = projects.filter(
-      (p) => (p.projectTypes?.includes("Mobile App" as never) || String(p.category) === "Mobile App")
-    ).length;
 
     return [
       { value: `+${totalProjects}`, label: "مشروع" },
-      { value: `+${uniqueCategories}`, label: "قطاع" },
-      { value: `+${webAppCount}`, label: "نظام ويب" },
-      { value: `+${mobileCount}`, label: "تطبيق" },
+      { value: `+${uniqueCategories}`, label: "تصنيف ومجال" },
     ];
   }, [projects]);
 

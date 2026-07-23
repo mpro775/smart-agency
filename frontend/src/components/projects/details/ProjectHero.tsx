@@ -5,10 +5,10 @@ import type { Project } from "../../../admin/types";
 
 interface ProjectHeroProps {
   project: Project;
-  projectTypes: string[];
+  categoryLabels: string[];
 }
 
-export default function ProjectHero({ project, projectTypes }: ProjectHeroProps) {
+export default function ProjectHero({ project, categoryLabels }: ProjectHeroProps) {
   return (
     <section className="relative pt-28 md:pt-36 pb-12 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -32,7 +32,7 @@ export default function ProjectHero({ project, projectTypes }: ProjectHeroProps)
           <div className="space-y-6 max-w-4xl">
             {/* Badges */}
             <div className="flex flex-wrap items-center gap-2.5">
-              {projectTypes.map((type, i) => (
+              {categoryLabels.map((label, i) => (
                 <motion.span
                   key={i}
                   initial={{ opacity: 0, scale: 0.85 }}
@@ -41,7 +41,7 @@ export default function ProjectHero({ project, projectTypes }: ProjectHeroProps)
                   className="text-xs font-bold bg-teal-50/80 border border-teal-100 text-teal-700 rounded-full px-4 py-1.5 shadow-sm flex items-center gap-1.5 hover:bg-teal-100/50 transition-colors"
                 >
                   <span className="w-1.5 h-1.5 rounded-full bg-teal-500 animate-pulse" />
-                  {type}
+                  {label}
                 </motion.span>
               ))}
               {project.isFeatured && (

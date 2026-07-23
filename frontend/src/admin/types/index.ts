@@ -26,15 +26,6 @@ export type {
 } from "../../types/api";
 
 // Project Types
-export enum ProjectCategory {
-  WEB_APP = "Web App",
-  MOBILE_APP = "Mobile App",
-  AUTOMATION = "Automation",
-  ERP = "ERP",
-  ECOMMERCE = "E-Commerce",
-  OTHER = "Other",
-}
-
 export interface ProjectResult {
   label: string;
   value: string;
@@ -65,14 +56,6 @@ export interface ProjectCategoryRef {
   icon?: string;
 }
 
-export enum DisplayVariant {
-  STANDARD = 'standard',
-  FEATURED = 'featured',
-  WIDE = 'wide',
-  COMPACT = 'compact',
-  CASE_STUDY = 'case_study',
-}
-
 export interface Project {
   _id: string;
   title: string;
@@ -86,19 +69,13 @@ export interface Project {
   images: ProjectImages;
   projectUrl?: string;
   clientName?: string;
-  category: ProjectCategory;
-  projectTypes?: ProjectCategory[];
-  categoryId?: ProjectCategoryRef | string;
   categoryIds?: ProjectCategoryRef[] | string[];
   industry?: string;
   duration?: string;
   year?: string;
   clientLogo?: string;
-  accentColor?: string;
   sortOrder?: number;
   featuredOrder?: number;
-  displayVariant?: DisplayVariant;
-  previewScreens?: string[];
   videoUrl?: string;
   stats?: ProjectStat[];
   isFeatured: boolean;

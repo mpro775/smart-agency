@@ -22,17 +22,10 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { slugify } from "../../utils/format";
-import { ProjectCategory, DisplayVariant } from "../../types";
 import type { Technology, ProjectResult, ProjectStat } from "../../types";
 
 const projectSchema = z.object({
@@ -55,19 +48,13 @@ const projectSchema = z.object({
   }),
   projectUrl: z.string().optional(),
   clientName: z.string().optional(),
-  category: z.nativeEnum(ProjectCategory),
-  projectTypes: z.array(z.nativeEnum(ProjectCategory)),
-  categoryId: z.string().optional(),
   categoryIds: z.array(z.string()),
   industry: z.string().optional(),
   duration: z.string().optional(),
   year: z.string().optional(),
   clientLogo: z.string().optional(),
-  accentColor: z.string().optional(),
   sortOrder: z.number().optional(),
   featuredOrder: z.number().optional(),
-  displayVariant: z.nativeEnum(DisplayVariant).optional(),
-  previewScreens: z.array(z.string()),
   videoUrl: z.string().optional(),
   stats: z.array(
     z.object({
@@ -86,51 +73,6 @@ const projectSchema = z.object({
 });
 
 type ProjectFormData = z.infer<typeof projectSchema>;
-
-const categoryOptions = [
-  { value: ProjectCategory.WEB_APP, label: "تطبيق ويب" },
-  { value: ProjectCategory.MOBILE_APP, label: "تطبيق موبايل" },
-  { value: ProjectCategory.AUTOMATION, label: "أتمتة" },
-  { value: ProjectCategory.ERP, label: "ERP" },
-  { value: ProjectCategory.ECOMMERCE, label: "متجر إلكتروني" },
-  { value: ProjectCategory.OTHER, label: "أخرى" },
-];
-
-const displayVariantOptions = [
-  { value: DisplayVariant.STANDARD, label: "عادي" },
-  { value: DisplayVariant.FEATURED, label: "مميز" },
-  { value: DisplayVariant.WIDE, label: "عريض" },
-  { value: DisplayVariant.COMPACT, label: "مضغوط" },
-  { value: DisplayVariant.CASE_STUDY, label: "دراسة حالة" },
-];
-
-const legacyCategoryMap: Record<string, ProjectCategory> = {
-  "مواقع إلكترونية": ProjectCategory.WEB_APP,
-  "مواقع الكترونية": ProjectCategory.WEB_APP,
-  "تطبيقات الجوال": ProjectCategory.MOBILE_APP,
-  "تطبيق موبايل": ProjectCategory.MOBILE_APP,
-  "متاجر إلكترونية": ProjectCategory.ECOMMERCE,
-  "متاجر الكترونية": ProjectCategory.ECOMMERCE,
-  "متجر إلكتروني": ProjectCategory.ECOMMERCE,
-  "متجر الكتروني": ProjectCategory.ECOMMERCE,
-  "Ecommerce": ProjectCategory.ECOMMERCE,
-  "E-Commerce": ProjectCategory.ECOMMERCE,
-  "أتمتة": ProjectCategory.AUTOMATION,
-  Automation: ProjectCategory.AUTOMATION,
-  "أنظمة ERP": ProjectCategory.ERP,
-  ERP: ProjectCategory.ERP,
-  Other: ProjectCategory.OTHER,
-  "أخرى": ProjectCategory.OTHER,
-};
-
-const normalizeProjectCategory = (category: unknown): ProjectCategory => {
-  if (typeof category !== "string") return ProjectCategory.OTHER;
-
-  const enumValues = Object.values(ProjectCategory) as string[];
-  if (enumValues.includes(category)) return category as ProjectCategory;
-
-  return legacyCategoryMap[category] ?? ProjectCategory.OTHER;
-};
 
 export default function ProjectForm() {
   const { id } = useParams();
@@ -177,19 +119,13 @@ export default function ProjectForm() {
       images: { cover: "", gallery: [] },
       projectUrl: "",
       clientName: "",
-      category: ProjectCategory.OTHER,
-      projectTypes: [],
-      categoryId: "",
       categoryIds: [],
       industry: "",
       duration: "",
       year: "",
       clientLogo: "",
-      accentColor: "",
       sortOrder: 0,
       featuredOrder: 0,
-      displayVariant: DisplayVariant.STANDARD,
-      previewScreens: [],
       videoUrl: "",
       stats: [],
       isFeatured: false,
@@ -225,8 +161,6 @@ export default function ProjectForm() {
     name: "stats",
   });
 
-  const previewScreens = watch("previewScreens");
-
   const title = watch("title");
 
   useEffect(() => {
@@ -255,15 +189,10 @@ export default function ProjectForm() {
       const rawResults = project.results || [];
       const rawTech = (project.technologies as (Technology | string)[]) || [];
       const rawStats = project.stats || [];
-      const rawPreviews = project.previewScreens || [];
-      const categoryIdValue = typeof project.categoryId === 'object' && project.categoryId !== null
-        ? (project.categoryId as { _id: string })._id
-        : (project.categoryId || "");
 
-      const rawProjectTypes = project.projectTypes || (project.category ? [project.category] : []);
       const rawCategoryIds = Array.isArray(project.categoryIds)
         ? project.categoryIds.map((c) => typeof c === 'object' && c !== null ? (c as { _id: string })._id : c).filter(Boolean)
-        : (categoryIdValue ? [categoryIdValue] : []);
+        : [];
 
       reset({
         title: project.title,
@@ -285,19 +214,13 @@ export default function ProjectForm() {
         },
         projectUrl: project.projectUrl || "",
         clientName: project.clientName || "",
-        category: normalizeProjectCategory(project.category),
-        projectTypes: rawProjectTypes as ProjectCategory[],
-        categoryId: categoryIdValue,
         categoryIds: rawCategoryIds,
         industry: project.industry || "",
         duration: project.duration || "",
         year: project.year || "",
         clientLogo: project.clientLogo || "",
-        accentColor: project.accentColor || "",
         sortOrder: project.sortOrder ?? 0,
         featuredOrder: project.featuredOrder ?? 0,
-        displayVariant: project.displayVariant || DisplayVariant.STANDARD,
-        previewScreens: rawPreviews,
         videoUrl: project.videoUrl || "",
         stats: rawStats.map((s: ProjectStat) => ({
           label: s?.label != null ? String(s.label) : "",
@@ -336,13 +259,9 @@ export default function ProjectForm() {
       ...data,
       features: data.features.map((f) => f.value),
       projectUrl: isEdit ? (projectUrl || null) : (projectUrl || undefined),
-      projectTypes: data.projectTypes.length > 0 ? data.projectTypes : undefined,
       categoryIds: data.categoryIds.length > 0 ? data.categoryIds : undefined,
-      categoryId: data.categoryIds.length > 0 ? data.categoryIds[0] : (data.categoryId || undefined),
-      category: data.projectTypes.length > 0 ? data.projectTypes[0] : data.category,
       sortOrder: data.sortOrder ?? 0,
       featuredOrder: data.featuredOrder ?? 0,
-      previewScreens: data.previewScreens.filter((url) => url.trim() !== ""),
       stats: data.stats.filter((s) => s.label && s.value),
     };
     mutation.mutate(payload);
@@ -484,79 +403,47 @@ export default function ProjectForm() {
 
                 <div className="space-y-3">
                   <Label className="text-slate-200" dir="rtl">
-                    أنواع المشروع / Project Types
-                  </Label>
-                  <Controller
-                    name="projectTypes"
-                    control={control}
-                    render={({ field }) => (
-                      <div className="grid grid-cols-2 md:grid-cols-3 gap-2" dir="rtl">
-                        {categoryOptions.map((option) => {
-                          const isSelected = field.value.includes(option.value);
-                          return (
-                            <button
-                              key={option.value}
-                              type="button"
-                              onClick={() => {
-                                const newVal = isSelected
-                                  ? field.value.filter((v) => v !== option.value)
-                                  : [...field.value, option.value];
-                                field.onChange(newVal);
-                              }}
-                              className={`px-3 py-2 rounded-lg border text-sm font-medium transition-all ${
-                                isSelected
-                                  ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/30"
-                                  : "bg-slate-700/50 text-slate-400 border-slate-600 hover:text-white hover:border-slate-500"
-                              }`}
-                            >
-                              {isSelected && "✓ "}{option.label}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    )}
-                  />
-                  {errors.projectTypes && (
-                    <p className="text-sm text-red-400" dir="rtl">
-                      {errors.projectTypes.message}
-                    </p>
-                  )}
-                </div>
-
-                <div className="space-y-2">
-                  <Label className="text-slate-200" dir="rtl">
-                    التصنيفات الديناميكية / Dynamic Categories
+                    تصنيفات المشروع / Project Categories
                   </Label>
                   <Controller
                     name="categoryIds"
                     control={control}
                     render={({ field }) => (
-                      <div className="flex flex-wrap gap-2" dir="rtl">
-                        {dbCategories?.map((cat) => {
-                          const isSelected = field.value.includes(cat._id);
-                          return (
-                            <button
-                              key={cat._id}
-                              type="button"
-                              onClick={() => {
-                                const newVal = isSelected
-                                  ? field.value.filter((id) => id !== cat._id)
-                                  : [...field.value, cat._id];
-                                field.onChange(newVal);
-                              }}
-                              className={`px-3 py-1.5 rounded-lg border text-sm transition-all ${
-                                isSelected
-                                  ? "bg-cyan-500/20 text-cyan-400 border-cyan-500/30"
-                                  : "bg-slate-700/50 text-slate-400 border-slate-600 hover:text-white hover:border-slate-500"
-                              }`}
-                            >
-                              {isSelected && "✓ "}{cat.label}
-                            </button>
-                          );
-                        })}
+                      <div className="flex flex-wrap gap-2.5" dir="rtl">
+                        {dbCategories && dbCategories.length > 0 ? (
+                          dbCategories.map((cat) => {
+                            const isSelected = field.value.includes(cat._id);
+                            return (
+                              <button
+                                key={cat._id}
+                                type="button"
+                                onClick={() => {
+                                  const newVal = isSelected
+                                    ? field.value.filter((id) => id !== cat._id)
+                                    : [...field.value, cat._id];
+                                  field.onChange(newVal);
+                                }}
+                                className={`px-3.5 py-2 rounded-xl border text-sm font-medium transition-all ${
+                                  isSelected
+                                    ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/30 shadow-sm"
+                                    : "bg-slate-700/50 text-slate-400 border-slate-600 hover:text-white hover:border-slate-500"
+                                }`}
+                              >
+                                {isSelected && "✓ "}{cat.label}
+                              </button>
+                            );
+                          })
+                        ) : (
+                          <p className="text-sm text-slate-400">لا توجد تصنيفات معرفة بعد</p>
+                        )}
                       </div>
                     )}
                   />
+                  {errors.categoryIds && (
+                    <p className="text-sm text-red-400" dir="rtl">
+                      {errors.categoryIds.message}
+                    </p>
+                  )}
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -896,65 +783,6 @@ export default function ProjectForm() {
               <Card className="bg-slate-800/50 border-slate-700" dir="rtl">
                 <CardHeader>
                   <CardTitle className="text-white" dir="rtl">
-                    لقطات المعاينة (Preview Screens)
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4" dir="rtl">
-                  <p className="text-sm text-slate-400">
-                    هذه اللقطات ستُستخدم للعرض عند التمرير على الكرت أو في السلايدر
-                  </p>
-                  {previewScreens.map((url, index) => (
-                    <div
-                      key={index}
-                      className="flex gap-3 items-start"
-                      dir="rtl"
-                    >
-                      <div className="flex-1 space-y-2">
-                        <ImageUpload
-                          value={url}
-                          onChange={(newUrl) => {
-                            const updated = [...previewScreens];
-                            updated[index] = newUrl;
-                            setValue("previewScreens", updated);
-                          }}
-                          onRemove={() => {
-                            const updated = [...previewScreens];
-                            updated[index] = "";
-                            setValue("previewScreens", updated);
-                          }}
-                        />
-                      </div>
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon"
-                        className="text-slate-400 hover:text-red-400 flex-shrink-0 mt-2"
-                        onClick={() => {
-                          const updated = previewScreens.filter((_, i) => i !== index);
-                          setValue("previewScreens", updated);
-                        }}
-                      >
-                        <X className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  ))}
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    className="border-slate-600 text-slate-400 hover:text-white"
-                    onClick={() => setValue("previewScreens", [...previewScreens, ""])}
-                    dir="rtl"
-                  >
-                    <Plus className="h-4 w-4 mr-1" />
-                    إضافة لقطة
-                  </Button>
-                </CardContent>
-              </Card>
-
-              <Card className="bg-slate-800/50 border-slate-700" dir="rtl">
-                <CardHeader>
-                  <CardTitle className="text-white" dir="rtl">
                     شعار العميل والفيديو
                   </CardTitle>
                 </CardHeader>
@@ -1002,71 +830,6 @@ export default function ProjectForm() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4" dir="rtl">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label className="text-slate-200" dir="rtl">
-                        نمط العرض
-                      </Label>
-                      <Controller
-                        name="displayVariant"
-                        control={control}
-                        render={({ field }) => (
-                          <Select
-                            value={field.value || DisplayVariant.STANDARD}
-                            onValueChange={field.onChange}
-                          >
-                            <SelectTrigger
-                              className="bg-slate-700/50 border-slate-600 text-white"
-                              dir="rtl"
-                            >
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent
-                              className="bg-slate-800 border-slate-700"
-                              dir="rtl"
-                            >
-                              {displayVariantOptions.map((option) => (
-                                <SelectItem
-                                  key={option.value}
-                                  value={option.value}
-                                  className="text-white hover:bg-slate-700"
-                                  dir="rtl"
-                                >
-                                  {option.label}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        )}
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label className="text-slate-200" dir="rtl">
-                        لون المشروع (Accent Color)
-                      </Label>
-                      <div className="flex gap-2">
-                        <Input
-                          {...register("accentColor")}
-                          className="bg-slate-700/50 border-slate-600 text-white flex-1"
-                          placeholder="#008C84"
-                          dir="ltr"
-                        />
-                        <Controller
-                          name="accentColor"
-                          control={control}
-                          render={({ field }) => (
-                            <input
-                              type="color"
-                              value={field.value || "#008C84"}
-                              onChange={(e) => field.onChange(e.target.value)}
-                              className="w-12 h-10 rounded cursor-pointer"
-                            />
-                          )}
-                        />
-                      </div>
-                    </div>
-                  </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">

@@ -13,7 +13,6 @@ import {
   IsNumber,
 } from 'class-validator';
 import { Transform, Type } from 'class-transformer';
-import { ProjectCategory, DisplayVariant } from '../schemas/project.schema';
 
 class ProjectResultDto {
   @ApiProperty({ description: 'Result label', example: 'زيادة المبيعات' })
@@ -173,35 +172,8 @@ export class CreateProjectDto {
   @IsString()
   clientName?: string;
 
-  @ApiProperty({
-    description: 'Project category',
-    enum: ProjectCategory,
-    example: ProjectCategory.MOBILE_APP,
-  })
-  @IsEnum(ProjectCategory, { message: 'Invalid project category' })
-  category: ProjectCategory;
-
   @ApiPropertyOptional({
-    description: 'Multiple project types',
-    enum: ProjectCategory,
-    isArray: true,
-    example: [ProjectCategory.WEB_APP, ProjectCategory.MOBILE_APP],
-  })
-  @IsOptional()
-  @IsArray()
-  @IsEnum(ProjectCategory, { each: true })
-  projectTypes?: ProjectCategory[];
-
-  @ApiPropertyOptional({
-    description: 'Project category ID from database',
-    example: '60d5ec49f1b2c8b1f8e4e5f1',
-  })
-  @IsOptional()
-  @IsMongoId()
-  categoryId?: string;
-
-  @ApiPropertyOptional({
-    description: 'Multiple project category IDs from database',
+    description: 'Project category IDs from database',
     type: [String],
   })
   @IsOptional()
@@ -242,14 +214,6 @@ export class CreateProjectDto {
   clientLogo?: string;
 
   @ApiPropertyOptional({
-    description: 'Accent color for project card',
-    example: '#008C84',
-  })
-  @IsOptional()
-  @IsString()
-  accentColor?: string;
-
-  @ApiPropertyOptional({
     description: 'Sort order for display',
     example: 1,
   })
@@ -264,24 +228,6 @@ export class CreateProjectDto {
   @IsOptional()
   @IsNumber()
   featuredOrder?: number;
-
-  @ApiPropertyOptional({
-    description: 'Display variant for project card',
-    enum: DisplayVariant,
-    example: DisplayVariant.FEATURED,
-  })
-  @IsOptional()
-  @IsEnum(DisplayVariant)
-  displayVariant?: DisplayVariant;
-
-  @ApiPropertyOptional({
-    description: 'Preview screenshots URLs',
-    type: [String],
-  })
-  @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
-  previewScreens?: string[];
 
   @ApiPropertyOptional({
     description: 'Video URL or demo link',
