@@ -17,6 +17,11 @@ export class CreateFaqDto {
   @IsNotEmpty()
   question: string;
 
+  @IsOptional()
+  @ApiPropertyOptional()
+  @IsString()
+  questionEn?: string;
+
   @ApiProperty({
     description: 'The answer (supports rich text/HTML)',
     example:
@@ -25,6 +30,10 @@ export class CreateFaqDto {
   @IsString()
   @IsNotEmpty()
   answer: string;
+
+  @IsOptional()
+  @IsString()
+  answerEn?: string;
 
   @ApiPropertyOptional({
     description: 'Category of the FAQ',

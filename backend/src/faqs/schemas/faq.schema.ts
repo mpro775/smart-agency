@@ -8,8 +8,14 @@ export class Faq {
   @Prop({ required: true })
   question: string;
 
+  @Prop({ required: false })
+  questionEn?: string;
+
   @Prop({ required: true })
-  answer: string; // Rich text supported
+  answer: string;
+
+  @Prop({ required: false })
+  answerEn?: string; // Rich text supported
 
   @Prop({ default: 'General' })
   category: string;

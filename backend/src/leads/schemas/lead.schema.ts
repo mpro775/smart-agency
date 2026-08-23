@@ -75,8 +75,14 @@ export class Lead {
   @Prop({ required: true })
   fullName: string;
 
+  @Prop({ required: false })
+  fullNameEn?: string;
+
   @Prop()
   companyName: string;
+
+  @Prop({ required: false })
+  companyNameEn?: string;
 
   @Prop({ required: true })
   email: string;
@@ -101,6 +107,9 @@ export class Lead {
   @Prop()
   message: string;
 
+  @Prop({ required: false })
+  messageEn?: string;
+
   @Prop({
     type: String,
     enum: LeadStatus,
@@ -123,6 +132,9 @@ export class Lead {
   @Prop()
   projectGoal?: string;
 
+  @Prop({ required: false })
+  projectGoalEn?: string;
+
   @Prop({ type: String, enum: Timeline })
   timeline?: Timeline;
 
@@ -134,6 +146,9 @@ export class Lead {
 
   @Prop()
   currentWebsite?: string;
+
+  @Prop({ required: false })
+  currentWebsiteEn?: string;
 
   @Prop({ type: [String], default: [] })
   referenceLinks?: string[];
@@ -158,6 +173,9 @@ export class Lead {
 
   @Prop({ type: String, enum: LeadPriority, default: LeadPriority.MEDIUM })
   priority: LeadPriority;
+
+  @Prop({ default: 'ar', enum: ['ar', 'en'] })
+  locale: string;
 
   createdAt?: Date;
   updatedAt?: Date;

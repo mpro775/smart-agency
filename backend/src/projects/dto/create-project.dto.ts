@@ -20,10 +20,20 @@ class ProjectResultDto {
   @IsNotEmpty()
   label: string;
 
+  @IsOptional()
+  @ApiPropertyOptional()
+  @IsString()
+  labelEn?: string;
+
   @ApiProperty({ description: 'Result value', example: '50%' })
   @IsString()
   @IsNotEmpty()
   value: string;
+
+  @IsOptional()
+  @ApiPropertyOptional()
+  @IsString()
+  valueEn?: string;
 }
 
 class ProjectImagesDto {
@@ -35,6 +45,11 @@ class ProjectImagesDto {
   @IsString()
   cover?: string;
 
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  coverEn?: string;
+
   @ApiPropertyOptional({
     description: 'Gallery images URLs',
     type: [String],
@@ -43,6 +58,12 @@ class ProjectImagesDto {
   @IsArray()
   @IsString({ each: true })
   gallery?: string[];
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  galleryEn?: string[];
 }
 
 class ProjectSeoDto {
@@ -51,16 +72,32 @@ class ProjectSeoDto {
   @IsString()
   metaTitle?: string;
 
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  metaTitleEn?: string;
+
   @ApiPropertyOptional({ description: 'SEO meta description' })
   @IsOptional()
   @IsString()
   metaDescription?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  metaDescriptionEn?: string;
 
   @ApiPropertyOptional({ description: 'SEO keywords', type: [String] })
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
   keywords?: string[];
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  keywordsEn?: string[];
 }
 
 class ProjectStatDto {
@@ -69,15 +106,30 @@ class ProjectStatDto {
   @IsNotEmpty()
   label: string;
 
+  @IsOptional()
+  @ApiPropertyOptional()
+  @IsString()
+  labelEn?: string;
+
   @ApiProperty({ description: 'Stat value', example: '45 يوم' })
   @IsString()
   @IsNotEmpty()
   value: string;
 
+  @IsOptional()
+  @ApiPropertyOptional()
+  @IsString()
+  valueEn?: string;
+
   @ApiPropertyOptional({ description: 'Stat description' })
   @IsOptional()
   @IsString()
   description?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  descriptionEn?: string;
 }
 
 export class CreateProjectDto {
@@ -85,6 +137,11 @@ export class CreateProjectDto {
   @IsString()
   @IsNotEmpty({ message: 'Project title is required' })
   title: string;
+
+  @IsOptional()
+  @ApiPropertyOptional()
+  @IsString()
+  titleEn?: string;
 
   @ApiProperty({
     description: 'Project slug (URL-friendly)',
@@ -102,6 +159,11 @@ export class CreateProjectDto {
   @IsNotEmpty({ message: 'Project summary is required' })
   summary: string;
 
+  @IsOptional()
+  @ApiPropertyOptional()
+  @IsString()
+  summaryEn?: string;
+
   @ApiPropertyOptional({
     description: 'The challenge/problem faced',
     example: 'كان العميل يعاني من صعوبة في إدارة المبيعات...',
@@ -110,6 +172,11 @@ export class CreateProjectDto {
   @IsString()
   challenge?: string;
 
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  challengeEn?: string;
+
   @ApiPropertyOptional({
     description: 'The solution provided',
     example: 'قمنا بتطوير نظام متكامل يشمل...',
@@ -117,6 +184,11 @@ export class CreateProjectDto {
   @IsOptional()
   @IsString()
   solution?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  solutionEn?: string;
 
   @ApiPropertyOptional({
     description: 'Project results/achievements',
@@ -137,6 +209,12 @@ export class CreateProjectDto {
   @IsString({ each: true })
   features?: string[];
 
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  featuresEn?: string[];
+
   @ApiPropertyOptional({
     description: 'Technology IDs used in the project',
     type: [String],
@@ -145,6 +223,12 @@ export class CreateProjectDto {
   @IsArray()
   @IsMongoId({ each: true })
   technologies?: string[];
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsArray()
+  @IsMongoId({ each: true })
+  technologiesEn?: string[];
 
   @ApiPropertyOptional({
     description: 'Project images',
@@ -167,10 +251,19 @@ export class CreateProjectDto {
   @IsUrl({}, { message: 'Invalid project URL' })
   projectUrl?: string;
 
+  @IsOptional()
+  @IsUrl({}, { message: 'Invalid project URL' })
+  projectUrlEn?: string;
+
   @ApiPropertyOptional({ description: 'Client name', example: 'شركة ريم' })
   @IsOptional()
   @IsString()
   clientName?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  clientNameEn?: string;
 
   @ApiPropertyOptional({
     description: 'Project category IDs from database',
@@ -181,6 +274,12 @@ export class CreateProjectDto {
   @IsMongoId({ each: true })
   categoryIds?: string[];
 
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsArray()
+  @IsMongoId({ each: true })
+  categoryIdsEn?: string[];
+
   @ApiPropertyOptional({
     description: 'Industry/sector',
     example: 'تعليم',
@@ -188,6 +287,11 @@ export class CreateProjectDto {
   @IsOptional()
   @IsString()
   industry?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  industryEn?: string;
 
   @ApiPropertyOptional({
     description: 'Project duration',
@@ -197,6 +301,11 @@ export class CreateProjectDto {
   @IsString()
   duration?: string;
 
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  durationEn?: string;
+
   @ApiPropertyOptional({
     description: 'Project year',
     example: '2025',
@@ -205,6 +314,11 @@ export class CreateProjectDto {
   @IsString()
   year?: string;
 
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  yearEn?: string;
+
   @ApiPropertyOptional({
     description: 'Client logo URL',
     example: 'https://cdn.example.com/logos/client.png',
@@ -212,6 +326,11 @@ export class CreateProjectDto {
   @IsOptional()
   @IsString()
   clientLogo?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  clientLogoEn?: string;
 
   @ApiPropertyOptional({
     description: 'Sort order for display',
@@ -236,6 +355,11 @@ export class CreateProjectDto {
   @IsOptional()
   @IsString()
   videoUrl?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  videoUrlEn?: string;
 
   @ApiPropertyOptional({
     description: 'Project statistics',

@@ -11,6 +11,11 @@ export class CreateTechnologyDto {
   @IsNotEmpty({ message: 'Technology name is required' })
   name: string;
 
+  @IsOptional()
+  @ApiPropertyOptional()
+  @IsString()
+  nameEn?: string;
+
   @ApiPropertyOptional({
     description: 'Technology icon URL (SVG)',
     example: 'https://cdn.example.com/icons/nestjs.svg',
@@ -36,6 +41,11 @@ export class CreateTechnologyDto {
   @IsString()
   description?: string;
 
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  descriptionEn?: string;
+
   @ApiPropertyOptional({
     description: 'Technology tooltip for non-technical users',
     example: 'نستخدمها لسرعة استجابة البيانات (Caching)',
@@ -43,4 +53,8 @@ export class CreateTechnologyDto {
   @IsOptional()
   @IsString()
   tooltip?: string;
+
+  @IsOptional()
+  @IsString()
+  tooltipEn?: string;
 }

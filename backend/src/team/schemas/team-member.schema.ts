@@ -20,8 +20,14 @@ export class TeamMember {
   @Prop({ required: true })
   fullName: string;
 
+  @Prop({ required: false })
+  fullNameEn?: string;
+
   @Prop({ required: true })
-  role: string; // e.g., "Senior Backend Developer"
+  role: string;
+
+  @Prop({ required: false })
+  roleEn?: string; // e.g., "Senior Backend Developer"
 
   @Prop({
     type: String,
@@ -33,11 +39,20 @@ export class TeamMember {
   @Prop()
   photo: string;
 
-  @Prop()
-  bio: string; // Short bio
+  @Prop({ required: false })
+  photoEn?: string;
 
   @Prop()
-  funFact: string; // Personal touch / fun fact about the member
+  bio: string;
+
+  @Prop({ required: false })
+  bioEn?: string; // Short bio
+
+  @Prop()
+  funFact: string;
+
+  @Prop({ required: false })
+  funFactEn?: string; // Personal touch / fun fact about the member
 
   @Prop()
   email: string;
@@ -55,9 +70,15 @@ export class TeamMember {
   @Prop()
   websiteUrl: string;
 
+  @Prop({ required: false })
+  websiteUrlEn?: string;
+
   // Skills & Specializations
   @Prop({ type: [String], default: [] })
-  specializations: string[]; // ["Nest.js", "Docker", "AWS"]
+  specializations: string[];
+
+  @Prop({ required: false })
+  specializationsEn?: string[]; // ["Nest.js", "Docker", "AWS"]
 
   // Display Options
   @Prop({ default: true })

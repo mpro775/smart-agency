@@ -9,20 +9,38 @@ export class Testimonial {
   @Prop({ required: true })
   clientName: string;
 
+  @Prop({ required: false })
+  clientNameEn?: string;
+
   @Prop()
-  position: string; // e.g., "CTO at Company X"
+  position: string;
+
+  @Prop({ required: false })
+  positionEn?: string; // e.g., "CTO at Company X"
 
   @Prop()
   companyName: string;
 
-  @Prop()
-  companyLogo: string; // URL
+  @Prop({ required: false })
+  companyNameEn?: string;
 
   @Prop()
-  clientPhoto: string; // URL
+  companyLogo: string;
+
+  @Prop({ required: false })
+  companyLogoEn?: string; // URL
+
+  @Prop()
+  clientPhoto: string;
+
+  @Prop({ required: false })
+  clientPhotoEn?: string; // URL
 
   @Prop({ required: true })
-  content: string; // نص الرأي
+  content: string;
+
+  @Prop({ required: false })
+  contentEn?: string; // نص الرأي
 
   @Prop({ min: 1, max: 5, default: 5 })
   rating: number;

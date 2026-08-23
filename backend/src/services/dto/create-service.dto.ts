@@ -17,6 +17,11 @@ export class CreateServiceDto {
   @IsNotEmpty({ message: 'Title is required' })
   title: string;
 
+  @IsOptional()
+  @ApiPropertyOptional()
+  @IsString()
+  titleEn?: string;
+
   @ApiPropertyOptional({
     description: 'Service description',
     example: 'حلول ويب متكاملة بدءًا من المواقع البسيطة وحتى الأنظمة المعقدة',
@@ -24,6 +29,11 @@ export class CreateServiceDto {
   @IsOptional()
   @IsString()
   description?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  descriptionEn?: string;
 
   @ApiPropertyOptional({
     description: 'Icon identifier or URL',
@@ -42,6 +52,11 @@ export class CreateServiceDto {
   @IsString()
   iconType?: string;
 
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  iconTypeEn?: string;
+
   @ApiPropertyOptional({
     description: 'Tailwind gradient classes',
     example: 'from-teal-500 to-teal-600',
@@ -50,6 +65,11 @@ export class CreateServiceDto {
   @IsOptional()
   @IsString()
   gradient?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  gradientEn?: string;
 
   @ApiPropertyOptional({
     description: 'List of features',
@@ -60,6 +80,12 @@ export class CreateServiceDto {
   @IsArray()
   @IsString({ each: true })
   features?: string[];
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  featuresEn?: string[];
 
   @ApiPropertyOptional({
     description: 'Service is active',
@@ -92,4 +118,9 @@ export class CreateServiceDto {
   @IsOptional()
   @IsString()
   shortDescription?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  shortDescriptionEn?: string;
 }

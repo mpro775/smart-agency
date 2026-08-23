@@ -25,16 +25,32 @@ class BlogSeoDto {
   @IsString()
   metaTitle?: string;
 
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  metaTitleEn?: string;
+
   @ApiPropertyOptional({ description: 'SEO meta description' })
   @IsOptional()
   @IsString()
   metaDescription?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  metaDescriptionEn?: string;
 
   @ApiPropertyOptional({ description: 'SEO keywords', type: [String] })
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
   keywords?: string[];
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  keywordsEn?: string[];
 
   @ApiPropertyOptional()
   @IsOptional()
@@ -49,7 +65,17 @@ class BlogSeoDto {
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()
+  ogTitleEn?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
   ogDescription?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  ogDescriptionEn?: string;
 
   @ApiPropertyOptional()
   @IsOptional()
@@ -64,7 +90,17 @@ class BlogSeoDto {
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()
+  twitterTitleEn?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
   twitterDescription?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  twitterDescriptionEn?: string;
 
   @ApiPropertyOptional()
   @IsOptional()
@@ -80,6 +116,11 @@ class BlogSeoDto {
   @IsOptional()
   @IsString()
   schemaType?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  schemaTypeEn?: string;
 }
 
 export class CreateBlogDto {
@@ -90,6 +131,11 @@ export class CreateBlogDto {
   @IsString()
   @IsNotEmpty({ message: 'Title is required' })
   title: string;
+
+  @IsOptional()
+  @ApiPropertyOptional()
+  @IsString()
+  titleEn?: string;
 
   @ApiProperty({
     description: 'Blog post slug (URL-friendly)',
@@ -107,6 +153,10 @@ export class CreateBlogDto {
   @IsNotEmpty({ message: 'Content is required' })
   content: string;
 
+  @IsOptional()
+  @IsString()
+  contentEn?: string;
+
   @ApiPropertyOptional({
     description: 'Short excerpt for previews',
     example: 'تعلم كيفية بناء تطبيق ناجح من الصفر...',
@@ -114,6 +164,11 @@ export class CreateBlogDto {
   @IsOptional()
   @IsString()
   excerpt?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  excerptEn?: string;
 
   @ApiPropertyOptional({
     description: 'Cover image URL',
@@ -127,6 +182,11 @@ export class CreateBlogDto {
   @IsOptional()
   @IsString()
   coverAlt?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  coverAltEn?: string;
 
   @ApiPropertyOptional({ example: 'ai' })
   @IsOptional()
@@ -161,18 +221,39 @@ export class CreateBlogDto {
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()
+  authorNameEn?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
   authorRole?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  authorRoleEn?: string;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()
   authorAvatar?: string;
 
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  authorAvatarEn?: string;
+
   @ApiPropertyOptional({ type: [String] })
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
   summaryPoints?: string[];
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  summaryPointsEn?: string[];
 
   @ApiPropertyOptional({ default: false })
   @IsOptional()
@@ -192,12 +273,27 @@ export class CreateBlogDto {
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()
+  ctaTitleEn?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
   ctaDescription?: string;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()
+  ctaDescriptionEn?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
   ctaButtonText?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  ctaButtonTextEn?: string;
 
   @ApiPropertyOptional()
   @IsOptional()
@@ -213,6 +309,12 @@ export class CreateBlogDto {
   @IsArray()
   @IsString({ each: true })
   tags?: string[];
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  tagsEn?: string[];
 
   @ApiPropertyOptional({
     description: 'Publish immediately',

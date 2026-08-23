@@ -8,20 +8,35 @@ export class Service {
   @Prop({ required: true })
   title: string;
 
+  @Prop({ required: false })
+  titleEn?: string;
+
   @Prop()
   description: string;
+
+  @Prop({ required: false })
+  descriptionEn?: string;
 
   @Prop()
   icon: string; // Icon name or URL
 
   @Prop()
-  iconType: string; // 'react-icon' | 'image' | 'emoji'
+  iconType: string;
+
+  @Prop({ required: false })
+  iconTypeEn?: string; // 'react-icon' | 'image' | 'emoji'
 
   @Prop({ default: 'from-teal-500 to-teal-600' })
-  gradient: string; // Tailwind gradient classes
+  gradient: string;
+
+  @Prop({ required: false })
+  gradientEn?: string; // Tailwind gradient classes
 
   @Prop({ type: [String], default: [] })
-  features: string[]; // List of features/benefits
+  features: string[];
+
+  @Prop({ required: false })
+  featuresEn?: string[]; // List of features/benefits
 
   @Prop({ default: true })
   isActive: boolean;
@@ -33,7 +48,10 @@ export class Service {
   slug: string; // URL-friendly identifier
 
   @Prop()
-  shortDescription: string; // Brief description for cards
+  shortDescription: string;
+
+  @Prop({ required: false })
+  shortDescriptionEn?: string; // Brief description for cards
 
   createdAt?: Date;
   updatedAt?: Date;

@@ -22,6 +22,11 @@ export class CreateTeamMemberDto {
   @IsNotEmpty({ message: 'Full name is required' })
   fullName: string;
 
+  @IsOptional()
+  @ApiPropertyOptional()
+  @IsString()
+  fullNameEn?: string;
+
   @ApiProperty({
     description: 'Job role/title',
     example: 'Senior Backend Developer',
@@ -29,6 +34,11 @@ export class CreateTeamMemberDto {
   @IsString()
   @IsNotEmpty({ message: 'Role is required' })
   role: string;
+
+  @IsOptional()
+  @ApiPropertyOptional()
+  @IsString()
+  roleEn?: string;
 
   @ApiProperty({
     description: 'Department',
@@ -46,6 +56,11 @@ export class CreateTeamMemberDto {
   @IsString()
   photo?: string;
 
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  photoEn?: string;
+
   @ApiPropertyOptional({
     description: 'Short bio',
     example: 'مطور خبير مع 5 سنوات خبرة في تطوير تطبيقات الويب',
@@ -54,6 +69,11 @@ export class CreateTeamMemberDto {
   @IsString()
   bio?: string;
 
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  bioEn?: string;
+
   @ApiPropertyOptional({
     description: 'Fun fact or personal touch about the member',
     example: 'مدمن قهوة ☕',
@@ -61,6 +81,11 @@ export class CreateTeamMemberDto {
   @IsOptional()
   @IsString()
   funFact?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  funFactEn?: string;
 
   @ApiPropertyOptional({
     description: 'Email address',
@@ -103,6 +128,11 @@ export class CreateTeamMemberDto {
   @IsString()
   websiteUrl?: string;
 
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  websiteUrlEn?: string;
+
   @ApiPropertyOptional({
     description: 'Skills and specializations',
     type: [String],
@@ -112,6 +142,12 @@ export class CreateTeamMemberDto {
   @IsArray()
   @IsString({ each: true })
   specializations?: string[];
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  specializationsEn?: string[];
 
   @ApiPropertyOptional({
     description: 'Show on homepage',

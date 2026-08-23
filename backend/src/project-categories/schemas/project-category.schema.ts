@@ -6,13 +6,22 @@ export type ProjectCategoryDocument = ProjectCategory & Document;
 @Schema({ timestamps: true })
 export class ProjectCategory {
   @Prop({ required: true, unique: true })
-  value: string; // e.g., 'Web App', 'Mobile App'
+  value: string;
+
+  @Prop({ required: false })
+  valueEn?: string; // e.g., 'Web App', 'Mobile App'
 
   @Prop({ required: true })
-  label: string; // Arabic label e.g., 'مواقع إلكترونية'
+  label: string;
+
+  @Prop({ required: false })
+  labelEn?: string; // Arabic label e.g., 'مواقع إلكترونية'
 
   @Prop()
   description: string;
+
+  @Prop({ required: false })
+  descriptionEn?: string;
 
   @Prop({ default: true })
   isActive: boolean;

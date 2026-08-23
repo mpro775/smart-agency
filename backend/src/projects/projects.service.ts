@@ -5,10 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import {
-  Project,
-  ProjectDocument,
-} from './schemas/project.schema';
+import { Project, ProjectDocument } from './schemas/project.schema';
 import {
   ProjectCategory as ProjectCategoryModel,
   ProjectCategoryDocument,

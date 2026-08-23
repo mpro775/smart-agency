@@ -19,6 +19,11 @@ class SocialLinksDto {
   @IsString()
   twitter?: string;
 
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  twitterEn?: string;
+
   @ApiPropertyOptional({
     description: 'Instagram URL',
     example: 'https://instagram.com/smartagency',
@@ -26,6 +31,11 @@ class SocialLinksDto {
   @IsOptional()
   @IsString()
   instagram?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  instagramEn?: string;
 
   @ApiPropertyOptional({
     description: 'LinkedIn URL',
@@ -35,6 +45,11 @@ class SocialLinksDto {
   @IsString()
   linkedin?: string;
 
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  linkedinEn?: string;
+
   @ApiPropertyOptional({
     description: 'Facebook URL',
     example: 'https://facebook.com/smartagency',
@@ -42,6 +57,11 @@ class SocialLinksDto {
   @IsOptional()
   @IsString()
   facebook?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  facebookEn?: string;
 }
 
 export class CreateCompanyInfoDto {
@@ -53,6 +73,11 @@ export class CreateCompanyInfoDto {
   @IsNotEmpty({ message: 'Address is required' })
   address: string;
 
+  @IsOptional()
+  @ApiPropertyOptional()
+  @IsString()
+  addressEn?: string;
+
   @ApiProperty({
     description: 'Google Maps URL',
     example: 'https://maps.google.com/?q=...',
@@ -61,6 +86,11 @@ export class CreateCompanyInfoDto {
   @IsNotEmpty({ message: 'Google Maps URL is required' })
   googleMapsUrl: string;
 
+  @IsOptional()
+  @ApiPropertyOptional()
+  @IsUrl({}, { message: 'Please provide a valid Google Maps URL' })
+  googleMapsUrlEn?: string;
+
   @ApiProperty({
     description: 'Working hours',
     example: 'الأحد - الخميس: 8 ص - 5 م',
@@ -68,6 +98,11 @@ export class CreateCompanyInfoDto {
   @IsString()
   @IsNotEmpty({ message: 'Working hours is required' })
   workingHours: string;
+
+  @IsOptional()
+  @ApiPropertyOptional()
+  @IsString()
+  workingHoursEn?: string;
 
   @ApiProperty({
     description: 'Company email',
@@ -92,6 +127,11 @@ export class CreateCompanyInfoDto {
   @IsUrl({}, { message: 'Please provide a valid WhatsApp URL' })
   @IsNotEmpty({ message: 'WhatsApp URL is required' })
   whatsappUrl: string;
+
+  @IsOptional()
+  @ApiPropertyOptional()
+  @IsUrl({}, { message: 'Please provide a valid WhatsApp URL' })
+  whatsappUrlEn?: string;
 
   @ApiProperty({
     description: 'Social media links',

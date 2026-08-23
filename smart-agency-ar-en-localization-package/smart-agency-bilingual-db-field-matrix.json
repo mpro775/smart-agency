@@ -1,0 +1,408 @@
+[
+  {
+    "model_or_collection": "About",
+    "current_field_or_group": "hero.title, hero.subtitle, hero.badge",
+    "fields_to_add_or_change": "hero.titleEn, hero.subtitleEn, hero.badgeEn",
+    "kind": "localized-content",
+    "implementation_notes": ""
+  },
+  {
+    "model_or_collection": "About",
+    "current_field_or_group": "hero.primaryButtonText, hero.secondaryButtonText",
+    "fields_to_add_or_change": "hero.primaryButtonTextEn, hero.secondaryButtonTextEn",
+    "kind": "localized-ui-content",
+    "implementation_notes": "URLs remain shared"
+  },
+  {
+    "model_or_collection": "About",
+    "current_field_or_group": "hero.trustBadges[]",
+    "fields_to_add_or_change": "hero.trustBadgesEn[]",
+    "kind": "localized-array",
+    "implementation_notes": "Keep the arrays logically aligned in the admin form"
+  },
+  {
+    "model_or_collection": "About",
+    "current_field_or_group": "vision, mission, approach",
+    "fields_to_add_or_change": "visionEn, missionEn, approachEn",
+    "kind": "localized-content",
+    "implementation_notes": ""
+  },
+  {
+    "model_or_collection": "About",
+    "current_field_or_group": "story.title, description, painPoints[], closingStatement",
+    "fields_to_add_or_change": "story.titleEn, descriptionEn, painPointsEn[], closingStatementEn",
+    "kind": "localized-content",
+    "implementation_notes": ""
+  },
+  {
+    "model_or_collection": "About",
+    "current_field_or_group": "thinking[].title, description, result",
+    "fields_to_add_or_change": "thinking[].titleEn, descriptionEn, resultEn",
+    "kind": "localized-nested-array",
+    "implementation_notes": "icon remains shared"
+  },
+  {
+    "model_or_collection": "About",
+    "current_field_or_group": "differentiators[].title, description, badge",
+    "fields_to_add_or_change": "differentiators[].titleEn, descriptionEn, badgeEn",
+    "kind": "localized-nested-array",
+    "implementation_notes": "icon remains shared"
+  },
+  {
+    "model_or_collection": "About",
+    "current_field_or_group": "process[].title, description, deliverable",
+    "fields_to_add_or_change": "process[].titleEn, descriptionEn, deliverableEn",
+    "kind": "localized-nested-array",
+    "implementation_notes": "step and icon remain shared"
+  },
+  {
+    "model_or_collection": "About",
+    "current_field_or_group": "values[].title, description, example",
+    "fields_to_add_or_change": "values[].titleEn, descriptionEn, exampleEn",
+    "kind": "localized-nested-array",
+    "implementation_notes": "icon remains shared"
+  },
+  {
+    "model_or_collection": "About",
+    "current_field_or_group": "stats[].label, suffix, description",
+    "fields_to_add_or_change": "stats[].labelEn, suffixEn, descriptionEn",
+    "kind": "localized-nested-array",
+    "implementation_notes": "numeric value remains shared"
+  },
+  {
+    "model_or_collection": "About",
+    "current_field_or_group": "teamNote.title, description, highlights[]",
+    "fields_to_add_or_change": "teamNote.titleEn, descriptionEn, highlightsEn[]",
+    "kind": "localized-content",
+    "implementation_notes": ""
+  },
+  {
+    "model_or_collection": "About",
+    "current_field_or_group": "cta.title, description, buttonText, secondaryButtonText",
+    "fields_to_add_or_change": "cta.titleEn, descriptionEn, buttonTextEn, secondaryButtonTextEn",
+    "kind": "localized-ui-content",
+    "implementation_notes": "CTA URLs remain shared"
+  },
+  {
+    "model_or_collection": "About",
+    "current_field_or_group": "seo.metaTitle, metaDescription, keywords[]",
+    "fields_to_add_or_change": "seo.metaTitleEn, metaDescriptionEn, keywordsEn[]",
+    "kind": "localized-seo",
+    "implementation_notes": "ogImage remains shared"
+  },
+  {
+    "model_or_collection": "Blog",
+    "current_field_or_group": "title, content, excerpt, coverAlt",
+    "fields_to_add_or_change": "titleEn, contentEn, excerptEn, coverAltEn",
+    "kind": "localized-content",
+    "implementation_notes": ""
+  },
+  {
+    "model_or_collection": "Blog",
+    "current_field_or_group": "authorName, authorRole",
+    "fields_to_add_or_change": "authorNameEn, authorRoleEn",
+    "kind": "localized-proper-name",
+    "implementation_notes": "Use verified Latin spelling for names"
+  },
+  {
+    "model_or_collection": "Blog",
+    "current_field_or_group": "tags[], category",
+    "fields_to_add_or_change": "tagsEn[], categoryEn + categoryKey",
+    "kind": "localized-taxonomy",
+    "implementation_notes": "categoryKey is the stable non-localized filter code"
+  },
+  {
+    "model_or_collection": "Blog",
+    "current_field_or_group": "summaryPoints[]",
+    "fields_to_add_or_change": "summaryPointsEn[]",
+    "kind": "localized-array",
+    "implementation_notes": ""
+  },
+  {
+    "model_or_collection": "Blog",
+    "current_field_or_group": "ctaTitle, ctaDescription, ctaButtonText",
+    "fields_to_add_or_change": "ctaTitleEn, ctaDescriptionEn, ctaButtonTextEn",
+    "kind": "localized-ui-content",
+    "implementation_notes": "ctaButtonUrl remains shared"
+  },
+  {
+    "model_or_collection": "Blog",
+    "current_field_or_group": "seo.metaTitle/metaDescription/keywords",
+    "fields_to_add_or_change": "seo.metaTitleEn/metaDescriptionEn/keywordsEn[]",
+    "kind": "localized-seo",
+    "implementation_notes": ""
+  },
+  {
+    "model_or_collection": "Blog",
+    "current_field_or_group": "seo.canonicalUrl",
+    "fields_to_add_or_change": "seo.canonicalUrlEn",
+    "kind": "localized-seo",
+    "implementation_notes": "Canonical differs because routes are locale-prefixed"
+  },
+  {
+    "model_or_collection": "Blog",
+    "current_field_or_group": "seo.ogTitle/ogDescription",
+    "fields_to_add_or_change": "seo.ogTitleEn/ogDescriptionEn",
+    "kind": "localized-seo",
+    "implementation_notes": "Images remain shared"
+  },
+  {
+    "model_or_collection": "Blog",
+    "current_field_or_group": "seo.twitterTitle/twitterDescription",
+    "fields_to_add_or_change": "seo.twitterTitleEn/twitterDescriptionEn",
+    "kind": "localized-seo",
+    "implementation_notes": "Images remain shared"
+  },
+  {
+    "model_or_collection": "Blog",
+    "current_field_or_group": "readingTime",
+    "fields_to_add_or_change": "readingTimeEn",
+    "kind": "derived-value",
+    "implementation_notes": "Compute independently from English content; do not translate the number"
+  },
+  {
+    "model_or_collection": "Blog",
+    "current_field_or_group": "slug",
+    "fields_to_add_or_change": "KEEP SHARED",
+    "kind": "stable-identifier",
+    "implementation_notes": "Use locale-prefixed routes /ar/blog/:slug and /en/blog/:slug"
+  },
+  {
+    "model_or_collection": "CompanyInfo",
+    "current_field_or_group": "address, workingHours",
+    "fields_to_add_or_change": "addressEn, workingHoursEn",
+    "kind": "localized-content",
+    "implementation_notes": ""
+  },
+  {
+    "model_or_collection": "CompanyInfo",
+    "current_field_or_group": "googleMapsUrl, email, phone, whatsappUrl, socialLinks",
+    "fields_to_add_or_change": "KEEP SHARED",
+    "kind": "shared-data",
+    "implementation_notes": "Not language-specific"
+  },
+  {
+    "model_or_collection": "FAQ",
+    "current_field_or_group": "question, answer",
+    "fields_to_add_or_change": "questionEn, answerEn",
+    "kind": "localized-content",
+    "implementation_notes": ""
+  },
+  {
+    "model_or_collection": "FAQ",
+    "current_field_or_group": "category",
+    "fields_to_add_or_change": "categoryEn + categoryKey",
+    "kind": "localized-taxonomy",
+    "implementation_notes": "categoryKey is used for filters; labels are localized"
+  },
+  {
+    "model_or_collection": "HostingPackage",
+    "current_field_or_group": "name, description, features[]",
+    "fields_to_add_or_change": "nameEn, descriptionEn, featuresEn[]",
+    "kind": "localized-content",
+    "implementation_notes": ""
+  },
+  {
+    "model_or_collection": "HostingPackage",
+    "current_field_or_group": "storage, bandwidth, ram, cpu, domains",
+    "fields_to_add_or_change": "storageEn, bandwidthEn, ramEn, cpuEn, domainsEn",
+    "kind": "localized-technical-copy",
+    "implementation_notes": "Immediate safe migration; later normalize numeric/unlimited values into structured fields"
+  },
+  {
+    "model_or_collection": "HostingPackage",
+    "current_field_or_group": "benefitHints",
+    "fields_to_add_or_change": "benefitHintsEn",
+    "kind": "localized-object",
+    "implementation_notes": "Keep the same keys; localize only values"
+  },
+  {
+    "model_or_collection": "HostingPackage",
+    "current_field_or_group": "price/currency/originalPrice/billingCycle/category/flags",
+    "fields_to_add_or_change": "KEEP SHARED",
+    "kind": "shared-data",
+    "implementation_notes": "Enums/codes and numeric data must not be duplicated per language"
+  },
+  {
+    "model_or_collection": "ProjectCategory",
+    "current_field_or_group": "label, description",
+    "fields_to_add_or_change": "labelEn, descriptionEn",
+    "kind": "localized-content",
+    "implementation_notes": ""
+  },
+  {
+    "model_or_collection": "ProjectCategory",
+    "current_field_or_group": "value",
+    "fields_to_add_or_change": "NORMALIZE AS STABLE CODE",
+    "kind": "stable-identifier",
+    "implementation_notes": "Use values such as website/mobile/ecommerce/automation/other/saas; current Arabic/typo value must not be display text"
+  },
+  {
+    "model_or_collection": "Project",
+    "current_field_or_group": "title, summary, challenge, solution",
+    "fields_to_add_or_change": "titleEn, summaryEn, challengeEn, solutionEn",
+    "kind": "localized-content",
+    "implementation_notes": ""
+  },
+  {
+    "model_or_collection": "Project",
+    "current_field_or_group": "results[].label, results[].value",
+    "fields_to_add_or_change": "results[].labelEn, results[].valueEn",
+    "kind": "localized-nested-array",
+    "implementation_notes": ""
+  },
+  {
+    "model_or_collection": "Project",
+    "current_field_or_group": "features[]",
+    "fields_to_add_or_change": "featuresEn[]",
+    "kind": "localized-array",
+    "implementation_notes": ""
+  },
+  {
+    "model_or_collection": "Project",
+    "current_field_or_group": "clientName, industry, duration",
+    "fields_to_add_or_change": "clientNameEn, industryEn, durationEn",
+    "kind": "localized-content",
+    "implementation_notes": "Client spelling/transliteration should be manually verified"
+  },
+  {
+    "model_or_collection": "Project",
+    "current_field_or_group": "stats[].label, value, description",
+    "fields_to_add_or_change": "stats[].labelEn, valueEn, descriptionEn",
+    "kind": "localized-nested-array",
+    "implementation_notes": ""
+  },
+  {
+    "model_or_collection": "Project",
+    "current_field_or_group": "seo.metaTitle/metaDescription/keywords[]",
+    "fields_to_add_or_change": "seo.metaTitleEn, metaDescriptionEn, keywordsEn[]",
+    "kind": "localized-seo",
+    "implementation_notes": ""
+  },
+  {
+    "model_or_collection": "Project",
+    "current_field_or_group": "slug",
+    "fields_to_add_or_change": "KEEP SHARED",
+    "kind": "stable-identifier",
+    "implementation_notes": "Use locale-prefixed routes; keep existing locale-neutral slug and avoid duplicate URL identity"
+  },
+  {
+    "model_or_collection": "Project",
+    "current_field_or_group": "technologies/categoryIds/images/projectUrl/year/clientLogo/videoUrl/orders/flags",
+    "fields_to_add_or_change": "KEEP SHARED",
+    "kind": "shared-data",
+    "implementation_notes": "Relations, media, URLs, numeric/order fields, and booleans are shared"
+  },
+  {
+    "model_or_collection": "Service",
+    "current_field_or_group": "title, description, features[], shortDescription",
+    "fields_to_add_or_change": "titleEn, descriptionEn, featuresEn[], shortDescriptionEn",
+    "kind": "localized-content",
+    "implementation_notes": ""
+  },
+  {
+    "model_or_collection": "Service",
+    "current_field_or_group": "slug",
+    "fields_to_add_or_change": "KEEP SHARED",
+    "kind": "stable-identifier",
+    "implementation_notes": "Stable identifier; locale prefix controls language"
+  },
+  {
+    "model_or_collection": "Service",
+    "current_field_or_group": "icon/iconType/gradient/isActive/sortOrder",
+    "fields_to_add_or_change": "KEEP SHARED",
+    "kind": "shared-data",
+    "implementation_notes": ""
+  },
+  {
+    "model_or_collection": "TeamMember",
+    "current_field_or_group": "fullName, role, bio, funFact, specializations[]",
+    "fields_to_add_or_change": "fullNameEn, roleEn, bioEn, funFactEn, specializationsEn[]",
+    "kind": "localized-proper-name",
+    "implementation_notes": "Use the member’s approved Latin spelling, not automatic transliteration"
+  },
+  {
+    "model_or_collection": "TeamMember",
+    "current_field_or_group": "department, photo, email, social URLs, flags, joinedAt",
+    "fields_to_add_or_change": "KEEP SHARED",
+    "kind": "shared-data",
+    "implementation_notes": "Department is an enum and its UI label belongs in i18n resources"
+  },
+  {
+    "model_or_collection": "Technology",
+    "current_field_or_group": "name",
+    "fields_to_add_or_change": "KEEP SHARED",
+    "kind": "brand-name",
+    "implementation_notes": "Technology names are canonical product/technology names"
+  },
+  {
+    "model_or_collection": "Technology",
+    "current_field_or_group": "description, tooltip",
+    "fields_to_add_or_change": "descriptionEn, tooltipEn",
+    "kind": "localized-content",
+    "implementation_notes": ""
+  },
+  {
+    "model_or_collection": "Technology",
+    "current_field_or_group": "category, icon",
+    "fields_to_add_or_change": "KEEP SHARED",
+    "kind": "shared-data",
+    "implementation_notes": "Category is an enum; translate its UI label in i18n resources"
+  },
+  {
+    "model_or_collection": "Testimonial",
+    "current_field_or_group": "clientName, position, companyName, content",
+    "fields_to_add_or_change": "clientNameEn, positionEn, companyNameEn, contentEn",
+    "kind": "localized-proper-name",
+    "implementation_notes": "Verify official Latin names/company names where available"
+  },
+  {
+    "model_or_collection": "Testimonial",
+    "current_field_or_group": "logos/photos/rating/linkedProject/flags/order",
+    "fields_to_add_or_change": "KEEP SHARED",
+    "kind": "shared-data",
+    "implementation_notes": ""
+  },
+  {
+    "model_or_collection": "Lead",
+    "current_field_or_group": "fullName/companyName/message/notes/projectGoal",
+    "fields_to_add_or_change": "DO NOT ADD *En COPIES",
+    "kind": "user-generated",
+    "implementation_notes": "Preserve exactly what the visitor entered"
+  },
+  {
+    "model_or_collection": "Lead",
+    "current_field_or_group": "language context",
+    "fields_to_add_or_change": "locale: ar | en",
+    "kind": "request-context",
+    "implementation_notes": "Save submission language so admin can understand origin and respond appropriately"
+  },
+  {
+    "model_or_collection": "Lead",
+    "current_field_or_group": "projectAnswers / select values",
+    "fields_to_add_or_change": "MIGRATE TO STABLE CODES OR BOOLEANS",
+    "kind": "stable-form-data",
+    "implementation_notes": "Do not store Arabic values such as نعم/لا; translate labels only"
+  },
+  {
+    "model_or_collection": "Newsletter",
+    "current_field_or_group": "subscriber context",
+    "fields_to_add_or_change": "locale: ar | en",
+    "kind": "request-context",
+    "implementation_notes": "Keep email shared; save the locale used at subscription time"
+  },
+  {
+    "model_or_collection": "User",
+    "current_field_or_group": "name",
+    "fields_to_add_or_change": "DO NOT ADD nameEn",
+    "kind": "user-generated",
+    "implementation_notes": "Names are identity data, not CMS translations"
+  },
+  {
+    "model_or_collection": "User",
+    "current_field_or_group": "admin preference",
+    "fields_to_add_or_change": "preferredLocale: ar | en",
+    "kind": "user-preference",
+    "implementation_notes": "Only needed if the admin UI itself is bilingual"
+  }
+]

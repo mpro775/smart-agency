@@ -25,6 +25,11 @@ export class CreateHostingPackageDto {
   @IsNotEmpty({ message: 'Package name is required' })
   name: string;
 
+  @IsOptional()
+  @ApiPropertyOptional()
+  @IsString()
+  nameEn?: string;
+
   @ApiPropertyOptional({
     description: 'Package description',
     example: 'Perfect for growing businesses with high traffic websites',
@@ -32,6 +37,11 @@ export class CreateHostingPackageDto {
   @IsOptional()
   @IsString()
   description?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  descriptionEn?: string;
 
   @ApiProperty({
     description: 'Package price',
@@ -49,6 +59,11 @@ export class CreateHostingPackageDto {
   @IsOptional()
   @IsString()
   currency?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  currencyEn?: string;
 
   @ApiPropertyOptional({
     description: 'Original price (for showing discount)',
@@ -84,6 +99,12 @@ export class CreateHostingPackageDto {
   @IsArray()
   @IsString({ each: true })
   features?: string[];
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  featuresEn?: string[];
 
   @ApiPropertyOptional({
     description: 'Mark as popular package',
@@ -126,6 +147,11 @@ export class CreateHostingPackageDto {
   @IsString()
   storage?: string;
 
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  storageEn?: string;
+
   @ApiPropertyOptional({
     description: 'Bandwidth specification',
     example: 'Unlimited',
@@ -133,6 +159,11 @@ export class CreateHostingPackageDto {
   @IsOptional()
   @IsString()
   bandwidth?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  bandwidthEn?: string;
 
   @ApiPropertyOptional({
     description: 'RAM specification',
@@ -142,6 +173,11 @@ export class CreateHostingPackageDto {
   @IsString()
   ram?: string;
 
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  ramEn?: string;
+
   @ApiPropertyOptional({
     description: 'CPU specification',
     example: '2 vCPU',
@@ -150,6 +186,11 @@ export class CreateHostingPackageDto {
   @IsString()
   cpu?: string;
 
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  cpuEn?: string;
+
   @ApiPropertyOptional({
     description: 'Number of domains',
     example: '5 Domains',
@@ -157,6 +198,11 @@ export class CreateHostingPackageDto {
   @IsOptional()
   @IsString()
   domains?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  domainsEn?: string;
 
   @ApiPropertyOptional({
     description: 'Discount percentage',
@@ -192,6 +238,11 @@ export class CreateHostingPackageDto {
   @IsOptional()
   @IsString()
   basePackageId?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  basePackageIdEn?: string;
 
   @ApiPropertyOptional({
     description: 'Benefit hints for technical specs',

@@ -1,0 +1,59 @@
+﻿model_or_collection,current_field_or_group,fields_to_add_or_change,kind,implementation_notes
+About,"hero.title, hero.subtitle, hero.badge","hero.titleEn, hero.subtitleEn, hero.badgeEn",localized-content,
+About,"hero.primaryButtonText, hero.secondaryButtonText","hero.primaryButtonTextEn, hero.secondaryButtonTextEn",localized-ui-content,URLs remain shared
+About,hero.trustBadges[],hero.trustBadgesEn[],localized-array,Keep the arrays logically aligned in the admin form
+About,"vision, mission, approach","visionEn, missionEn, approachEn",localized-content,
+About,"story.title, description, painPoints[], closingStatement","story.titleEn, descriptionEn, painPointsEn[], closingStatementEn",localized-content,
+About,"thinking[].title, description, result","thinking[].titleEn, descriptionEn, resultEn",localized-nested-array,icon remains shared
+About,"differentiators[].title, description, badge","differentiators[].titleEn, descriptionEn, badgeEn",localized-nested-array,icon remains shared
+About,"process[].title, description, deliverable","process[].titleEn, descriptionEn, deliverableEn",localized-nested-array,step and icon remain shared
+About,"values[].title, description, example","values[].titleEn, descriptionEn, exampleEn",localized-nested-array,icon remains shared
+About,"stats[].label, suffix, description","stats[].labelEn, suffixEn, descriptionEn",localized-nested-array,numeric value remains shared
+About,"teamNote.title, description, highlights[]","teamNote.titleEn, descriptionEn, highlightsEn[]",localized-content,
+About,"cta.title, description, buttonText, secondaryButtonText","cta.titleEn, descriptionEn, buttonTextEn, secondaryButtonTextEn",localized-ui-content,CTA URLs remain shared
+About,"seo.metaTitle, metaDescription, keywords[]","seo.metaTitleEn, metaDescriptionEn, keywordsEn[]",localized-seo,ogImage remains shared
+Blog,"title, content, excerpt, coverAlt","titleEn, contentEn, excerptEn, coverAltEn",localized-content,
+Blog,"authorName, authorRole","authorNameEn, authorRoleEn",localized-proper-name,Use verified Latin spelling for names
+Blog,"tags[], category","tagsEn[], categoryEn + categoryKey",localized-taxonomy,categoryKey is the stable non-localized filter code
+Blog,summaryPoints[],summaryPointsEn[],localized-array,
+Blog,"ctaTitle, ctaDescription, ctaButtonText","ctaTitleEn, ctaDescriptionEn, ctaButtonTextEn",localized-ui-content,ctaButtonUrl remains shared
+Blog,seo.metaTitle/metaDescription/keywords,seo.metaTitleEn/metaDescriptionEn/keywordsEn[],localized-seo,
+Blog,seo.canonicalUrl,seo.canonicalUrlEn,localized-seo,Canonical differs because routes are locale-prefixed
+Blog,seo.ogTitle/ogDescription,seo.ogTitleEn/ogDescriptionEn,localized-seo,Images remain shared
+Blog,seo.twitterTitle/twitterDescription,seo.twitterTitleEn/twitterDescriptionEn,localized-seo,Images remain shared
+Blog,readingTime,readingTimeEn,derived-value,Compute independently from English content; do not translate the number
+Blog,slug,KEEP SHARED,stable-identifier,Use locale-prefixed routes /ar/blog/:slug and /en/blog/:slug
+CompanyInfo,"address, workingHours","addressEn, workingHoursEn",localized-content,
+CompanyInfo,"googleMapsUrl, email, phone, whatsappUrl, socialLinks",KEEP SHARED,shared-data,Not language-specific
+FAQ,"question, answer","questionEn, answerEn",localized-content,
+FAQ,category,categoryEn + categoryKey,localized-taxonomy,categoryKey is used for filters; labels are localized
+HostingPackage,"name, description, features[]","nameEn, descriptionEn, featuresEn[]",localized-content,
+HostingPackage,"storage, bandwidth, ram, cpu, domains","storageEn, bandwidthEn, ramEn, cpuEn, domainsEn",localized-technical-copy,Immediate safe migration; later normalize numeric/unlimited values into structured fields
+HostingPackage,benefitHints,benefitHintsEn,localized-object,Keep the same keys; localize only values
+HostingPackage,price/currency/originalPrice/billingCycle/category/flags,KEEP SHARED,shared-data,Enums/codes and numeric data must not be duplicated per language
+ProjectCategory,"label, description","labelEn, descriptionEn",localized-content,
+ProjectCategory,value,NORMALIZE AS STABLE CODE,stable-identifier,Use values such as website/mobile/ecommerce/automation/other/saas; current Arabic/typo value must not be display text
+Project,"title, summary, challenge, solution","titleEn, summaryEn, challengeEn, solutionEn",localized-content,
+Project,"results[].label, results[].value","results[].labelEn, results[].valueEn",localized-nested-array,
+Project,features[],featuresEn[],localized-array,
+Project,"clientName, industry, duration","clientNameEn, industryEn, durationEn",localized-content,Client spelling/transliteration should be manually verified
+Project,"stats[].label, value, description","stats[].labelEn, valueEn, descriptionEn",localized-nested-array,
+Project,seo.metaTitle/metaDescription/keywords[],"seo.metaTitleEn, metaDescriptionEn, keywordsEn[]",localized-seo,
+Project,slug,KEEP SHARED,stable-identifier,Use locale-prefixed routes; keep existing locale-neutral slug and avoid duplicate URL identity
+Project,technologies/categoryIds/images/projectUrl/year/clientLogo/videoUrl/orders/flags,KEEP SHARED,shared-data,"Relations, media, URLs, numeric/order fields, and booleans are shared"
+Service,"title, description, features[], shortDescription","titleEn, descriptionEn, featuresEn[], shortDescriptionEn",localized-content,
+Service,slug,KEEP SHARED,stable-identifier,Stable identifier; locale prefix controls language
+Service,icon/iconType/gradient/isActive/sortOrder,KEEP SHARED,shared-data,
+TeamMember,"fullName, role, bio, funFact, specializations[]","fullNameEn, roleEn, bioEn, funFactEn, specializationsEn[]",localized-proper-name,"Use the member’s approved Latin spelling, not automatic transliteration"
+TeamMember,"department, photo, email, social URLs, flags, joinedAt",KEEP SHARED,shared-data,Department is an enum and its UI label belongs in i18n resources
+Technology,name,KEEP SHARED,brand-name,Technology names are canonical product/technology names
+Technology,"description, tooltip","descriptionEn, tooltipEn",localized-content,
+Technology,"category, icon",KEEP SHARED,shared-data,Category is an enum; translate its UI label in i18n resources
+Testimonial,"clientName, position, companyName, content","clientNameEn, positionEn, companyNameEn, contentEn",localized-proper-name,Verify official Latin names/company names where available
+Testimonial,logos/photos/rating/linkedProject/flags/order,KEEP SHARED,shared-data,
+Lead,fullName/companyName/message/notes/projectGoal,DO NOT ADD *En COPIES,user-generated,Preserve exactly what the visitor entered
+Lead,language context,locale: ar | en,request-context,Save submission language so admin can understand origin and respond appropriately
+Lead,projectAnswers / select values,MIGRATE TO STABLE CODES OR BOOLEANS,stable-form-data,Do not store Arabic values such as نعم/لا; translate labels only
+Newsletter,subscriber context,locale: ar | en,request-context,Keep email shared; save the locale used at subscription time
+User,name,DO NOT ADD nameEn,user-generated,"Names are identity data, not CMS translations"
+User,admin preference,preferredLocale: ar | en,user-preference,Only needed if the admin UI itself is bilingual

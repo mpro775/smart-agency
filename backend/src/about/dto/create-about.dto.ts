@@ -20,6 +20,11 @@ class HeroSectionDto {
   @IsNotEmpty({ message: 'Hero title is required' })
   title: string;
 
+  @IsOptional()
+  @ApiPropertyOptional()
+  @IsString()
+  titleEn?: string;
+
   @ApiProperty({
     description: 'Hero section subtitle',
     example:
@@ -29,6 +34,11 @@ class HeroSectionDto {
   @IsNotEmpty({ message: 'Hero subtitle is required' })
   subtitle: string;
 
+  @IsOptional()
+  @ApiPropertyOptional()
+  @IsString()
+  subtitleEn?: string;
+
   @ApiPropertyOptional({
     description: 'Hero badge text',
     example: 'من نحن',
@@ -36,6 +46,11 @@ class HeroSectionDto {
   @IsOptional()
   @IsString()
   badge?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  badgeEn?: string;
 
   @ApiPropertyOptional({
     description: 'Hero section image URL',
@@ -53,6 +68,11 @@ class HeroSectionDto {
   @IsString()
   primaryButtonText?: string;
 
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  primaryButtonTextEn?: string;
+
   @ApiPropertyOptional({
     description: 'Primary button URL',
     example: '/contact',
@@ -68,6 +88,11 @@ class HeroSectionDto {
   @IsOptional()
   @IsString()
   secondaryButtonText?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  secondaryButtonTextEn?: string;
 
   @ApiPropertyOptional({
     description: 'Secondary button URL',
@@ -85,6 +110,12 @@ class HeroSectionDto {
   @IsArray()
   @IsString({ each: true })
   trustBadges?: string[];
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  trustBadgesEn?: string[];
 }
 
 class StorySectionDto {
@@ -96,6 +127,11 @@ class StorySectionDto {
   @IsString()
   title?: string;
 
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  titleEn?: string;
+
   @ApiPropertyOptional({
     description: 'Story description',
     example:
@@ -104,6 +140,11 @@ class StorySectionDto {
   @IsOptional()
   @IsString()
   description?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  descriptionEn?: string;
 
   @ApiPropertyOptional({
     description: 'Pain points list',
@@ -114,6 +155,12 @@ class StorySectionDto {
   @IsString({ each: true })
   painPoints?: string[];
 
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  painPointsEn?: string[];
+
   @ApiPropertyOptional({
     description: 'Closing statement',
     example: 'نحن لا نتعامل مع المشروع كتصميم أو كود فقط',
@@ -121,6 +168,11 @@ class StorySectionDto {
   @IsOptional()
   @IsString()
   closingStatement?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  closingStatementEn?: string;
 }
 
 class ThinkingItemDto {
@@ -140,6 +192,11 @@ class ThinkingItemDto {
   @IsNotEmpty({ message: 'Title is required' })
   title: string;
 
+  @IsOptional()
+  @ApiPropertyOptional()
+  @IsString()
+  titleEn?: string;
+
   @ApiProperty({
     description: 'Thinking item description',
     example: 'نبدأ بفهم الهدف التجاري، طبيعة الجمهور، رحلة المستخدم',
@@ -148,6 +205,11 @@ class ThinkingItemDto {
   @IsNotEmpty({ message: 'Description is required' })
   description: string;
 
+  @IsOptional()
+  @ApiPropertyOptional()
+  @IsString()
+  descriptionEn?: string;
+
   @ApiPropertyOptional({
     description: 'Result text',
     example: 'مخرجات أوضح قبل الدخول في التصميم والتنفيذ',
@@ -155,6 +217,11 @@ class ThinkingItemDto {
   @IsOptional()
   @IsString()
   result?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  resultEn?: string;
 }
 
 class DifferentiatorItemDto {
@@ -174,6 +241,11 @@ class DifferentiatorItemDto {
   @IsNotEmpty({ message: 'Title is required' })
   title: string;
 
+  @IsOptional()
+  @ApiPropertyOptional()
+  @IsString()
+  titleEn?: string;
+
   @ApiProperty({
     description: 'Differentiator description',
     example: 'نتعامل مع كل مشروع كسير عمل وتجربة وهدف تجاري',
@@ -182,6 +254,11 @@ class DifferentiatorItemDto {
   @IsNotEmpty({ message: 'Description is required' })
   description: string;
 
+  @IsOptional()
+  @ApiPropertyOptional()
+  @IsString()
+  descriptionEn?: string;
+
   @ApiPropertyOptional({
     description: 'Badge text',
     example: 'Product Mindset',
@@ -189,6 +266,11 @@ class DifferentiatorItemDto {
   @IsOptional()
   @IsString()
   badge?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  badgeEn?: string;
 }
 
 class ProcessStepDto {
@@ -208,6 +290,11 @@ class ProcessStepDto {
   @IsNotEmpty({ message: 'Title is required' })
   title: string;
 
+  @IsOptional()
+  @ApiPropertyOptional()
+  @IsString()
+  titleEn?: string;
+
   @ApiProperty({
     description: 'Step description',
     example: 'نحدد الهدف، الجمهور، نطاق المشروع، الأولويات',
@@ -216,6 +303,11 @@ class ProcessStepDto {
   @IsNotEmpty({ message: 'Description is required' })
   description: string;
 
+  @IsOptional()
+  @ApiPropertyOptional()
+  @IsString()
+  descriptionEn?: string;
+
   @ApiPropertyOptional({
     description: 'Deliverable text',
     example: 'ملخص المتطلبات وخريطة أولية للحل',
@@ -223,6 +315,11 @@ class ProcessStepDto {
   @IsOptional()
   @IsString()
   deliverable?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  deliverableEn?: string;
 
   @ApiPropertyOptional({
     description: 'Icon name',
@@ -250,6 +347,11 @@ class PrincipleItemDto {
   @IsNotEmpty({ message: 'Title is required' })
   title: string;
 
+  @IsOptional()
+  @ApiPropertyOptional()
+  @IsString()
+  titleEn?: string;
+
   @ApiProperty({
     description: 'Principle description',
     example: 'كل قرار تصميمي أو تقني يجب أن يخدم هدفًا واضحًا',
@@ -258,6 +360,11 @@ class PrincipleItemDto {
   @IsNotEmpty({ message: 'Description is required' })
   description: string;
 
+  @IsOptional()
+  @ApiPropertyOptional()
+  @IsString()
+  descriptionEn?: string;
+
   @ApiPropertyOptional({
     description: 'Practical example',
     example: 'قبل التصميم نسأل: ما القرار الذي نريد من المستخدم اتخاذه؟',
@@ -265,6 +372,11 @@ class PrincipleItemDto {
   @IsOptional()
   @IsString()
   example?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  exampleEn?: string;
 }
 
 class StatItemDto {
@@ -292,6 +404,11 @@ class StatItemDto {
   @IsNotEmpty({ message: 'Stat label is required' })
   label: string;
 
+  @IsOptional()
+  @ApiPropertyOptional()
+  @IsString()
+  labelEn?: string;
+
   @ApiPropertyOptional({
     description: 'Stat suffix (e.g., +, %)',
     example: '+',
@@ -300,6 +417,10 @@ class StatItemDto {
   @IsString()
   suffix?: string;
 
+  @IsOptional()
+  @IsString()
+  suffixEn?: string;
+
   @ApiPropertyOptional({
     description: 'Stat description',
     example: 'بين مواقع تعريفية، متاجر إلكترونية، تطبيقات',
@@ -307,6 +428,11 @@ class StatItemDto {
   @IsOptional()
   @IsString()
   description?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  descriptionEn?: string;
 }
 
 class TeamNoteSectionDto {
@@ -318,6 +444,11 @@ class TeamNoteSectionDto {
   @IsString()
   title?: string;
 
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  titleEn?: string;
+
   @ApiPropertyOptional({
     description: 'Team note description',
     example: 'نؤمن أن قوة الوكالة لا تقاس بعدد الأشخاص فقط',
@@ -325,6 +456,11 @@ class TeamNoteSectionDto {
   @IsOptional()
   @IsString()
   description?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  descriptionEn?: string;
 
   @ApiPropertyOptional({
     description: 'Highlights list',
@@ -334,6 +470,12 @@ class TeamNoteSectionDto {
   @IsArray()
   @IsString({ each: true })
   highlights?: string[];
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  highlightsEn?: string[];
 
   @ApiPropertyOptional({
     description: 'Team image URL',
@@ -353,6 +495,11 @@ class CTASectionDto {
   @IsNotEmpty({ message: 'CTA title is required' })
   title: string;
 
+  @IsOptional()
+  @ApiPropertyOptional()
+  @IsString()
+  titleEn?: string;
+
   @ApiProperty({
     description: 'CTA description',
     example: 'شاركنا فكرتك، وسنساعدك على تحويلها إلى تجربة واضحة',
@@ -361,6 +508,11 @@ class CTASectionDto {
   @IsNotEmpty({ message: 'CTA description is required' })
   description: string;
 
+  @IsOptional()
+  @ApiPropertyOptional()
+  @IsString()
+  descriptionEn?: string;
+
   @ApiProperty({
     description: 'CTA button text',
     example: 'ابدأ مشروعك معنا',
@@ -368,6 +520,11 @@ class CTASectionDto {
   @IsString()
   @IsNotEmpty({ message: 'CTA button text is required' })
   buttonText: string;
+
+  @IsOptional()
+  @ApiPropertyOptional()
+  @IsString()
+  buttonTextEn?: string;
 
   @ApiPropertyOptional({
     description: 'CTA button URL',
@@ -384,6 +541,11 @@ class CTASectionDto {
   @IsOptional()
   @IsString()
   secondaryButtonText?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  secondaryButtonTextEn?: string;
 
   @ApiPropertyOptional({
     description: 'Secondary button URL',
@@ -403,6 +565,11 @@ class SEOSectionDto {
   @IsString()
   metaTitle?: string;
 
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  metaTitleEn?: string;
+
   @ApiPropertyOptional({
     description: 'Meta description for SEO',
     example:
@@ -412,6 +579,11 @@ class SEOSectionDto {
   @IsString()
   metaDescription?: string;
 
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  metaDescriptionEn?: string;
+
   @ApiPropertyOptional({
     description: 'SEO keywords',
     example: ['وكالة سمارت', 'شركة برمجة', 'تصميم مواقع'],
@@ -420,6 +592,12 @@ class SEOSectionDto {
   @IsArray()
   @IsString({ each: true })
   keywords?: string[];
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  keywordsEn?: string[];
 
   @ApiPropertyOptional({
     description: 'OG image URL',
@@ -447,6 +625,11 @@ export class CreateAboutDto {
   @IsNotEmpty({ message: 'Vision is required' })
   vision: string;
 
+  @IsOptional()
+  @ApiPropertyOptional()
+  @IsString()
+  visionEn?: string;
+
   @ApiProperty({
     description: 'Mission text',
     example:
@@ -456,6 +639,11 @@ export class CreateAboutDto {
   @IsNotEmpty({ message: 'Mission is required' })
   mission: string;
 
+  @IsOptional()
+  @ApiPropertyOptional()
+  @IsString()
+  missionEn?: string;
+
   @ApiProperty({
     description: 'Approach text',
     example: 'نعمل بمنهجية تبدأ بفهم الهدف والسوق والمستخدم',
@@ -463,6 +651,11 @@ export class CreateAboutDto {
   @IsString()
   @IsNotEmpty({ message: 'Approach is required' })
   approach: string;
+
+  @IsOptional()
+  @ApiPropertyOptional()
+  @IsString()
+  approachEn?: string;
 
   @ApiPropertyOptional({
     description: 'Story section',

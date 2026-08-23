@@ -34,6 +34,11 @@ export class FilterLeadsDto extends PaginationDto {
   @IsString()
   search?: string;
 
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  searchEn?: string;
+
   @ApiPropertyOptional({
     description: 'Filter by lead type',
     enum: LeadType,

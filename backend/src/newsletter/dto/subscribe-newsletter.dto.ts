@@ -23,6 +23,18 @@ export class SubscribeNewsletterDto {
     message: 'Source must be one of: footer, blog, homepage, popup',
   })
   source?: string;
+
+  @ApiProperty({
+    description: 'Language locale',
+    example: 'en',
+    required: false,
+    enum: ['ar', 'en'],
+    default: 'ar',
+  })
+  @IsOptional()
+  @IsString()
+  @IsIn(['ar', 'en'])
+  locale?: string;
 }
 
 export class NewsletterResponseDto {

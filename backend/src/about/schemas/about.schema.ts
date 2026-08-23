@@ -7,11 +7,20 @@ class HeroSection {
   @Prop({ required: true })
   title: string;
 
+  @Prop({ required: false })
+  titleEn?: string;
+
   @Prop({ required: true })
   subtitle: string;
 
   @Prop({ required: false })
+  subtitleEn?: string;
+
+  @Prop({ required: false })
   badge?: string;
+
+  @Prop({ required: false })
+  badgeEn?: string;
 
   @Prop({ required: false })
   image?: string;
@@ -20,16 +29,25 @@ class HeroSection {
   primaryButtonText?: string;
 
   @Prop({ required: false })
+  primaryButtonTextEn?: string;
+
+  @Prop({ required: false })
   primaryButtonUrl?: string;
 
   @Prop({ required: false })
   secondaryButtonText?: string;
 
   @Prop({ required: false })
+  secondaryButtonTextEn?: string;
+
+  @Prop({ required: false })
   secondaryButtonUrl?: string;
 
   @Prop({ type: [String], default: [] })
   trustBadges?: string[];
+
+  @Prop({ required: false })
+  trustBadgesEn?: string[];
 }
 
 class StorySection {
@@ -37,13 +55,25 @@ class StorySection {
   title?: string;
 
   @Prop({ required: false })
+  titleEn?: string;
+
+  @Prop({ required: false })
   description?: string;
+
+  @Prop({ required: false })
+  descriptionEn?: string;
 
   @Prop({ type: [String], default: [] })
   painPoints?: string[];
 
   @Prop({ required: false })
+  painPointsEn?: string[];
+
+  @Prop({ required: false })
   closingStatement?: string;
+
+  @Prop({ required: false })
+  closingStatementEn?: string;
 }
 
 class ThinkingItem {
@@ -53,11 +83,20 @@ class ThinkingItem {
   @Prop({ required: true })
   title: string;
 
+  @Prop({ required: false })
+  titleEn?: string;
+
   @Prop({ required: true })
   description: string;
 
   @Prop({ required: false })
+  descriptionEn?: string;
+
+  @Prop({ required: false })
   result?: string;
+
+  @Prop({ required: false })
+  resultEn?: string;
 }
 
 class DifferentiatorItem {
@@ -67,11 +106,20 @@ class DifferentiatorItem {
   @Prop({ required: true })
   title: string;
 
+  @Prop({ required: false })
+  titleEn?: string;
+
   @Prop({ required: true })
   description: string;
 
   @Prop({ required: false })
+  descriptionEn?: string;
+
+  @Prop({ required: false })
   badge?: string;
+
+  @Prop({ required: false })
+  badgeEn?: string;
 }
 
 class ProcessStep {
@@ -81,11 +129,20 @@ class ProcessStep {
   @Prop({ required: true })
   title: string;
 
+  @Prop({ required: false })
+  titleEn?: string;
+
   @Prop({ required: true })
   description: string;
 
   @Prop({ required: false })
+  descriptionEn?: string;
+
+  @Prop({ required: false })
   deliverable?: string;
+
+  @Prop({ required: false })
+  deliverableEn?: string;
 
   @Prop({ required: false })
   icon?: string;
@@ -98,11 +155,20 @@ class PrincipleItem {
   @Prop({ required: true })
   title: string;
 
+  @Prop({ required: false })
+  titleEn?: string;
+
   @Prop({ required: true })
   description: string;
 
   @Prop({ required: false })
+  descriptionEn?: string;
+
+  @Prop({ required: false })
   example?: string;
+
+  @Prop({ required: false })
+  exampleEn?: string;
 }
 
 class StatItem {
@@ -116,10 +182,19 @@ class StatItem {
   label: string;
 
   @Prop({ required: false })
+  labelEn?: string;
+
+  @Prop({ required: false })
   suffix?: string;
 
   @Prop({ required: false })
+  suffixEn?: string;
+
+  @Prop({ required: false })
   description?: string;
+
+  @Prop({ required: false })
+  descriptionEn?: string;
 }
 
 class TeamNoteSection {
@@ -127,10 +202,19 @@ class TeamNoteSection {
   title?: string;
 
   @Prop({ required: false })
+  titleEn?: string;
+
+  @Prop({ required: false })
   description?: string;
+
+  @Prop({ required: false })
+  descriptionEn?: string;
 
   @Prop({ type: [String], default: [] })
   highlights?: string[];
+
+  @Prop({ required: false })
+  highlightsEn?: string[];
 
   @Prop({ required: false })
   image?: string;
@@ -140,17 +224,29 @@ class CTASection {
   @Prop({ required: true })
   title: string;
 
+  @Prop({ required: false })
+  titleEn?: string;
+
   @Prop({ required: true })
   description: string;
 
+  @Prop({ required: false })
+  descriptionEn?: string;
+
   @Prop({ required: true })
   buttonText: string;
+
+  @Prop({ required: false })
+  buttonTextEn?: string;
 
   @Prop({ required: false })
   buttonUrl?: string;
 
   @Prop({ required: false })
   secondaryButtonText?: string;
+
+  @Prop({ required: false })
+  secondaryButtonTextEn?: string;
 
   @Prop({ required: false })
   secondaryButtonUrl?: string;
@@ -161,10 +257,19 @@ class SEOSection {
   metaTitle?: string;
 
   @Prop({ required: false })
+  metaTitleEn?: string;
+
+  @Prop({ required: false })
   metaDescription?: string;
+
+  @Prop({ required: false })
+  metaDescriptionEn?: string;
 
   @Prop({ type: [String], default: [] })
   keywords?: string[];
+
+  @Prop({ required: false })
+  keywordsEn?: string[];
 
   @Prop({ required: false })
   ogImage?: string;
@@ -178,11 +283,20 @@ export class About {
   @Prop({ required: true })
   vision: string;
 
+  @Prop({ required: false })
+  visionEn?: string;
+
   @Prop({ required: true })
   mission: string;
 
+  @Prop({ required: false })
+  missionEn?: string;
+
   @Prop({ required: true })
   approach: string;
+
+  @Prop({ required: false })
+  approachEn?: string;
 
   @Prop({ type: Object, required: false })
   story?: StorySection;

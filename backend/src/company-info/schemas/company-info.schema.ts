@@ -8,11 +8,20 @@ export class CompanyInfo {
   @Prop({ required: true })
   address: string;
 
+  @Prop({ required: false })
+  addressEn?: string;
+
   @Prop({ required: true })
   googleMapsUrl: string;
 
+  @Prop({ required: false })
+  googleMapsUrlEn?: string;
+
   @Prop({ required: true })
   workingHours: string;
+
+  @Prop({ required: false })
+  workingHoursEn?: string;
 
   @Prop({ required: true })
   email: string;
@@ -22,6 +31,9 @@ export class CompanyInfo {
 
   @Prop({ required: true })
   whatsappUrl: string;
+
+  @Prop({ required: false })
+  whatsappUrlEn?: string;
 
   @Prop({
     type: {

@@ -20,6 +20,11 @@ export class FilterFaqDto extends PaginationDto {
   @IsString()
   search?: string;
 
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  searchEn?: string;
+
   @ApiPropertyOptional({
     description: 'Filter by active status',
     example: true,

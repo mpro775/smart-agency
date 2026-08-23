@@ -1,10 +1,5 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import {
-  IsOptional,
-  IsString,
-  IsBoolean,
-  IsMongoId,
-} from 'class-validator';
+import { IsOptional, IsString, IsBoolean, IsMongoId } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { PaginationDto } from '../../common/dto/pagination.dto';
 
@@ -16,6 +11,11 @@ export class FilterProjectsDto extends PaginationDto {
   @IsMongoId()
   tech?: string;
 
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsMongoId()
+  techEn?: string;
+
   @ApiPropertyOptional({
     description: 'Filter by category IDs (comma-separated or single ID)',
   })
@@ -23,12 +23,21 @@ export class FilterProjectsDto extends PaginationDto {
   @IsString()
   categoryIds?: string;
 
+  @IsOptional()
+  @IsString()
+  categoryIdsEn?: string;
+
   @ApiPropertyOptional({
     description: 'Filter by industry/sector',
   })
   @IsOptional()
   @IsString()
   industry?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  industryEn?: string;
 
   @ApiPropertyOptional({
     description: 'Filter featured projects only',
@@ -61,4 +70,9 @@ export class FilterProjectsDto extends PaginationDto {
   @IsOptional()
   @IsString()
   search?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  searchEn?: string;
 }

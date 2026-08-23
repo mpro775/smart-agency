@@ -19,6 +19,11 @@ export class CreateTestimonialDto {
   @IsNotEmpty({ message: 'Client name is required' })
   clientName: string;
 
+  @IsOptional()
+  @ApiPropertyOptional()
+  @IsString()
+  clientNameEn?: string;
+
   @ApiPropertyOptional({
     description: 'Client position/title',
     example: 'CTO at Company X',
@@ -26,6 +31,11 @@ export class CreateTestimonialDto {
   @IsOptional()
   @IsString()
   position?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  positionEn?: string;
 
   @ApiPropertyOptional({
     description: 'Company name',
@@ -35,6 +45,11 @@ export class CreateTestimonialDto {
   @IsString()
   companyName?: string;
 
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  companyNameEn?: string;
+
   @ApiPropertyOptional({
     description: 'Company logo URL',
     example: 'https://cdn.example.com/logos/company.png',
@@ -42,6 +57,11 @@ export class CreateTestimonialDto {
   @IsOptional()
   @IsString()
   companyLogo?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  companyLogoEn?: string;
 
   @ApiPropertyOptional({
     description: 'Client photo URL',
@@ -51,6 +71,11 @@ export class CreateTestimonialDto {
   @IsString()
   clientPhoto?: string;
 
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  clientPhotoEn?: string;
+
   @ApiProperty({
     description: 'Testimonial content',
     example: 'عمل احترافي وتواصل ممتاز. أنصح بهم بشدة!',
@@ -58,6 +83,11 @@ export class CreateTestimonialDto {
   @IsString()
   @IsNotEmpty({ message: 'Testimonial content is required' })
   content: string;
+
+  @IsOptional()
+  @ApiPropertyOptional()
+  @IsString()
+  contentEn?: string;
 
   @ApiPropertyOptional({
     description: 'Rating (1-5)',
@@ -77,6 +107,11 @@ export class CreateTestimonialDto {
   @IsOptional()
   @IsMongoId()
   linkedProject?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsMongoId()
+  linkedProjectEn?: string;
 
   @ApiPropertyOptional({
     description: 'Is testimonial active',

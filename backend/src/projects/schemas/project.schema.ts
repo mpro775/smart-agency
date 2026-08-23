@@ -9,8 +9,14 @@ export class ProjectResult {
   @Prop({ required: true })
   label: string;
 
+  @Prop({ required: false })
+  labelEn?: string;
+
   @Prop({ required: true })
   value: string;
+
+  @Prop({ required: false })
+  valueEn?: string;
 }
 
 @Schema({ _id: false })
@@ -18,8 +24,14 @@ export class ProjectImages {
   @Prop()
   cover: string;
 
+  @Prop({ required: false })
+  coverEn?: string;
+
   @Prop({ type: [String], default: [] })
   gallery: string[];
+
+  @Prop({ required: false })
+  galleryEn?: string[];
 }
 
 @Schema({ _id: false })
@@ -27,11 +39,20 @@ export class ProjectSeo {
   @Prop()
   metaTitle: string;
 
+  @Prop({ required: false })
+  metaTitleEn?: string;
+
   @Prop()
   metaDescription: string;
 
+  @Prop({ required: false })
+  metaDescriptionEn?: string;
+
   @Prop({ type: [String], default: [] })
   keywords: string[];
+
+  @Prop({ required: false })
+  keywordsEn?: string[];
 }
 
 @Schema({ _id: false })
@@ -39,11 +60,20 @@ export class ProjectStat {
   @Prop({ required: true })
   label: string;
 
+  @Prop({ required: false })
+  labelEn?: string;
+
   @Prop({ required: true })
   value: string;
 
+  @Prop({ required: false })
+  valueEn?: string;
+
   @Prop()
   description?: string;
+
+  @Prop({ required: false })
+  descriptionEn?: string;
 }
 
 @Schema({ timestamps: true })
@@ -51,23 +81,38 @@ export class Project {
   @Prop({ required: true })
   title: string;
 
+  @Prop({ required: false })
+  titleEn?: string;
+
   @Prop({ required: true, unique: true, lowercase: true })
   slug: string;
 
   @Prop({ required: true })
   summary: string;
 
+  @Prop({ required: false })
+  summaryEn?: string;
+
   @Prop()
   challenge: string;
 
+  @Prop({ required: false })
+  challengeEn?: string;
+
   @Prop()
   solution: string;
+
+  @Prop({ required: false })
+  solutionEn?: string;
 
   @Prop({ type: [ProjectResult], default: [] })
   results: ProjectResult[];
 
   @Prop({ type: [String], default: [] })
   features: string[];
+
+  @Prop({ required: false })
+  featuresEn?: string[];
 
   @Prop({ type: [{ type: Types.ObjectId, ref: 'Technology' }] })
   technologies: Technology[] | Types.ObjectId[];
@@ -78,8 +123,14 @@ export class Project {
   @Prop()
   projectUrl: string;
 
+  @Prop({ required: false })
+  projectUrlEn?: string;
+
   @Prop()
   clientName: string;
+
+  @Prop({ required: false })
+  clientNameEn?: string;
 
   @Prop({
     type: [{ type: Types.ObjectId, ref: 'ProjectCategory' }],
@@ -90,14 +141,26 @@ export class Project {
   @Prop()
   industry?: string;
 
+  @Prop({ required: false })
+  industryEn?: string;
+
   @Prop()
   duration?: string;
+
+  @Prop({ required: false })
+  durationEn?: string;
 
   @Prop()
   year?: string;
 
+  @Prop({ required: false })
+  yearEn?: string;
+
   @Prop()
   clientLogo?: string;
+
+  @Prop({ required: false })
+  clientLogoEn?: string;
 
   @Prop({ default: 0 })
   sortOrder?: number;
@@ -107,6 +170,9 @@ export class Project {
 
   @Prop()
   videoUrl?: string;
+
+  @Prop({ required: false })
+  videoUrlEn?: string;
 
   @Prop({ type: [ProjectStat], default: [] })
   stats?: ProjectStat[];

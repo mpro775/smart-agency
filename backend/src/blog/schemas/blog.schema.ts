@@ -9,11 +9,20 @@ export class BlogSeo {
   @Prop()
   metaTitle: string;
 
+  @Prop({ required: false })
+  metaTitleEn?: string;
+
   @Prop()
   metaDescription: string;
 
+  @Prop({ required: false })
+  metaDescriptionEn?: string;
+
   @Prop({ type: [String], default: [] })
   keywords: string[];
+
+  @Prop({ required: false })
+  keywordsEn?: string[];
 
   @Prop()
   canonicalUrl: string;
@@ -21,8 +30,14 @@ export class BlogSeo {
   @Prop()
   ogTitle: string;
 
+  @Prop({ required: false })
+  ogTitleEn?: string;
+
   @Prop()
   ogDescription: string;
+
+  @Prop({ required: false })
+  ogDescriptionEn?: string;
 
   @Prop()
   ogImage: string;
@@ -30,8 +45,14 @@ export class BlogSeo {
   @Prop()
   twitterTitle: string;
 
+  @Prop({ required: false })
+  twitterTitleEn?: string;
+
   @Prop()
   twitterDescription: string;
+
+  @Prop({ required: false })
+  twitterDescriptionEn?: string;
 
   @Prop()
   twitterImage: string;
@@ -41,6 +62,9 @@ export class BlogSeo {
 
   @Prop({ default: 'Article' })
   schemaType: string;
+
+  @Prop({ required: false })
+  schemaTypeEn?: string;
 }
 
 @Schema({ timestamps: true })
@@ -48,14 +72,23 @@ export class Blog {
   @Prop({ required: true })
   title: string;
 
+  @Prop({ required: false })
+  titleEn?: string;
+
   @Prop({ required: true, unique: true, lowercase: true })
   slug: string;
 
   @Prop({ required: true })
   content: string;
 
+  @Prop({ required: false })
+  contentEn?: string;
+
   @Prop()
   excerpt: string;
+
+  @Prop({ required: false })
+  excerptEn?: string;
 
   @Prop()
   coverImage: string;
@@ -63,20 +96,35 @@ export class Blog {
   @Prop()
   coverAlt: string;
 
+  @Prop({ required: false })
+  coverAltEn?: string;
+
   @Prop({ type: Types.ObjectId, ref: 'User' })
   author: User | Types.ObjectId;
 
   @Prop()
   authorName: string;
 
+  @Prop({ required: false })
+  authorNameEn?: string;
+
   @Prop()
   authorRole: string;
+
+  @Prop({ required: false })
+  authorRoleEn?: string;
 
   @Prop()
   authorAvatar: string;
 
+  @Prop({ required: false })
+  authorAvatarEn?: string;
+
   @Prop({ type: [String], default: [] })
   tags: string[];
+
+  @Prop({ required: false })
+  tagsEn?: string[];
 
   @Prop({ required: true, default: 'general' })
   category: string;
@@ -102,6 +150,9 @@ export class Blog {
   @Prop({ type: [String], default: [] })
   summaryPoints: string[];
 
+  @Prop({ required: false })
+  summaryPointsEn?: string[];
+
   @Prop({ default: false })
   isEditorPick: boolean;
 
@@ -111,11 +162,20 @@ export class Blog {
   @Prop()
   ctaTitle: string;
 
+  @Prop({ required: false })
+  ctaTitleEn?: string;
+
   @Prop()
   ctaDescription: string;
 
+  @Prop({ required: false })
+  ctaDescriptionEn?: string;
+
   @Prop()
   ctaButtonText: string;
+
+  @Prop({ required: false })
+  ctaButtonTextEn?: string;
 
   @Prop()
   ctaButtonUrl: string;

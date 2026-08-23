@@ -24,14 +24,23 @@ export class HostingPackage {
   @Prop({ required: true })
   name: string;
 
+  @Prop({ required: false })
+  nameEn?: string;
+
   @Prop()
   description: string;
+
+  @Prop({ required: false })
+  descriptionEn?: string;
 
   @Prop({ required: true })
   price: number;
 
   @Prop({ default: 'USD' })
   currency: string;
+
+  @Prop({ required: false })
+  currencyEn?: string;
 
   @Prop()
   originalPrice: number; // For showing discounts (strike-through price)
@@ -53,6 +62,9 @@ export class HostingPackage {
   @Prop({ type: [String], default: [] })
   features: string[];
 
+  @Prop({ required: false })
+  featuresEn?: string[];
+
   @Prop({ default: false })
   isPopular: boolean;
 
@@ -67,19 +79,34 @@ export class HostingPackage {
 
   // Technical Specs
   @Prop()
-  storage: string; // e.g., "50GB SSD"
+  storage: string;
+
+  @Prop({ required: false })
+  storageEn?: string; // e.g., "50GB SSD"
 
   @Prop()
-  bandwidth: string; // e.g., "Unlimited"
+  bandwidth: string;
+
+  @Prop({ required: false })
+  bandwidthEn?: string; // e.g., "Unlimited"
 
   @Prop()
-  ram: string; // e.g., "4GB"
+  ram: string;
+
+  @Prop({ required: false })
+  ramEn?: string; // e.g., "4GB"
 
   @Prop()
-  cpu: string; // e.g., "2 vCPU"
+  cpu: string;
+
+  @Prop({ required: false })
+  cpuEn?: string; // e.g., "2 vCPU"
 
   @Prop()
-  domains: string; // e.g., "5 Domains"
+  domains: string;
+
+  @Prop({ required: false })
+  domainsEn?: string; // e.g., "5 Domains"
 
   // Promotion
   @Prop()
@@ -93,7 +120,10 @@ export class HostingPackage {
   yearlyPrice?: number; // Optional yearly price (calculated if not provided)
 
   @Prop({ type: 'ObjectId', ref: 'HostingPackage' })
-  basePackageId?: string; // Reference to base package for feature stacking
+  basePackageId?: string;
+
+  @Prop({ required: false })
+  basePackageIdEn?: string; // Reference to base package for feature stacking
 
   @Prop({ type: Object })
   benefitHints?: { [key: string]: string }; // Tooltips for technical specs

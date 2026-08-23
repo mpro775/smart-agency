@@ -92,7 +92,9 @@ export class UploadsService {
 
     const MAX_ORIGINAL_IMAGE_SIZE = 15 * 1024 * 1024; // 15MB
     if (file.size > MAX_ORIGINAL_IMAGE_SIZE) {
-      throw new BadRequestException('File size must be less than 15MB before compression');
+      throw new BadRequestException(
+        'File size must be less than 15MB before compression',
+      );
     }
 
     let fileBuffer = file.buffer;
@@ -112,7 +114,7 @@ export class UploadsService {
           })
           .webp({ quality: 82 })
           .toBuffer({ resolveWithObject: true });
-          
+
         fileBuffer = data;
         width = info.width;
         height = info.height;
@@ -134,7 +136,9 @@ export class UploadsService {
 
     const MAX_OPTIMIZED_IMAGE_SIZE = 3 * 1024 * 1024; // 3MB
     if (fileBuffer.length > MAX_OPTIMIZED_IMAGE_SIZE) {
-      throw new BadRequestException('File size after compression is still too large (exceeds 3MB)');
+      throw new BadRequestException(
+        'File size after compression is still too large (exceeds 3MB)',
+      );
     }
 
     const key = this.buildObjectKey(fileName, options.folder);

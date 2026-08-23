@@ -45,4 +45,9 @@ export class FilterServiceDto {
   @IsOptional()
   @IsString()
   search?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  searchEn?: string;
 }
