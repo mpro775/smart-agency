@@ -109,7 +109,7 @@ export default function FAQForm() {
                 
                 <div className="space-y-2">
                   <Label className="text-slate-200">Answer</Label>
-                  <Controller name="answerEn" control={control} render={({ field }) => <RichTextEditor value={field.value || ''} onChange={field.onChange} placeholder="Write the answer here..." />} />
+                  <Controller name="answerEn" control={control} render={({ field }) => <RichTextEditor value={field.value || ''} onChange={field.onChange} placeholder="Write the answer here..." locale="en" />} />
                 </div>
               </TabsContent>
             </Tabs>

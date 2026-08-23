@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Pencil, Trash2, HelpCircle, ChevronDown, ChevronUp } from 'lucide-react';
 import { faqsService } from '../../services/faqs.service';
-import { PageHeader, ConfirmDialog } from '../../components/shared';
+import { PageHeader, ConfirmDialog, TranslationStatus } from '../../components/shared';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
@@ -73,7 +73,10 @@ export default function FAQsList() {
                           <p className="font-medium text-white">{faq.question}</p>
                           {!faq.isActive && <Badge variant="outline" className="border-red-500/30 text-red-400 text-xs">غير نشط</Badge>}
                         </div>
-                        <Badge variant="outline" className="border-slate-600 text-slate-400 text-xs">{faq.category}</Badge>
+                        <div className="flex gap-2">
+                          <Badge variant="outline" className="border-slate-600 text-slate-400 text-xs">{faq.category}</Badge>
+                          <TranslationStatus isTranslated={!!faq.questionEn} />
+                        </div>
                       </div>
                       {expandedId === faq._id ? <ChevronUp className="h-5 w-5 text-slate-400" /> : <ChevronDown className="h-5 w-5 text-slate-400" />}
                     </div>

@@ -70,6 +70,7 @@ interface RichTextEditorProps {
   onChange: (value: string) => void;
   placeholder?: string;
   className?: string;
+  locale?: "ar" | "en";
 }
 
 const TEMPLATES = [
@@ -106,7 +107,9 @@ export function RichTextEditor({
   onChange,
   placeholder = "ابدأ الكتابة...",
   className,
+  locale = "ar",
 }: RichTextEditorProps) {
+  const isRtl = locale === "ar";
   const [, setEditorState] = useState(0);
   const [showHtml, setShowHtml] = useState(false);
   const [htmlContent, setHtmlContent] = useState("");
@@ -165,8 +168,8 @@ export function RichTextEditor({
     content: value,
     editorProps: {
       attributes: {
-        dir: "rtl",
-        class: "prose prose-invert prose-emerald max-w-none p-4 min-h-[400px] bg-slate-700/30 [&_.ProseMirror]:outline-none [&_.ProseMirror]:min-h-[350px] [&_.ProseMirror]:text-white [&_.ProseMirror_h1]:text-white [&_.ProseMirror_h2]:text-white [&_.ProseMirror_h3]:text-white [&_.ProseMirror_p]:text-slate-200 [&_.ProseMirror_ul]:text-slate-200 [&_.ProseMirror_ol]:text-slate-200 [&_.ProseMirror_li]:text-slate-200 [&_.ProseMirror_li]:mb-1 [&_.ProseMirror_li]:leading-relaxed [&_.ProseMirror_blockquote]:text-slate-300 [&_.ProseMirror_blockquote]:border-r-4 [&_.ProseMirror_blockquote]:border-emerald-500 [&_.ProseMirror_blockquote]:pr-4 [&_.ProseMirror_blockquote]:bg-slate-800/50 [&_.ProseMirror_blockquote]:p-4 [&_.ProseMirror_blockquote]:rounded-lg [&_.ProseMirror_code]:text-slate-100 [&_.ProseMirror_code]:bg-slate-800 [&_.ProseMirror_code]:px-1.5 [&_.ProseMirror_code]:py-0.5 [&_.ProseMirror_code]:rounded [&_.ProseMirror_pre]:bg-slate-900 [&_.ProseMirror_pre]:p-4 [&_.ProseMirror_pre]:rounded-lg [&_.ProseMirror_pre]:my-4 [&_.ProseMirror_pre_code]:bg-transparent [&_.ProseMirror_pre_code]:text-slate-100 [&_.ProseMirror_pre_code]:font-mono [&_.ProseMirror_pre_code]:text-sm [&_.ProseMirror_hr]:border-slate-600 [&_.ProseMirror_hr]:my-8 [&_.ProseMirror_hr]:border-t-2 [&_.ProseMirror_table]:w-full [&_.ProseMirror_table]:border-collapse [&_.ProseMirror_table]:my-4 [&_.ProseMirror_th]:bg-slate-700 [&_.ProseMirror_th]:text-white [&_.ProseMirror_th]:p-3 [&_.ProseMirror_th]:text-right [&_.ProseMirror_th]:border [&_.ProseMirror_th]:border-slate-600 [&_.ProseMirror_td]:p-3 [&_.ProseMirror_td]:text-slate-200 [&_.ProseMirror_td]:text-right [&_.ProseMirror_td]:border [&_.ProseMirror_td]:border-slate-600 [&_.ProseMirror_td]:bg-slate-800/30 [&_.prose-rtl]:direction-rtl [&_.prose-rtl_h1]:text-right [&_.prose-rtl_h2]:text-right [&_.prose-rtl_h3]:text-right [&_.prose-rtl_p]:text-right [&_.prose-rtl_ul]:text-right [&_.prose-rtl_ol]:text-right [&_.prose-rtl_li]:text-right [&_.prose-rtl_blockquote]:text-right [&_.ProseMirror_p.is-editor-empty:first-child::before]:content-[attr(data-placeholder)] [&_.ProseMirror_p.is-editor-empty:first-child::before]:text-slate-500 [&_.ProseMirror_p.is-editor-empty:first-child::before]:pointer-events-none",
+        dir: isRtl ? "rtl" : "ltr",
+        class: `prose prose-invert prose-emerald max-w-none p-4 min-h-[400px] bg-slate-700/30 [&_.ProseMirror]:outline-none [&_.ProseMirror]:min-h-[350px] [&_.ProseMirror]:text-white [&_.ProseMirror_h1]:text-white [&_.ProseMirror_h2]:text-white [&_.ProseMirror_h3]:text-white [&_.ProseMirror_p]:text-slate-200 [&_.ProseMirror_ul]:text-slate-200 [&_.ProseMirror_ol]:text-slate-200 [&_.ProseMirror_li]:text-slate-200 [&_.ProseMirror_li]:mb-1 [&_.ProseMirror_li]:leading-relaxed [&_.ProseMirror_blockquote]:text-slate-300 [&_.ProseMirror_blockquote]:border-${isRtl ? 'r' : 'l'}-4 [&_.ProseMirror_blockquote]:border-emerald-500 [&_.ProseMirror_blockquote]:p${isRtl ? 'r' : 'l'}-4 [&_.ProseMirror_blockquote]:bg-slate-800/50 [&_.ProseMirror_blockquote]:p-4 [&_.ProseMirror_blockquote]:rounded-lg [&_.ProseMirror_code]:text-slate-100 [&_.ProseMirror_code]:bg-slate-800 [&_.ProseMirror_code]:px-1.5 [&_.ProseMirror_code]:py-0.5 [&_.ProseMirror_code]:rounded [&_.ProseMirror_pre]:bg-slate-900 [&_.ProseMirror_pre]:p-4 [&_.ProseMirror_pre]:rounded-lg [&_.ProseMirror_pre]:my-4 [&_.ProseMirror_pre_code]:bg-transparent [&_.ProseMirror_pre_code]:text-slate-100 [&_.ProseMirror_pre_code]:font-mono [&_.ProseMirror_pre_code]:text-sm [&_.ProseMirror_hr]:border-slate-600 [&_.ProseMirror_hr]:my-8 [&_.ProseMirror_hr]:border-t-2 [&_.ProseMirror_table]:w-full [&_.ProseMirror_table]:border-collapse [&_.ProseMirror_table]:my-4 [&_.ProseMirror_th]:bg-slate-700 [&_.ProseMirror_th]:text-white [&_.ProseMirror_th]:p-3 [&_.ProseMirror_th]:text-${isRtl ? 'right' : 'left'} [&_.ProseMirror_th]:border [&_.ProseMirror_th]:border-slate-600 [&_.ProseMirror_td]:p-3 [&_.ProseMirror_td]:text-slate-200 [&_.ProseMirror_td]:text-${isRtl ? 'right' : 'left'} [&_.ProseMirror_td]:border [&_.ProseMirror_td]:border-slate-600 [&_.ProseMirror_td]:bg-slate-800/30 ${isRtl ? '[&_.prose-rtl]:direction-rtl [&_.prose-rtl_h1]:text-right [&_.prose-rtl_h2]:text-right [&_.prose-rtl_h3]:text-right [&_.prose-rtl_p]:text-right [&_.prose-rtl_ul]:text-right [&_.prose-rtl_ol]:text-right [&_.prose-rtl_li]:text-right [&_.prose-rtl_blockquote]:text-right' : ''} [&_.ProseMirror_p.is-editor-empty:first-child::before]:content-[attr(data-placeholder)] [&_.ProseMirror_p.is-editor-empty:first-child::before]:text-slate-500 [&_.ProseMirror_p.is-editor-empty:first-child::before]:pointer-events-none`,
       },
       handleDrop: (view, event, _slice, moved) => {
         if (!moved && event.dataTransfer?.files?.length) {
@@ -451,7 +454,7 @@ export function RichTextEditor({
         "border border-slate-700 rounded-xl overflow-hidden flex flex-col",
         className
       )}
-      dir="rtl"
+      dir={isRtl ? "rtl" : "ltr"}
     >
       {/* Top Status Bar */}
       <div className="flex items-center justify-between px-3 py-2 bg-slate-900/50 border-b border-slate-700 text-xs text-slate-400">

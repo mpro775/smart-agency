@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Pencil, Trash2, FolderKanban } from 'lucide-react';
 import { projectCategoriesService } from '../../services/project-categories.service';
-import { PageHeader, ConfirmDialog } from '../../components/shared';
+import { PageHeader, ConfirmDialog, TranslationStatus } from '../../components/shared';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
@@ -84,6 +84,9 @@ export default function ProjectCategoriesList() {
                     >
                       {category.value}
                     </Badge>
+                    <div className="mb-2">
+                      <TranslationStatus isTranslated={!!category.labelEn} />
+                    </div>
                     {category.description && (
                       <p className="text-sm text-slate-400 mt-2">
                         {category.description}

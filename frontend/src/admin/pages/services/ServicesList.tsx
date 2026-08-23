@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Pencil, Trash2 } from 'lucide-react';
 import { servicesService } from '../../services/services.service';
-import { PageHeader, ConfirmDialog } from '../../components/shared';
+import { PageHeader, ConfirmDialog, TranslationStatus } from '../../components/shared';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
@@ -110,6 +110,7 @@ export default function ServicesList() {
                       >
                         {service.isActive ? 'نشط' : 'غير نشط'}
                       </Badge>
+                      <TranslationStatus isTranslated={!!service.titleEn} />
                       {service.sortOrder !== undefined && (
                         <Badge
                           variant="outline"

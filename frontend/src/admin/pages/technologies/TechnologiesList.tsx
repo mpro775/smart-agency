@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Pencil, Trash2, Cpu } from "lucide-react";
 import { technologiesService } from "../../services/technologies.service";
-import { PageHeader, ConfirmDialog } from "../../components/shared";
+import { PageHeader, ConfirmDialog, TranslationStatus } from "../../components/shared";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -98,11 +98,14 @@ export default function TechnologiesList() {
                             </p>
                             <Badge
                               variant="outline"
-                              className="border-slate-600 text-slate-400 text-xs mt-1"
+                              className="border-slate-600 text-slate-400 text-xs mt-1 mb-2"
                               dir="rtl"
                             >
                               {tech.category}
                             </Badge>
+                            <div dir="rtl">
+                              <TranslationStatus isTranslated={!!tech.tooltipEn || !!tech.descriptionEn} />
+                            </div>
                           </div>
                         </div>
                         <div

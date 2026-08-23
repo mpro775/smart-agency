@@ -335,7 +335,7 @@ export default function BlogForm() {
                   </TabsContent>
                   
                   <TabsContent value="en" dir="ltr">
-                    <Controller name="contentEn" control={control} render={({ field }) => <RichTextEditor value={field.value || ""} onChange={field.onChange} placeholder="Start writing..." />} />
+                    <Controller name="contentEn" control={control} render={({ field }) => <RichTextEditor value={field.value || ""} onChange={field.onChange} placeholder="Start writing..." locale="en" />} />
                   </TabsContent>
                 </Tabs>
               </CardContent>

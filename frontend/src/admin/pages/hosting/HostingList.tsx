@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Pencil, Trash2, Server, Star, Zap } from 'lucide-react';
 import { hostingService } from '../../services/hosting.service';
-import { DataTable, type Column, PageHeader, ConfirmDialog } from '../../components/shared';
+import { DataTable, type Column, PageHeader, ConfirmDialog, TranslationStatus } from '../../components/shared';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
@@ -46,7 +46,8 @@ export default function HostingList() {
               {item.isPopular && <Badge className="bg-yellow-500/20 text-yellow-400 text-xs"><Star className="h-3 w-3 ml-1" />شائعة</Badge>}
               {item.isBestValue && <Badge className="bg-emerald-500/20 text-emerald-400 text-xs"><Zap className="h-3 w-3 ml-1" />أفضل قيمة</Badge>}
             </div>
-            <p className="text-sm text-slate-500">{item.category}</p>
+            <p className="text-sm text-slate-500 mb-1">{item.category}</p>
+            <TranslationStatus isTranslated={!!item.nameEn} />
           </div>
         </div>
       ),

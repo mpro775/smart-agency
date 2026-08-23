@@ -4,7 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Calendar, Clock, Eye, FileText, Pencil, Star, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { blogService } from "../../services/blog.service";
-import { ConfirmDialog, DataTable, type Column, PageHeader } from "../../components/shared";
+import { ConfirmDialog, DataTable, type Column, PageHeader, TranslationStatus } from "../../components/shared";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -62,7 +62,8 @@ export default function BlogList() {
           <div>
             <p className="font-medium text-white">{blog.title}</p>
             <p className="line-clamp-1 text-sm text-slate-500">{blog.excerpt}</p>
-            <p className="mt-1 text-xs text-slate-500">/{blog.slug}</p>
+            <p className="mt-1 text-xs text-slate-500 mb-1">/{blog.slug}</p>
+            <TranslationStatus isTranslated={!!blog.titleEn} />
           </div>
         </div>
       ),
