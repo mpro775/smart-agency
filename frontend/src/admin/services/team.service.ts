@@ -16,17 +16,22 @@ export interface TeamFilters {
 
 export interface CreateTeamMemberDto {
   fullName: string;
+  fullNameEn?: string;
   role: string;
+  roleEn?: string;
   department?: Department;
   photo?: string | null;
   bio?: string | null;
+  bioEn?: string | null;
   funFact?: string | null;
+  funFactEn?: string | null;
   email?: string | null;
   linkedinUrl?: string | null;
   githubUrl?: string | null;
   twitterUrl?: string | null;
   websiteUrl?: string | null;
   specializations?: string[];
+  specializationsEn?: string[];
   showOnHome?: boolean;
   showOnAbout?: boolean;
   isActive?: boolean;

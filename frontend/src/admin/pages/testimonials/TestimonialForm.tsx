@@ -15,15 +15,20 @@ import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from 'sonner';
 
 const testimonialSchema = z.object({
   clientName: z.string().min(1, 'اسم العميل مطلوب'),
+  clientNameEn: z.string().optional(),
   position: z.string().optional(),
+  positionEn: z.string().optional(),
   companyName: z.string().optional(),
+  companyNameEn: z.string().optional(),
   companyLogo: z.string().optional(),
   clientPhoto: z.string().optional(),
   content: z.string().min(1, 'المحتوى مطلوب'),
+  contentEn: z.string().optional(),
   rating: z.number().min(1).max(5),
   linkedProject: z.string().optional(),
   isActive: z.boolean(),
@@ -52,18 +57,22 @@ export default function TestimonialForm() {
 
   const { register, control, handleSubmit, watch, setValue, reset, formState: { errors } } = useForm<TestimonialFormData>({
     resolver: zodResolver(testimonialSchema),
-    defaultValues: { clientName: '', position: '', companyName: '', companyLogo: '', clientPhoto: '', content: '', rating: 5, linkedProject: '', isActive: true, isFeatured: false, sortOrder: 0 },
+    defaultValues: { clientName: '', clientNameEn: '', position: '', positionEn: '', companyName: '', companyNameEn: '', companyLogo: '', clientPhoto: '', content: '', contentEn: '', rating: 5, linkedProject: '', isActive: true, isFeatured: false, sortOrder: 0 },
   });
 
   useEffect(() => {
     if (testimonial) {
       reset({
         clientName: testimonial.clientName,
+        clientNameEn: testimonial.clientNameEn || '',
         position: testimonial.position || '',
+        positionEn: testimonial.positionEn || '',
         companyName: testimonial.companyName || '',
+        companyNameEn: testimonial.companyNameEn || '',
         companyLogo: testimonial.companyLogo || '',
         clientPhoto: testimonial.clientPhoto || '',
         content: testimonial.content,
+        contentEn: testimonial.contentEn || '',
         rating: testimonial.rating,
         linkedProject: typeof testimonial.linkedProject === 'string' ? testimonial.linkedProject : testimonial.linkedProject?._id || '',
         isActive: testimonial.isActive,
@@ -96,22 +105,62 @@ export default function TestimonialForm() {
             <Card className="bg-slate-800/50 border-slate-700">
               <CardHeader><CardTitle className="text-white">معلومات العميل</CardTitle></CardHeader>
               <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label className="text-slate-200">اسم العميل *</Label>
-                    <Input {...register('clientName')} className="bg-slate-700/50 border-slate-600 text-white" />
-                    {errors.clientName && <p className="text-sm text-red-400">{errors.clientName.message}</p>}
-                  </div>
-                  <div className="space-y-2">
-                    <Label className="text-slate-200">المنصب</Label>
-                    <Input {...register('position')} className="bg-slate-700/50 border-slate-600 text-white" placeholder="مثال: CEO at Company" />
-                  </div>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label className="text-slate-200">اسم الشركة</Label>
-                    <Input {...register('companyName')} className="bg-slate-700/50 border-slate-600 text-white" />
-                  </div>
+                <Tabs defaultValue="ar" className="space-y-4">
+                  <TabsList className="bg-slate-900 border border-slate-700 w-full flex">
+                    <TabsTrigger value="ar" className="flex-1 data-[state=active]:bg-slate-800">العربية ✓</TabsTrigger>
+                    <TabsTrigger value="en" className="flex-1 data-[state=active]:bg-slate-800">English</TabsTrigger>
+                  </TabsList>
+                  
+                  <TabsContent value="ar" className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label className="text-slate-200">اسم العميل *</Label>
+                        <Input {...register('clientName')} className="bg-slate-700/50 border-slate-600 text-white" />
+                        {errors.clientName && <p className="text-sm text-red-400">{errors.clientName.message}</p>}
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-slate-200">المنصب</Label>
+                        <Input {...register('position')} className="bg-slate-700/50 border-slate-600 text-white" placeholder="مثال: CEO at Company" />
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label className="text-slate-200">اسم الشركة</Label>
+                      <Input {...register('companyName')} className="bg-slate-700/50 border-slate-600 text-white" />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label className="text-slate-200">المحتوى *</Label>
+                      <Textarea {...register('content')} className="bg-slate-700/50 border-slate-600 text-white min-h-32" placeholder="رأي العميل..." />
+                      {errors.content && <p className="text-sm text-red-400">{errors.content.message}</p>}
+                    </div>
+                  </TabsContent>
+                  
+                  <TabsContent value="en" className="space-y-4" dir="ltr">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label className="text-slate-200">Client Name</Label>
+                        <Input {...register('clientNameEn')} className="bg-slate-700/50 border-slate-600 text-white" />
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-slate-200">Position</Label>
+                        <Input {...register('positionEn')} className="bg-slate-700/50 border-slate-600 text-white" placeholder="e.g. CEO at Company" />
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label className="text-slate-200">Company Name</Label>
+                      <Input {...register('companyNameEn')} className="bg-slate-700/50 border-slate-600 text-white" />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label className="text-slate-200">Content</Label>
+                      <Textarea {...register('contentEn')} className="bg-slate-700/50 border-slate-600 text-white min-h-32" placeholder="Client review..." />
+                    </div>
+                  </TabsContent>
+                </Tabs>
+                
+                <div className="pt-4 border-t border-slate-700">
                   <div className="space-y-2">
                     <Label className="text-slate-200">التقييم</Label>
                     <div className="flex items-center gap-1">
@@ -122,11 +171,6 @@ export default function TestimonialForm() {
                       ))}
                     </div>
                   </div>
-                </div>
-                <div className="space-y-2">
-                  <Label className="text-slate-200">المحتوى *</Label>
-                  <Textarea {...register('content')} className="bg-slate-700/50 border-slate-600 text-white min-h-32" placeholder="رأي العميل..." />
-                  {errors.content && <p className="text-sm text-red-400">{errors.content.message}</p>}
                 </div>
               </CardContent>
             </Card>

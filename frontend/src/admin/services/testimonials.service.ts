@@ -10,11 +10,15 @@ export interface TestimonialFilters {
 
 export interface CreateTestimonialDto {
   clientName: string;
+  clientNameEn?: string;
   position?: string;
+  positionEn?: string;
   companyName?: string;
+  companyNameEn?: string;
   companyLogo?: string;
   clientPhoto?: string;
   content: string;
+  contentEn?: string;
   rating?: number;
   linkedProject?: string;
   isActive?: boolean;

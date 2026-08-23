@@ -12,12 +12,17 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from 'sonner';
 
 const faqSchema = z.object({
   question: z.string().min(1, 'السؤال مطلوب'),
+  questionEn: z.string().optional(),
   answer: z.string().min(1, 'الإجابة مطلوبة'),
+  answerEn: z.string().optional(),
   category: z.string(),
+  categoryEn: z.string().optional(),
+  categoryKey: z.string().optional(),
   orderNumber: z.number(),
   isActive: z.boolean(),
 });
@@ -38,12 +43,12 @@ export default function FAQForm() {
 
   const { register, control, handleSubmit, reset, formState: { errors } } = useForm<FAQFormData>({
     resolver: zodResolver(faqSchema),
-    defaultValues: { question: '', answer: '', category: 'General', orderNumber: 0, isActive: true },
+    defaultValues: { question: '', questionEn: '', answer: '', answerEn: '', category: 'General', categoryEn: '', categoryKey: 'general', orderNumber: 0, isActive: true },
   });
 
   useEffect(() => {
     if (faq) {
-      reset({ question: faq.question, answer: faq.answer, category: faq.category, orderNumber: faq.orderNumber, isActive: faq.isActive });
+      reset({ question: faq.question, questionEn: faq.questionEn || '', answer: faq.answer, answerEn: faq.answerEn || '', category: faq.category, categoryEn: faq.categoryEn || '', categoryKey: faq.categoryKey || 'general', orderNumber: faq.orderNumber, isActive: faq.isActive });
     }
   }, [faq, reset]);
 
@@ -66,25 +71,58 @@ export default function FAQForm() {
         <Card className="bg-slate-800/50 border-slate-700">
           <CardHeader><CardTitle className="text-white">معلومات السؤال</CardTitle></CardHeader>
           <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label className="text-slate-200">السؤال *</Label>
-              <Input {...register('question')} className="bg-slate-700/50 border-slate-600 text-white" placeholder="ما هو السؤال؟" />
-              {errors.question && <p className="text-sm text-red-400">{errors.question.message}</p>}
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Tabs defaultValue="ar" className="space-y-4">
+              <TabsList className="bg-slate-900 border border-slate-700 w-full flex">
+                <TabsTrigger value="ar" className="flex-1 data-[state=active]:bg-slate-800">العربية ✓</TabsTrigger>
+                <TabsTrigger value="en" className="flex-1 data-[state=active]:bg-slate-800">English</TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="ar" className="space-y-4">
+                <div className="space-y-2">
+                  <Label className="text-slate-200">السؤال *</Label>
+                  <Input {...register('question')} className="bg-slate-700/50 border-slate-600 text-white" placeholder="ما هو السؤال؟" />
+                  {errors.question && <p className="text-sm text-red-400">{errors.question.message}</p>}
+                </div>
+                
+                <div className="space-y-2">
+                  <Label className="text-slate-200">التصنيف (عربي)</Label>
+                  <Input {...register('category')} className="bg-slate-700/50 border-slate-600 text-white" placeholder="عام" />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label className="text-slate-200">الإجابة *</Label>
+                  <Controller name="answer" control={control} render={({ field }) => <RichTextEditor value={field.value} onChange={field.onChange} placeholder="اكتب الإجابة هنا..." />} />
+                  {errors.answer && <p className="text-sm text-red-400">{errors.answer.message}</p>}
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="en" className="space-y-4" dir="ltr">
+                <div className="space-y-2">
+                  <Label className="text-slate-200">Question</Label>
+                  <Input {...register('questionEn')} className="bg-slate-700/50 border-slate-600 text-white" placeholder="What is the question?" />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label className="text-slate-200">Category (English)</Label>
+                  <Input {...register('categoryEn')} className="bg-slate-700/50 border-slate-600 text-white" placeholder="General" />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label className="text-slate-200">Answer</Label>
+                  <Controller name="answerEn" control={control} render={({ field }) => <RichTextEditor value={field.value || ''} onChange={field.onChange} placeholder="Write the answer here..." />} />
+                </div>
+              </TabsContent>
+            </Tabs>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border-t border-slate-700 pt-4 mt-4">
               <div className="space-y-2">
-                <Label className="text-slate-200">التصنيف</Label>
-                <Input {...register('category')} className="bg-slate-700/50 border-slate-600 text-white" placeholder="General" />
+                <Label className="text-slate-200">رمز التصنيف (Category Key) للبرمجة</Label>
+                <Input {...register('categoryKey')} className="bg-slate-700/50 border-slate-600 text-white" placeholder="general" dir="ltr" />
               </div>
               <div className="space-y-2">
                 <Label className="text-slate-200">ترتيب العرض</Label>
                 <Input type="number" {...register('orderNumber', { valueAsNumber: true })} className="bg-slate-700/50 border-slate-600 text-white" />
               </div>
-            </div>
-            <div className="space-y-2">
-              <Label className="text-slate-200">الإجابة *</Label>
-              <Controller name="answer" control={control} render={({ field }) => <RichTextEditor value={field.value} onChange={field.onChange} placeholder="اكتب الإجابة هنا..." />} />
-              {errors.answer && <p className="text-sm text-red-400">{errors.answer.message}</p>}
             </div>
             <Controller name="isActive" control={control} render={({ field }) => <div className="flex items-center gap-2 pt-2"><Switch checked={field.value} onCheckedChange={field.onChange} /><Label className="text-slate-200">نشط</Label></div>} />
           </CardContent>

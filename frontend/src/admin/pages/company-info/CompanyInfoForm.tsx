@@ -10,15 +10,18 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 
 const companyInfoSchema = z.object({
   address: z.string().min(1, "العنوان مطلوب"),
+  addressEn: z.string().optional(),
   googleMapsUrl: z
     .string()
     .url("يرجى إدخال رابط صحيح")
     .min(1, "رابط Google Maps مطلوب"),
   workingHours: z.string().min(1, "أوقات الدوام مطلوبة"),
+  workingHoursEn: z.string().optional(),
   email: z
     .string()
     .email("يرجى إدخال بريد إلكتروني صحيح")
@@ -73,8 +76,10 @@ export default function CompanyInfoForm() {
     resolver: zodResolver(companyInfoSchema),
     defaultValues: {
       address: "",
+      addressEn: "",
       googleMapsUrl: "",
       workingHours: "",
+      workingHoursEn: "",
       email: "",
       phone: "",
       whatsappUrl: "",
@@ -91,8 +96,10 @@ export default function CompanyInfoForm() {
     if (companyInfo) {
       reset({
         address: companyInfo.address || "",
+        addressEn: companyInfo.addressEn || "",
         googleMapsUrl: companyInfo.googleMapsUrl || "",
         workingHours: companyInfo.workingHours || "",
+        workingHoursEn: companyInfo.workingHoursEn || "",
         email: companyInfo.email || "",
         phone: companyInfo.phone || "",
         whatsappUrl: companyInfo.whatsappUrl || "",
@@ -135,44 +142,76 @@ export default function CompanyInfoForm() {
             <CardTitle className="text-white">معلومات الاتصال</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label className="text-slate-200">العنوان *</Label>
-              <Input
-                {...register("address")}
-                className="bg-slate-700/50 border-slate-600 text-white"
-                placeholder="مثال: صنعاء, اليمن"
-              />
-              {errors.address && (
-                <p className="text-sm text-red-400">{errors.address.message}</p>
-              )}
-            </div>
+            <Tabs defaultValue="ar" className="space-y-4">
+              <TabsList className="bg-slate-900 border border-slate-700 w-full flex">
+                <TabsTrigger value="ar" className="flex-1 data-[state=active]:bg-slate-800">العربية ✓</TabsTrigger>
+                <TabsTrigger value="en" className="flex-1 data-[state=active]:bg-slate-800">English</TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="ar" className="space-y-4">
+                <div className="space-y-2">
+                  <Label className="text-slate-200">العنوان *</Label>
+                  <Input
+                    {...register("address")}
+                    className="bg-slate-700/50 border-slate-600 text-white"
+                    placeholder="مثال: صنعاء, اليمن"
+                  />
+                  {errors.address && (
+                    <p className="text-sm text-red-400">{errors.address.message}</p>
+                  )}
+                </div>
 
-            <div className="space-y-2">
-              <Label className="text-slate-200">رابط Google Maps *</Label>
-              <Input
-                {...register("googleMapsUrl")}
-                className="bg-slate-700/50 border-slate-600 text-white"
-                placeholder="https://maps.google.com/?q=..."
-              />
-              {errors.googleMapsUrl && (
-                <p className="text-sm text-red-400">
-                  {errors.googleMapsUrl.message}
-                </p>
-              )}
-            </div>
+                <div className="space-y-2">
+                  <Label className="text-slate-200">أوقات الدوام *</Label>
+                  <Input
+                    {...register("workingHours")}
+                    className="bg-slate-700/50 border-slate-600 text-white"
+                    placeholder="مثال: الأحد - الخميس: 8 ص - 5 م"
+                  />
+                  {errors.workingHours && (
+                    <p className="text-sm text-red-400">
+                      {errors.workingHours.message}
+                    </p>
+                  )}
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="en" className="space-y-4" dir="ltr">
+                <div className="space-y-2">
+                  <Label className="text-slate-200">Address</Label>
+                  <Input
+                    {...register("addressEn")}
+                    className="bg-slate-700/50 border-slate-600 text-white"
+                    placeholder="e.g. Sana'a, Yemen"
+                  />
+                </div>
 
-            <div className="space-y-2">
-              <Label className="text-slate-200">أوقات الدوام *</Label>
-              <Input
-                {...register("workingHours")}
-                className="bg-slate-700/50 border-slate-600 text-white"
-                placeholder="مثال: الأحد - الخميس: 8 ص - 5 م"
-              />
-              {errors.workingHours && (
-                <p className="text-sm text-red-400">
-                  {errors.workingHours.message}
-                </p>
-              )}
+                <div className="space-y-2">
+                  <Label className="text-slate-200">Working Hours</Label>
+                  <Input
+                    {...register("workingHoursEn")}
+                    className="bg-slate-700/50 border-slate-600 text-white"
+                    placeholder="e.g. Sun - Thu: 8 AM - 5 PM"
+                  />
+                </div>
+              </TabsContent>
+            </Tabs>
+            
+            <div className="border-t border-slate-700 pt-4 space-y-4">
+              <div className="space-y-2">
+                <Label className="text-slate-200">رابط Google Maps *</Label>
+                <Input
+                  {...register("googleMapsUrl")}
+                  className="bg-slate-700/50 border-slate-600 text-white"
+                  placeholder="https://maps.google.com/?q=..."
+                  dir="ltr"
+                />
+                {errors.googleMapsUrl && (
+                  <p className="text-sm text-red-400">
+                    {errors.googleMapsUrl.message}
+                  </p>
+                )}
+              </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

@@ -11,22 +11,30 @@ export interface HostingFilters {
 
 export interface CreateHostingPackageDto {
   name: string;
+  nameEn?: string;
   description?: string;
+  descriptionEn?: string;
   price: number;
   currency?: string;
   originalPrice?: number;
   billingCycle?: BillingCycle;
   category?: PackageCategory;
   features?: string[];
+  featuresEn?: string[];
   isPopular?: boolean;
   isBestValue?: boolean;
   isActive?: boolean;
   sortOrder?: number;
   storage?: string;
+  storageEn?: string;
   bandwidth?: string;
+  bandwidthEn?: string;
   ram?: string;
+  ramEn?: string;
   cpu?: string;
+  cpuEn?: string;
   domains?: string;
+  domainsEn?: string;
   discountPercentage?: number;
   promotionEndsAt?: string;
 }

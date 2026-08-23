@@ -13,28 +13,37 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
 import { BillingCycle, PackageCategory } from '../../types';
 
 const hostingSchema = z.object({
   name: z.string().min(1, 'الاسم مطلوب'),
+  nameEn: z.string().optional(),
   description: z.string().optional(),
+  descriptionEn: z.string().optional(),
   price: z.number().min(0),
   currency: z.string(),
   originalPrice: z.number().optional(),
   billingCycle: z.nativeEnum(BillingCycle),
   category: z.nativeEnum(PackageCategory),
   features: z.array(z.string()),
+  featuresEn: z.array(z.string()).optional(),
   isPopular: z.boolean(),
   isBestValue: z.boolean(),
   isActive: z.boolean(),
   sortOrder: z.number(),
   storage: z.string().optional(),
+  storageEn: z.string().optional(),
   bandwidth: z.string().optional(),
+  bandwidthEn: z.string().optional(),
   ram: z.string().optional(),
+  ramEn: z.string().optional(),
   cpu: z.string().optional(),
+  cpuEn: z.string().optional(),
   domains: z.string().optional(),
+  domainsEn: z.string().optional(),
 });
 
 type HostingFormData = z.infer<typeof hostingSchema>;
@@ -53,12 +62,12 @@ export default function HostingForm() {
 
   const { register, control, handleSubmit, watch, setValue, reset, formState: { errors } } = useForm<HostingFormData>({
     resolver: zodResolver(hostingSchema),
-    defaultValues: { name: '', description: '', price: 0, currency: 'USD', billingCycle: BillingCycle.MONTHLY, category: PackageCategory.SHARED_HOSTING, features: [], isPopular: false, isBestValue: false, isActive: true, sortOrder: 0, storage: '', bandwidth: '', ram: '', cpu: '', domains: '' },
+    defaultValues: { name: '', nameEn: '', description: '', descriptionEn: '', price: 0, currency: 'USD', billingCycle: BillingCycle.MONTHLY, category: PackageCategory.SHARED_HOSTING, features: [], featuresEn: [], isPopular: false, isBestValue: false, isActive: true, sortOrder: 0, storage: '', storageEn: '', bandwidth: '', bandwidthEn: '', ram: '', ramEn: '', cpu: '', cpuEn: '', domains: '', domainsEn: '' },
   });
 
   useEffect(() => {
     if (pkg) {
-      reset({ name: pkg.name, description: pkg.description || '', price: pkg.price, currency: pkg.currency, originalPrice: pkg.originalPrice, billingCycle: pkg.billingCycle, category: pkg.category, features: pkg.features || [], isPopular: pkg.isPopular, isBestValue: pkg.isBestValue, isActive: pkg.isActive, sortOrder: pkg.sortOrder, storage: pkg.storage || '', bandwidth: pkg.bandwidth || '', ram: pkg.ram || '', cpu: pkg.cpu || '', domains: pkg.domains || '' });
+      reset({ name: pkg.name, nameEn: pkg.nameEn || '', description: pkg.description || '', descriptionEn: pkg.descriptionEn || '', price: pkg.price, currency: pkg.currency, originalPrice: pkg.originalPrice, billingCycle: pkg.billingCycle, category: pkg.category, features: pkg.features || [], featuresEn: pkg.featuresEn || [], isPopular: pkg.isPopular, isBestValue: pkg.isBestValue, isActive: pkg.isActive, sortOrder: pkg.sortOrder, storage: pkg.storage || '', storageEn: pkg.storageEn || '', bandwidth: pkg.bandwidth || '', bandwidthEn: pkg.bandwidthEn || '', ram: pkg.ram || '', ramEn: pkg.ramEn || '', cpu: pkg.cpu || '', cpuEn: pkg.cpuEn || '', domains: pkg.domains || '', domainsEn: pkg.domainsEn || '' });
     }
   }, [pkg, reset]);
 
@@ -83,29 +92,51 @@ export default function HostingForm() {
             <Card className="bg-slate-800/50 border-slate-700">
               <CardHeader><CardTitle className="text-white">معلومات الباقة</CardTitle></CardHeader>
               <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label className="text-slate-200">الاسم *</Label>
-                    <Input {...register('name')} className="bg-slate-700/50 border-slate-600 text-white" />
-                    {errors.name && <p className="text-sm text-red-400">{errors.name.message}</p>}
-                  </div>
-                  <div className="space-y-2">
-                    <Label className="text-slate-200">التصنيف</Label>
-                    <Controller name="category" control={control} render={({ field }) => (
-                      <Select value={field.value} onValueChange={field.onChange}>
-                        <SelectTrigger className="bg-slate-700/50 border-slate-600 text-white"><SelectValue /></SelectTrigger>
-                        <SelectContent className="bg-slate-800 border-slate-700">
-                          {Object.values(PackageCategory).map((cat) => <SelectItem key={cat} value={cat} className="text-white hover:bg-slate-700">{cat}</SelectItem>)}
-                        </SelectContent>
-                      </Select>
-                    )} />
-                  </div>
-                </div>
                 <div className="space-y-2">
-                  <Label className="text-slate-200">الوصف</Label>
-                  <Textarea {...register('description')} className="bg-slate-700/50 border-slate-600 text-white" />
+                  <Label className="text-slate-200">التصنيف</Label>
+                  <Controller name="category" control={control} render={({ field }) => (
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger className="bg-slate-700/50 border-slate-600 text-white"><SelectValue /></SelectTrigger>
+                      <SelectContent className="bg-slate-800 border-slate-700">
+                        {Object.values(PackageCategory).map((cat) => <SelectItem key={cat} value={cat} className="text-white hover:bg-slate-700">{cat}</SelectItem>)}
+                      </SelectContent>
+                    </Select>
+                  )} />
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                
+                <Tabs defaultValue="ar" className="space-y-4">
+                  <TabsList className="bg-slate-900 border border-slate-700 w-full flex">
+                    <TabsTrigger value="ar" className="flex-1 data-[state=active]:bg-slate-800">العربية ✓</TabsTrigger>
+                    <TabsTrigger value="en" className="flex-1 data-[state=active]:bg-slate-800">English</TabsTrigger>
+                  </TabsList>
+                  
+                  <TabsContent value="ar" className="space-y-4">
+                    <div className="space-y-2">
+                      <Label className="text-slate-200">الاسم *</Label>
+                      <Input {...register('name')} className="bg-slate-700/50 border-slate-600 text-white" />
+                      {errors.name && <p className="text-sm text-red-400">{errors.name.message}</p>}
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label className="text-slate-200">الوصف</Label>
+                      <Textarea {...register('description')} className="bg-slate-700/50 border-slate-600 text-white" />
+                    </div>
+                  </TabsContent>
+                  
+                  <TabsContent value="en" className="space-y-4" dir="ltr">
+                    <div className="space-y-2">
+                      <Label className="text-slate-200">Name</Label>
+                      <Input {...register('nameEn')} className="bg-slate-700/50 border-slate-600 text-white" />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label className="text-slate-200">Description</Label>
+                      <Textarea {...register('descriptionEn')} className="bg-slate-700/50 border-slate-600 text-white" />
+                    </div>
+                  </TabsContent>
+                </Tabs>
+                
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 border-t border-slate-700 pt-4">
                   <div className="space-y-2">
                     <Label className="text-slate-200">السعر *</Label>
                     <Input type="number" step="0.01" {...register('price', { valueAsNumber: true })} className="bg-slate-700/50 border-slate-600 text-white" />
@@ -130,26 +161,67 @@ export default function HostingForm() {
             </Card>
             <Card className="bg-slate-800/50 border-slate-700">
               <CardHeader><CardTitle className="text-white">المواصفات التقنية</CardTitle></CardHeader>
-              <CardContent className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                <div className="space-y-2"><Label className="text-slate-200">المساحة</Label><Input {...register('storage')} className="bg-slate-700/50 border-slate-600 text-white" placeholder="50GB SSD" /></div>
-                <div className="space-y-2"><Label className="text-slate-200">الباندويث</Label><Input {...register('bandwidth')} className="bg-slate-700/50 border-slate-600 text-white" placeholder="Unlimited" /></div>
-                <div className="space-y-2"><Label className="text-slate-200">RAM</Label><Input {...register('ram')} className="bg-slate-700/50 border-slate-600 text-white" placeholder="4GB" /></div>
-                <div className="space-y-2"><Label className="text-slate-200">CPU</Label><Input {...register('cpu')} className="bg-slate-700/50 border-slate-600 text-white" placeholder="2 vCPU" /></div>
-                <div className="space-y-2"><Label className="text-slate-200">النطاقات</Label><Input {...register('domains')} className="bg-slate-700/50 border-slate-600 text-white" placeholder="5 Domains" /></div>
+              <CardContent>
+                <Tabs defaultValue="ar" className="space-y-4">
+                  <TabsList className="bg-slate-900 border border-slate-700 w-full flex">
+                    <TabsTrigger value="ar" className="flex-1 data-[state=active]:bg-slate-800">العربية ✓</TabsTrigger>
+                    <TabsTrigger value="en" className="flex-1 data-[state=active]:bg-slate-800">English</TabsTrigger>
+                  </TabsList>
+                  
+                  <TabsContent value="ar">
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                      <div className="space-y-2"><Label className="text-slate-200">المساحة</Label><Input {...register('storage')} className="bg-slate-700/50 border-slate-600 text-white" placeholder="50GB SSD" /></div>
+                      <div className="space-y-2"><Label className="text-slate-200">الباندويث</Label><Input {...register('bandwidth')} className="bg-slate-700/50 border-slate-600 text-white" placeholder="Unlimited" /></div>
+                      <div className="space-y-2"><Label className="text-slate-200">RAM</Label><Input {...register('ram')} className="bg-slate-700/50 border-slate-600 text-white" placeholder="4GB" /></div>
+                      <div className="space-y-2"><Label className="text-slate-200">CPU</Label><Input {...register('cpu')} className="bg-slate-700/50 border-slate-600 text-white" placeholder="2 vCPU" /></div>
+                      <div className="space-y-2"><Label className="text-slate-200">النطاقات</Label><Input {...register('domains')} className="bg-slate-700/50 border-slate-600 text-white" placeholder="5 Domains" /></div>
+                    </div>
+                  </TabsContent>
+                  
+                  <TabsContent value="en" dir="ltr">
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                      <div className="space-y-2"><Label className="text-slate-200">Storage</Label><Input {...register('storageEn')} className="bg-slate-700/50 border-slate-600 text-white" placeholder="50GB SSD" /></div>
+                      <div className="space-y-2"><Label className="text-slate-200">Bandwidth</Label><Input {...register('bandwidthEn')} className="bg-slate-700/50 border-slate-600 text-white" placeholder="Unlimited" /></div>
+                      <div className="space-y-2"><Label className="text-slate-200">RAM</Label><Input {...register('ramEn')} className="bg-slate-700/50 border-slate-600 text-white" placeholder="4GB" /></div>
+                      <div className="space-y-2"><Label className="text-slate-200">CPU</Label><Input {...register('cpuEn')} className="bg-slate-700/50 border-slate-600 text-white" placeholder="2 vCPU" /></div>
+                      <div className="space-y-2"><Label className="text-slate-200">Domains</Label><Input {...register('domainsEn')} className="bg-slate-700/50 border-slate-600 text-white" placeholder="5 Domains" /></div>
+                    </div>
+                  </TabsContent>
+                </Tabs>
               </CardContent>
             </Card>
             <Card className="bg-slate-800/50 border-slate-700">
-              <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle className="text-white">الميزات</CardTitle>
-                <Button type="button" variant="outline" size="sm" className="border-slate-600" onClick={() => setValue('features', [...watch('features'), ''])}><Plus className="h-4 w-4 ml-1" />إضافة</Button>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                {watch('features').map((_, index) => (
-                  <div key={index} className="flex gap-2">
-                    <Input {...register(`features.${index}`)} className="bg-slate-700/50 border-slate-600 text-white" placeholder="ميزة..." />
-                    <Button type="button" variant="ghost" size="icon" className="text-slate-400 hover:text-red-400" onClick={() => setValue('features', watch('features').filter((_, i) => i !== index))}><X className="h-4 w-4" /></Button>
-                  </div>
-                ))}
+              <CardContent>
+                <Tabs defaultValue="ar" className="space-y-4">
+                  <TabsList className="bg-slate-900 border border-slate-700 w-full flex">
+                    <TabsTrigger value="ar" className="flex-1 data-[state=active]:bg-slate-800">العربية ✓</TabsTrigger>
+                    <TabsTrigger value="en" className="flex-1 data-[state=active]:bg-slate-800">English</TabsTrigger>
+                  </TabsList>
+                  
+                  <TabsContent value="ar" className="space-y-2">
+                    <div className="flex justify-end mb-2">
+                      <Button type="button" variant="outline" size="sm" className="border-slate-600" onClick={() => setValue('features', [...watch('features'), ''])}><Plus className="h-4 w-4 ml-1" />إضافة ميزة</Button>
+                    </div>
+                    {watch('features').map((_, index) => (
+                      <div key={index} className="flex gap-2">
+                        <Input {...register(`features.${index}`)} className="bg-slate-700/50 border-slate-600 text-white" placeholder="ميزة..." />
+                        <Button type="button" variant="ghost" size="icon" className="text-slate-400 hover:text-red-400" onClick={() => setValue('features', watch('features').filter((_, i) => i !== index))}><X className="h-4 w-4" /></Button>
+                      </div>
+                    ))}
+                  </TabsContent>
+                  
+                  <TabsContent value="en" className="space-y-2" dir="ltr">
+                    <div className="flex justify-end mb-2">
+                      <Button type="button" variant="outline" size="sm" className="border-slate-600" onClick={() => setValue('featuresEn', [...(watch('featuresEn') || []), ''])}><Plus className="h-4 w-4 ml-1" />Add Feature</Button>
+                    </div>
+                    {watch('featuresEn')?.map((_, index) => (
+                      <div key={index} className="flex gap-2">
+                        <Input {...register(`featuresEn.${index}`)} className="bg-slate-700/50 border-slate-600 text-white" placeholder="Feature..." />
+                        <Button type="button" variant="ghost" size="icon" className="text-slate-400 hover:text-red-400" onClick={() => setValue('featuresEn', watch('featuresEn')!.filter((_, i) => i !== index))}><X className="h-4 w-4" /></Button>
+                      </div>
+                    ))}
+                  </TabsContent>
+                </Tabs>
               </CardContent>
             </Card>
           </div>

@@ -30,17 +30,24 @@ import type { Technology, ProjectResult, ProjectStat } from "../../types";
 
 const projectSchema = z.object({
   title: z.string().min(1, "العنوان مطلوب"),
+  titleEn: z.string().optional(),
   slug: z.string().min(1, "الرابط مطلوب"),
   summary: z.string().min(1, "الملخص مطلوب"),
+  summaryEn: z.string().optional(),
   challenge: z.string().optional(),
+  challengeEn: z.string().optional(),
   solution: z.string().optional(),
+  solutionEn: z.string().optional(),
   results: z.array(
     z.object({
       label: z.string(),
+      labelEn: z.string().optional(),
       value: z.string(),
+      valueEn: z.string().optional(),
     })
   ),
   features: z.array(z.object({ value: z.string() })),
+  featuresEn: z.array(z.object({ value: z.string() })),
   technologies: z.array(z.string()),
   images: z.object({
     cover: z.string().optional(),
@@ -48,9 +55,12 @@ const projectSchema = z.object({
   }),
   projectUrl: z.string().optional(),
   clientName: z.string().optional(),
+  clientNameEn: z.string().optional(),
   categoryIds: z.array(z.string()),
   industry: z.string().optional(),
+  industryEn: z.string().optional(),
   duration: z.string().optional(),
+  durationEn: z.string().optional(),
   year: z.string().optional(),
   clientLogo: z.string().optional(),
   sortOrder: z.number().optional(),
@@ -59,16 +69,22 @@ const projectSchema = z.object({
   stats: z.array(
     z.object({
       label: z.string(),
+      labelEn: z.string().optional(),
       value: z.string(),
+      valueEn: z.string().optional(),
       description: z.string().optional(),
+      descriptionEn: z.string().optional(),
     })
   ),
   isFeatured: z.boolean(),
   isPublished: z.boolean(),
   seo: z.object({
     metaTitle: z.string().optional(),
+    metaTitleEn: z.string().optional(),
     metaDescription: z.string().optional(),
+    metaDescriptionEn: z.string().optional(),
     keywords: z.array(z.string()),
+    keywordsEn: z.array(z.string()),
   }),
 });
 
@@ -109,19 +125,27 @@ export default function ProjectForm() {
     mode: "onChange",
     defaultValues: {
       title: "",
+      titleEn: "",
       slug: "",
       summary: "",
+      summaryEn: "",
       challenge: "",
+      challengeEn: "",
       solution: "",
+      solutionEn: "",
       results: [],
       features: [] as { value: string }[],
+      featuresEn: [] as { value: string }[],
       technologies: [],
       images: { cover: "", gallery: [] },
       projectUrl: "",
       clientName: "",
+      clientNameEn: "",
       categoryIds: [],
       industry: "",
+      industryEn: "",
       duration: "",
+      durationEn: "",
       year: "",
       clientLogo: "",
       sortOrder: 0,
@@ -130,7 +154,7 @@ export default function ProjectForm() {
       stats: [],
       isFeatured: false,
       isPublished: false,
-      seo: { metaTitle: "", metaDescription: "", keywords: [] },
+      seo: { metaTitle: "", metaTitleEn: "", metaDescription: "", metaDescriptionEn: "", keywords: [], keywordsEn: [] },
     },
   });
 
@@ -153,6 +177,15 @@ export default function ProjectForm() {
   });
 
   const {
+    fields: featureFieldsEn,
+    append: appendFeatureEn,
+    remove: removeFeatureEn,
+  } = useFieldArray({
+    control,
+    name: "featuresEn",
+  });
+
+  const {
     fields: statFields,
     append: appendStat,
     remove: removeStat,
@@ -171,12 +204,24 @@ export default function ProjectForm() {
 
   const resetProjectIdRef = useRef<string | null>(null);
   const featuresContainerRef = useRef<HTMLDivElement>(null);
+  const featuresEnContainerRef = useRef<HTMLDivElement>(null);
 
   const focusLastFeatureInput = () => {
     const container = featuresContainerRef.current;
     if (container) {
       const inputs = container.querySelectorAll<HTMLInputElement>(
         'input[name^="features."]'
+      );
+      const lastInput = inputs[inputs.length - 1];
+      if (lastInput) lastInput.focus();
+    }
+  };
+
+  const focusLastFeatureEnInput = () => {
+    const container = featuresEnContainerRef.current;
+    if (container) {
+      const inputs = container.querySelectorAll<HTMLInputElement>(
+        'input[name^="featuresEn."]'
       );
       const lastInput = inputs[inputs.length - 1];
       if (lastInput) lastInput.focus();
@@ -196,15 +241,22 @@ export default function ProjectForm() {
 
       reset({
         title: project.title,
+        titleEn: project.titleEn || "",
         slug: project.slug,
         summary: project.summary,
+        summaryEn: project.summaryEn || "",
         challenge: project.challenge || "",
+        challengeEn: project.challengeEn || "",
         solution: project.solution || "",
+        solutionEn: project.solutionEn || "",
         results: rawResults.map((r: ProjectResult) => ({
           label: r?.label != null ? String(r.label) : "",
+          labelEn: r?.labelEn || "",
           value: r?.value != null ? String(r.value) : "",
+          valueEn: r?.valueEn || "",
         })),
         features: (project.features || []).map((value: string) => ({ value: value ?? "" })),
+        featuresEn: (project.featuresEn || []).map((value: string) => ({ value: value ?? "" })),
         technologies: rawTech
           .map((t) => (typeof t === "string" ? t : (t as Technology)?._id))
           .filter((id): id is string => Boolean(id)),
@@ -214,9 +266,12 @@ export default function ProjectForm() {
         },
         projectUrl: project.projectUrl || "",
         clientName: project.clientName || "",
+        clientNameEn: project.clientNameEn || "",
         categoryIds: rawCategoryIds,
         industry: project.industry || "",
+        industryEn: project.industryEn || "",
         duration: project.duration || "",
+        durationEn: project.durationEn || "",
         year: project.year || "",
         clientLogo: project.clientLogo || "",
         sortOrder: project.sortOrder ?? 0,
@@ -224,15 +279,21 @@ export default function ProjectForm() {
         videoUrl: project.videoUrl || "",
         stats: rawStats.map((s: ProjectStat) => ({
           label: s?.label != null ? String(s.label) : "",
+          labelEn: s?.labelEn || "",
           value: s?.value != null ? String(s.value) : "",
+          valueEn: s?.valueEn || "",
           description: s?.description || "",
+          descriptionEn: s?.descriptionEn || "",
         })),
         isFeatured: Boolean(project.isFeatured),
         isPublished: Boolean(project.isPublished),
         seo: {
           metaTitle: project.seo?.metaTitle || "",
+          metaTitleEn: project.seo?.metaTitleEn || "",
           metaDescription: project.seo?.metaDescription || "",
+          metaDescriptionEn: project.seo?.metaDescriptionEn || "",
           keywords: Array.isArray(project.seo?.keywords) ? project.seo.keywords : [],
+          keywordsEn: Array.isArray(project.seo?.keywordsEn) ? project.seo.keywordsEn : [],
         },
       });
     }
@@ -258,6 +319,7 @@ export default function ProjectForm() {
     const payload: CreateProjectDto = {
       ...data,
       features: data.features.map((f) => f.value),
+      featuresEn: data.featuresEn.map((f) => f.value),
       projectUrl: isEdit ? (projectUrl || null) : (projectUrl || undefined),
       categoryIds: data.categoryIds.length > 0 ? data.categoryIds : undefined,
       sortOrder: data.sortOrder ?? 0,
@@ -348,55 +410,86 @@ export default function ProjectForm() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4" dir="rtl">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label className="text-slate-200" dir="rtl">
-                      العنوان *
-                    </Label>
-                    <Input
-                      {...register("title")}
-                      className="bg-slate-700/50 border-slate-600 text-white"
-                      placeholder="اسم المشروع"
-                      dir="rtl"
-                    />
-                    {errors.title && (
-                      <p className="text-sm text-red-400" dir="rtl">
-                        {errors.title.message}
-                      </p>
-                    )}
-                  </div>
+                <Tabs defaultValue="ar" className="space-y-4" dir="rtl">
+                  <TabsList className="bg-slate-900 border border-slate-700" dir="rtl">
+                    <TabsTrigger value="ar" className="data-[state=active]:bg-slate-800">العربية ✓</TabsTrigger>
+                    <TabsTrigger value="en" className="data-[state=active]:bg-slate-800">English</TabsTrigger>
+                  </TabsList>
+                  
+                  <TabsContent value="ar" className="space-y-4">
+                    <div className="space-y-2">
+                      <Label className="text-slate-200" dir="rtl">
+                        العنوان *
+                      </Label>
+                      <Input
+                        {...register("title")}
+                        className="bg-slate-700/50 border-slate-600 text-white"
+                        placeholder="اسم المشروع"
+                        dir="rtl"
+                      />
+                      {errors.title && (
+                        <p className="text-sm text-red-400" dir="rtl">
+                          {errors.title.message}
+                        </p>
+                      )}
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-slate-200" dir="rtl">
+                        الملخص *
+                      </Label>
+                      <Textarea
+                        {...register("summary")}
+                        className="bg-slate-700/50 border-slate-600 text-white min-h-24"
+                        placeholder="وصف مختصر للمشروع"
+                        dir="rtl"
+                      />
+                      {errors.summary && (
+                        <p className="text-sm text-red-400" dir="rtl">
+                          {errors.summary.message}
+                        </p>
+                      )}
+                    </div>
+                  </TabsContent>
+                  
+                  <TabsContent value="en" className="space-y-4" dir="ltr">
+                    <div className="space-y-2">
+                      <Label className="text-slate-200" dir="ltr">
+                        Title
+                      </Label>
+                      <Input
+                        {...register("titleEn")}
+                        className="bg-slate-700/50 border-slate-600 text-white"
+                        placeholder="Project Name"
+                        dir="ltr"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-slate-200" dir="ltr">
+                        Summary
+                      </Label>
+                      <Textarea
+                        {...register("summaryEn")}
+                        className="bg-slate-700/50 border-slate-600 text-white min-h-24"
+                        placeholder="Brief project description"
+                        dir="ltr"
+                      />
+                    </div>
+                  </TabsContent>
+                </Tabs>
 
-                  <div className="space-y-2">
-                    <Label className="text-slate-200" dir="rtl">
-                      الرابط *
-                    </Label>
-                    <Input
-                      {...register("slug")}
-                      className="bg-slate-700/50 border-slate-600 text-white"
-                      placeholder="project-slug"
-                      dir="ltr"
-                    />
-                    {errors.slug && (
-                      <p className="text-sm text-red-400" dir="rtl">
-                        {errors.slug.message}
-                      </p>
-                    )}
-                  </div>
-                </div>
-
-                <div className="space-y-2">
+                <div className="space-y-2 mt-6 pt-6 border-t border-slate-700">
                   <Label className="text-slate-200" dir="rtl">
-                    الملخص *
+                    الرابط * (Slug)
                   </Label>
-                  <Textarea
-                    {...register("summary")}
-                    className="bg-slate-700/50 border-slate-600 text-white min-h-24"
-                    placeholder="وصف مختصر للمشروع"
-                    dir="rtl"
+                  <Input
+                    {...register("slug")}
+                    className="bg-slate-700/50 border-slate-600 text-white"
+                    placeholder="project-slug"
+                    dir="ltr"
                   />
-                  {errors.summary && (
+                  {errors.slug && (
                     <p className="text-sm text-red-400" dir="rtl">
-                      {errors.summary.message}
+                      {errors.slug.message}
                     </p>
                   )}
                 </div>
@@ -446,17 +539,33 @@ export default function ProjectForm() {
                   )}
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                  <div className="space-y-4">
                     <Label className="text-slate-200" dir="rtl">
                       اسم العميل
                     </Label>
-                    <Input
-                      {...register("clientName")}
-                      className="bg-slate-700/50 border-slate-600 text-white"
-                      placeholder="اسم العميل"
-                      dir="rtl"
-                    />
+                    <Tabs defaultValue="ar" className="space-y-4" dir="rtl">
+                      <TabsList className="bg-slate-900 border border-slate-700 w-full flex" dir="rtl">
+                        <TabsTrigger value="ar" className="flex-1 data-[state=active]:bg-slate-800">عربي</TabsTrigger>
+                        <TabsTrigger value="en" className="flex-1 data-[state=active]:bg-slate-800">English</TabsTrigger>
+                      </TabsList>
+                      <TabsContent value="ar">
+                        <Input
+                          {...register("clientName")}
+                          className="bg-slate-700/50 border-slate-600 text-white"
+                          placeholder="اسم العميل (عربي)"
+                          dir="rtl"
+                        />
+                      </TabsContent>
+                      <TabsContent value="en" dir="ltr">
+                        <Input
+                          {...register("clientNameEn")}
+                          className="bg-slate-700/50 border-slate-600 text-white"
+                          placeholder="Client Name (English)"
+                          dir="ltr"
+                        />
+                      </TabsContent>
+                    </Tabs>
                   </div>
 
                   <div className="space-y-2">
@@ -598,132 +707,242 @@ export default function ProjectForm() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4" dir="rtl">
-                <div className="space-y-2">
-                  <Label className="text-slate-200" dir="rtl">
-                    التحدي
-                  </Label>
-                  <Textarea
-                    {...register("challenge")}
-                    className="bg-slate-700/50 border-slate-600 text-white min-h-32"
-                    placeholder="ما هو التحدي الذي واجه العميل؟"
-                    dir="rtl"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label className="text-slate-200" dir="rtl">
-                    الحل
-                  </Label>
-                  <Textarea
-                    {...register("solution")}
-                    className="bg-slate-700/50 border-slate-600 text-white min-h-32"
-                    placeholder="كيف تم حل المشكلة؟"
-                    dir="rtl"
-                  />
-                </div>
-
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between" dir="rtl">
-                    <Label className="text-slate-200" dir="rtl">
-                      النتائج
-                    </Label>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      className="border-slate-600 text-slate-400 hover:text-white"
-                      onClick={() => appendResult({ label: "", value: "" })}
-                      dir="rtl"
-                    >
-                      <Plus className="h-4 w-4 mr-1" />
-                      إضافة نتيجة
-                    </Button>
-                  </div>
-                  {resultFields.map((field, index) => (
-                    <div
-                      key={field.id}
-                      className="flex gap-3 items-start"
-                      dir="rtl"
-                    >
-                      <div className="flex-1 space-y-2">
-                        <Input
-                          {...register(`results.${index}.label`)}
-                          className="bg-slate-700/50 border-slate-600 text-white"
-                          placeholder="العنوان (مثال: توحيد دورة العمل)"
-                          dir="rtl"
-                        />
+                <Tabs defaultValue="ar" className="space-y-4" dir="rtl">
+                  <TabsList className="bg-slate-900 border border-slate-700 w-full flex" dir="rtl">
+                    <TabsTrigger value="ar" className="flex-1 data-[state=active]:bg-slate-800">العربية ✓</TabsTrigger>
+                    <TabsTrigger value="en" className="flex-1 data-[state=active]:bg-slate-800">English</TabsTrigger>
+                  </TabsList>
+                  
+                  <TabsContent value="ar" className="space-y-8">
+                    {/* Arabic Challenge & Solution */}
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        <Label className="text-slate-200" dir="rtl">التحدي</Label>
                         <Textarea
-                          {...register(`results.${index}.value`)}
-                          className="bg-slate-700/50 border-slate-600 text-white min-h-20"
-                          placeholder="الوصف (مثال: من البلاغ العام إلى طلب الصيانة ثم الإغلاق داخل منصة واحدة)"
+                          {...register("challenge")}
+                          className="bg-slate-700/50 border-slate-600 text-white min-h-32"
+                          placeholder="ما هو التحدي الذي واجه العميل؟"
                           dir="rtl"
                         />
                       </div>
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon"
-                        className="text-slate-400 hover:text-red-400 flex-shrink-0"
-                        onClick={() => removeResult(index)}
-                      >
-                        <X className="h-4 w-4" />
-                      </Button>
+                      <div className="space-y-2">
+                        <Label className="text-slate-200" dir="rtl">الحل</Label>
+                        <Textarea
+                          {...register("solution")}
+                          className="bg-slate-700/50 border-slate-600 text-white min-h-32"
+                          placeholder="كيف تم حل المشكلة؟"
+                          dir="rtl"
+                        />
+                      </div>
                     </div>
-                  ))}
-                </div>
 
-                <div className="space-y-3" ref={featuresContainerRef}>
-                  <div className="flex items-center justify-between" dir="rtl">
-                    <Label className="text-slate-200" dir="rtl">
-                      المميزات
-                    </Label>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      className="border-slate-600 text-slate-400 hover:text-white"
-                      onClick={() => {
-                        appendFeature({ value: "" });
-                        setTimeout(() => focusLastFeatureInput(), 0);
-                      }}
-                      dir="rtl"
-                    >
-                      <Plus className="h-4 w-4 mr-1" />
-                      إضافة ميزة
-                    </Button>
-                  </div>
-                  {featureFields.map((field, index) => (
-                    <div
-                      key={field.id}
-                      className="flex gap-3 items-center"
-                      dir="rtl"
-                    >
-                      <Input
-                        {...register(`features.${index}.value`)}
-                        className="bg-slate-700/50 border-slate-600 text-white flex-1"
-                        placeholder="أدخل الميزة ثم Enter للميزة التالية"
-                        dir="rtl"
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter") {
-                            e.preventDefault();
-                            e.stopPropagation();
+                    {/* Arabic Results */}
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between" dir="rtl">
+                        <Label className="text-slate-200" dir="rtl">النتائج</Label>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          className="border-slate-600 text-slate-400 hover:text-white"
+                          onClick={() => appendResult({ label: "", labelEn: "", value: "", valueEn: "" })}
+                          dir="rtl"
+                        >
+                          <Plus className="h-4 w-4 mr-1" /> إضافة نتيجة
+                        </Button>
+                      </div>
+                      {resultFields.map((field, index) => (
+                        <div key={field.id} className="flex gap-3 items-start" dir="rtl">
+                          <div className="flex-1 space-y-2">
+                            <Input
+                              {...register(`results.${index}.label`)}
+                              className="bg-slate-700/50 border-slate-600 text-white"
+                              placeholder="العنوان (مثال: توحيد دورة العمل)"
+                              dir="rtl"
+                            />
+                            <Textarea
+                              {...register(`results.${index}.value`)}
+                              className="bg-slate-700/50 border-slate-600 text-white min-h-20"
+                              placeholder="الوصف (مثال: من البلاغ العام إلى طلب الصيانة ثم الإغلاق...)"
+                              dir="rtl"
+                            />
+                          </div>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="text-slate-400 hover:text-red-400 flex-shrink-0"
+                            onClick={() => removeResult(index)}
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Arabic Features */}
+                    <div className="space-y-3" ref={featuresContainerRef}>
+                      <div className="flex items-center justify-between" dir="rtl">
+                        <Label className="text-slate-200" dir="rtl">المميزات</Label>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          className="border-slate-600 text-slate-400 hover:text-white"
+                          onClick={() => {
                             appendFeature({ value: "" });
                             setTimeout(() => focusLastFeatureInput(), 0);
-                          }
-                        }}
-                      />
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon"
-                        className="text-slate-400 hover:text-red-400"
-                        onClick={() => removeFeature(index)}
-                      >
-                        <X className="h-4 w-4" />
-                      </Button>
+                          }}
+                          dir="rtl"
+                        >
+                          <Plus className="h-4 w-4 mr-1" /> إضافة ميزة
+                        </Button>
+                      </div>
+                      {featureFields.map((field, index) => (
+                        <div key={field.id} className="flex gap-3 items-center" dir="rtl">
+                          <Input
+                            {...register(`features.${index}.value`)}
+                            className="bg-slate-700/50 border-slate-600 text-white flex-1"
+                            placeholder="أدخل الميزة ثم Enter للميزة التالية"
+                            dir="rtl"
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter") {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                appendFeature({ value: "" });
+                                setTimeout(() => focusLastFeatureInput(), 0);
+                              }
+                            }}
+                          />
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="text-slate-400 hover:text-red-400"
+                            onClick={() => removeFeature(index)}
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
+                  </TabsContent>
+
+                  <TabsContent value="en" className="space-y-8" dir="ltr">
+                    {/* English Challenge & Solution */}
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        <Label className="text-slate-200" dir="ltr">Challenge</Label>
+                        <Textarea
+                          {...register("challengeEn")}
+                          className="bg-slate-700/50 border-slate-600 text-white min-h-32"
+                          placeholder="What was the challenge?"
+                          dir="ltr"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-slate-200" dir="ltr">Solution</Label>
+                        <Textarea
+                          {...register("solutionEn")}
+                          className="bg-slate-700/50 border-slate-600 text-white min-h-32"
+                          placeholder="How was it solved?"
+                          dir="ltr"
+                        />
+                      </div>
+                    </div>
+
+                    {/* English Results */}
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between" dir="ltr">
+                        <Label className="text-slate-200" dir="ltr">Results</Label>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          className="border-slate-600 text-slate-400 hover:text-white"
+                          onClick={() => appendResult({ label: "", labelEn: "", value: "", valueEn: "" })}
+                          dir="ltr"
+                        >
+                          <Plus className="h-4 w-4 ml-1" /> Add Result
+                        </Button>
+                      </div>
+                      {resultFields.map((field, index) => (
+                        <div key={`${field.id}-en`} className="flex gap-3 items-start" dir="ltr">
+                          <div className="flex-1 space-y-2">
+                            <Input
+                              {...register(`results.${index}.labelEn`)}
+                              className="bg-slate-700/50 border-slate-600 text-white"
+                              placeholder="Title (e.g., Workflow Unification)"
+                              dir="ltr"
+                            />
+                            <Textarea
+                              {...register(`results.${index}.valueEn`)}
+                              className="bg-slate-700/50 border-slate-600 text-white min-h-20"
+                              placeholder="Description..."
+                              dir="ltr"
+                            />
+                          </div>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="text-slate-400 hover:text-red-400 flex-shrink-0"
+                            onClick={() => removeResult(index)}
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* English Features */}
+                    <div className="space-y-3" ref={featuresEnContainerRef}>
+                      <div className="flex items-center justify-between" dir="ltr">
+                        <Label className="text-slate-200" dir="ltr">Features</Label>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          className="border-slate-600 text-slate-400 hover:text-white"
+                          onClick={() => {
+                            appendFeatureEn({ value: "" });
+                            setTimeout(() => focusLastFeatureEnInput(), 0);
+                          }}
+                          dir="ltr"
+                        >
+                          <Plus className="h-4 w-4 ml-1" /> Add Feature
+                        </Button>
+                      </div>
+                      {featureFieldsEn.map((field, index) => (
+                        <div key={field.id} className="flex gap-3 items-center" dir="ltr">
+                          <Input
+                            {...register(`featuresEn.${index}.value`)}
+                            className="bg-slate-700/50 border-slate-600 text-white flex-1"
+                            placeholder="Enter feature then press Enter"
+                            dir="ltr"
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter") {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                appendFeatureEn({ value: "" });
+                                setTimeout(() => focusLastFeatureEnInput(), 0);
+                              }
+                            }}
+                          />
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="text-slate-400 hover:text-red-400"
+                            onClick={() => removeFeatureEn(index)}
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  </TabsContent>
+                </Tabs>
               </CardContent>
             </Card>
           </TabsContent>
@@ -859,19 +1078,70 @@ export default function ProjectForm() {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label className="text-slate-200" dir="rtl">
-                        القطاع / الصناعة
-                      </Label>
-                      <Input
-                        {...register("industry")}
-                        className="bg-slate-700/50 border-slate-600 text-white"
-                        placeholder="تعليم، تجارة إلكترونية، خدمات..."
-                        dir="rtl"
-                      />
-                    </div>
+                  <Tabs defaultValue="ar" className="space-y-4" dir="rtl">
+                    <TabsList className="bg-slate-900 border border-slate-700 w-full flex" dir="rtl">
+                      <TabsTrigger value="ar" className="flex-1 data-[state=active]:bg-slate-800">عربي</TabsTrigger>
+                      <TabsTrigger value="en" className="flex-1 data-[state=active]:bg-slate-800">English</TabsTrigger>
+                    </TabsList>
+                    
+                    <TabsContent value="ar">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label className="text-slate-200" dir="rtl">
+                            القطاع / الصناعة
+                          </Label>
+                          <Input
+                            {...register("industry")}
+                            className="bg-slate-700/50 border-slate-600 text-white"
+                            placeholder="تعليم، تجارة إلكترونية، خدمات..."
+                            dir="rtl"
+                          />
+                        </div>
 
+                        <div className="space-y-2">
+                          <Label className="text-slate-200" dir="rtl">
+                            مدة التنفيذ
+                          </Label>
+                          <Input
+                            {...register("duration")}
+                            className="bg-slate-700/50 border-slate-600 text-white"
+                            placeholder="45 يوم، 3 أشهر، 6 أسابيع..."
+                            dir="rtl"
+                          />
+                        </div>
+                      </div>
+                    </TabsContent>
+
+                    <TabsContent value="en" dir="ltr">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label className="text-slate-200" dir="ltr">
+                            Industry
+                          </Label>
+                          <Input
+                            {...register("industryEn")}
+                            className="bg-slate-700/50 border-slate-600 text-white"
+                            placeholder="Education, E-commerce, Services..."
+                            dir="ltr"
+                          />
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label className="text-slate-200" dir="ltr">
+                            Duration
+                          </Label>
+                          <Input
+                            {...register("durationEn")}
+                            className="bg-slate-700/50 border-slate-600 text-white"
+                            placeholder="45 days, 3 months..."
+                            dir="ltr"
+                          />
+                        </div>
+                      </div>
+                    </TabsContent>
+                  </Tabs>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
                     <div className="space-y-2">
                       <Label className="text-slate-200" dir="rtl">
                         سنة التنفيذ
@@ -883,18 +1153,6 @@ export default function ProjectForm() {
                         dir="ltr"
                       />
                     </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label className="text-slate-200" dir="rtl">
-                      مدة التنفيذ
-                    </Label>
-                    <Input
-                      {...register("duration")}
-                      className="bg-slate-700/50 border-slate-600 text-white"
-                      placeholder="45 يوم، 3 أشهر، 6 أسابيع..."
-                      dir="rtl"
-                    />
                   </div>
                 </CardContent>
               </Card>
@@ -909,63 +1167,124 @@ export default function ProjectForm() {
                   <p className="text-sm text-slate-400">
                     أرقام مختصرة تُعرض داخل الكرت أو صفحة التفاصيل
                   </p>
-                  {statFields.map((field, index) => (
-                    <div
-                      key={field.id}
-                      className="flex gap-3 items-start p-3 bg-slate-700/30 rounded-lg"
-                      dir="rtl"
-                    >
-                      <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-3">
-                        <div className="space-y-2">
-                          <Label className="text-xs text-slate-400">القيمة</Label>
-                          <Input
-                            {...register(`stats.${index}.value`)}
-                            className="bg-slate-700/50 border-slate-600 text-white"
-                            placeholder="+28"
-                            dir="rtl"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label className="text-xs text-slate-400">العنوان</Label>
-                          <Input
-                            {...register(`stats.${index}.label`)}
-                            className="bg-slate-700/50 border-slate-600 text-white"
-                            placeholder="شاشة"
-                            dir="rtl"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label className="text-xs text-slate-400">الوصف (اختياري)</Label>
-                          <Input
-                            {...register(`stats.${index}.description`)}
-                            className="bg-slate-700/50 border-slate-600 text-white"
-                            placeholder="عدد الشاشات المصممة والمطورة"
-                            dir="rtl"
-                          />
-                        </div>
-                      </div>
+                  
+                  <Tabs defaultValue="ar" className="space-y-4" dir="rtl">
+                    <div className="flex items-center justify-between" dir="rtl">
+                      <TabsList className="bg-slate-900 border border-slate-700" dir="rtl">
+                        <TabsTrigger value="ar" className="data-[state=active]:bg-slate-800">العربية ✓</TabsTrigger>
+                        <TabsTrigger value="en" className="data-[state=active]:bg-slate-800">English</TabsTrigger>
+                      </TabsList>
                       <Button
                         type="button"
-                        variant="ghost"
-                        size="icon"
-                        className="text-slate-400 hover:text-red-400 flex-shrink-0"
-                        onClick={() => removeStat(index)}
+                        variant="outline"
+                        size="sm"
+                        className="border-slate-600 text-slate-400 hover:text-white"
+                        onClick={() => appendStat({ label: "", labelEn: "", value: "", valueEn: "", description: "", descriptionEn: "" })}
+                        dir="rtl"
                       >
-                        <X className="h-4 w-4" />
+                        <Plus className="h-4 w-4 mr-1" />
+                        إضافة رقم
                       </Button>
                     </div>
-                  ))}
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    className="border-slate-600 text-slate-400 hover:text-white"
-                    onClick={() => appendStat({ label: "", value: "", description: "" })}
-                    dir="rtl"
-                  >
-                    <Plus className="h-4 w-4 mr-1" />
-                    إضافة رقم
-                  </Button>
+                    
+                    <TabsContent value="ar" className="space-y-4">
+                      {statFields.map((field, index) => (
+                        <div
+                          key={field.id}
+                          className="flex gap-3 items-start p-3 bg-slate-700/30 rounded-lg"
+                          dir="rtl"
+                        >
+                          <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <div className="space-y-2">
+                              <Label className="text-xs text-slate-400">القيمة</Label>
+                              <Input
+                                {...register(`stats.${index}.value`)}
+                                className="bg-slate-700/50 border-slate-600 text-white"
+                                placeholder="+28"
+                                dir="rtl"
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <Label className="text-xs text-slate-400">العنوان</Label>
+                              <Input
+                                {...register(`stats.${index}.label`)}
+                                className="bg-slate-700/50 border-slate-600 text-white"
+                                placeholder="شاشة"
+                                dir="rtl"
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <Label className="text-xs text-slate-400">الوصف (اختياري)</Label>
+                              <Input
+                                {...register(`stats.${index}.description`)}
+                                className="bg-slate-700/50 border-slate-600 text-white"
+                                placeholder="عدد الشاشات المصممة والمطورة"
+                                dir="rtl"
+                              />
+                            </div>
+                          </div>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="text-slate-400 hover:text-red-400 flex-shrink-0"
+                            onClick={() => removeStat(index)}
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      ))}
+                    </TabsContent>
+
+                    <TabsContent value="en" className="space-y-4" dir="ltr">
+                      {statFields.map((field, index) => (
+                        <div
+                          key={`${field.id}-en`}
+                          className="flex gap-3 items-start p-3 bg-slate-700/30 rounded-lg"
+                          dir="ltr"
+                        >
+                          <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <div className="space-y-2">
+                              <Label className="text-xs text-slate-400">Value</Label>
+                              <Input
+                                {...register(`stats.${index}.valueEn`)}
+                                className="bg-slate-700/50 border-slate-600 text-white"
+                                placeholder="+28"
+                                dir="ltr"
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <Label className="text-xs text-slate-400">Label</Label>
+                              <Input
+                                {...register(`stats.${index}.labelEn`)}
+                                className="bg-slate-700/50 border-slate-600 text-white"
+                                placeholder="Screen"
+                                dir="ltr"
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <Label className="text-xs text-slate-400">Description</Label>
+                              <Input
+                                {...register(`stats.${index}.descriptionEn`)}
+                                className="bg-slate-700/50 border-slate-600 text-white"
+                                placeholder="Number of designed screens"
+                                dir="ltr"
+                              />
+                            </div>
+                          </div>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="text-slate-400 hover:text-red-400 flex-shrink-0"
+                            onClick={() => removeStat(index)}
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      ))}
+                    </TabsContent>
+                  </Tabs>
                 </CardContent>
               </Card>
             </div>
@@ -980,76 +1299,158 @@ export default function ProjectForm() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4" dir="rtl">
-                <div className="space-y-2">
-                  <Label className="text-slate-200" dir="rtl">
-                    Meta Title
-                  </Label>
-                  <Input
-                    {...register("seo.metaTitle")}
-                    className="bg-slate-700/50 border-slate-600 text-white"
-                    placeholder="عنوان صفحة المشروع"
-                    dir="rtl"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label className="text-slate-200" dir="rtl">
-                    Meta Description
-                  </Label>
-                  <Textarea
-                    {...register("seo.metaDescription")}
-                    className="bg-slate-700/50 border-slate-600 text-white"
-                    placeholder="وصف للظهور في نتائج البحث"
-                    dir="rtl"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label className="text-slate-200" dir="rtl">
-                    الكلمات المفتاحية
-                  </Label>
-                  <Input
-                    className="bg-slate-700/50 border-slate-600 text-white"
-                    placeholder="أدخل الكلمات مفصولة بفواصل"
-                    dir="rtl"
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" || e.key === ",") {
-                        e.preventDefault();
-                        const input = e.currentTarget;
-                        const value = input.value.trim();
-                        if (value) {
-                          const current = watch("seo.keywords") || [];
-                          setValue("seo.keywords", [...current, value]);
-                          input.value = "";
-                        }
-                      }
-                    }}
-                  />
-                  <div className="flex flex-wrap gap-2 mt-2" dir="rtl">
-                    {watch("seo.keywords")?.map((keyword, index) => (
-                      <span
-                        key={index}
-                        className="px-2 py-1 bg-slate-700 rounded-lg text-sm text-slate-300 flex items-center gap-1"
+                <Tabs defaultValue="ar" className="space-y-4" dir="rtl">
+                  <TabsList className="bg-slate-900 border border-slate-700 w-full flex" dir="rtl">
+                    <TabsTrigger value="ar" className="flex-1 data-[state=active]:bg-slate-800">العربية ✓</TabsTrigger>
+                    <TabsTrigger value="en" className="flex-1 data-[state=active]:bg-slate-800">English</TabsTrigger>
+                  </TabsList>
+                  
+                  <TabsContent value="ar" className="space-y-4">
+                    <div className="space-y-2">
+                      <Label className="text-slate-200" dir="rtl">
+                        Meta Title
+                      </Label>
+                      <Input
+                        {...register("seo.metaTitle")}
+                        className="bg-slate-700/50 border-slate-600 text-white"
+                        placeholder="عنوان صفحة المشروع"
                         dir="rtl"
-                      >
-                        {keyword}
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const current = watch("seo.keywords") || [];
-                            setValue(
-                              "seo.keywords",
-                              current.filter((_, i) => i !== index)
-                            );
-                          }}
-                          className="text-slate-500 hover:text-red-400"
-                        >
-                          <X className="h-3 w-3" />
-                        </button>
-                      </span>
-                    ))}
-                  </div>
-                </div>
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-slate-200" dir="rtl">
+                        Meta Description
+                      </Label>
+                      <Textarea
+                        {...register("seo.metaDescription")}
+                        className="bg-slate-700/50 border-slate-600 text-white"
+                        placeholder="وصف للظهور في نتائج البحث"
+                        dir="rtl"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-slate-200" dir="rtl">
+                        الكلمات المفتاحية
+                      </Label>
+                      <Input
+                        className="bg-slate-700/50 border-slate-600 text-white"
+                        placeholder="أدخل الكلمات مفصولة بفواصل"
+                        dir="rtl"
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === ",") {
+                            e.preventDefault();
+                            const input = e.currentTarget;
+                            const value = input.value.trim();
+                            if (value) {
+                              const current = watch("seo.keywords") || [];
+                              setValue("seo.keywords", [...current, value]);
+                              input.value = "";
+                            }
+                          }
+                        }}
+                      />
+                      <div className="flex flex-wrap gap-2 mt-2" dir="rtl">
+                        {watch("seo.keywords")?.map((keyword, index) => (
+                          <span
+                            key={index}
+                            className="px-2 py-1 bg-slate-700 rounded-lg text-sm text-slate-300 flex items-center gap-1"
+                            dir="rtl"
+                          >
+                            {keyword}
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const current = watch("seo.keywords") || [];
+                                setValue(
+                                  "seo.keywords",
+                                  current.filter((_, i) => i !== index)
+                                );
+                              }}
+                              className="text-slate-500 hover:text-red-400"
+                            >
+                              <X className="h-3 w-3" />
+                            </button>
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </TabsContent>
+
+                  <TabsContent value="en" className="space-y-4" dir="ltr">
+                    <div className="space-y-2">
+                      <Label className="text-slate-200" dir="ltr">
+                        Meta Title
+                      </Label>
+                      <Input
+                        {...register("seo.metaTitleEn")}
+                        className="bg-slate-700/50 border-slate-600 text-white"
+                        placeholder="Project page title"
+                        dir="ltr"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-slate-200" dir="ltr">
+                        Meta Description
+                      </Label>
+                      <Textarea
+                        {...register("seo.metaDescriptionEn")}
+                        className="bg-slate-700/50 border-slate-600 text-white"
+                        placeholder="Description for search results"
+                        dir="ltr"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-slate-200" dir="ltr">
+                        Keywords
+                      </Label>
+                      <Input
+                        className="bg-slate-700/50 border-slate-600 text-white"
+                        placeholder="Enter keywords separated by commas"
+                        dir="ltr"
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === ",") {
+                            e.preventDefault();
+                            const input = e.currentTarget;
+                            const value = input.value.trim();
+                            if (value) {
+                              const current = watch("seo.keywordsEn") || [];
+                              setValue("seo.keywordsEn", [...current, value]);
+                              input.value = "";
+                            }
+                          }
+                        }}
+                      />
+                      <div className="flex flex-wrap gap-2 mt-2" dir="ltr">
+                        {watch("seo.keywordsEn")?.map((keyword, index) => (
+                          <span
+                            key={index}
+                            className="px-2 py-1 bg-slate-700 rounded-lg text-sm text-slate-300 flex items-center gap-1"
+                            dir="ltr"
+                          >
+                            {keyword}
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const current = watch("seo.keywordsEn") || [];
+                                setValue(
+                                  "seo.keywordsEn",
+                                  current.filter((_, i) => i !== index)
+                                );
+                              }}
+                              className="text-slate-500 hover:text-red-400"
+                            >
+                              <X className="h-3 w-3" />
+                            </button>
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </TabsContent>
+                </Tabs>
               </CardContent>
             </Card>
           </TabsContent>

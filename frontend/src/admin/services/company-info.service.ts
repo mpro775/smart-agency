@@ -4,8 +4,10 @@ import type { ApiResponse } from "../types";
 export interface CompanyInfo {
   _id: string;
   address: string;
+  addressEn?: string;
   googleMapsUrl: string;
   workingHours: string;
+  workingHoursEn?: string;
   email: string;
   phone: string;
   whatsappUrl: string;
@@ -21,8 +23,10 @@ export interface CompanyInfo {
 
 export interface UpdateCompanyInfoDto {
   address?: string;
+  addressEn?: string;
   googleMapsUrl?: string;
   workingHours?: string;
+  workingHoursEn?: string;
   email?: string;
   phone?: string;
   whatsappUrl?: string;

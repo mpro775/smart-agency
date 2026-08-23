@@ -10,6 +10,9 @@ export interface CreateTechnologyDto {
   icon?: string;
   category?: TechnologyCategory;
   description?: string;
+  descriptionEn?: string;
+  tooltip?: string;
+  tooltipEn?: string;
 }
 
 export type UpdateTechnologyDto = Partial<CreateTechnologyDto>;

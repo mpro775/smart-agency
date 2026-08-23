@@ -13,12 +13,15 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 
 const categorySchema = z.object({
   value: z.string().min(1, "القيمة مطلوبة"),
   label: z.string().min(1, "التسمية مطلوبة"),
+  labelEn: z.string().optional(),
   description: z.string().optional(),
+  descriptionEn: z.string().optional(),
   isActive: z.boolean(),
   sortOrder: z.number().min(0),
   icon: z.string().optional(),
@@ -49,7 +52,9 @@ export default function ProjectCategoryForm() {
     defaultValues: {
       value: "",
       label: "",
+      labelEn: "",
       description: "",
+      descriptionEn: "",
       isActive: true,
       sortOrder: 0,
       icon: "",
@@ -61,7 +66,9 @@ export default function ProjectCategoryForm() {
       reset({
         value: category.value,
         label: category.label,
+        labelEn: category.labelEn || "",
         description: category.description || "",
+        descriptionEn: category.descriptionEn || "",
         isActive: category.isActive,
         sortOrder: category.sortOrder || 0,
         icon: category.icon || "",
@@ -105,46 +112,75 @@ export default function ProjectCategoryForm() {
             <CardTitle className="text-white">معلومات الفئة</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label className="text-slate-200">القيمة (Value) *</Label>
-                <Input
-                  {...register("value")}
-                  className="bg-slate-700/50 border-slate-600 text-white"
-                  placeholder="مثال: Web App"
-                  disabled={isEdit}
-                />
-                {errors.value && (
-                  <p className="text-sm text-red-400">{errors.value.message}</p>
-                )}
-                {isEdit && (
-                  <p className="text-xs text-slate-500">
-                    لا يمكن تعديل القيمة بعد الإنشاء
-                  </p>
-                )}
-              </div>
-              <div className="space-y-2">
-                <Label className="text-slate-200">التسمية (Label) *</Label>
-                <Input
-                  {...register("label")}
-                  className="bg-slate-700/50 border-slate-600 text-white"
-                  placeholder="مثال: مواقع إلكترونية"
-                />
-                {errors.label && (
-                  <p className="text-sm text-red-400">{errors.label.message}</p>
-                )}
-              </div>
+            <div className="space-y-2">
+              <Label className="text-slate-200">القيمة (Value) *</Label>
+              <Input
+                {...register("value")}
+                className="bg-slate-700/50 border-slate-600 text-white max-w-sm"
+                placeholder="مثال: Web App"
+                disabled={isEdit}
+              />
+              {errors.value && (
+                <p className="text-sm text-red-400">{errors.value.message}</p>
+              )}
+              {isEdit && (
+                <p className="text-xs text-slate-500">
+                  لا يمكن تعديل القيمة بعد الإنشاء
+                </p>
+              )}
             </div>
 
-            <div className="space-y-2">
-              <Label className="text-slate-200">الوصف</Label>
-              <Textarea
-                {...register("description")}
-                rows={3}
-                className="bg-slate-700/50 border-slate-600 text-white"
-                placeholder="وصف الفئة..."
-              />
-            </div>
+            <Tabs defaultValue="ar" className="space-y-4">
+              <TabsList className="bg-slate-900 border border-slate-700 w-full flex">
+                <TabsTrigger value="ar" className="flex-1 data-[state=active]:bg-slate-800">العربية ✓</TabsTrigger>
+                <TabsTrigger value="en" className="flex-1 data-[state=active]:bg-slate-800">English</TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="ar" className="space-y-4">
+                <div className="space-y-2">
+                  <Label className="text-slate-200">التسمية (Label) *</Label>
+                  <Input
+                    {...register("label")}
+                    className="bg-slate-700/50 border-slate-600 text-white"
+                    placeholder="مثال: مواقع إلكترونية"
+                  />
+                  {errors.label && (
+                    <p className="text-sm text-red-400">{errors.label.message}</p>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-slate-200">الوصف</Label>
+                  <Textarea
+                    {...register("description")}
+                    rows={3}
+                    className="bg-slate-700/50 border-slate-600 text-white"
+                    placeholder="وصف الفئة..."
+                  />
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="en" className="space-y-4" dir="ltr">
+                <div className="space-y-2">
+                  <Label className="text-slate-200">Label</Label>
+                  <Input
+                    {...register("labelEn")}
+                    className="bg-slate-700/50 border-slate-600 text-white"
+                    placeholder="e.g. Websites"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-slate-200">Description</Label>
+                  <Textarea
+                    {...register("descriptionEn")}
+                    rows={3}
+                    className="bg-slate-700/50 border-slate-600 text-white"
+                    placeholder="Category description..."
+                  />
+                </div>
+              </TabsContent>
+            </Tabs>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">

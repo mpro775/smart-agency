@@ -5,7 +5,9 @@ export interface ProjectCategory {
   _id: string;
   value: string;
   label: string;
+  labelEn?: string;
   description?: string;
+  descriptionEn?: string;
   isActive: boolean;
   sortOrder: number;
   icon?: string;
@@ -16,7 +18,9 @@ export interface ProjectCategory {
 export interface CreateProjectCategoryDto {
   value: string;
   label: string;
+  labelEn?: string;
   description?: string;
+  descriptionEn?: string;
   isActive?: boolean;
   sortOrder?: number;
   icon?: string;

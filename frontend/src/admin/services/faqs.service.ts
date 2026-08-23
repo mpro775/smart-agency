@@ -11,8 +11,12 @@ export interface FAQFilters {
 
 export interface CreateFAQDto {
   question: string;
+  questionEn?: string;
   answer: string;
+  answerEn?: string;
   category?: string;
+  categoryEn?: string;
+  categoryKey?: string;
   orderNumber?: number;
   isActive?: boolean;
 }

@@ -28,13 +28,18 @@ export type {
 // Project Types
 export interface ProjectResult {
   label: string;
+  labelEn?: string;
   value: string;
+  valueEn?: string;
 }
 
 export interface ProjectStat {
   label: string;
+  labelEn?: string;
   value: string;
+  valueEn?: string;
   description?: string;
+  descriptionEn?: string;
 }
 
 export interface ProjectImages {
@@ -44,8 +49,11 @@ export interface ProjectImages {
 
 export interface ProjectSeo {
   metaTitle?: string;
+  metaTitleEn?: string;
   metaDescription?: string;
+  metaDescriptionEn?: string;
   keywords: string[];
+  keywordsEn?: string[];
 }
 
 export interface ProjectCategoryRef {
@@ -59,19 +67,27 @@ export interface ProjectCategoryRef {
 export interface Project {
   _id: string;
   title: string;
+  titleEn?: string;
   slug: string;
   summary: string;
+  summaryEn?: string;
   challenge?: string;
+  challengeEn?: string;
   solution?: string;
+  solutionEn?: string;
   results: ProjectResult[];
   features?: string[];
+  featuresEn?: string[];
   technologies: Technology[] | string[];
   images: ProjectImages;
   projectUrl?: string;
   clientName?: string;
+  clientNameEn?: string;
   categoryIds?: ProjectCategoryRef[] | string[];
   industry?: string;
+  industryEn?: string;
   duration?: string;
+  durationEn?: string;
   year?: string;
   clientLogo?: string;
   sortOrder?: number;
@@ -88,14 +104,22 @@ export interface Project {
 // Blog Types
 export interface BlogSeo {
   metaTitle?: string;
+  metaTitleEn?: string;
   metaDescription?: string;
+  metaDescriptionEn?: string;
   keywords: string[];
+  keywordsEn?: string[];
   canonicalUrl?: string;
+  canonicalUrlEn?: string;
   ogTitle?: string;
+  ogTitleEn?: string;
   ogDescription?: string;
+  ogDescriptionEn?: string;
   ogImage?: string;
   twitterTitle?: string;
+  twitterTitleEn?: string;
   twitterDescription?: string;
+  twitterDescriptionEn?: string;
   twitterImage?: string;
   noIndex?: boolean;
   schemaType?: string;
@@ -106,28 +130,41 @@ export type BlogContentType = 'article' | 'guide' | 'case-study' | 'insight' | '
 export interface Blog {
   _id: string;
   title: string;
+  titleEn?: string;
   slug: string;
   content: string;
+  contentEn?: string;
   excerpt?: string;
+  excerptEn?: string;
   coverImage?: string;
   coverAlt?: string;
+  coverAltEn?: string;
   author?: User | string;
   authorName?: string;
+  authorNameEn?: string;
   authorRole?: string;
+  authorRoleEn?: string;
   authorAvatar?: string;
   tags: string[];
+  tagsEn?: string[];
   category?: string;
+  categoryEn?: string;
   contentType?: BlogContentType;
   isPublished: boolean;
   isFeatured?: boolean;
   featuredOrder?: number;
   readingTime?: number;
+  readingTimeEn?: number;
   summaryPoints?: string[];
+  summaryPointsEn?: string[];
   isEditorPick?: boolean;
   allowIndexing?: boolean;
   ctaTitle?: string;
+  ctaTitleEn?: string;
   ctaDescription?: string;
+  ctaDescriptionEn?: string;
   ctaButtonText?: string;
+  ctaButtonTextEn?: string;
   ctaButtonUrl?: string;
   seo: BlogSeo;
   publishedAt?: string;
@@ -252,17 +289,22 @@ export enum Department {
 export interface TeamMember {
   _id: string;
   fullName: string;
+  fullNameEn?: string;
   role: string;
+  roleEn?: string;
   department: Department;
   photo?: string | null;
   bio?: string | null;
+  bioEn?: string | null;
   funFact?: string | null;
+  funFactEn?: string | null;
   email?: string | null;
   linkedinUrl?: string | null;
   githubUrl?: string | null;
   twitterUrl?: string | null;
   websiteUrl?: string | null;
   specializations: string[];
+  specializationsEn?: string[];
   showOnHome: boolean;
   showOnAbout: boolean;
   isActive: boolean;
@@ -277,11 +319,15 @@ export interface TeamMember {
 export interface Testimonial {
   _id: string;
   clientName: string;
+  clientNameEn?: string;
   position?: string;
+  positionEn?: string;
   companyName?: string;
+  companyNameEn?: string;
   companyLogo?: string;
   clientPhoto?: string;
   content: string;
+  contentEn?: string;
   rating: number;
   linkedProject?: Project | string;
   isActive: boolean;
@@ -308,7 +354,9 @@ export interface Technology {
   icon?: string;
   category: TechnologyCategory;
   description?: string;
+  descriptionEn?: string;
   tooltip?: string;
+  tooltipEn?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -333,22 +381,30 @@ export enum PackageCategory {
 export interface HostingPackage {
   _id: string;
   name: string;
+  nameEn?: string;
   description?: string;
+  descriptionEn?: string;
   price: number;
   currency: string;
   originalPrice?: number;
   billingCycle: BillingCycle;
   category: PackageCategory;
   features: string[];
+  featuresEn?: string[];
   isPopular: boolean;
   isBestValue: boolean;
   isActive: boolean;
   sortOrder: number;
   storage?: string;
+  storageEn?: string;
   bandwidth?: string;
+  bandwidthEn?: string;
   ram?: string;
+  ramEn?: string;
   cpu?: string;
+  cpuEn?: string;
   domains?: string;
+  domainsEn?: string;
   discountPercentage?: number;
   promotionEndsAt?: string;
   createdAt: string;
@@ -359,8 +415,12 @@ export interface HostingPackage {
 export interface FAQ {
   _id: string;
   question: string;
+  questionEn?: string;
   answer: string;
+  answerEn?: string;
   category: string;
+  categoryEn?: string;
+  categoryKey?: string;
   orderNumber: number;
   isActive: boolean;
   createdAt: string;

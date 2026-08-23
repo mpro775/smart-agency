@@ -21,13 +21,16 @@ import {
 } from "@/components/ui/select";
 import { toast } from "sonner";
 import { TechnologyCategory } from "../../types";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const technologySchema = z.object({
   name: z.string().min(1, "الاسم مطلوب"),
   icon: z.string().optional(),
   category: z.nativeEnum(TechnologyCategory),
   description: z.string().optional(),
+  descriptionEn: z.string().optional(),
   tooltip: z.string().optional(),
+  tooltipEn: z.string().optional(),
 });
 
 type TechnologyFormData = z.infer<typeof technologySchema>;
@@ -67,7 +70,9 @@ export default function TechnologyForm() {
       icon: "",
       category: TechnologyCategory.OTHER,
       description: "",
+      descriptionEn: "",
       tooltip: "",
+      tooltipEn: "",
     },
   });
 
@@ -78,7 +83,9 @@ export default function TechnologyForm() {
         icon: technology.icon || "",
         category: technology.category,
         description: technology.description || "",
+        descriptionEn: technology.descriptionEn || "",
         tooltip: technology.tooltip || "",
+        tooltipEn: technology.tooltipEn || "",
       });
     }
   }, [technology, reset]);
@@ -202,28 +209,60 @@ export default function TechnologyForm() {
                 )}
               </div>
             </div>
-            <div className="space-y-2">
-              <Label className="text-slate-200" dir="rtl">
-                الوصف
-              </Label>
-              <Textarea
-                {...register("description")}
-                className="bg-slate-700/50 border-slate-600 text-white"
-                placeholder="وصف مختصر للتقنية"
-                dir="rtl"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label className="text-slate-200" dir="rtl">
-                التلميح
-              </Label>
-              <Input
-                {...register("tooltip")}
-                className="bg-slate-700/50 border-slate-600 text-white"
-                placeholder="تلميح قصير يظهر عند hover للعملاء غير التقنيين"
-                dir="rtl"
-              />
-            </div>
+            <Tabs defaultValue="ar" className="space-y-4 pt-4 border-t border-slate-700">
+              <TabsList className="bg-slate-900 border border-slate-700 w-full flex">
+                <TabsTrigger value="ar" className="flex-1 data-[state=active]:bg-slate-800">العربية ✓</TabsTrigger>
+                <TabsTrigger value="en" className="flex-1 data-[state=active]:bg-slate-800">English</TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="ar" className="space-y-4">
+                <div className="space-y-2">
+                  <Label className="text-slate-200" dir="rtl">
+                    الوصف
+                  </Label>
+                  <Textarea
+                    {...register("description")}
+                    className="bg-slate-700/50 border-slate-600 text-white"
+                    placeholder="وصف مختصر للتقنية"
+                    dir="rtl"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-slate-200" dir="rtl">
+                    التلميح
+                  </Label>
+                  <Input
+                    {...register("tooltip")}
+                    className="bg-slate-700/50 border-slate-600 text-white"
+                    placeholder="تلميح قصير يظهر عند hover للعملاء غير التقنيين"
+                    dir="rtl"
+                  />
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="en" className="space-y-4" dir="ltr">
+                <div className="space-y-2">
+                  <Label className="text-slate-200">
+                    Description
+                  </Label>
+                  <Textarea
+                    {...register("descriptionEn")}
+                    className="bg-slate-700/50 border-slate-600 text-white"
+                    placeholder="Brief technology description"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-slate-200">
+                    Tooltip
+                  </Label>
+                  <Input
+                    {...register("tooltipEn")}
+                    className="bg-slate-700/50 border-slate-600 text-white"
+                    placeholder="Short tooltip for hover effect"
+                  />
+                </div>
+              </TabsContent>
+            </Tabs>
             <div className="space-y-2">
               <Label className="text-slate-200" dir="rtl">
                 الأيقونة

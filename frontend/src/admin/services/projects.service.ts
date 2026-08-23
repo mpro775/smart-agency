@@ -15,25 +15,36 @@ export interface ProjectFilters {
 
 export interface ProjectStatDto {
   label: string;
+  labelEn?: string;
   value: string;
+  valueEn?: string;
   description?: string;
+  descriptionEn?: string;
 }
 
 export interface CreateProjectDto {
   title: string;
+  titleEn?: string;
   slug: string;
   summary: string;
+  summaryEn?: string;
   challenge?: string;
+  challengeEn?: string;
   solution?: string;
-  results?: { label: string; value: string }[];
+  solutionEn?: string;
+  results?: { label: string; labelEn?: string; value: string; valueEn?: string; }[];
   features?: string[];
+  featuresEn?: string[];
   technologies?: string[];
   images?: { cover?: string; gallery?: string[] };
   projectUrl?: string | null;
   clientName?: string;
+  clientNameEn?: string;
   categoryIds?: string[];
   industry?: string;
+  industryEn?: string;
   duration?: string;
+  durationEn?: string;
   year?: string;
   clientLogo?: string;
   sortOrder?: number;
@@ -41,7 +52,7 @@ export interface CreateProjectDto {
   videoUrl?: string;
   stats?: ProjectStatDto[];
   isFeatured?: boolean;
-  seo?: { metaTitle?: string; metaDescription?: string; keywords?: string[] };
+  seo?: { metaTitle?: string; metaTitleEn?: string; metaDescription?: string; metaDescriptionEn?: string; keywords?: string[]; keywordsEn?: string[]; };
   isPublished?: boolean;
 }
 

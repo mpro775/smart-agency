@@ -4,15 +4,19 @@ import type { ApiResponse, PaginatedResponse } from "../types";
 export interface Service {
   _id: string;
   title: string;
+  titleEn?: string;
   description?: string;
+  descriptionEn?: string;
   icon?: string;
   iconType?: string;
   gradient?: string;
   features?: string[];
+  featuresEn?: string[];
   isActive: boolean;
   sortOrder: number;
   slug?: string;
   shortDescription?: string;
+  shortDescriptionEn?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -26,15 +30,19 @@ export interface ServiceFilters {
 
 export interface CreateServiceDto {
   title: string;
+  titleEn?: string;
   description?: string;
+  descriptionEn?: string;
   icon?: string;
   iconType?: string;
   gradient?: string;
   features?: string[];
+  featuresEn?: string[];
   isActive?: boolean;
   sortOrder?: number;
   slug?: string;
   shortDescription?: string;
+  shortDescriptionEn?: string;
 }
 
 export type UpdateServiceDto = Partial<CreateServiceDto>;
