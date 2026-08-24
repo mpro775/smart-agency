@@ -1,3 +1,4 @@
+import { tr } from "@/i18n";
 import { motion, AnimatePresence } from "framer-motion";
 import { Briefcase, BarChart3, Mail, Github, Linkedin, Globe, ExternalLink, Lightbulb } from "lucide-react";
 import type { TeamMember } from "../../services/team.service";
@@ -27,7 +28,6 @@ export default function FeaturedTeamMember({ member, onOpenProfile }: Props) {
         exit={{ opacity: 0, y: -15, scale: 0.98 }}
         transition={{ duration: 0.35 }}
         className="relative overflow-hidden rounded-2xl sm:rounded-3xl border border-white/10 bg-white/[0.04] backdrop-blur-2xl shadow-2xl shadow-black/30 min-h-0 lg:min-h-[560px]"
-        dir="rtl"
       >
         <div className="absolute inset-0 opacity-30 bg-[radial-gradient(circle_at_25%_35%,rgba(34,211,238,0.22),transparent_35%),linear-gradient(to_bottom_right,rgba(255,255,255,0.04),transparent)]" />
         <div className="absolute inset-0 opacity-[0.07]" style={{ backgroundImage: "linear-gradient(rgba(255,255,255,.18) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.18) 1px, transparent 1px)", backgroundSize: "36px 36px" }} />
@@ -72,7 +72,7 @@ export default function FeaturedTeamMember({ member, onOpenProfile }: Props) {
 
             {skills.length > 0 && (
               <div className="mb-4 sm:mb-7">
-                <h4 className="text-xs sm:text-sm text-cyan-300 font-semibold mb-2 sm:mb-3">المهارات الأساسية</h4>
+                <h4 className="text-xs sm:text-sm text-cyan-300 font-semibold mb-2 sm:mb-3">{tr("المهارات الأساسية")}</h4>
                 <div className="flex flex-wrap gap-1.5 sm:gap-2">
                   {skills.map((skill) => (
                     <span key={skill} className="rounded-lg sm:rounded-xl border border-white/10 bg-white/[0.045] px-2.5 py-1 sm:px-4 sm:py-2 text-xs sm:text-sm text-gray-200">
@@ -89,7 +89,7 @@ export default function FeaturedTeamMember({ member, onOpenProfile }: Props) {
                   <BarChart3 className="text-cyan-300 w-5 h-5 sm:w-6 sm:h-6" />
                   <div>
                     <div className="text-white font-extrabold text-base sm:text-xl">{member.projectsCount ?? 0}</div>
-                    <div className="text-gray-400 text-[10px] sm:text-xs">مشروع مكتمل</div>
+                    <div className="text-gray-400 text-[10px] sm:text-xs">{tr("مشروع مكتمل")}</div>
                   </div>
                 </div>
 
@@ -115,9 +115,9 @@ export default function FeaturedTeamMember({ member, onOpenProfile }: Props) {
                 type="button"
                 onClick={() => onOpenProfile(member)}
                 className="inline-flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-full bg-cyan-300 text-gray-950 font-bold text-xs sm:text-sm hover:bg-cyan-200 transition-colors shadow-lg shadow-cyan-500/20"
-                aria-label="عرض الملف المهني"
+                aria-label={tr("عرض الملف المهني")}
               >
-                <span>عرض الملف</span>
+                <span>{tr("عرض الملف")}</span>
                 <ExternalLink className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               </button>
             </div>

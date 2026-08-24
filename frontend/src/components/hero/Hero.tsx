@@ -1,3 +1,4 @@
+import { tr } from "@/i18n";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Rocket, Eye, Sparkles } from "lucide-react";
@@ -25,10 +26,9 @@ const Hero = () => {
             transition={{ duration: 0.7, ease: "easeOut" }}
             className="mx-auto max-w-2xl text-4xl font-black leading-[1.3] tracking-[-0.02em] text-[var(--smart-text-main)] sm:text-5xl lg:mx-0 lg:text-6xl xl:text-7xl"
           >
-            <span className="block">نبني</span>
+            <span className="block">{tr("نبني")}</span>
             <span className="relative inline-block text-[var(--smart-primary)]">
-              أنظمة رقمية
-              <svg
+              {tr("أنظمة رقمية")}<svg
                 className="absolute -bottom-2 left-0 w-full"
                 viewBox="0 0 200 12"
                 fill="none"
@@ -43,8 +43,8 @@ const Hero = () => {
                 />
               </svg>
             </span>
-            <span className="block">تساعد مشروعك</span>
-            <span className="block">على النمو</span>
+            <span className="block">{tr("تساعد مشروعك")}</span>
+            <span className="block">{tr("على النمو")}</span>
           </motion.h1>
 
           <motion.p
@@ -53,8 +53,7 @@ const Hero = () => {
             transition={{ duration: 0.65, ease: "easeOut", delay: 0.15 }}
             className="mx-auto mt-6 max-w-lg text-sm leading-relaxed text-[var(--smart-text-muted)] sm:text-base lg:mx-0"
           >
-            نطوّر مواقع، تطبيقات، متاجر وأنظمة مخصّصة تجمع بين التصميم الاحترافي، البرمجة المتقنة، والبنية القابلة للتوسع.
-          </motion.p>
+            {tr("نطوّر مواقع، تطبيقات، متاجر وأنظمة مخصّصة تجمع بين التصميم الاحترافي، البرمجة المتقنة، والبنية القابلة للتوسع.")}</motion.p>
 
           <motion.div
             initial={{ opacity: 0, y: 24 }}
@@ -69,7 +68,7 @@ const Hero = () => {
                 className="group flex items-center gap-2 rounded-xl bg-[var(--smart-primary)] px-7 py-3.5 text-sm font-bold text-white shadow-[var(--smart-shadow-brand)] transition-all duration-300 hover:-translate-y-0.5"
               >
                 <Rocket size={16} className="relative z-10" />
-                <span className="relative z-10">ابدأ مشروعك الآن</span>
+                <span className="relative z-10">{tr("ابدأ مشروعك الآن")}</span>
               </motion.button>
             </Link>
             <Link to="/projects">
@@ -79,7 +78,7 @@ const Hero = () => {
                 className="flex items-center gap-2 rounded-xl border-2 border-[var(--smart-border-light-strong)] bg-white/80 px-7 py-3.5 text-sm font-medium text-[var(--smart-text-main)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--smart-primary)]"
               >
                 <Eye size={16} />
-                <span>شاهد أعمالنا</span>
+                <span>{tr("شاهد أعمالنا")}</span>
               </motion.button>
             </Link>
           </motion.div>

@@ -1,3 +1,4 @@
+import { tr } from "@/i18n";
 import { useEffect, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import { BarChart3, TrendingUp, CheckCircle2 } from "lucide-react";
@@ -90,7 +91,7 @@ export default function ProjectStats({ stats, results }: ProjectStatsProps) {
               <div className="p-3 rounded-2xl bg-amber-50 border border-amber-100 text-amber-600 shadow-sm">
                 <BarChart3 className="w-6 h-6" />
               </div>
-              <span>أرقام وإنجازات المشروع</span>
+              <span>{tr("أرقام وإنجازات المشروع")}</span>
             </h3>
 
             <div className="grid sm:grid-cols-3 gap-6">
@@ -128,7 +129,7 @@ export default function ProjectStats({ stats, results }: ProjectStatsProps) {
               <div className="p-3 rounded-2xl bg-emerald-50 border border-emerald-100 text-emerald-600 shadow-sm">
                 <TrendingUp className="w-6 h-6" />
               </div>
-              <span>النتائج المحققة للأعمال</span>
+              <span>{tr("النتائج المحققة للأعمال")}</span>
             </h3>
 
             <motion.div

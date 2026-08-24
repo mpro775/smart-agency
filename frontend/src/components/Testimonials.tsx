@@ -1,4 +1,4 @@
-"use client";
+import { tr } from "@/i18n";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
@@ -47,14 +47,12 @@ function TestimonialsHeader() {
     <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }} viewport={{ once: true, amount: 0.2 }} className="text-center">
       <span className="inline-flex items-center gap-2 rounded-full border border-[var(--smart-border-dark)] bg-white/[0.05] px-4 py-2 text-sm font-bold text-[var(--smart-primary-light)] backdrop-blur-xl">
         <FiMessageSquare className="w-4 h-4" />
-        آراء عملائنا
-      </span>
+        {tr("آراء عملائنا")}</span>
       <h2 className="mt-6 text-4xl md:text-6xl font-bold leading-tight text-[var(--smart-text-on-dark)]">
-        ثقة بُنيت على <span className="text-[var(--smart-primary-light)]">نتائج حقيقية</span>
+        {tr("ثقة بُنيت على")}<span className="text-[var(--smart-primary-light)]">{tr("نتائج حقيقية")}</span>
       </h2>
       <p className="mt-6 max-w-2xl mx-auto text-lg leading-8 text-[var(--smart-text-muted-on-dark)]">
-        نفخر بالشراكات طويلة المدى التي نبنيها مع عملائنا. هذه بعض الكلمات التي تعكس أثر عملنا وجودة ما نقدمه في كل مشروع.
-      </p>
+        {tr("نفخر بالشراكات طويلة المدى التي نبنيها مع عملائنا. هذه بعض الكلمات التي تعكس أثر عملنا وجودة ما نقدمه في كل مشروع.")}</p>
     </motion.div>
   );
 }
@@ -80,14 +78,13 @@ function FeaturedTestimonialCard({ testimonial }: { testimonial: Testimonial }) 
             {testimonial.linkedProject && typeof testimonial.linkedProject === "object" && "_id" in testimonial.linkedProject ? (
               <Link to={`/projects/${testimonial.linkedProject._id}`} className="inline-flex items-center gap-2 rounded-full border border-[var(--smart-border-dark-strong)] bg-white/[0.05] px-5 py-2.5 text-sm text-[var(--smart-primary-light)] hover:bg-white/[0.08] transition-colors">
                 <FiExternalLink className="w-4 h-4" />
-                مشاهدة المشروع
-              </Link>
+                {tr("مشاهدة المشروع")}</Link>
             ) : null}
           </div>
         </div>
         {testimonial.companyLogo && (
           <div className="mt-6 pt-6 border-t border-[var(--smart-border-dark)] flex items-center gap-3">
-            <img src={testimonial.companyLogo} alt={testimonial.companyName || "شعار الشركة"} className="h-8 object-contain opacity-70" />
+            <img src={testimonial.companyLogo} alt={testimonial.companyName || tr("شعار الشركة")} className="h-8 object-contain opacity-70" />
           </div>
         )}
       </div>
@@ -101,24 +98,24 @@ function ProjectSummaryCard() {
       <div className="rounded-[2rem] border border-[var(--smart-border-dark)] bg-[var(--smart-bg-dark-card)] p-6 h-full backdrop-blur-xl">
         <div className="flex items-center gap-2 mb-4">
           <FiBriefcase className="w-5 h-5 text-[var(--smart-primary-light)]" />
-          <p className="text-sm font-medium text-[var(--smart-primary-light)]">ملخص المشروع</p>
+          <p className="text-sm font-medium text-[var(--smart-primary-light)]">{tr("ملخص المشروع")}</p>
         </div>
         <div className="space-y-3 mb-6">
           <div className="flex items-center gap-3 text-[var(--smart-text-muted-on-dark)]">
             <FiLayers className="w-4 h-4 text-[var(--smart-primary)]/60" />
-            <span className="text-sm">تصميم وتجربة المستخدم</span>
+            <span className="text-sm">{tr("تصميم وتجربة المستخدم")}</span>
           </div>
           <div className="flex items-center gap-3 text-[var(--smart-text-muted-on-dark)]">
             <FiCode className="w-4 h-4 text-[var(--smart-primary)]/60" />
-            <span className="text-sm">تطوير موقع احترافي</span>
+            <span className="text-sm">{tr("تطوير موقع احترافي")}</span>
           </div>
         </div>
         <div className="rounded-2xl bg-[var(--smart-primary)]/10 p-4 border border-[var(--smart-border-dark-strong)]">
           <div className="flex items-center gap-2 mb-2">
             <FiTrendingUp className="w-4 h-4 text-[var(--smart-primary-light)]" />
-            <span className="text-xs text-[var(--smart-primary-light)]">النتيجة</span>
+            <span className="text-xs text-[var(--smart-primary-light)]">{tr("النتيجة")}</span>
           </div>
-          <strong className="text-[var(--smart-text-on-dark)] text-sm">تجربة رقمية أكثر وضوحًا واحترافية</strong>
+          <strong className="text-[var(--smart-text-on-dark)] text-sm">{tr("تجربة رقمية أكثر وضوحًا واحترافية")}</strong>
         </div>
       </div>
     </motion.div>
@@ -148,13 +145,12 @@ function ClientLogosStrip({ clients }: { clients: Testimonial[] }) {
     <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.3 }} viewport={{ once: true, amount: 0.2 }} className="lg:col-span-7 rounded-[2rem] border border-[var(--smart-border-dark)] bg-[var(--smart-bg-dark-card)] p-6 backdrop-blur-xl">
       <h3 className="text-lg font-semibold text-[var(--smart-text-on-dark)] mb-4 flex items-center gap-2">
         <FiAward className="w-5 h-5 text-[var(--smart-primary-light)]" />
-        شركات وثقت بنا
-      </h3>
+        {tr("شركات وثقت بنا")}</h3>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         {clients.map((client, index) => (
           <div key={client._id || index} className="flex items-center justify-center rounded-2xl bg-white/5 p-4 min-h-[60px]">
             {client.companyLogo ? (
-              <img src={client.companyLogo} alt={client.companyName || "شعار الشركة"} className="h-6 object-contain opacity-70 hover:opacity-100 transition-opacity" />
+              <img src={client.companyLogo} alt={client.companyName || tr("شعار الشركة")} className="h-6 object-contain opacity-70 hover:opacity-100 transition-opacity" />
             ) : client.companyName ? (
               <span className="text-sm text-[var(--smart-text-muted-on-dark)] font-medium text-center">{client.companyName}</span>
             ) : (
@@ -174,15 +170,15 @@ function TrustStats({ testimonials }: { testimonials: Testimonial[] }) {
       <div className="grid grid-cols-3 gap-4 text-center">
         <div>
           <div className="text-3xl font-bold text-[var(--smart-primary-light)] mb-1">+20</div>
-          <div className="text-xs text-[var(--smart-text-muted-on-dark)]">مشروع تم تسليمه بنجاح</div>
+          <div className="text-xs text-[var(--smart-text-muted-on-dark)]">{tr("مشروع تم تسليمه بنجاح")}</div>
         </div>
         <div>
           <div className="text-3xl font-bold text-[var(--smart-primary-light)] mb-1">{averageRating.toFixed(1)}</div>
-          <div className="text-xs text-[var(--smart-text-muted-on-dark)]">متوسط التقييم من عملائنا</div>
+          <div className="text-xs text-[var(--smart-text-muted-on-dark)]">{tr("متوسط التقييم من عملائنا")}</div>
         </div>
         <div>
           <div className="text-3xl font-bold text-[var(--smart-primary-light)] mb-1">+8</div>
-          <div className="text-xs text-[var(--smart-text-muted-on-dark)]">قطاعات تنوع في الخبرات</div>
+          <div className="text-xs text-[var(--smart-text-muted-on-dark)]">{tr("قطاعات تنوع في الخبرات")}</div>
         </div>
       </div>
     </motion.div>

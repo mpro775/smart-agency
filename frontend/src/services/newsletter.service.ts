@@ -1,3 +1,4 @@
+import { tr } from "@/i18n";
 import axios from "axios";
 import publicApi from "./api";
 import type { ApiResponse } from "@/types/api";
@@ -29,14 +30,14 @@ export const newsletterService = {
         const status = error.response.status;
         if (status === 409) {
           throw new Error(
-            "هذا البريد الإلكتروني مشترك بالفعل في النشرة البريدية"
+            tr("هذا البريد الإلكتروني مشترك بالفعل في النشرة البريدية")
           );
         }
         if (status === 400) {
-          throw new Error("يرجى إدخال بريد إلكتروني صحيح");
+          throw new Error(tr("يرجى إدخال بريد إلكتروني صحيح"));
         }
       }
-      throw new Error("حدث خطأ أثناء الاشتراك. يرجى المحاولة مرة أخرى");
+      throw new Error(tr("حدث خطأ أثناء الاشتراك. يرجى المحاولة مرة أخرى"));
     }
   },
 
@@ -52,9 +53,9 @@ export const newsletterService = {
       return response.data.data;
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response?.status === 404) {
-        throw new Error("هذا البريد الإلكتروني غير موجود في قائمتنا");
+        throw new Error(tr("هذا البريد الإلكتروني غير موجود في قائمتنا"));
       }
-      throw new Error("حدث خطأ أثناء إلغاء الاشتراك. يرجى المحاولة مرة أخرى");
+      throw new Error(tr("حدث خطأ أثناء إلغاء الاشتراك. يرجى المحاولة مرة أخرى"));
     }
   },
 };

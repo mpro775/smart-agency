@@ -1,3 +1,4 @@
+import { tr } from "@/i18n";
 import { motion } from "framer-motion";
 import { FaHandshake } from "react-icons/fa";
 import { FiCheckCircle, FiStar } from "react-icons/fi";
@@ -80,21 +81,19 @@ export function AboutValues({ values }: AboutValuesProps) {
             whileHover={{ scale: 1.05 }}
           >
             <FiStar className="text-primary" size={16} />
-            <span className="text-primary font-bold text-sm">قيمنا الجوهرية</span>
+            <span className="text-primary font-bold text-sm">{tr("قيمنا الجوهرية")}</span>
           </motion.div>
 
           {/* Title */}
           <h2 className="text-5xl md:text-6xl font-black text-gray-900 mb-6 leading-tight">
-            <span className="block">المبادئ التي</span>
+            <span className="block">{tr("المبادئ التي")}</span>
             <span className="block text-transparent bg-clip-text bg-gradient-to-l from-primary via-primary-dark to-primary">
-              تقودنا للتميز
-            </span>
+              {tr("تقودنا للتميز")}</span>
           </h2>
 
           {/* Subtitle */}
           <p className="mt-6 text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed font-medium">
-            نؤمن بقيم راسخة تشكل أساس نجاحنا وتميزنا في كل مشروع نقدمه
-          </p>
+            {tr("نؤمن بقيم راسخة تشكل أساس نجاحنا وتميزنا في كل مشروع نقدمه")}</p>
 
           {/* Decorative line */}
           <motion.div
@@ -244,7 +243,7 @@ export function AboutValues({ values }: AboutValuesProps) {
                     >
                       <FiCheckCircle className="text-primary-dark" size={20} />
                     </motion.div>
-                    <span className="text-primary-dark">قيمة أساسية</span>
+                    <span className="text-primary-dark">{tr("قيمة أساسية")}</span>
                     <div className="flex-1 h-px bg-gradient-to-r from-primary/40 to-transparent ml-2" />
                   </motion.div>
                 </div>

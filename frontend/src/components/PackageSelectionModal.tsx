@@ -1,3 +1,4 @@
+import { tr } from "@/i18n";
 import {
   useState,
   type FormEvent,
@@ -109,7 +110,7 @@ export default function PackageSelectionModal({
       setSubmitError(
         error instanceof Error
           ? error.message
-          : "فشل إرسال الطلب. يرجى المحاولة مرة أخرى."
+          : tr("فشل إرسال الطلب. يرجى المحاولة مرة أخرى.")
       );
     }
   };
@@ -179,12 +180,9 @@ export default function PackageSelectionModal({
                     <CheckCircle2 className="w-12 h-12 text-green-600" />
                   </motion.div>
                   <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                    تم استلام طلبك بنجاح!
-                  </h3>
+                    {tr("تم استلام طلبك بنجاح!")}</h3>
                   <p className="text-gray-500 max-w-xs mx-auto">
-                    شكراً لثقتك بنا. سيقوم فريقنا بمراجعة طلبك والتواصل معك في
-                    أقرب وقت ممكن لإكمال الإجراءات.
-                  </p>
+                    {tr("شكراً لثقتك بنا. سيقوم فريقنا بمراجعة طلبك والتواصل معك في أقرب وقت ممكن لإكمال الإجراءات.")}</p>
                 </div>
               ) : (
                 <>
@@ -192,10 +190,10 @@ export default function PackageSelectionModal({
                   <div className="bg-gray-50 border-b border-gray-100 p-8 pt-10">
                     <div className="text-center mb-2">
                       <span className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold tracking-wider mb-3">
-                        {isEnterprise ? "طلب خاص" : "تأكيد الطلب"}
+                        {isEnterprise ? tr("طلب خاص") : tr("تأكيد الطلب")}
                       </span>
                       <h3 className="text-2xl font-bold text-gray-900">
-                        {isEnterprise ? "حلول المؤسسات" : selectedPackage?.name}
+                        {isEnterprise ? tr("حلول المؤسسات") : selectedPackage?.name}
                       </h3>
                     </div>
 
@@ -207,8 +205,7 @@ export default function PackageSelectionModal({
                           </div>
                           <div className="text-right">
                             <p className="text-xs text-gray-500">
-                              الباقة المختارة
-                            </p>
+                              {tr("الباقة المختارة")}</p>
                             <p className="font-semibold text-gray-900">
                               {selectedPackage.name}
                             </p>
@@ -218,12 +215,12 @@ export default function PackageSelectionModal({
                         <div className="flex items-center gap-3">
                           <div className="text-right">
                             <p className="text-xs text-gray-500">
-                              {billingCycle === "Monthly" ? "شهرياً" : "سنوياً"}
+                              {billingCycle === "Monthly" ? tr("شهرياً") : tr("سنوياً")}
                             </p>
                             <p className="font-bold text-gray-900 text-lg">
                               {displayPrice}{" "}
                               <span className="text-xs font-normal text-gray-500">
-                                {selectedPackage.currency || "ر.س"}
+                                {selectedPackage.currency || tr("ر.س")}
                               </span>
                             </p>
                           </div>
@@ -236,9 +233,7 @@ export default function PackageSelectionModal({
 
                     {isEnterprise && (
                       <p className="text-center text-gray-600 text-sm mt-2 max-w-sm mx-auto">
-                        املأ النموذج أدناه وسيقوم خبراؤنا التقنيون بالتواصل معك
-                        لتصميم الحل الأمثل.
-                      </p>
+                        {tr("املأ النموذج أدناه وسيقوم خبراؤنا التقنيون بالتواصل معك لتصميم الحل الأمثل.")}</p>
                     )}
                   </div>
 
@@ -247,7 +242,7 @@ export default function PackageSelectionModal({
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                       <div className="space-y-1.5">
                         <label className="text-xs font-semibold text-gray-700 mr-1">
-                          الاسم الكامل <span className="text-red-500">*</span>
+                          {tr("الاسم الكامل")}<span className="text-red-500">*</span>
                         </label>
                         <InputField
                           icon={User}
@@ -255,12 +250,12 @@ export default function PackageSelectionModal({
                           value={formData.fullName}
                           onChange={handleInputChange}
                           required
-                          placeholder="مثال: محمد أحمد"
+                          placeholder={tr("مثال: محمد أحمد")}
                         />
                       </div>
                       <div className="space-y-1.5">
                         <label className="text-xs font-semibold text-gray-700 mr-1">
-                          رقم الهاتف <span className="text-red-500">*</span>
+                          {tr("رقم الهاتف")}<span className="text-red-500">*</span>
                         </label>
                         <InputField
                           icon={Phone}
@@ -278,7 +273,7 @@ export default function PackageSelectionModal({
 
                     <div className="space-y-1.5">
                       <label className="text-xs font-semibold text-gray-700 mr-1">
-                        البريد الإلكتروني{" "}
+                        {tr("البريد الإلكتروني")}{" "}
                         <span className="text-red-500">*</span>
                       </label>
                       <InputField
@@ -294,21 +289,19 @@ export default function PackageSelectionModal({
 
                     <div className="space-y-1.5">
                       <label className="text-xs font-semibold text-gray-700 mr-1">
-                        اسم الشركة (اختياري)
-                      </label>
+                        {tr("اسم الشركة (اختياري)")}</label>
                       <InputField
                         icon={Building2}
                         name="companyName"
                         value={formData.companyName}
                         onChange={handleInputChange}
-                        placeholder="اسم مؤسستك أو شركتك"
+                        placeholder={tr("اسم مؤسستك أو شركتك")}
                       />
                     </div>
 
                     <div className="space-y-1.5">
                       <label className="text-xs font-semibold text-gray-700 mr-1">
-                        ملاحظات إضافية
-                      </label>
+                        {tr("ملاحظات إضافية")}</label>
                       <div className="relative group">
                         <div className="absolute top-3 right-0 pr-3 pointer-events-none text-gray-400 group-focus-within:text-primary transition-colors">
                           <MessageSquare size={18} />
@@ -321,8 +314,8 @@ export default function PackageSelectionModal({
                           className="w-full pr-10 pl-4 py-3 bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary focus:bg-white transition-all outline-none placeholder:text-gray-400 resize-none"
                           placeholder={
                             isEnterprise
-                              ? "صف لنا متطلبات السيرفر والمواصفات التي تحتاجها..."
-                              : "أي تعليمات خاصة..."
+                              ? tr("صف لنا متطلبات السيرفر والمواصفات التي تحتاجها...")
+                              : tr("أي تعليمات خاصة...")
                           }
                         />
                       </div>
@@ -350,18 +343,16 @@ export default function PackageSelectionModal({
                         {isSubmitting ? (
                           <>
                             <Loader2 className="animate-spin" size={20} />
-                            <span>جاري المعالجة...</span>
+                            <span>{tr("جاري المعالجة...")}</span>
                           </>
                         ) : (
                           <span>
-                            {isEnterprise ? "إرسال طلب عرض سعر" : "إتمام الطلب"}
+                            {isEnterprise ? tr("إرسال طلب عرض سعر") : tr("إتمام الطلب")}
                           </span>
                         )}
                       </motion.button>
                       <p className="text-center text-xs text-gray-400 mt-4">
-                        بضغطك على إتمام الطلب، أنت توافق على شروط الخدمة وسياسة
-                        الخصوصية.
-                      </p>
+                        {tr("بضغطك على إتمام الطلب، أنت توافق على شروط الخدمة وسياسة الخصوصية.")}</p>
                     </div>
                   </form>
                 </>

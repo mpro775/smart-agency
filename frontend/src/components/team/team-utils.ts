@@ -1,17 +1,18 @@
+import { tr } from "@/i18n";
 export const getDepartmentLabel = (department?: string) => {
   const labels: Record<string, string> = {
-    Management: "الإدارة",
-    Backend: "تطوير الخلفية",
-    Frontend: "تطوير الواجهات",
-    Mobile: "تطبيقات الجوال",
-    DevOps: "البنية والتشغيل",
-    Design: "التصميم وتجربة المستخدم",
-    "Quality Assurance": "ضمان الجودة",
-    Marketing: "التسويق والنمو",
-    Support: "الدعم الفني",
+    Management: tr("الإدارة"),
+    Backend: tr("تطوير الخلفية"),
+    Frontend: tr("تطوير الواجهات"),
+    Mobile: tr("تطبيقات الجوال"),
+    DevOps: tr("البنية والتشغيل"),
+    Design: tr("التصميم وتجربة المستخدم"),
+    "Quality Assurance": tr("ضمان الجودة"),
+    Marketing: tr("التسويق والنمو"),
+    Support: tr("الدعم الفني"),
   };
 
-  return department ? labels[department] ?? department : "فريق سمارت";
+  return department ? labels[department] ?? department : tr("فريق سمارت");
 };
 
 export const getDepartmentAccent = (department?: string) => {

@@ -1,3 +1,4 @@
+import { tr } from "@/i18n";
 import type { BlogTaxonomyItem } from "../../services/blog.service";
 
 export default function CategoryTabs({
@@ -9,10 +10,10 @@ export default function CategoryTabs({
   selected: string;
   onSelect: (value: string) => void;
 }) {
-  const items = [{ value: "all", label: "الكل", count: 0 }, ...categories];
+  const items = [{ value: "all", label: tr("الكل"), count: 0 }, ...categories];
 
   return (
-    <div className="flex gap-2 overflow-x-auto pb-2" dir="rtl">
+    <div className="flex gap-2 overflow-x-auto pb-2">
       {items.map((item) => (
         <button
           key={item.value}

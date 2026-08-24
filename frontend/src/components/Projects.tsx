@@ -1,4 +1,3 @@
-"use client";
 import ProjectsShowcase from "./projects/ProjectsShowcase";
 import type { Project } from "../admin/types";
 

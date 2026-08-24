@@ -1,3 +1,4 @@
+import { tr } from "@/i18n";
 import { motion, useInView, useMotionValue, useTransform, animate } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import { type ComponentType } from "react";
@@ -77,7 +78,7 @@ export function AboutProofStats({ stats }: AboutProofStatsProps) {
         />
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10" dir="rtl">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -86,11 +87,9 @@ export function AboutProofStats({ stats }: AboutProofStatsProps) {
           className="text-center mb-16"
         >
           <span className="inline-block px-5 py-2 rounded-full bg-primary/5 border border-primary/15 text-primary text-sm font-bold mb-5 tracking-wide">
-            بالأرقام
-          </span>
+            {tr("بالأرقام")}</span>
           <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight">
-            إنجازاتنا تتحدث عنا
-          </h2>
+            {tr("إنجازاتنا تتحدث عنا")}</h2>
         </motion.div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">

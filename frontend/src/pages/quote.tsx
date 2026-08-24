@@ -1,3 +1,4 @@
+import { tr } from "@/i18n";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import type { FormEvent } from "react";
@@ -81,82 +82,82 @@ const initialData: WizardData = {
 const serviceCards = [
   {
     value: ServiceType.WEB_APP,
-    label: "موقع إلكتروني",
-    description: "موقع تعريفي أو تفاعلي مع لوحة تحكم",
+    label: tr("موقع إلكتروني"),
+    description: tr("موقع تعريفي أو تفاعلي مع لوحة تحكم"),
     icon: <FiGlobe size={24} />,
   },
   {
     value: ServiceType.ECOMMERCE,
-    label: "متجر إلكتروني",
-    description: "لبيع المنتجات وإدارة الطلبات والدفع والتوصيل",
+    label: tr("متجر إلكتروني"),
+    description: tr("لبيع المنتجات وإدارة الطلبات والدفع والتوصيل"),
     icon: <FiShoppingBag size={24} />,
   },
   {
     value: ServiceType.MOBILE_APP,
-    label: "تطبيق جوال",
-    description: "تطبيق Android أو iOS أو كلاهما",
+    label: tr("تطبيق جوال"),
+    description: tr("تطبيق Android أو iOS أو كلاهما"),
     icon: <FiSmartphone size={24} />,
   },
   {
     value: ServiceType.ERP,
-    label: "نظام إداري / ERP",
-    description: "نظام شامل لإدارة الموارد والعمليات",
+    label: tr("نظام إداري / ERP"),
+    description: tr("نظام شامل لإدارة الموارد والعمليات"),
     icon: <FiSettings size={24} />,
   },
   {
     value: ServiceType.AUTOMATION,
-    label: "أتمتة أعمال",
-    description: "أتمتة العمليات وربط الأدوات المختلفة",
+    label: tr("أتمتة أعمال"),
+    description: tr("أتمتة العمليات وربط الأدوات المختلفة"),
     icon: <FiCpu size={24} />,
   },
   {
     value: ServiceType.CONSULTATION,
-    label: "استشارة تقنية",
-    description: "استشارة لاختيار الحل الأنسب لمشروعك",
+    label: tr("استشارة تقنية"),
+    description: tr("استشارة لاختيار الحل الأنسب لمشروعك"),
     icon: <FiMessageSquare size={24} />,
   },
   {
     value: ServiceType.OTHER,
-    label: "أخرى",
-    description: "مشروع آخر أو فكرة مختلفة",
+    label: tr("أخرى"),
+    description: tr("مشروع آخر أو فكرة مختلفة"),
     icon: <FiHelpCircle size={24} />,
   },
 ];
 
 const budgetCards = [
-  { value: BudgetRange.SMALL, label: "أقل من 1,000 دولار" },
-  { value: BudgetRange.MEDIUM, label: "1,000 - 5,000 دولار" },
-  { value: BudgetRange.LARGE, label: "5,000 - 15,000 دولار" },
-  { value: BudgetRange.ENTERPRISE, label: "أكثر من 15,000 دولار" },
-  { value: BudgetRange.NOT_SPECIFIED, label: "غير محدد" },
+  { value: BudgetRange.SMALL, label: tr("أقل من 1,000 دولار") },
+  { value: BudgetRange.MEDIUM, label: tr("1,000 - 5,000 دولار") },
+  { value: BudgetRange.LARGE, label: tr("5,000 - 15,000 دولار") },
+  { value: BudgetRange.ENTERPRISE, label: tr("أكثر من 15,000 دولار") },
+  { value: BudgetRange.NOT_SPECIFIED, label: tr("غير محدد") },
 ];
 
 const timelineCards = [
-  { value: Timeline.URGENT, label: "عاجل" },
-  { value: Timeline.ONE_MONTH, label: "خلال شهر" },
-  { value: Timeline.TWO_THREE_MONTHS, label: "خلال 2 - 3 أشهر" },
-  { value: Timeline.FLEXIBLE, label: "مرن" },
+  { value: Timeline.URGENT, label: tr("عاجل") },
+  { value: Timeline.ONE_MONTH, label: tr("خلال شهر") },
+  { value: Timeline.TWO_THREE_MONTHS, label: tr("خلال 2 - 3 أشهر") },
+  { value: Timeline.FLEXIBLE, label: tr("مرن") },
 ];
 
 const companySizeOptions = [
-  { value: CompanySize.INDIVIDUAL, label: "فرد / مستقل" },
-  { value: CompanySize.STARTUP, label: "شركة ناشئة" },
-  { value: CompanySize.SMALL_BUSINESS, label: "مشروع صغير" },
-  { value: CompanySize.COMPANY, label: "شركة متوسطة / كبيرة" },
+  { value: CompanySize.INDIVIDUAL, label: tr("فرد / مستقل") },
+  { value: CompanySize.STARTUP, label: tr("شركة ناشئة") },
+  { value: CompanySize.SMALL_BUSINESS, label: tr("مشروع صغير") },
+  { value: CompanySize.COMPANY, label: tr("شركة متوسطة / كبيرة") },
 ];
 
 const projectStageOptions = [
-  { value: ProjectStage.IDEA, label: "فكرة أولية" },
-  { value: ProjectStage.EXISTING_BUSINESS, label: "مشروع قائم" },
-  { value: ProjectStage.REDESIGN, label: "إعادة تصميم" },
-  { value: ProjectStage.SCALING, label: "توسع وتطوير" },
+  { value: ProjectStage.IDEA, label: tr("فكرة أولية") },
+  { value: ProjectStage.EXISTING_BUSINESS, label: tr("مشروع قائم") },
+  { value: ProjectStage.REDESIGN, label: tr("إعادة تصميم") },
+  { value: ProjectStage.SCALING, label: tr("توسع وتطوير") },
 ];
 
 const contactMethodOptions = [
-  { value: PreferredContactMethod.WHATSAPP, label: "واتساب", icon: <MessageCircle size={18} /> },
-  { value: PreferredContactMethod.PHONE, label: "مكالمة هاتفية", icon: <Phone size={18} /> },
-  { value: PreferredContactMethod.EMAIL, label: "بريد إلكتروني", icon: <Mail size={18} /> },
-  { value: PreferredContactMethod.MEETING, label: "اجتماع", icon: <FiCalendar size={18} /> },
+  { value: PreferredContactMethod.WHATSAPP, label: tr("واتساب"), icon: <MessageCircle size={18} /> },
+  { value: PreferredContactMethod.PHONE, label: tr("مكالمة هاتفية"), icon: <Phone size={18} /> },
+  { value: PreferredContactMethod.EMAIL, label: tr("بريد إلكتروني"), icon: <Mail size={18} /> },
+  { value: PreferredContactMethod.MEETING, label: tr("اجتماع"), icon: <FiCalendar size={18} /> },
 ];
 
 function calculatePriority(data: Partial<WizardData>): LeadPriority {
@@ -281,7 +282,7 @@ export default function QuotePage() {
     } catch (error: unknown) {
       console.error("Error submitting project brief:", error);
       setIsSubmitting(false);
-      let message = "فشل إرسال الطلب. يرجى المحاولة مرة أخرى.";
+      let message = tr("فشل إرسال الطلب. يرجى المحاولة مرة أخرى.");
       if (error && typeof error === "object" && "response" in error) {
         const resp = (error as { response?: { data?: { message?: string } } }).response;
         message = resp?.data?.message || message;
@@ -291,11 +292,11 @@ export default function QuotePage() {
   };
 
   const steps = [
-    { num: 1, label: "معلوماتك" },
-    { num: 2, label: "نوع المشروع" },
-    { num: 3, label: "تفاصيل الفكرة" },
-    { num: 4, label: "الميزانية والمدة" },
-    { num: 5, label: "طريقة التواصل" },
+    { num: 1, label: tr("معلوماتك") },
+    { num: 2, label: tr("نوع المشروع") },
+    { num: 3, label: tr("تفاصيل الفكرة") },
+    { num: 4, label: tr("الميزانية والمدة") },
+    { num: 5, label: tr("طريقة التواصل") },
   ];
 
   // Smart questions based on service type
@@ -303,13 +304,13 @@ export default function QuotePage() {
     if (data.serviceType === ServiceType.ECOMMERCE) {
       return (
         <div className="space-y-4 mt-4 p-4 bg-gray-50 rounded-xl">
-          <h4 className="font-medium text-gray-800">أسئلة خاصة بالمتجر الإلكتروني</h4>
+          <h4 className="font-medium text-gray-800">{tr("أسئلة خاصة بالمتجر الإلكتروني")}</h4>
           <div className="space-y-3">
             {[
-              { key: "productsReady", label: "هل لديك منتجات جاهزة؟" },
-              { key: "needsPayment", label: "هل تحتاج دفع إلكتروني؟" },
-              { key: "needsDeliveryIntegration", label: "هل تحتاج ربط توصيل؟" },
-              { key: "needsAdminPanel", label: "هل تحتاج لوحة تحكم؟" },
+              { key: "productsReady", label: tr("هل لديك منتجات جاهزة؟") },
+              { key: "needsPayment", label: tr("هل تحتاج دفع إلكتروني؟") },
+              { key: "needsDeliveryIntegration", label: tr("هل تحتاج ربط توصيل؟") },
+              { key: "needsAdminPanel", label: tr("هل تحتاج لوحة تحكم؟") },
             ].map((q) => (
               <div key={q.key} className="flex items-center justify-between">
                 <span className="text-sm text-gray-700">{q.label}</span>
@@ -323,8 +324,7 @@ export default function QuotePage() {
                         : "bg-white border border-gray-200 text-gray-600 hover:border-[#008080]"
                     }`}
                   >
-                    نعم
-                  </button>
+                    {tr("نعم")}</button>
                   <button
                     type="button"
                     onClick={() => updateProjectAnswer(q.key, false)}
@@ -334,8 +334,7 @@ export default function QuotePage() {
                         : "bg-white border border-gray-200 text-gray-600 hover:border-gray-400"
                     }`}
                   >
-                    لا
-                  </button>
+                    {tr("لا")}</button>
                 </div>
               </div>
             ))}
@@ -347,125 +346,33 @@ export default function QuotePage() {
     if (data.serviceType === ServiceType.MOBILE_APP) {
       return (
         <div className="space-y-4 mt-4 p-4 bg-gray-50 rounded-xl">
-          <h4 className="font-medium text-gray-800">أسئلة خاصة بالتطبيق</h4>
+          <h4 className="font-medium text-gray-800">{tr("أسئلة خاصة بالتطبيق")}</h4>
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-700">هل التطبيق Android فقط أم Android و iOS؟</span>
+              <span className="text-sm text-gray-700">{tr("هل التطبيق Android فقط أم Android و iOS؟")}</span>
             </div>
             <div className="flex gap-2">
-              {["Android only", "Android + iOS"].map((opt) => (
+              {[
+                { value: "android", label: tr("Android فقط") },
+                { value: "both", label: tr("Android و iOS") },
+              ].map((opt) => (
                 <button
-                  key={opt}
+                  key={opt.value}
                   type="button"
-                  onClick={() => updateProjectAnswer("platforms", opt)}
+                  onClick={() => updateProjectAnswer("platforms", opt.value)}
                   className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
-                    data.projectAnswers["platforms"] === opt
+                    data.projectAnswers["platforms"] === opt.value
                       ? "bg-[#008080] text-white"
                       : "bg-white border border-gray-200 text-gray-600 hover:border-[#008080]"
                   }`}
                 >
-                  {opt}
+                  {opt.label}
                 </button>
               ))}
             </div>
             {[
-              { key: "needsAdminPanel", label: "هل يحتاج لوحة تحكم؟" },
-              { key: "hasDesign", label: "هل لديك تصميم جاهز؟" },
-              { key: "productScope", label: "هل تريد MVP أم منتج كامل؟" },
-            ].map((q) => (
-              <div key={q.key} className="flex items-center justify-between">
-                <span className="text-sm text-gray-700">{q.label}</span>
-                <div className="flex gap-2">
-                  <button
-                    type="button"
-                    onClick={() => updateProjectAnswer(q.key, "نعم")}
-                    className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
-                      data.projectAnswers[q.key] === "نعم"
-                        ? "bg-[#008080] text-white"
-                        : "bg-white border border-gray-200 text-gray-600 hover:border-[#008080]"
-                    }`}
-                  >
-                    نعم
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => updateProjectAnswer(q.key, "لا")}
-                    className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
-                      data.projectAnswers[q.key] === "لا"
-                        ? "bg-gray-500 text-white"
-                        : "bg-white border border-gray-200 text-gray-600 hover:border-gray-400"
-                    }`}
-                  >
-                    لا
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      );
-    }
-
-    if (data.serviceType === ServiceType.WEB_APP) {
-      return (
-        <div className="space-y-4 mt-4 p-4 bg-gray-50 rounded-xl">
-          <h4 className="font-medium text-gray-800">أسئلة خاصة بالموقع</h4>
-          <div className="space-y-3">
-            {[
-              { key: "isInteractive", label: "هل الموقع تعريفي أم نظام تفاعلي؟" },
-              { key: "needsBlog", label: "هل تحتاج مدونة أو لوحة تحكم؟" },
-              { key: "needsSEO", label: "هل تحتاج تحسين SEO؟" },
-            ].map((q) => (
-              <div key={q.key} className="flex items-center justify-between">
-                <span className="text-sm text-gray-700">{q.label}</span>
-                <div className="flex gap-2">
-                  <button
-                    type="button"
-                    onClick={() => updateProjectAnswer(q.key, "نعم")}
-                    className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
-                      data.projectAnswers[q.key] === "نعم"
-                        ? "bg-[#008080] text-white"
-                        : "bg-white border border-gray-200 text-gray-600 hover:border-[#008080]"
-                    }`}
-                  >
-                    نعم
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => updateProjectAnswer(q.key, "لا")}
-                    className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
-                      data.projectAnswers[q.key] === "لا"
-                        ? "bg-gray-500 text-white"
-                        : "bg-white border border-gray-200 text-gray-600 hover:border-gray-400"
-                    }`}
-                  >
-                    لا
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      );
-    }
-
-    if (data.serviceType === ServiceType.AUTOMATION) {
-      return (
-        <div className="space-y-4 mt-4 p-4 bg-gray-50 rounded-xl">
-          <h4 className="font-medium text-gray-800">أسئلة خاصة بالأتمتة</h4>
-          <div className="space-y-3">
-            <div>
-              <label className="block text-sm text-gray-700 mb-1">ما العملية التي تريد أتمتتها؟</label>
-              <textarea
-                rows={2}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#008080]"
-                placeholder="وصف مختصر..."
-                onChange={(e) => updateProjectAnswer("processToAutomate", e.target.value)}
-              />
-            </div>
-            {[
-              { key: "needsCRM", label: "هل تحتاج ربط CRM؟" },
-              { key: "needsNotifications", label: "هل تحتاج إشعارات؟" },
+              { key: "needsAdminPanel", label: tr("هل يحتاج لوحة تحكم؟") },
+              { key: "hasDesign", label: tr("هل لديك تصميم جاهز؟") },
             ].map((q) => (
               <div key={q.key} className="flex items-center justify-between">
                 <span className="text-sm text-gray-700">{q.label}</span>
@@ -479,8 +386,7 @@ export default function QuotePage() {
                         : "bg-white border border-gray-200 text-gray-600 hover:border-[#008080]"
                     }`}
                   >
-                    نعم
-                  </button>
+                    {tr("نعم")}</button>
                   <button
                     type="button"
                     onClick={() => updateProjectAnswer(q.key, false)}
@@ -490,8 +396,119 @@ export default function QuotePage() {
                         : "bg-white border border-gray-200 text-gray-600 hover:border-gray-400"
                     }`}
                   >
-                    لا
+                    {tr("لا")}</button>
+                </div>
+              </div>
+            ))}
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-gray-700">{tr("هل تريد MVP أم منتج كامل؟")}</span>
+              <div className="flex gap-2">
+                {[
+                  { value: "mvp", label: "MVP" },
+                  { value: "full_product", label: tr("منتج كامل") },
+                ].map((option) => (
+                  <button
+                    key={option.value}
+                    type="button"
+                    onClick={() => updateProjectAnswer("productScope", option.value)}
+                    className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                      data.projectAnswers.productScope === option.value
+                        ? "bg-[#008080] text-white"
+                        : "bg-white border border-gray-200 text-gray-600 hover:border-[#008080]"
+                    }`}
+                  >
+                    {option.label}
                   </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    if (data.serviceType === ServiceType.WEB_APP) {
+      return (
+        <div className="space-y-4 mt-4 p-4 bg-gray-50 rounded-xl">
+          <h4 className="font-medium text-gray-800">{tr("أسئلة خاصة بالموقع")}</h4>
+          <div className="space-y-3">
+            {[
+              { key: "isInteractive", label: tr("هل الموقع تعريفي أم نظام تفاعلي؟") },
+              { key: "needsBlog", label: tr("هل تحتاج مدونة أو لوحة تحكم؟") },
+              { key: "needsSEO", label: tr("هل تحتاج تحسين SEO؟") },
+            ].map((q) => (
+              <div key={q.key} className="flex items-center justify-between">
+                <span className="text-sm text-gray-700">{q.label}</span>
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => updateProjectAnswer(q.key, true)}
+                    className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                      data.projectAnswers[q.key] === true
+                        ? "bg-[#008080] text-white"
+                        : "bg-white border border-gray-200 text-gray-600 hover:border-[#008080]"
+                    }`}
+                  >
+                    {tr("نعم")}</button>
+                  <button
+                    type="button"
+                    onClick={() => updateProjectAnswer(q.key, false)}
+                    className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                      data.projectAnswers[q.key] === false
+                        ? "bg-gray-500 text-white"
+                        : "bg-white border border-gray-200 text-gray-600 hover:border-gray-400"
+                    }`}
+                  >
+                    {tr("لا")}</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    if (data.serviceType === ServiceType.AUTOMATION) {
+      return (
+        <div className="space-y-4 mt-4 p-4 bg-gray-50 rounded-xl">
+          <h4 className="font-medium text-gray-800">{tr("أسئلة خاصة بالأتمتة")}</h4>
+          <div className="space-y-3">
+            <div>
+              <label className="block text-sm text-gray-700 mb-1">{tr("ما العملية التي تريد أتمتتها؟")}</label>
+              <textarea
+                rows={2}
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#008080]"
+                placeholder={tr("وصف مختصر...")}
+                onChange={(e) => updateProjectAnswer("processToAutomate", e.target.value)}
+              />
+            </div>
+            {[
+              { key: "needsCRM", label: tr("هل تحتاج ربط CRM؟") },
+              { key: "needsNotifications", label: tr("هل تحتاج إشعارات؟") },
+            ].map((q) => (
+              <div key={q.key} className="flex items-center justify-between">
+                <span className="text-sm text-gray-700">{q.label}</span>
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => updateProjectAnswer(q.key, true)}
+                    className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                      data.projectAnswers[q.key] === true
+                        ? "bg-[#008080] text-white"
+                        : "bg-white border border-gray-200 text-gray-600 hover:border-[#008080]"
+                    }`}
+                  >
+                    {tr("نعم")}</button>
+                  <button
+                    type="button"
+                    onClick={() => updateProjectAnswer(q.key, false)}
+                    className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                      data.projectAnswers[q.key] === false
+                        ? "bg-gray-500 text-white"
+                        : "bg-white border border-gray-200 text-gray-600 hover:border-gray-400"
+                    }`}
+                  >
+                    {tr("لا")}</button>
                 </div>
               </div>
             ))}
@@ -510,7 +527,6 @@ export default function QuotePage() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         className="min-h-screen flex items-center justify-center px-4 py-20"
-        dir="rtl"
       >
         <div className="max-w-lg mx-auto text-center">
           <motion.div
@@ -522,14 +538,12 @@ export default function QuotePage() {
             <FiCheck className="text-green-600 text-4xl" />
           </motion.div>
           <h1 className="text-3xl font-bold text-gray-900 mb-4">
-            تم استلام تفاصيل مشروعك بنجاح
-          </h1>
+            {tr("تم استلام تفاصيل مشروعك بنجاح")}</h1>
           <p className="text-gray-600 text-lg mb-8 leading-relaxed">
-            سيقوم فريق سمارت بمراجعة الطلب وتحضير تصوّر أولي خلال 24 ساعة عمل.
-          </p>
+            {tr("سيقوم فريق سمارت بمراجعة الطلب وتحضير تصوّر أولي خلال 24 ساعة عمل.")}</p>
 
           <div className="space-y-3 mb-10 text-right">
-            {["مراجعة الطلب", "تحديد أفضل حل تقني", "التواصل معك", "إرسال تصوّر أولي أو تحديد اجتماع"].map(
+            {[tr("مراجعة الطلب"), tr("تحديد أفضل حل تقني"), tr("التواصل معك"), tr("إرسال تصوّر أولي أو تحديد اجتماع")].map(
               (step, i) => (
                 <motion.div
                   key={i}
@@ -555,23 +569,20 @@ export default function QuotePage() {
               className="flex items-center gap-2 px-6 py-3 rounded-xl bg-green-600 text-white font-semibold hover:bg-green-700 transition-all"
             >
               <MessageCircle size={18} />
-              تواصل عبر واتساب
-            </a>
+              {tr("تواصل عبر واتساب")}</a>
             <Link to="/">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 className="px-6 py-3 rounded-xl bg-gray-100 text-gray-700 font-semibold hover:bg-gray-200 transition-all"
               >
-                العودة للرئيسية
-              </motion.button>
+                {tr("العودة للرئيسية")}</motion.button>
             </Link>
             <Link to="/projects">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 className="px-6 py-3 rounded-xl border border-gray-300 text-gray-700 font-semibold hover:bg-gray-50 transition-all"
               >
-                استعراض أعمالنا
-              </motion.button>
+                {tr("استعراض أعمالنا")}</motion.button>
             </Link>
           </div>
         </div>
@@ -585,17 +596,15 @@ export default function QuotePage() {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
       className="min-h-screen py-20 px-4"
-      dir="rtl"
     >
       {/* Hero */}
       <div className="text-center max-w-2xl mx-auto mb-12">
         <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-          ابدأ مشروعك —{" "}
-          <span className="text-[#008080]">نحوّل فكرتك إلى خطة واضحة</span>
+          {tr("ابدأ مشروعك —")}{" "}
+          <span className="text-[#008080]">{tr("نحوّل فكرتك إلى خطة واضحة")}</span>
         </h1>
         <p className="text-gray-600 text-lg">
-          خمس خطوات بسيطة لمساعدتنا على فهم مشروعك وتقديم أفضل حل تقني.
-        </p>
+          {tr("خمس خطوات بسيطة لمساعدتنا على فهم مشروعك وتقديم أفضل حل تقني.")}</p>
       </div>
 
       {/* Error */}
@@ -660,29 +669,26 @@ export default function QuotePage() {
                     exit={{ opacity: 0, x: -20 }}
                     className="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-gray-100"
                   >
-                    <h2 className="text-xl font-bold text-gray-900 mb-2">معلوماتك</h2>
+                    <h2 className="text-xl font-bold text-gray-900 mb-2">{tr("معلوماتك")}</h2>
                     <p className="text-gray-500 text-sm mb-6">
-                      نحتاج هذه البيانات فقط لنتواصل معك بعد مراجعة تفاصيل المشروع.
-                    </p>
+                      {tr("نحتاج هذه البيانات فقط لنتواصل معك بعد مراجعة تفاصيل المشروع.")}</p>
                     <div className="space-y-5">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div>
                           <label className="block mb-2 text-sm font-medium text-gray-700">
-                            الاسم الكامل *
-                          </label>
+                            {tr("الاسم الكامل *")}</label>
                           <input
                             type="text"
                             value={data.fullName}
                             onChange={(e) => updateField("fullName", e.target.value)}
                             required
                             className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#008080] text-sm"
-                            placeholder="أدخل اسمك"
+                            placeholder={tr("أدخل اسمك")}
                           />
                         </div>
                         <div>
                           <label className="block mb-2 text-sm font-medium text-gray-700">
-                            البريد الإلكتروني *
-                          </label>
+                            {tr("البريد الإلكتروني *")}</label>
                           <input
                             type="email"
                             value={data.email}
@@ -696,20 +702,18 @@ export default function QuotePage() {
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div>
                           <label className="block mb-2 text-sm font-medium text-gray-700">
-                            اسم الشركة (اختياري)
-                          </label>
+                            {tr("اسم الشركة (اختياري)")}</label>
                           <input
                             type="text"
                             value={data.companyName}
                             onChange={(e) => updateField("companyName", e.target.value)}
                             className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#008080] text-sm"
-                            placeholder="اسم الشركة"
+                            placeholder={tr("اسم الشركة")}
                           />
                         </div>
                         <div>
                           <label className="block mb-2 text-sm font-medium text-gray-700">
-                            رقم الهاتف (اختياري)
-                          </label>
+                            {tr("رقم الهاتف (اختياري)")}</label>
                           <input
                             type="tel"
                             value={data.phone}
@@ -721,8 +725,7 @@ export default function QuotePage() {
                       </div>
                       <div>
                         <label className="block mb-2 text-sm font-medium text-gray-700">
-                          حجم الشركة
-                        </label>
+                          {tr("حجم الشركة")}</label>
                         <div className="grid grid-cols-2 gap-3">
                           {companySizeOptions.map((opt) => (
                             <button
@@ -753,8 +756,8 @@ export default function QuotePage() {
                     exit={{ opacity: 0, x: -20 }}
                     className="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-gray-100"
                   >
-                    <h2 className="text-xl font-bold text-gray-900 mb-2">نوع المشروع</h2>
-                    <p className="text-gray-500 text-sm mb-6">اختر نوع المشروع الذي تريد بناءه.</p>
+                    <h2 className="text-xl font-bold text-gray-900 mb-2">{tr("نوع المشروع")}</h2>
+                    <p className="text-gray-500 text-sm mb-6">{tr("اختر نوع المشروع الذي تريد بناءه.")}</p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       {serviceCards.map((card) => (
                         <button
@@ -793,13 +796,12 @@ export default function QuotePage() {
                     exit={{ opacity: 0, x: -20 }}
                     className="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-gray-100"
                   >
-                    <h2 className="text-xl font-bold text-gray-900 mb-2">تفاصيل الفكرة</h2>
-                    <p className="text-gray-500 text-sm mb-6">أخبرنا أكثر عن مشروعك.</p>
+                    <h2 className="text-xl font-bold text-gray-900 mb-2">{tr("تفاصيل الفكرة")}</h2>
+                    <p className="text-gray-500 text-sm mb-6">{tr("أخبرنا أكثر عن مشروعك.")}</p>
                     <div className="space-y-5">
                       <div>
                         <label className="block mb-2 text-sm font-medium text-gray-700">
-                          مرحلة المشروع
-                        </label>
+                          {tr("مرحلة المشروع")}</label>
                         <div className="grid grid-cols-2 gap-3">
                           {projectStageOptions.map((opt) => (
                             <button
@@ -819,21 +821,19 @@ export default function QuotePage() {
                       </div>
                       <div>
                         <label className="block mb-2 text-sm font-medium text-gray-700">
-                          هدف المشروع
-                        </label>
+                          {tr("هدف المشروع")}</label>
                         <input
                           type="text"
                           value={data.projectGoal}
                           onChange={(e) => updateField("projectGoal", e.target.value)}
                           className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#008080] text-sm"
-                          placeholder="ما الهدف الرئيسي من هذا المشروع؟"
+                          placeholder={tr("ما الهدف الرئيسي من هذا المشروع؟")}
                         />
                       </div>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div>
                           <label className="block mb-2 text-sm font-medium text-gray-700">
-                            الموقع الحالي (إن وجد)
-                          </label>
+                            {tr("الموقع الحالي (إن وجد)")}</label>
                           <input
                             type="url"
                             value={data.currentWebsite}
@@ -844,8 +844,7 @@ export default function QuotePage() {
                         </div>
                         <div>
                           <label className="block mb-2 text-sm font-medium text-gray-700">
-                            هل لديك هوية بصرية؟
-                          </label>
+                            {tr("هل لديك هوية بصرية؟")}</label>
                           <div className="flex gap-3">
                             {[true, false].map((val) => (
                               <button
@@ -858,7 +857,7 @@ export default function QuotePage() {
                                     : "border-gray-200 text-gray-600 hover:border-gray-300"
                                 }`}
                               >
-                                {val ? "نعم" : "لا"}
+                                {val ? tr("نعم") : tr("لا")}
                               </button>
                             ))}
                           </div>
@@ -866,14 +865,13 @@ export default function QuotePage() {
                       </div>
                       <div>
                         <label className="block mb-2 text-sm font-medium text-gray-700">
-                          وصف المشروع
-                        </label>
+                          {tr("وصف المشروع")}</label>
                         <textarea
                           rows={4}
                           value={data.message}
                           onChange={(e) => updateField("message", e.target.value)}
                           className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#008080] text-sm resize-none"
-                          placeholder="أخبرنا أكثر عن مشروعك، متطلباتك، والجدول الزمني المطلوب..."
+                          placeholder={tr("أخبرنا أكثر عن مشروعك، متطلباتك، والجدول الزمني المطلوب...")}
                         />
                       </div>
 
@@ -891,15 +889,13 @@ export default function QuotePage() {
                     exit={{ opacity: 0, x: -20 }}
                     className="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-gray-100"
                   >
-                    <h2 className="text-xl font-bold text-gray-900 mb-2">الميزانية والمدة</h2>
+                    <h2 className="text-xl font-bold text-gray-900 mb-2">{tr("الميزانية والمدة")}</h2>
                     <p className="text-gray-500 text-sm mb-6">
-                      هذه المعلومات تساعدنا في تقديم الحل الأنسب لميزانيتك.
-                    </p>
+                      {tr("هذه المعلومات تساعدنا في تقديم الحل الأنسب لميزانيتك.")}</p>
                     <div className="space-y-6">
                       <div>
                         <label className="block mb-3 text-sm font-medium text-gray-700">
-                          الميزانية المتوقعة
-                        </label>
+                          {tr("الميزانية المتوقعة")}</label>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                           {budgetCards.map((card) => (
                             <button
@@ -919,8 +915,7 @@ export default function QuotePage() {
                       </div>
                       <div>
                         <label className="block mb-3 text-sm font-medium text-gray-700">
-                          المدة المتوقعة
-                        </label>
+                          {tr("المدة المتوقعة")}</label>
                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                           {timelineCards.map((card) => (
                             <button
@@ -940,8 +935,7 @@ export default function QuotePage() {
                       </div>
                       <div>
                         <label className="block mb-2 text-sm font-medium text-gray-700">
-                          تاريخ الإطلاق المتوقع (اختياري)
-                        </label>
+                          {tr("تاريخ الإطلاق المتوقع (اختياري)")}</label>
                         <input
                           type="date"
                           value={data.expectedLaunchDate}
@@ -962,15 +956,13 @@ export default function QuotePage() {
                     exit={{ opacity: 0, x: -20 }}
                     className="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-gray-100"
                   >
-                    <h2 className="text-xl font-bold text-gray-900 mb-2">طريقة التواصل</h2>
+                    <h2 className="text-xl font-bold text-gray-900 mb-2">{tr("طريقة التواصل")}</h2>
                     <p className="text-gray-500 text-sm mb-6">
-                      اختر الطريقة الأنسب للتواصل معك بعد مراجعة الطلب.
-                    </p>
+                      {tr("اختر الطريقة الأنسب للتواصل معك بعد مراجعة الطلب.")}</p>
                     <div className="space-y-6">
                       <div>
                         <label className="block mb-3 text-sm font-medium text-gray-700">
-                          طريقة التواصل المفضلة
-                        </label>
+                          {tr("طريقة التواصل المفضلة")}</label>
                         <div className="grid grid-cols-2 gap-3">
                           {contactMethodOptions.map((opt) => (
                             <button
@@ -992,14 +984,13 @@ export default function QuotePage() {
                       {data.preferredContactMethod === PreferredContactMethod.MEETING && (
                         <div>
                           <label className="block mb-2 text-sm font-medium text-gray-700">
-                            وقت الاجتماع المفضل
-                          </label>
+                            {tr("وقت الاجتماع المفضل")}</label>
                           <div className="grid grid-cols-2 gap-3">
                             {[
-                              { value: "morning", label: "صباحًا" },
-                              { value: "afternoon", label: "ظهرًا" },
-                              { value: "evening", label: "مساءً" },
-                              { value: "flexible", label: "مرن" },
+                              { value: "morning", label: tr("صباحًا") },
+                              { value: "afternoon", label: tr("ظهرًا") },
+                              { value: "evening", label: tr("مساءً") },
+                              { value: "flexible", label: tr("مرن") },
                             ].map((opt) => (
                               <button
                                 key={opt.value}
@@ -1035,8 +1026,7 @@ export default function QuotePage() {
                   }`}
                 >
                   <FiArrowRight size={16} />
-                  السابق
-                </button>
+                  {tr("السابق")}</button>
 
                 {currentStep < 5 ? (
                   <button
@@ -1049,8 +1039,7 @@ export default function QuotePage() {
                         : "bg-gray-200 text-gray-400 cursor-not-allowed"
                     }`}
                   >
-                    التالي
-                    <FiArrowLeft size={16} />
+                    {tr("التالي")}<FiArrowLeft size={16} />
                   </button>
                 ) : (
                   <motion.button
@@ -1064,7 +1053,7 @@ export default function QuotePage() {
                         : "bg-[#008080] hover:bg-[#006666] text-white shadow-md"
                     }`}
                   >
-                    {isSubmitting ? "جاري الإرسال..." : "إرسال الطلب"}
+                    {isSubmitting ? tr("جاري الإرسال...") : tr("إرسال الطلب")}
                     <FiSend size={16} />
                   </motion.button>
                 )}
@@ -1077,13 +1066,12 @@ export default function QuotePage() {
             <div className="sticky top-24 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
               <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
                 <FiFileText className="text-[#008080]" />
-                ملخص طلبك
-              </h3>
+                {tr("ملخص طلبك")}</h3>
               <div className="space-y-3 text-sm">
                 <div className="flex items-start gap-2">
                   <FiUser className="text-gray-400 mt-0.5 flex-shrink-0" size={14} />
                   <div>
-                    <span className="text-gray-500">الاسم:</span>
+                    <span className="text-gray-500">{tr("الاسم:")}</span>
                     <p className="font-medium">{data.fullName || "-"}</p>
                   </div>
                 </div>
@@ -1091,7 +1079,7 @@ export default function QuotePage() {
                   <div className="flex items-start gap-2">
                     <Building2 className="text-gray-400 mt-0.5 flex-shrink-0" size={14} />
                     <div>
-                      <span className="text-gray-500">الشركة:</span>
+                      <span className="text-gray-500">{tr("الشركة:")}</span>
                       <p className="font-medium">{data.companyName}</p>
                     </div>
                   </div>
@@ -1099,7 +1087,7 @@ export default function QuotePage() {
                 <div className="flex items-start gap-2">
                   <FiGlobe className="text-gray-400 mt-0.5 flex-shrink-0" size={14} />
                   <div>
-                    <span className="text-gray-500">نوع المشروع:</span>
+                    <span className="text-gray-500">{tr("نوع المشروع:")}</span>
                     <p className="font-medium">{getServiceLabel(data.serviceType)}</p>
                   </div>
                 </div>
@@ -1107,7 +1095,7 @@ export default function QuotePage() {
                   <div className="flex items-start gap-2">
                     <FiSettings className="text-gray-400 mt-0.5 flex-shrink-0" size={14} />
                     <div>
-                      <span className="text-gray-500">مرحلة المشروع:</span>
+                      <span className="text-gray-500">{tr("مرحلة المشروع:")}</span>
                       <p className="font-medium">{getStageLabel(data.projectStage)}</p>
                     </div>
                   </div>
@@ -1116,7 +1104,7 @@ export default function QuotePage() {
                   <div className="flex items-start gap-2">
                     <FiUsers className="text-gray-400 mt-0.5 flex-shrink-0" size={14} />
                     <div>
-                      <span className="text-gray-500">حجم الشركة:</span>
+                      <span className="text-gray-500">{tr("حجم الشركة:")}</span>
                       <p className="font-medium">{getCompanySizeLabel(data.companySize)}</p>
                     </div>
                   </div>
@@ -1125,7 +1113,7 @@ export default function QuotePage() {
                   <div className="flex items-start gap-2">
                     <FiDollarSign className="text-gray-400 mt-0.5 flex-shrink-0" size={14} />
                     <div>
-                      <span className="text-gray-500">الميزانية:</span>
+                      <span className="text-gray-500">{tr("الميزانية:")}</span>
                       <p className="font-medium">{getBudgetLabel(data.budgetRange)}</p>
                     </div>
                   </div>
@@ -1134,7 +1122,7 @@ export default function QuotePage() {
                   <div className="flex items-start gap-2">
                     <FiClock className="text-gray-400 mt-0.5 flex-shrink-0" size={14} />
                     <div>
-                      <span className="text-gray-500">المدة:</span>
+                      <span className="text-gray-500">{tr("المدة:")}</span>
                       <p className="font-medium">{getTimelineLabel(data.timeline)}</p>
                     </div>
                   </div>
@@ -1143,7 +1131,7 @@ export default function QuotePage() {
                   <div className="flex items-start gap-2">
                     <MessageCircle className="text-gray-400 mt-0.5 flex-shrink-0" size={14} />
                     <div>
-                      <span className="text-gray-500">التواصل:</span>
+                      <span className="text-gray-500">{tr("التواصل:")}</span>
                       <p className="font-medium">{getContactMethodLabel(data.preferredContactMethod)}</p>
                     </div>
                   </div>

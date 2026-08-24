@@ -1,3 +1,4 @@
+import { tr } from "@/i18n";
 import type { Blog } from "../../admin/types";
 import { getAuthorName } from "./blogUtils";
 import { Pen } from "lucide-react";
@@ -6,7 +7,7 @@ export default function AuthorBox({ blog }: { blog: Blog }) {
   const name = getAuthorName(blog);
 
   return (
-    <section className="relative overflow-hidden rounded-3xl border border-slate-100 bg-white p-6 shadow-lg shadow-slate-200/40 ring-1 ring-slate-100" dir="rtl">
+    <section className="relative overflow-hidden rounded-3xl border border-slate-100 bg-white p-6 shadow-lg shadow-slate-200/40 ring-1 ring-slate-100">
       {/* Top accent */}
       <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-l from-primary to-primary-dark" />
 
@@ -23,13 +24,12 @@ export default function AuthorBox({ blog }: { blog: Blog }) {
         </div>
         <div>
           <h2 className="text-lg font-bold text-slate-950">{name}</h2>
-          <p className="mt-1 text-sm font-medium text-primary">{blog.authorRole || "فريق المنتجات الرقمية"}</p>
+          <p className="mt-1 text-sm font-medium text-primary">{blog.authorRole || tr("فريق المنتجات الرقمية")}</p>
         </div>
       </div>
 
       <p className="mt-5 leading-7 text-slate-600">
-        فريق متخصص في بناء المنتجات الرقمية، المواقع، المتاجر، وتجارب المستخدم العملية لعملاء Smart Agency.
-      </p>
+        {tr("فريق متخصص في بناء المنتجات الرقمية، المواقع، المتاجر، وتجارب المستخدم العملية لعملاء Smart Agency.")}</p>
     </section>
   );
 }

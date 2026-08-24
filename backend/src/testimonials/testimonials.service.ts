@@ -43,7 +43,9 @@ export class TestimonialsService {
 
     if (!includeInactive) {
       testimonialsQuery
-        .select('name role company avatar rating content isFeatured order')
+        .select(
+          'clientName clientNameEn position positionEn companyName companyNameEn companyLogo clientPhoto rating content contentEn linkedProject isFeatured sortOrder',
+        )
         .lean();
     }
 

@@ -1,4 +1,4 @@
-"use client";
+import { tr } from "@/i18n";
 import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -24,17 +24,17 @@ import { publicFaqsService } from "../services/faqs.service";
 import type { FAQ } from "../services/faqs.service";
 
 const categoryDisplayMap: Record<string, string> = {
-  General: "قبل بدء المشروع",
-  عام: "قبل بدء المشروع",
-  تقني: "التقنية والتنفيذ",
-  استضافة: "الاستضافة والبنية التحتية",
-  دفع: "التكلفة والمدة",
-  مالي: "التكلفة والمدة",
-  خدمات: "التقنية والتنفيذ",
+  General: tr("قبل بدء المشروع"),
+  عام: tr("قبل بدء المشروع"),
+  تقني: tr("التقنية والتنفيذ"),
+  استضافة: tr("الاستضافة والبنية التحتية"),
+  دفع: tr("التكلفة والمدة"),
+  مالي: tr("التكلفة والمدة"),
+  خدمات: tr("التقنية والتنفيذ"),
 };
 
 const getCategoryLabel = (category?: string) => {
-  if (!category) return "عام";
+  if (!category) return tr("عام");
   return categoryDisplayMap[category] || category;
 };
 
@@ -43,42 +43,42 @@ const getCategoryIcon = (category?: string, question?: string) => {
   const questionLower = question?.toLowerCase() || "";
 
   if (
-    categoryLower.includes("استضاف") ||
-    questionLower.includes("سيرفر") ||
-    questionLower.includes("استضاف")
+    categoryLower.includes(tr("استضاف")) ||
+    questionLower.includes(tr("سيرفر")) ||
+    questionLower.includes(tr("استضاف"))
   ) {
     return FiServer;
   }
 
   if (
-    categoryLower.includes("تقني") ||
-    questionLower.includes("سحاب") ||
+    categoryLower.includes(tr("تقني")) ||
+    questionLower.includes(tr("سحاب")) ||
     questionLower.includes("cloud")
   ) {
     return FiCloud;
   }
 
   if (
-    categoryLower.includes("دفع") ||
-    questionLower.includes("دفع") ||
-    questionLower.includes("سعر") ||
-    questionLower.includes("مالي")
+    categoryLower.includes(tr("دفع")) ||
+    questionLower.includes(tr("دفع")) ||
+    questionLower.includes(tr("سعر")) ||
+    questionLower.includes(tr("مالي"))
   ) {
     return FiCreditCard;
   }
 
   if (
-    categoryLower.includes("تطوير") ||
-    questionLower.includes("كود") ||
-    questionLower.includes("برمج")
+    categoryLower.includes(tr("تطوير")) ||
+    questionLower.includes(tr("كود")) ||
+    questionLower.includes(tr("برمج"))
   ) {
     return FiCode;
   }
 
   if (
-    categoryLower.includes("إعداد") ||
-    questionLower.includes("إعداد") ||
-    questionLower.includes("تكوين")
+    categoryLower.includes(tr("إعداد")) ||
+    questionLower.includes(tr("إعداد")) ||
+    questionLower.includes(tr("تكوين"))
   ) {
     return FiSettings;
   }
@@ -90,9 +90,9 @@ const formatIndex = (index: number) => String(index + 1).padStart(2, "0");
 
 function SmartAdvisoryCard() {
   const steps = [
-    { num: "01", text: "تحليل الفكرة" },
-    { num: "02", text: "تقدير المدة والتكلفة" },
-    { num: "03", text: "خطة التنفيذ والدعم" },
+    { num: "01", text: tr("تحليل الفكرة") },
+    { num: "02", text: tr("تقدير المدة والتكلفة") },
+    { num: "03", text: tr("خطة التنفيذ والدعم") },
   ];
 
   return (
@@ -105,10 +105,9 @@ function SmartAdvisoryCard() {
     >
       <div className="absolute top-0 right-0 h-1 w-full bg-gradient-to-l from-[var(--smart-primary-light)] to-transparent" />
 
-      <h3 className="text-xl font-bold text-white mb-2">هل لديك فكرة مشروع؟</h3>
+      <h3 className="text-xl font-bold text-white mb-2">{tr("هل لديك فكرة مشروع؟")}</h3>
       <p className="text-white/60 text-sm mb-6 leading-relaxed">
-        نساعدك على تحويلها إلى واقع ناجح.
-      </p>
+        {tr("نساعدك على تحويلها إلى واقع ناجح.")}</p>
 
       <div className="space-y-4 mb-8">
         {steps.map((step) => (
@@ -130,13 +129,11 @@ function SmartAdvisoryCard() {
         className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-2xl font-semibold transition-all duration-300 shadow-lg shadow-primary/20"
       >
         <FaWhatsapp className="text-lg" />
-        احجز استشارة مجانية
-      </motion.a>
+        {tr("احجز استشارة مجانية")}</motion.a>
 
       <p className="text-white/40 text-xs text-center mt-4 flex items-center justify-center gap-1">
         <FiCheckCircle className="text-primary" />
-        نرد عليك خلال أسرع وقت
-      </p>
+        {tr("نرد عليك خلال أسرع وقت")}</p>
     </motion.div>
   );
 }
@@ -145,18 +142,18 @@ function TrustBar() {
   const items = [
     {
       icon: FiShield,
-      title: "حلول موثوقة وآمنة",
-      desc: "نستخدم أفضل الممارسات لحماية مشروعك وبياناتك.",
+      title: tr("حلول موثوقة وآمنة"),
+      desc: tr("نستخدم أفضل الممارسات لحماية مشروعك وبياناتك."),
     },
     {
       icon: FiUsers,
-      title: "فريق متخصص",
-      desc: "خبرة في التصميم، البرمجة، وإدارة المشاريع الرقمية.",
+      title: tr("فريق متخصص"),
+      desc: tr("خبرة في التصميم، البرمجة، وإدارة المشاريع الرقمية."),
     },
     {
       icon: FiClock,
-      title: "تسليم في الوقت المحدد",
-      desc: "نعمل بخطة واضحة وجدول زمني متفق عليه.",
+      title: tr("تسليم في الوقت المحدد"),
+      desc: tr("نعمل بخطة واضحة وجدول زمني متفق عليه."),
     },
   ];
 
@@ -191,11 +188,9 @@ function EmptyResults() {
     >
       <FiMessageCircle className="text-5xl text-white/20 mx-auto mb-4" />
       <h4 className="text-white/80 font-semibold text-lg mb-2">
-        لم نجد سؤالًا مطابقًا لبحثك
-      </h4>
+        {tr("لم نجد سؤالًا مطابقًا لبحثك")}</h4>
       <p className="text-white/40 text-sm max-w-md mx-auto leading-relaxed">
-        جرّب كلمات مثل: التكلفة، المدة، الدعم، الاستضافة، أو تواصل معنا مباشرة.
-      </p>
+        {tr("جرّب كلمات مثل: التكلفة، المدة، الدعم، الاستضافة، أو تواصل معنا مباشرة.")}</p>
     </motion.div>
   );
 }
@@ -251,7 +246,7 @@ export default function FAQs({ initialFaqs }: FAQsProps) {
         setError(null);
       } catch (err) {
         console.error("Error fetching FAQs:", err);
-        setError("فشل تحميل الأسئلة الشائعة. يرجى المحاولة مرة أخرى.");
+        setError(tr("فشل تحميل الأسئلة الشائعة. يرجى المحاولة مرة أخرى."));
       } finally {
         setLoading(false);
       }
@@ -325,7 +320,7 @@ export default function FAQs({ initialFaqs }: FAQsProps) {
       <SectionShell tone="dark" pattern="grid" id="faqs">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--smart-primary-light)]"></div>
-          <p className="mt-4 text-[var(--smart-text-muted-on-dark)]">جاري تحميل مركز المساعدة...</p>
+          <p className="mt-4 text-[var(--smart-text-muted-on-dark)]">{tr("جاري تحميل مركز المساعدة...")}</p>
         </div>
       </SectionShell>
     );
@@ -357,19 +352,14 @@ export default function FAQs({ initialFaqs }: FAQsProps) {
           className="text-center mb-12"
         >
           <span className="inline-block px-4 py-1.5 text-sm font-medium rounded-full border border-primary/30 bg-primary/10 text-primary mb-4">
-            مركز المساعدة
-          </span>
+            {tr("مركز المساعدة")}</span>
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            إجابات واضحة لـ
-            <span className="text-transparent bg-clip-text bg-gradient-to-l from-primary to-teal-400">
+            {tr("إجابات واضحة لـ")}<span className="text-transparent bg-clip-text bg-gradient-to-l from-primary to-teal-400">
               {" "}
-              قرارات أفضل
-            </span>
+              {tr("قرارات أفضل")}</span>
           </h2>
           <p className="text-lg text-white/60 max-w-2xl mx-auto leading-relaxed">
-            جمعنا أكثر الأسئلة شيوعًا لمساعدتك على فهم طريقة عملنا واتخاذ قرارك
-            بثقة ووضوح.
-          </p>
+            {tr("جمعنا أكثر الأسئلة شيوعًا لمساعدتك على فهم طريقة عملنا واتخاذ قرارك بثقة ووضوح.")}</p>
         </motion.div>
 
         {/* Smart Filters */}
@@ -391,8 +381,7 @@ export default function FAQs({ initialFaqs }: FAQsProps) {
                   : "border-white/10 bg-white/[0.04] text-white/60 hover:bg-white/[0.08] hover:text-white/80"
               }`}
             >
-              جميع الأسئلة
-            </motion.button>
+              {tr("جميع الأسئلة")}</motion.button>
             {categories.map((category) => (
               <motion.button
                 key={category}
@@ -425,7 +414,7 @@ export default function FAQs({ initialFaqs }: FAQsProps) {
               <FiSearch className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 text-lg" />
               <input
                 type="text"
-                placeholder="ابحث عن التكلفة، المدة، الدعم، أو طريقة العمل..."
+                placeholder={tr("ابحث عن التكلفة، المدة، الدعم، أو طريقة العمل...")}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full rounded-2xl border border-white/10 bg-white/[0.05] py-4 pr-12 pl-4 text-white placeholder:text-white/40 outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all duration-300"
@@ -435,8 +424,7 @@ export default function FAQs({ initialFaqs }: FAQsProps) {
             {/* Results Count */}
             {searchQuery && (
               <p className="text-sm text-white/40 mb-4">
-                تم العثور على {filteredFaqs.length} نتيجة
-                {` لـ "${searchQuery}"`}
+                {tr("تم العثور على")}{filteredFaqs.length} {tr("نتيجة")}{` لـ "${searchQuery}"`}
               </p>
             )}
 
@@ -535,11 +523,9 @@ export default function FAQs({ initialFaqs }: FAQsProps) {
               >
                 <div className="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-primary to-transparent" />
                 <h3 className="text-xl md:text-2xl font-bold text-white mb-3">
-                  لم تجد إجابة لسؤالك؟
-                </h3>
+                  {tr("لم تجد إجابة لسؤالك؟")}</h3>
                 <p className="text-white/60 mb-6 leading-relaxed max-w-lg mx-auto">
-                  تواصل معنا مباشرة وسنساعدك في فهم الخطوة المناسبة لمشروعك.
-                </p>
+                  {tr("تواصل معنا مباشرة وسنساعدك في فهم الخطوة المناسبة لمشروعك.")}</p>
                 <motion.a
                   href="https://wa.me/967778032532"
                   target="_blank"
@@ -549,8 +535,7 @@ export default function FAQs({ initialFaqs }: FAQsProps) {
                   className="inline-flex items-center gap-3 bg-green-600 hover:bg-green-700 text-white px-8 py-3.5 rounded-2xl font-semibold text-lg shadow-lg shadow-green-600/20 transition-all duration-300"
                 >
                   <FaWhatsapp className="text-xl" />
-                  تواصل معنا واتساب
-                  <FiArrowUpLeft className="text-sm" />
+                  {tr("تواصل معنا واتساب")}<FiArrowUpLeft className="text-sm" />
                 </motion.a>
               </motion.div>
             )}

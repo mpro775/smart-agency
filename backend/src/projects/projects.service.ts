@@ -2,6 +2,7 @@ import {
   Injectable,
   NotFoundException,
   ConflictException,
+  BadRequestException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -15,6 +16,18 @@ import { UpdateProjectDto } from './dto/update-project.dto';
 import { FilterProjectsDto } from './dto/filter-projects.dto';
 import { PaginatedResponseDto } from '../common/dto/pagination.dto';
 
+const hasRequiredEnglishProjectContent = (
+  project: CreateProjectDto | UpdateProjectDto,
+) =>
+  Boolean(
+    project.titleEn?.trim() &&
+    project.summaryEn?.trim() &&
+    project.challengeEn?.trim() &&
+    project.solutionEn?.trim() &&
+    project.seo?.metaTitleEn?.trim() &&
+    project.seo?.metaDescriptionEn?.trim(),
+  );
+
 @Injectable()
 export class ProjectsService {
   constructor(
@@ -24,6 +37,16 @@ export class ProjectsService {
   ) {}
 
   async create(createProjectDto: CreateProjectDto): Promise<ProjectDocument> {
+    if (
+      createProjectDto.isPublished !== false &&
+      !hasRequiredEnglishProjectContent(createProjectDto)
+    ) {
+      throw new BadRequestException({
+        code: 'BILINGUAL_CONTENT_INCOMPLETE',
+        message:
+          'English project content and SEO must be complete before publishing',
+      });
+    }
     const existingProject = await this.projectModel
       .findOne({ slug: createProjectDto.slug.toLowerCase() })
       .exec();
@@ -77,7 +100,15 @@ export class ProjectsService {
     }
 
     if (industry) {
-      query.industry = { $regex: industry, $options: 'i' };
+      query.$and = [
+        ...(query.$and ?? []),
+        {
+          $or: [
+            { industry: { $regex: industry, $options: 'i' } },
+            { industryEn: { $regex: industry, $options: 'i' } },
+          ],
+        },
+      ];
     }
 
     // Support both 'featured' and 'isFeatured' for backward compatibility
@@ -89,7 +120,11 @@ export class ProjectsService {
     if (search) {
       const searchOr = [
         { title: { $regex: search, $options: 'i' } },
+        { titleEn: { $regex: search, $options: 'i' } },
         { summary: { $regex: search, $options: 'i' } },
+        { summaryEn: { $regex: search, $options: 'i' } },
+        { industry: { $regex: search, $options: 'i' } },
+        { industryEn: { $regex: search, $options: 'i' } },
       ];
       if (query.$or || query.$and) {
         if (query.$and) {
@@ -121,7 +156,7 @@ export class ProjectsService {
     if (!includeUnpublished) {
       projectsQuery
         .select(
-          'title slug summary shortDescription images categoryIds industry year technologies isFeatured order createdAt results stats clientName clientLogo projectUrl',
+          'title titleEn slug summary summaryEn shortDescription images categoryIds industry industryEn year technologies isFeatured order createdAt results stats clientName clientNameEn clientLogo projectUrl',
         )
         .lean();
     }
@@ -147,7 +182,7 @@ export class ProjectsService {
       .populate('technologies', 'name icon category description tooltip')
       .populate('categoryIds')
       .select(
-        'title slug summary challenge solution results features images technologies clientName clientLogo categoryIds industry duration year videoUrl stats projectUrl isFeatured seo',
+        'title titleEn slug summary summaryEn challenge challengeEn solution solutionEn results features featuresEn images technologies clientName clientNameEn clientLogo categoryIds industry industryEn duration durationEn year videoUrl stats projectUrl isFeatured seo',
       )
       .lean()
       .exec()) as ProjectDocument | null;
@@ -179,7 +214,7 @@ export class ProjectsService {
       .populate('technologies', 'name icon category description tooltip')
       .populate('categoryIds')
       .select(
-        'title slug summary challenge solution results features images technologies clientName clientLogo categoryIds industry duration year videoUrl stats projectUrl isFeatured seo',
+        'title titleEn slug summary summaryEn challenge challengeEn solution solutionEn results features featuresEn images technologies clientName clientNameEn clientLogo categoryIds industry industryEn duration durationEn year videoUrl stats projectUrl isFeatured seo',
       )
       .lean()
       .exec()) as ProjectDocument | null;
@@ -195,6 +230,23 @@ export class ProjectsService {
     id: string,
     updateProjectDto: UpdateProjectDto,
   ): Promise<ProjectDocument> {
+    const currentProject = await this.projectModel.findById(id).lean().exec();
+    if (!currentProject) throw new NotFoundException('Project not found');
+
+    if (
+      updateProjectDto.isPublished &&
+      !currentProject.isPublished &&
+      !hasRequiredEnglishProjectContent({
+        ...(currentProject as unknown as CreateProjectDto),
+        ...updateProjectDto,
+      })
+    ) {
+      throw new BadRequestException({
+        code: 'BILINGUAL_CONTENT_INCOMPLETE',
+        message:
+          'English project content and SEO must be complete before publishing',
+      });
+    }
     if (updateProjectDto.slug) {
       const existingProject = await this.projectModel
         .findOne({
@@ -281,6 +333,9 @@ export class ProjectsService {
           _id: cat._id.toString(),
           value: cat.value,
           label: cat.label,
+          labelEn: cat.labelEn,
+          description: cat.description,
+          descriptionEn: cat.descriptionEn,
           count,
         };
       }),

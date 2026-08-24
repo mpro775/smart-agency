@@ -1,3 +1,4 @@
+import { tr } from "@/i18n";
 import { ArrowLeft, CalendarDays, Clock3, Eye } from "lucide-react";
 import { Link } from "react-router-dom";
 import type { Blog } from "../../admin/types";
@@ -26,8 +27,7 @@ export default function BlogInsightCard({ blog, variant = "default" }: { blog: B
           <ContentTypeBadge type={blog.contentType} />
           {blog.isEditorPick && (
             <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700">
-              اختيار التحرير
-            </span>
+              {tr("اختيار التحرير")}</span>
           )}
         </div>
 
@@ -39,7 +39,7 @@ export default function BlogInsightCard({ blog, variant = "default" }: { blog: B
 
         {!compact && (
           <p className="mt-3 line-clamp-3 text-sm leading-7 text-slate-600">
-            {blog.excerpt || "رؤية عملية من فريق Smart Agency حول بناء منتجات رقمية أفضل."}
+            {blog.excerpt || tr("رؤية عملية من فريق Smart Agency حول بناء منتجات رقمية أفضل.")}
           </p>
         )}
 
@@ -52,8 +52,7 @@ export default function BlogInsightCard({ blog, variant = "default" }: { blog: B
           )}
           <span className="inline-flex items-center gap-1">
             <Clock3 className="h-4 w-4" />
-            {getReadingTime(blog)} دقائق
-          </span>
+            {getReadingTime(blog)} {tr("دقائق")}</span>
           <span className="inline-flex items-center gap-1">
             <Eye className="h-4 w-4" />
             {blog.views || 0}
@@ -62,8 +61,7 @@ export default function BlogInsightCard({ blog, variant = "default" }: { blog: B
 
         {!compact && (
           <Link to={`/blog/${blog.slug}`} className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-primary hover:text-primaryDark">
-            قراءة المقال
-            <ArrowLeft className="h-4 w-4" />
+            {tr("قراءة المقال")}<ArrowLeft className="h-4 w-4" />
           </Link>
         )}
       </div>

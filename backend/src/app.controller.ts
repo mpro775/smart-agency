@@ -49,7 +49,7 @@ export class AppController {
     };
 
     return {
-      status: dbState === 1 ? 'healthy' : 'unhealthy',
+      status: Number(dbState) === 1 ? 'healthy' : 'unhealthy',
       timestamp: new Date().toISOString(),
       uptime: process.uptime(),
       database: {

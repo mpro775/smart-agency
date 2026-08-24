@@ -51,7 +51,9 @@ export class ServicesService {
     if (search) {
       query.$or = [
         { title: { $regex: search, $options: 'i' } },
+        { titleEn: { $regex: search, $options: 'i' } },
         { description: { $regex: search, $options: 'i' } },
+        { descriptionEn: { $regex: search, $options: 'i' } },
       ];
     }
 
@@ -74,7 +76,7 @@ export class ServicesService {
       .find({ isActive: true })
       .sort({ sortOrder: 1, createdAt: -1 })
       .select(
-        'title slug shortDescription description icon features order isActive',
+        'title titleEn slug shortDescription shortDescriptionEn description descriptionEn icon features featuresEn sortOrder isActive',
       )
       .lean()
       .exec();

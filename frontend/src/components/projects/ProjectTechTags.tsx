@@ -1,4 +1,3 @@
-"use client";
 import type { Technology } from "../../admin/types";
 
 interface ProjectTechTagsProps {
@@ -21,7 +20,7 @@ export default function ProjectTechTags({
   const remaining = names.length - max;
 
   return (
-    <div className={`flex flex-wrap gap-1.5 ${className}`} dir="rtl">
+    <div className={`flex flex-wrap gap-1.5 ${className}`}>
       {visible.map((name, i) => (
         <span
           key={i}

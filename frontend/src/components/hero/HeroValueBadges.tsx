@@ -1,20 +1,21 @@
+import { tr } from "@/i18n";
 import { motion } from "framer-motion";
 import { PenTool, Smartphone, Layers } from "lucide-react";
 
 const values = [
   {
-    title: "تصميم UX/UI",
-    desc: "تجربة رقمية مميزة",
+    title: tr("تصميم UX/UI"),
+    desc: tr("تجربة رقمية مميزة"),
     icon: PenTool,
   },
   {
-    title: "تطوير Web & Mobile",
-    desc: "تطبيقات سريعة ومتجاوبة",
+    title: tr("تطوير Web & Mobile"),
+    desc: tr("تطبيقات سريعة ومتجاوبة"),
     icon: Smartphone,
   },
   {
-    title: "بنية قابلة للتوسع",
-    desc: "جاهزة للنمو والتوسع",
+    title: tr("بنية قابلة للتوسع"),
+    desc: tr("جاهزة للنمو والتوسع"),
     icon: Layers,
   },
 ];

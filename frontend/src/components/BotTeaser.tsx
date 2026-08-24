@@ -1,3 +1,4 @@
+import { tr } from "@/i18n";
 import { motion } from "framer-motion";
 import { FiArrowLeft, FiMessageSquare, FiSmartphone, FiGlobe, FiBarChart2 } from "react-icons/fi";
 import { Link } from "react-router-dom";
@@ -38,13 +39,11 @@ export default function BotTeaser() {
           </motion.div>
 
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">
-            مساعدك الذكي <span className="text-primary">لخدمة العملاء</span>
+            {tr("مساعدك الذكي")}<span className="text-primary">{tr("لخدمة العملاء")}</span>
           </h2>
           
           <p className="text-xl text-gray-600 leading-relaxed mb-10 max-w-3xl mx-auto">
-            نظام ذكي متكامل يرد على استفسارات عملائك آليًا عبر جميع قنوات التواصل،
-            مدعوم بالذكاء الاصطناعي ومزود بأحدث تقنيات معالجة اللغة الطبيعية.
-          </p>
+            {tr("نظام ذكي متكامل يرد على استفسارات عملائك آليًا عبر جميع قنوات التواصل، مدعوم بالذكاء الاصطناعي ومزود بأحدث تقنيات معالجة اللغة الطبيعية.")}</p>
 
           {/* مميزات البوت */}
           <motion.div 
@@ -55,10 +54,10 @@ export default function BotTeaser() {
             viewport={{ once: true }}
           >
             {[
-              { icon: <FiSmartphone />, text: "يدعم واتساب وتليجرام" },
-              { icon: <FiGlobe />, text: "متكامل مع موقعك" },
-              { icon: <FiBarChart2 />, text: "تحليلات لحظية" },
-              { icon: <FiMessageSquare />, text: "ردود ذكية" }
+              { icon: <FiSmartphone />, text: tr("يدعم واتساب وتليجرام") },
+              { icon: <FiGlobe />, text: tr("متكامل مع موقعك") },
+              { icon: <FiBarChart2 />, text: tr("تحليلات لحظية") },
+              { icon: <FiMessageSquare />, text: tr("ردود ذكية") }
             ].map((feature, index) => (
               <motion.div
                 key={index}
@@ -87,15 +86,13 @@ export default function BotTeaser() {
               className="relative inline-flex items-center px-8 py-4 rounded-xl bg-[linear-gradient(to_right,var(--color-primary),var(--color-primary-dark))] text-white font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] group overflow-hidden"
             >
               <span className="relative z-10 flex items-center justify-center gap-2">
-                سجل اهتمامك الآن
-                <FiArrowLeft className="group-hover:translate-x-1 transition-transform" />
+                {tr("سجل اهتمامك الآن")}<FiArrowLeft className="group-hover:translate-x-1 transition-transform" />
               </span>
               <span className="absolute inset-0 bg-gradient-to-r from-primaryDark to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </Link>
             
             <p className="text-gray-500 mt-4 text-sm">
-              سيتم إعلامك عند الإطلاق الرسمي
-            </p>
+              {tr("سيتم إعلامك عند الإطلاق الرسمي")}</p>
           </motion.div>
         </motion.div>
       </div>

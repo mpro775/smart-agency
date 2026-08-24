@@ -5,7 +5,6 @@ import {
   IsOptional,
   IsArray,
   IsBoolean,
-  IsEnum,
   ValidateNested,
   IsUrl,
   IsMongoId,

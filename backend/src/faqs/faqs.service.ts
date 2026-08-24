@@ -30,14 +30,25 @@ export class FaqsService {
     }
 
     if (category) {
-      query.category = category;
+      query.$or = [
+        { categoryKey: category },
+        { category },
+        { categoryEn: category },
+      ];
     }
 
     if (search) {
-      query.$or = [
+      const searchConditions = [
         { question: { $regex: search, $options: 'i' } },
+        { questionEn: { $regex: search, $options: 'i' } },
         { answer: { $regex: search, $options: 'i' } },
+        { answerEn: { $regex: search, $options: 'i' } },
       ];
+      query.$and = [
+        ...(query.$or ? [{ $or: query.$or }] : []),
+        { $or: searchConditions },
+      ];
+      delete query.$or;
     }
 
     const total = await this.faqModel.countDocuments(query).exec();
@@ -49,7 +60,11 @@ export class FaqsService {
       .limit(limit);
 
     if (!includeInactive) {
-      faqsQuery.select('question answer category order isActive').lean();
+      faqsQuery
+        .select(
+          'question questionEn answer answerEn category categoryEn categoryKey order isActive',
+        )
+        .lean();
     }
 
     const faqs = await faqsQuery.exec();

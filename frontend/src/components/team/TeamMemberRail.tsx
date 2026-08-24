@@ -12,7 +12,7 @@ export default function TeamMemberRail({ members, activeMember, onSelect }: Prop
   const shouldReduceMotion = useReducedMotion();
 
   return (
-    <div className="flex lg:flex-col gap-2.5 sm:gap-3 overflow-x-auto lg:overflow-visible pb-3 lg:pb-0 pt-1 snap-x snap-mandatory scrollbar-none scroll-smooth -mx-4 px-4 sm:mx-0 sm:px-0" dir="rtl">
+    <div className="flex lg:flex-col gap-2.5 sm:gap-3 overflow-x-auto lg:overflow-visible pb-3 lg:pb-0 pt-1 snap-x snap-mandatory scrollbar-none scroll-smooth -mx-4 px-4 sm:mx-0 sm:px-0">
       {members.map((member, index) => {
         const isActive = activeMember?._id === member._id;
 

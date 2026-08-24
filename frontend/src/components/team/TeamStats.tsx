@@ -1,3 +1,4 @@
+import { tr } from "@/i18n";
 import { motion } from "framer-motion";
 import { Rocket, Grid2X2, Target } from "lucide-react";
 import type { TeamMember } from "../../services/team.service";
@@ -12,24 +13,24 @@ export default function TeamStats({ members }: Props) {
 
   const stats = [
     {
-      label: "مشروع",
+      label: tr("مشروع"),
       value: totalProjects > 0 ? `+${totalProjects}` : `+${members.length * 5}`,
       icon: Rocket,
     },
     {
-      label: "تخصصات",
+      label: tr("تخصصات"),
       value: `+${Math.max(departmentsCount, 1)}`,
       icon: Grid2X2,
     },
     {
-      label: "من الفكرة إلى الإطلاق",
+      label: tr("من الفكرة إلى الإطلاق"),
       value: "",
       icon: Target,
     },
   ];
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-4 max-w-3xl mx-auto mb-8 sm:mb-12" dir="rtl">
+    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-4 max-w-3xl mx-auto mb-8 sm:mb-12">
       {stats.map((stat, index) => (
         <motion.div
           key={stat.label}

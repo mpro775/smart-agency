@@ -1,4 +1,4 @@
-"use client";
+import { tr } from "@/i18n";
 import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import {
@@ -54,25 +54,25 @@ function getPackageIcon(name: string) {
 
   if (
     normalized.includes("wordpress") ||
-    normalized.includes("وورد") ||
+    normalized.includes(tr("وورد")) ||
     normalized.includes("wordpress")
   ) {
     return FiGlobe;
   }
 
-  if (normalized.includes("أساسية") || normalized.includes("basic")) {
+  if (normalized.includes(tr("أساسية")) || normalized.includes("basic")) {
     return FiSend;
   }
 
   if (
-    normalized.includes("متوسطة") ||
+    normalized.includes(tr("متوسطة")) ||
     normalized.includes("growth") ||
-    normalized.includes("النمو")
+    normalized.includes(tr("النمو"))
   ) {
     return FiAward;
   }
 
-  if (normalized.includes("متقدمة") || normalized.includes("advanced")) {
+  if (normalized.includes(tr("متقدمة")) || normalized.includes("advanced")) {
     return FiBox;
   }
 
@@ -83,13 +83,13 @@ function getPackageIcon(name: string) {
 function getPackageMicrocopy(pkg: HostingPackage) {
   const name = pkg.name.toLowerCase();
 
-  if (name.includes("أساسية")) return "مثالية للمواقع الصغيرة والبدايات الذكية.";
-  if (name.includes("متوسطة")) return "للشركات النامية والمشاريع الاحترافية.";
-  if (name.includes("متقدمة")) return "للمشاريع الكبيرة والتطبيقات عالية الأداء.";
-  if (name.includes("wordpress") || name.includes("وورد"))
-    return "مخصصة لمواقع WordPress مع أداء محسن.";
+  if (name.includes(tr("أساسية"))) return tr("مثالية للمواقع الصغيرة والبدايات الذكية.");
+  if (name.includes(tr("متوسطة"))) return tr("للشركات النامية والمشاريع الاحترافية.");
+  if (name.includes(tr("متقدمة"))) return tr("للمشاريع الكبيرة والتطبيقات عالية الأداء.");
+  if (name.includes("wordpress") || name.includes(tr("وورد")))
+    return tr("مخصصة لمواقع WordPress مع أداء محسن.");
 
-  return pkg.description || "خطة مرنة مصممة لدعم نمو مشروعك.";
+  return pkg.description || tr("خطة مرنة مصممة لدعم نمو مشروعك.");
 }
 
 // --- مكون Spec للمواصفات التقنية ---
@@ -127,10 +127,10 @@ function Spec({
 
 // --- نقاط القيمة ---
 const valuePoints = [
-  { label: "دعم فني سريع", icon: FiHeadphones },
-  { label: "حماية SSL", icon: FiShield },
-  { label: "أداء عالي", icon: FiZap },
-  { label: "جاهز للتوسع", icon: FiLayers },
+  { label: tr("دعم فني سريع"), icon: FiHeadphones },
+  { label: tr("حماية SSL"), icon: FiShield },
+  { label: tr("أداء عالي"), icon: FiZap },
+  { label: tr("جاهز للتوسع"), icon: FiLayers },
 ];
 
 interface HostingPackagesProps {
@@ -229,7 +229,7 @@ export default function HostingPackages({
         setPackages(data);
       } catch (err) {
         console.error(err);
-        setError("فشل تحميل البيانات، يرجى المحاولة لاحقاً.");
+        setError(tr("فشل تحميل البيانات، يرجى المحاولة لاحقاً."));
       } finally {
         setLoading(false);
       }
@@ -271,10 +271,9 @@ export default function HostingPackages({
           className="text-center mb-16"
         >
           <span className="inline-block py-1 px-3 rounded-full bg-primary/10 text-primary text-sm font-semibold tracking-wide mb-4">
-            خطط مرنة
-          </span>
+            {tr("خطط مرنة")}</span>
           <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-6 tracking-tight">
-            اختر الخطة الأنسب{" "}
+            {tr("اختر الخطة الأنسب")}{" "}
             <span
               className="text-transparent bg-clip-text"
               style={{
@@ -282,13 +281,10 @@ export default function HostingPackages({
                   "linear-gradient(to right, var(--color-primary), var(--color-primary-dark))",
               }}
             >
-              لنمو مشروعك
-            </span>
+              {tr("لنمو مشروعك")}</span>
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
-            خطط احترافية للاستضافة والخدمات الرقمية مصممة لتحقيق أعلى أداء، أمان
-            واستقرار، مع دعم فني متخصص يساعدك على النجاح والنمو.
-          </p>
+            {tr("خطط احترافية للاستضافة والخدمات الرقمية مصممة لتحقيق أعلى أداء، أمان واستقرار، مع دعم فني متخصص يساعدك على النجاح والنمو.")}</p>
         </motion.div>
 
         {/* زر التبديل (Monthly / Yearly) */}
@@ -324,7 +320,7 @@ export default function HostingPackages({
                 color: billingCycle === "Monthly" ? "#ffffff" : "#4b5563",
               }}
             >
-              <span className="relative z-10">شهري</span>
+              <span className="relative z-10">{tr("شهري")}</span>
             </motion.button>
 
             <motion.button
@@ -336,7 +332,7 @@ export default function HostingPackages({
                 color: billingCycle === "Yearly" ? "#ffffff" : "#4b5563",
               }}
             >
-              <span className="relative z-10">سنوي</span>
+              <span className="relative z-10">{tr("سنوي")}</span>
               <motion.span
                 initial={false}
                 animate={{
@@ -360,8 +356,7 @@ export default function HostingPackages({
                       : "1px solid #bbf7d0",
                 }}
               >
-                وفّر 20%
-              </motion.span>
+                {tr("وفّر 20%")}</motion.span>
             </motion.button>
           </div>
         </div>
@@ -444,8 +439,7 @@ export default function HostingPackages({
                           "linear-gradient(to right, var(--color-primary), var(--color-primary-dark))",
                       }}
                     >
-                      الأكثر طلبًا
-                    </span>
+                      {tr("الأكثر طلبًا")}</span>
                   </div>
                 )}
 
@@ -483,8 +477,7 @@ export default function HostingPackages({
                   {/* سبب تمييز الباقة */}
                   {isPopular && (
                     <p className="mb-5 rounded-2xl bg-white/10 px-4 py-3 text-sm leading-6 text-teal-50">
-                      أفضل توازن بين السعر، الأداء، والدعم للمشاريع الجادة.
-                    </p>
+                      {tr("أفضل توازن بين السعر، الأداء، والدعم للمشاريع الجادة.")}</p>
                   )}
 
                   {/* السعر */}
@@ -509,12 +502,12 @@ export default function HostingPackages({
                           isPopular ? "text-gray-400" : "text-gray-500"
                         }`}
                       >
-                        / {billingCycle === "Monthly" ? "شهرياً" : "سنوياً"}
+                        / {billingCycle === "Monthly" ? tr("شهرياً") : tr("سنوياً")}
                       </span>
                     </div>
                     {originalPrice && originalPrice > displayPrice && (
                       <div className="mt-1 text-sm text-red-500 line-through decoration-red-500/50">
-                        بدلاً من {originalPrice} {pkg.currency}
+                        {tr("بدلاً من")}{originalPrice} {pkg.currency}
                       </div>
                     )}
                   </div>
@@ -524,7 +517,7 @@ export default function HostingPackages({
                     <div className="mb-5 grid grid-cols-2 gap-2">
                       {pkg.storage && (
                         <Spec
-                          label="التخزين"
+                          label={tr("التخزين")}
                           value={pkg.storage}
                           icon={FiHardDrive}
                           dark={isPopular}
@@ -532,7 +525,7 @@ export default function HostingPackages({
                       )}
                       {pkg.bandwidth && (
                         <Spec
-                          label="النطاق"
+                          label={tr("النطاق")}
                           value={pkg.bandwidth}
                           icon={FiActivity}
                           dark={isPopular}
@@ -540,7 +533,7 @@ export default function HostingPackages({
                       )}
                       {pkg.cpu && (
                         <Spec
-                          label="المعالج"
+                          label={tr("المعالج")}
                           value={pkg.cpu}
                           icon={FiCpu}
                           dark={isPopular}
@@ -548,7 +541,7 @@ export default function HostingPackages({
                       )}
                       {pkg.ram && (
                         <Spec
-                          label="الذاكرة"
+                          label={tr("الذاكرة")}
                           value={pkg.ram}
                           icon={FiZap}
                           dark={isPopular}
@@ -565,8 +558,7 @@ export default function HostingPackages({
                           isPopular ? "text-gray-500" : "text-gray-400"
                         }`}
                       >
-                        المميزات
-                      </span>
+                        {tr("المميزات")}</span>
                       {pkg.features && pkg.features.length > 0 && (
                         <button
                           onClick={() => toggleFeatures(pkg._id)}
@@ -575,8 +567,8 @@ export default function HostingPackages({
                           }`}
                         >
                           {expandedFeatures.has(pkg._id)
-                            ? "إخفاء التفاصيل"
-                            : "عرض الكل"}
+                            ? tr("إخفاء التفاصيل")
+                            : tr("عرض الكل")}
                         </button>
                       )}
                     </div>
@@ -624,7 +616,7 @@ export default function HostingPackages({
                         : "bg-gray-100 text-gray-900 hover:bg-gray-200"
                     }`}
                   >
-                    {isPopular ? "اختر الخطة" : "ابدأ الآن"}
+                    {isPopular ? tr("اختر الخطة") : tr("ابدأ الآن")}
                     <FiArrowLeft
                       className={isPopular ? "animate-pulse" : ""}
                     />
@@ -651,12 +643,9 @@ export default function HostingPackages({
                 </div>
                 <div>
                   <h3 className="text-2xl font-extrabold text-gray-900">
-                    تحتاج حلاً مخصصًا؟ دعنا نبني لك باقة تناسب مشروعك
-                  </h3>
+                    {tr("تحتاج حلاً مخصصًا؟ دعنا نبني لك باقة تناسب مشروعك")}</h3>
                   <p className="mt-2 text-gray-600">
-                    سنصمم لك خطة خاصة تتناسب مع احتياجاتك، حجم الزيارات، نوع
-                    المشروع، وأهداف النمو.
-                  </p>
+                    {tr("سنصمم لك خطة خاصة تتناسب مع احتياجاتك، حجم الزيارات، نوع المشروع، وأهداف النمو.")}</p>
                 </div>
               </div>
               <motion.button
@@ -665,8 +654,7 @@ export default function HostingPackages({
                 onClick={openEnterpriseModal}
                 className="rounded-2xl bg-gray-950 px-8 py-4 font-bold text-white shadow-lg transition hover:bg-primary whitespace-nowrap"
               >
-                تواصل معنا
-              </motion.button>
+                {tr("تواصل معنا")}</motion.button>
             </div>
           </div>
         </motion.div>

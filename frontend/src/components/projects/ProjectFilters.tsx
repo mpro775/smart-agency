@@ -1,4 +1,3 @@
-"use client";
 import { motion } from "framer-motion";
 
 export interface FilterCategory {
@@ -22,7 +21,7 @@ export default function ProjectFilters({
   if (!categories || categories.length === 0) return null;
 
   return (
-    <div className="flex justify-center mb-10" dir="rtl">
+    <div className="flex justify-center mb-10">
       <div className="inline-flex flex-wrap items-center justify-center gap-2 rounded-full border border-teal-900/10 bg-white/70 p-2 shadow-sm backdrop-blur-xl">
         {categories.map((cat) => (
           <motion.button

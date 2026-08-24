@@ -1,4 +1,5 @@
-"use client";
+import { tr } from "@/i18n";
+import { useLocale } from "@/localization/LocaleLayout";
 import { motion } from "framer-motion";
 import {
   FaTwitter,
@@ -25,11 +26,12 @@ import { newsletterService } from "../services/newsletter.service";
 import { companyInfoService } from "../services/company-info.service";
 
 export default function Footer() {
+  const { locale } = useLocale();
   const currentYear = new Date().getFullYear();
 
   // Fetch company info
   const { data: companyInfo } = useQuery({
-    queryKey: ["company-info"],
+    queryKey: ["company-info", locale],
     queryFn: () => companyInfoService.get(),
     staleTime: 1000 * 60 * 10, // 10 minutes
   });
@@ -56,7 +58,7 @@ export default function Footer() {
       setTimeout(() => setSubmitSuccess(false), 5000);
     } catch (error) {
       setSubmitError(
-        error instanceof Error ? error.message : "حدث خطأ أثناء الاشتراك",
+        error instanceof Error ? error.message : tr("حدث خطأ أثناء الاشتراك"),
       );
     } finally {
       setIsSubmitting(false);
@@ -68,35 +70,35 @@ export default function Footer() {
     {
       icon: <FaTwitter />,
       href: companyInfo?.socialLinks?.twitter || "#",
-      label: "تويتر",
+      label: tr("تويتر"),
       color: "#1DA1F2",
       enabled: !!companyInfo?.socialLinks?.twitter,
     },
     {
       icon: <FaInstagram />,
       href: companyInfo?.socialLinks?.instagram || "#",
-      label: "إنستغرام",
+      label: tr("إنستغرام"),
       color: "#E4405F",
       enabled: !!companyInfo?.socialLinks?.instagram,
     },
     {
       icon: <FaWhatsapp />,
       href: companyInfo?.whatsappUrl || "#",
-      label: "واتساب",
+      label: tr("واتساب"),
       color: "#25D366",
       enabled: !!companyInfo?.whatsappUrl,
     },
     {
       icon: <FaLinkedin />,
       href: companyInfo?.socialLinks?.linkedin || "#",
-      label: "لينكدإن",
+      label: tr("لينكدإن"),
       color: "#0077B5",
       enabled: !!companyInfo?.socialLinks?.linkedin,
     },
     {
       icon: <FaFacebook />,
       href: companyInfo?.socialLinks?.facebook || "#",
-      label: "فيسبوك",
+      label: tr("فيسبوك"),
       color: "#1877F2",
       enabled: !!companyInfo?.socialLinks?.facebook,
     },
@@ -106,7 +108,7 @@ export default function Footer() {
   const contactInfo = [
     {
       icon: <FaMapMarkerAlt />,
-      text: companyInfo?.address || "صنعاء, اليمن",
+      text: companyInfo?.address || tr("صنعاء, اليمن"),
       link: companyInfo?.googleMapsUrl || "#",
     },
     {
@@ -125,7 +127,7 @@ export default function Footer() {
     },
     {
       icon: <FaClock />,
-      text: companyInfo?.workingHours || "السبت - الخميس: 8 ص - 5 م",
+      text: companyInfo?.workingHours || tr("السبت - الخميس: 8 ص - 5 م"),
       link: "#",
     },
   ];
@@ -155,8 +157,8 @@ export default function Footer() {
                   viewport={{ once: true }}
                   className="text-3xl md:text-4xl font-bold text-white mb-4 leading-tight"
                 >
-                  لديك فكرة مشروع؟{" "}
-                  <span className="text-primary">لا تتركها في رأسك.</span>
+                  {tr("لديك فكرة مشروع؟")}{" "}
+                  <span className="text-primary">{tr("لا تتركها في رأسك.")}</span>
                 </motion.h2>
 
                 <motion.p
@@ -166,9 +168,7 @@ export default function Footer() {
                   viewport={{ once: true }}
                   className="text-white/80 text-base md:text-lg mb-8 max-w-2xl mx-auto"
                 >
-                  نحن هنا لنجعل أفكارك واقعاً. ابدأ رحلتك الرقمية مع استشارة مجانية
-                  من خبرائنا.
-                </motion.p>
+                  {tr("نحن هنا لنجعل أفكارك واقعاً. ابدأ رحلتك الرقمية مع استشارة مجانية من خبرائنا.")}</motion.p>
 
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
@@ -184,8 +184,7 @@ export default function Footer() {
                       className="group relative inline-flex items-center px-10 py-4 rounded-2xl bg-gradient-to-r from-primary to-primary-dark text-white font-semibold text-base shadow-xl hover:shadow-2xl hover:shadow-primary/30 transition-all duration-300"
                     >
                       <span className="relative z-10 flex items-center gap-3">
-                        ابدأ استشارتك المجانية
-                        <FiArrowLeft className="group-hover:translate-x-1 transition-transform duration-300" />
+                        {tr("ابدأ استشارتك المجانية")}<FiArrowLeft className="group-hover:translate-x-1 transition-transform duration-300" />
                       </span>
                     </motion.button>
                   </Link>
@@ -201,8 +200,7 @@ export default function Footer() {
                     className="group inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-white/10 backdrop-blur-md text-white font-semibold text-base border border-white/20 hover:bg-white/20 hover:border-white/40 transition-all duration-300"
                   >
                     <FaPhone className="text-lg" />
-                    اتصل بنا الآن
-                  </motion.a>
+                    {tr("اتصل بنا الآن")}</motion.a>
                 </motion.div>
               </div>
             </div>
@@ -230,21 +228,18 @@ export default function Footer() {
               <Link to="/" className="inline-flex mb-6 group">
                 <img
                   src="/logo2.png"
-                  alt="وكالة سمارت"
+                  alt={tr("وكالة سمارت")}
                   className="h-14 w-auto brightness-0 invert transition-transform duration-300 group-hover:scale-105"
                 />
               </Link>
 
               <p className="text-gray-300 leading-relaxed text-sm mb-8">
-                نقدم حلولاً رقمية متكاملة تساعد عملك على النمو والازدهار في
-                العصر الرقمي، من خلال فريق من الخبراء المبدعين والمحترفين.
-              </p>
+                {tr("نقدم حلولاً رقمية متكاملة تساعد عملك على النمو والازدهار في العصر الرقمي، من خلال فريق من الخبراء المبدعين والمحترفين.")}</p>
 
               <div>
                 <h4 className="text-sm font-semibold text-white mb-5 flex items-center gap-2">
                   <span className="w-8 h-0.5 bg-primary rounded-full" />
-                  تابعنا على
-                </h4>
+                  {tr("تابعنا على")}</h4>
                 <div className="flex flex-wrap gap-3">
                   {socialLinks.map((social, index) => (
                     <motion.a
@@ -280,15 +275,14 @@ export default function Footer() {
             >
               <h3 className="text-base font-bold mb-6 text-white flex items-center gap-2">
                 <span className="w-8 h-0.5 bg-primary rounded-full" />
-                روابط سريعة
-              </h3>
+                {tr("روابط سريعة")}</h3>
               <ul className="space-y-3">
                 {[
-                  { label: "الرئيسية", href: "/" },
-                  { label: "خدماتنا", href: "/#services" },
-                  { label: "أعمالنا", href: "/#projects" },
-                  { label: "فريقنا", href: "/#team" },
-                  { label: "المدونة", href: "/blog" },
+                  { label: tr("الرئيسية"), href: "/" },
+                  { label: tr("خدماتنا"), href: "/#services" },
+                  { label: tr("أعمالنا"), href: "/#projects" },
+                  { label: tr("فريقنا"), href: "/#team" },
+                  { label: tr("المدونة"), href: "/blog" },
                 ].map((link, index) => (
                   <motion.li
                     key={index}
@@ -322,8 +316,7 @@ export default function Footer() {
             >
               <h3 className="text-base font-bold mb-6 text-white flex items-center gap-2">
                 <span className="w-8 h-0.5 bg-primary rounded-full" />
-                تواصل معنا
-              </h3>
+                {tr("تواصل معنا")}</h3>
               <div className="space-y-4">
                 {contactInfo.map((info, index) => (
                   <motion.a
@@ -365,8 +358,7 @@ export default function Footer() {
                   <FiMail className="text-primary text-lg" />
                 </div>
                 <h3 className="text-base font-bold text-white">
-                  النشرة البريدية
-                </h3>
+                  {tr("النشرة البريدية")}</h3>
               </div>
 
               {submitSuccess ? (
@@ -385,17 +377,14 @@ export default function Footer() {
                     </div>
                   </motion.div>
                   <p className="text-green-400 text-sm font-semibold">
-                    تم الاشتراك بنجاح!
-                  </p>
+                    {tr("تم الاشتراك بنجاح!")}</p>
                   <p className="text-green-300/80 text-xs mt-1">
-                    سنرسل لك آخر الأخبار والعروض
-                  </p>
+                    {tr("سنرسل لك آخر الأخبار والعروض")}</p>
                 </motion.div>
               ) : (
                 <>
                   <p className="text-gray-300 mb-5 leading-relaxed text-sm">
-                    اشترك ليصلك جديد التقنية وعروضنا الخاصة
-                  </p>
+                    {tr("اشترك ليصلك جديد التقنية وعروضنا الخاصة")}</p>
 
                   <form onSubmit={handleNewsletterSubmit} className="space-y-4">
                     <div className="relative group">
@@ -405,7 +394,7 @@ export default function Footer() {
                           type="email"
                           value={newsletterEmail}
                           onChange={(e) => setNewsletterEmail(e.target.value)}
-                          placeholder="بريدك الإلكتروني"
+                          placeholder={tr("بريدك الإلكتروني")}
                           className="flex-1 px-3 py-3 bg-transparent text-white placeholder-gray-400 focus:outline-none text-sm"
                           required
                           disabled={isSubmitting}
@@ -447,8 +436,7 @@ export default function Footer() {
                     )}
 
                     <p className="text-gray-500 text-xs">
-                      نحترم خصوصيتك. لن نشارك بريدك مع أي طرف ثالث.
-                    </p>
+                      {tr("نحترم خصوصيتك. لن نشارك بريدك مع أي طرف ثالث.")}</p>
                   </form>
                 </>
               )}
@@ -467,17 +455,16 @@ export default function Footer() {
               {/* Copyright */}
               <div className="flex flex-col items-center lg:items-start gap-2">
                 <div className="text-gray-400 text-sm">
-                  جميع الحقوق محفوظة &copy; {currentYear}
+                  {tr("جميع الحقوق محفوظة &copy;")}{currentYear}
                   <span className="text-primary font-semibold mx-1">
-                    وكالة سمارت
-                  </span>
+                    {tr("وكالة سمارت")}</span>
                 </div>
                 <div className="flex items-center gap-2 text-xs text-gray-500">
                   <span>Made with</span>
                   <span className="text-red-500">❤</span>
                   <span>in</span>
                   <span className="text-lg">🇾🇪</span>
-                  <span className="text-primary font-medium">صنعاء، اليمن</span>
+                  <span className="text-primary font-medium">{tr("صنعاء، اليمن")}</span>
                 </div>
               </div>
 
@@ -487,15 +474,13 @@ export default function Footer() {
                   to="/privacy"
                   className="text-gray-400 hover:text-white transition-colors duration-300 text-sm"
                 >
-                  سياسة الخصوصية
-                </Link>
+                  {tr("سياسة الخصوصية")}</Link>
                 <div className="w-px h-4 bg-gray-700" />
                 <Link
                   to="/terms"
                   className="text-gray-400 hover:text-white transition-colors duration-300 text-sm"
                 >
-                  شروط الاستخدام
-                </Link>
+                  {tr("شروط الاستخدام")}</Link>
               </div>
             </div>
           </motion.div>

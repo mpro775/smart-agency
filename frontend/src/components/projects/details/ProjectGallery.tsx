@@ -1,3 +1,4 @@
+import { tr } from "@/i18n";
 import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Monitor, Play, Rocket, X, ChevronLeft, ChevronRight } from "lucide-react";
@@ -54,7 +55,7 @@ export default function ProjectGallery({ displayImages, videoUrl, heroImage, tit
             <div className="p-3 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 shadow-sm">
               <Monitor className="w-6 h-6" />
             </div>
-            <span>معرض اللقطات الفنية</span>
+            <span>{tr("معرض اللقطات الفنية")}</span>
           </h3>
 
           {/* HTML Video Preview */}

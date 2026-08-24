@@ -58,7 +58,9 @@ export class TeamService {
 
     if (!includeInactive) {
       membersQuery
-        .select('name role bio avatar socialLinks order isActive')
+        .select(
+          'fullName fullNameEn role roleEn bio bioEn funFact funFactEn specializations specializationsEn department photo email linkedinUrl githubUrl websiteUrl projectsCount sortOrder isActive',
+        )
         .lean();
     }
 

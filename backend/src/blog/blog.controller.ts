@@ -73,8 +73,8 @@ export class BlogController {
   @ApiOperation({ summary: 'Get all unique tags' })
   @ApiResponse({ status: 200, description: 'Tags fetched successfully' })
   @ResponseMessage('Tags fetched successfully')
-  getAllTags() {
-    return this.blogService.getAllTags();
+  getAllTags(@Query('lang') lang?: string) {
+    return this.blogService.getAllTags(lang === 'en' ? 'en' : 'ar');
   }
 
   @Get('categories')
@@ -82,8 +82,8 @@ export class BlogController {
   @ApiOperation({ summary: 'Get all blog categories' })
   @ApiResponse({ status: 200, description: 'Categories fetched successfully' })
   @ResponseMessage('Categories fetched successfully')
-  getCategories() {
-    return this.blogService.getAllCategories();
+  getCategories(@Query('lang') lang?: string) {
+    return this.blogService.getAllCategories(lang === 'en' ? 'en' : 'ar');
   }
 
   @Get('featured')

@@ -1,3 +1,4 @@
+import { tr } from "@/i18n";
 import { motion } from "framer-motion";
 import {
   FiLinkedin,
@@ -38,11 +39,10 @@ export default function TeamProfileDrawer({ member, open, onOpenChange }: Props)
       <SheetContent
         side="right"
         className="w-full sm:max-w-md lg:max-w-xl bg-[#09090b] border-white/10 text-gray-100 p-0 overflow-y-auto"
-        dir="rtl"
       >
         <SheetHeader className="sr-only">
-          <SheetTitle>الملف المهني</SheetTitle>
-          <SheetDescription>تفاصيل العضو</SheetDescription>
+          <SheetTitle>{tr("الملف المهني")}</SheetTitle>
+          <SheetDescription>{tr("تفاصيل العضو")}</SheetDescription>
         </SheetHeader>
 
         {/* Ambient Background */}
@@ -98,7 +98,7 @@ export default function TeamProfileDrawer({ member, open, onOpenChange }: Props)
                 )}
                 {member.joinedAt && (
                   <div className="flex items-center justify-center gap-2 sm:gap-3">
-                    <span className="text-gray-300">منذ {new Date(member.joinedAt).getFullYear()}</span>
+                    <span className="text-gray-300">{tr("منذ")}{new Date(member.joinedAt).getFullYear()}</span>
                     <FiCalendar className="text-gray-600 shrink-0" />
                   </div>
                 )}
@@ -141,8 +141,7 @@ export default function TeamProfileDrawer({ member, open, onOpenChange }: Props)
               >
                 <h3 className="flex items-center gap-2 text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4">
                   <FiUser className={accentColor} />
-                  نبذة تعريفية
-                </h3>
+                  {tr("نبذة تعريفية")}</h3>
                 <p className="text-gray-400 leading-relaxed text-sm sm:text-base">
                   {member.bio}
                 </p>
@@ -157,8 +156,7 @@ export default function TeamProfileDrawer({ member, open, onOpenChange }: Props)
               >
                 <h3 className="flex items-center gap-2 text-base sm:text-lg font-semibold text-white mb-3 sm:mb-5">
                   <FiAward className={accentColor} />
-                  المهارات والتخصصات
-                </h3>
+                  {tr("المهارات والتخصصات")}</h3>
                 <div className="flex flex-wrap gap-2">
                   {member.specializations.map((spec, index) => (
                     <span
@@ -183,8 +181,7 @@ export default function TeamProfileDrawer({ member, open, onOpenChange }: Props)
                     <FiAward size={80} />
                   </div>
                   <h4 className={`text-xs sm:text-sm font-medium ${accentColor} mb-2 uppercase tracking-wider`}>
-                    شيء يميز هذا العضو
-                  </h4>
+                    {tr("شيء يميز هذا العضو")}</h4>
                   <p className="text-gray-300 text-xs sm:text-sm italic relative z-10 leading-relaxed">
                     "{member.funFact}"
                   </p>

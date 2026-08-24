@@ -202,3 +202,11 @@ ProjectSchema.index({ sortOrder: 1 });
 ProjectSchema.index({ featuredOrder: 1 });
 ProjectSchema.index({ isPublished: 1, isFeatured: 1, sortOrder: 1 });
 ProjectSchema.index({ createdAt: -1 });
+ProjectSchema.index({
+  title: 'text',
+  titleEn: 'text',
+  summary: 'text',
+  summaryEn: 'text',
+  industry: 'text',
+  industryEn: 'text',
+});

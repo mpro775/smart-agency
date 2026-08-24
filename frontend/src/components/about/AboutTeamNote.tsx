@@ -1,3 +1,4 @@
+import { tr } from "@/i18n";
 import { motion } from "framer-motion";
 import { type TeamNoteSection } from "../../services/about.service";
 import { Check } from "lucide-react";
@@ -13,7 +14,7 @@ const fadeInUp = {
 
 export function AboutTeamNote({ teamNote }: AboutTeamNoteProps) {
   return (
-    <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" dir="rtl">
+    <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       <motion.div
         initial="hidden"
         whileInView="visible"
@@ -27,8 +28,7 @@ export function AboutTeamNote({ teamNote }: AboutTeamNoteProps) {
         <div className="relative z-10 grid lg:grid-cols-2 gap-12 p-8 md:p-12 items-center">
           <div className="text-right">
             <span className="inline-block px-5 py-2 rounded-full bg-primary/5 border border-primary/15 text-primary text-sm font-bold mb-6 tracking-wide">
-              فريق العمل
-            </span>
+              {tr("فريق العمل")}</span>
             <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-6 tracking-tight leading-tight">
               {teamNote.title}
             </h2>

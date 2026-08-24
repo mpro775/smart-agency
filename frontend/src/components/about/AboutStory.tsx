@@ -1,3 +1,4 @@
+import { tr } from "@/i18n";
 import { motion } from "framer-motion";
 import { type StorySection } from "../../services/about.service";
 import { CheckCircle2, Award } from "lucide-react";
@@ -13,7 +14,7 @@ const fadeInUp = {
 
 export function AboutStory({ story }: AboutStoryProps) {
   return (
-    <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" dir="rtl">
+    <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       <motion.div
         initial="hidden"
         whileInView="visible"
@@ -22,8 +23,7 @@ export function AboutStory({ story }: AboutStoryProps) {
         className="text-center mb-16"
       >
         <span className="inline-block px-5 py-2 rounded-full bg-primary/5 border border-primary/15 text-primary text-sm font-bold mb-5 tracking-wide">
-          قصتنا وهدفنا
-        </span>
+          {tr("قصتنا وهدفنا")}</span>
         <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight">
           {story.title}
         </h2>
@@ -82,8 +82,7 @@ export function AboutStory({ story }: AboutStoryProps) {
                 <Award className="w-7 h-7" />
               </div>
               <h3 className="text-2xl font-black mb-4 text-slate-900 tracking-tight">
-                فلسفة سمارت
-              </h3>
+                {tr("فلسفة سمارت")}</h3>
               <p className="text-slate-500 leading-[1.9] font-medium text-base">
                 {story.closingStatement}
               </p>

@@ -1,3 +1,4 @@
+import { tr } from "@/i18n";
 import { motion } from "framer-motion";
 import { type ComponentType } from "react";
 import * as FiIcons from "react-icons/fi";
@@ -29,7 +30,7 @@ export function AboutThinking({ items }: AboutThinkingProps) {
   if (!items || items.length === 0) return null;
 
   return (
-    <section className="py-24 px-4 sm:px-6 lg:px-8 relative" dir="rtl">
+    <section className="py-24 px-4 sm:px-6 lg:px-8 relative">
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial="hidden"
@@ -39,11 +40,9 @@ export function AboutThinking({ items }: AboutThinkingProps) {
           className="text-center mb-16"
         >
           <span className="inline-block px-5 py-2 rounded-full bg-primary/5 border border-primary/15 text-primary text-sm font-bold mb-5 tracking-wide">
-            منهجيتنا
-          </span>
+            {tr("منهجيتنا")}</span>
           <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight">
-            كيف نفكر في كل مشروع؟
-          </h2>
+            {tr("كيف نفكر في كل مشروع؟")}</h2>
         </motion.div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">

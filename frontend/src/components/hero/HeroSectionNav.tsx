@@ -1,12 +1,13 @@
+import { tr } from "@/i18n";
 import { motion } from "framer-motion";
 
 const sections = [
-  { number: "01", label: "الرئيسية", active: true },
-  { number: "02", label: "من نحن" },
-  { number: "03", label: "أعمالنا" },
-  { number: "04", label: "خدماتنا" },
-  { number: "05", label: "التقنيات" },
-  { number: "06", label: "تواصل معنا" },
+  { number: "01", label: tr("الرئيسية"), active: true },
+  { number: "02", label: tr("من نحن") },
+  { number: "03", label: tr("أعمالنا") },
+  { number: "04", label: tr("خدماتنا") },
+  { number: "05", label: tr("التقنيات") },
+  { number: "06", label: tr("تواصل معنا") },
 ];
 
 const HeroSectionNav = () => {
@@ -16,7 +17,6 @@ const HeroSectionNav = () => {
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.6, delay: 0.5 }}
       className="hidden xl:flex fixed right-6 top-1/2 -translate-y-1/2 z-30 flex-col items-center gap-0"
-      dir="rtl"
     >
       {sections.map((section, index) => (
         <div key={section.number} className="flex flex-col items-center">

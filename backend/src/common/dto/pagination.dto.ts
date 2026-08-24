@@ -1,8 +1,13 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsOptional, IsInt, Min, Max } from 'class-validator';
+import { IsOptional, IsInt, Min, Max, IsIn } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class PaginationDto {
+  @ApiPropertyOptional({ enum: ['ar', 'en'], default: 'ar' })
+  @IsOptional()
+  @IsIn(['ar', 'en'])
+  lang?: 'ar' | 'en';
+
   @ApiPropertyOptional({
     description: 'Page number',
     minimum: 1,

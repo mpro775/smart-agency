@@ -1,3 +1,4 @@
+import { tr } from "@/i18n";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Inbox, Loader2 } from "lucide-react";
@@ -50,9 +51,9 @@ export default function AboutPage() {
   // SEO Management
   useEffect(() => {
     if (!aboutData) return;
-    const title = aboutData.seo?.metaTitle || "من نحن | Smart Agency";
-    const description = aboutData.seo?.metaDescription || "تعرف على وكالة سمارت ورؤيتنا وقصتنا في تقديم الحلول الرقمية المبتكرة.";
-    const keywords = aboutData.seo?.keywords?.join(", ") || "وكالة سمارت, حلول رقمية, تطوير مواقع, تصميم واجهات";
+    const title = aboutData.seo?.metaTitle || tr("من نحن | Smart Agency");
+    const description = aboutData.seo?.metaDescription || tr("تعرف على وكالة سمارت ورؤيتنا وقصتنا في تقديم الحلول الرقمية المبتكرة.");
+    const keywords = aboutData.seo?.keywords?.join(", ") || tr("وكالة سمارت, حلول رقمية, تطوير مواقع, تصميم واجهات");
     
     const previousTitle = document.title;
     document.title = title;
@@ -102,7 +103,7 @@ export default function AboutPage() {
           className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-teal-400/10 rounded-full blur-[100px]"
         />
 
-        <div className="relative flex flex-col items-center z-10" dir="rtl">
+        <div className="relative flex flex-col items-center z-10">
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
@@ -116,8 +117,7 @@ export default function AboutPage() {
             transition={{ duration: 2, repeat: Infinity }}
             className="text-slate-500 font-bold text-lg tracking-wide"
           >
-            جاري تحضير البيانات...
-          </motion.p>
+            {tr("جاري تحضير البيانات...")}</motion.p>
         </div>
       </div>
     );
@@ -130,13 +130,12 @@ export default function AboutPage() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           className="text-center p-8 md:p-12 bg-white rounded-3xl border border-slate-200 shadow-xl max-w-md w-full"
-          dir="rtl"
         >
           <div className="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-slate-200 text-slate-400">
             <Inbox className="w-8 h-8" />
           </div>
-          <h3 className="text-xl font-bold text-slate-900 mb-2">لا توجد بيانات متاحة</h3>
-          <p className="text-slate-500 text-sm">نواجه مشكلة في عرض تفاصيل هذه الصفحة حالياً.</p>
+          <h3 className="text-xl font-bold text-slate-900 mb-2">{tr("لا توجد بيانات متاحة")}</h3>
+          <p className="text-slate-500 text-sm">{tr("نواجه مشكلة في عرض تفاصيل هذه الصفحة حالياً.")}</p>
         </motion.div>
       </div>
     );

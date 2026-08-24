@@ -1,4 +1,4 @@
-"use client";
+import { tr } from "@/i18n";
 import { motion } from "framer-motion";
 import {
   FiLinkedin,
@@ -39,7 +39,7 @@ export default function TeamMemberDialog({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-[95vw] md:max-w-4xl lg:max-w-5xl xl:max-w-6xl bg-[#09090b] border border-white/10 text-gray-100 shadow-2xl p-0 overflow-hidden sm:rounded-3xl max-h-[90vh] flex flex-col">
         <DialogHeader className="sr-only">
-          <DialogTitle>تفاصيل العضو</DialogTitle>
+          <DialogTitle>{tr("تفاصيل العضو")}</DialogTitle>
         </DialogHeader>
 
         {/* خلفية هادئة جداً - Ambient Background */}
@@ -107,7 +107,7 @@ export default function TeamMemberDialog({
                 {member.joinedAt && (
                   <div className="flex items-center justify-center md:justify-end gap-3 group">
                     <span className="transition-colors group-hover:text-gray-200">
-                      منذ {new Date(member.joinedAt).getFullYear()}
+                      {tr("منذ")}{new Date(member.joinedAt).getFullYear()}
                     </span>
                     <FiCalendar className="text-gray-600 group-hover:text-emerald-400 transition-colors shrink-0" />
                   </div>
@@ -156,8 +156,7 @@ export default function TeamMemberDialog({
                 >
                   <h3 className="flex items-center gap-2 text-lg font-semibold text-white mb-4">
                     <FiUser className={accentColor} />
-                    نبذة تعريفية
-                  </h3>
+                    {tr("نبذة تعريفية")}</h3>
                   <p className="text-gray-400 leading-relaxed text-base font-light">
                     {member.bio}
                   </p>
@@ -173,8 +172,7 @@ export default function TeamMemberDialog({
                 >
                   <h3 className="flex items-center gap-2 text-lg font-semibold text-white mb-5">
                     <FiAward className={accentColor} />
-                    المهارات والتخصصات
-                  </h3>
+                    {tr("المهارات والتخصصات")}</h3>
                   <div className="flex flex-wrap gap-2">
                     {member.specializations.map((spec, index) => (
                       <span
@@ -202,8 +200,7 @@ export default function TeamMemberDialog({
                     <h4
                       className={`text-sm font-medium ${accentColor} mb-2 uppercase tracking-wider`}
                     >
-                      شيء قد لا تعرفه
-                    </h4>
+                      {tr("شيء قد لا تعرفه")}</h4>
                     <p className="text-gray-300 italic relative z-10 leading-relaxed">
                       "{member.funFact}"
                     </p>
@@ -216,8 +213,7 @@ export default function TeamMemberDialog({
                 onClick={onClose}
                 className="md:hidden w-full py-4 rounded-xl bg-white/5 text-white text-sm font-medium hover:bg-white/10 transition-colors border border-white/10"
               >
-                إغلاق
-              </button>
+                {tr("إغلاق")}</button>
             </div>
           </div>
         </div>

@@ -1,4 +1,4 @@
-"use client";
+import { tr } from "@/i18n";
 import { useRef } from "react";
 import { motion } from "framer-motion";
 import { FiExternalLink, FiArrowLeft } from "react-icons/fi";
@@ -97,13 +97,12 @@ export default function FeaturedProject({ project }: FeaturedProjectProps) {
             </div>
           )}
 
-          <div className="absolute top-5 right-5 z-10 flex flex-col gap-2" dir="rtl">
+          <div className="absolute top-5 right-5 z-10 flex flex-col gap-2">
             <span className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-white/25 backdrop-blur-xl text-white text-sm font-semibold rounded-xl border border-white/30 shadow-sm">
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
-              دراسة حالة
-            </span>
+              {tr("دراسة حالة")}</span>
             {categoryLabels.length > 0 && (
               <span className="inline-block px-3.5 py-1.5 bg-black/45 backdrop-blur-md text-white text-xs font-semibold rounded-xl border border-white/15">
                 {categoryLabels.join(" + ")}
@@ -113,7 +112,7 @@ export default function FeaturedProject({ project }: FeaturedProjectProps) {
         </div>
 
         {/* Content side */}
-        <div className="lg:w-5/12 p-6 md:p-8 lg:p-10 flex flex-col justify-center" dir="rtl">
+        <div className="lg:w-5/12 p-6 md:p-8 lg:p-10 flex flex-col justify-center">
           <div className="flex items-center gap-3 mb-4 flex-wrap">
             {categoryLabels.length > 0 && (
               <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-[var(--smart-primary)]/[0.07] text-[var(--smart-primary)] text-sm font-semibold rounded-xl border border-[var(--smart-primary)]/15">
@@ -126,8 +125,7 @@ export default function FeaturedProject({ project }: FeaturedProjectProps) {
                 <svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                 </svg>
-                مشروع مميز
-              </span>
+                {tr("مشروع مميز")}</span>
             )}
           </div>
 
@@ -144,15 +142,14 @@ export default function FeaturedProject({ project }: FeaturedProjectProps) {
           {techNames.length > 0 && (
             <div className="mb-5">
               <p className="text-xs text-slate-400 font-medium mb-2">
-                التقنيات المستخدمة
-              </p>
+                {tr("التقنيات المستخدمة")}</p>
               <ProjectTechTags technologies={project.technologies} max={4} />
             </div>
           )}
 
           {project.stats && project.stats.length > 0 && (
             <div className="mb-5 p-4 bg-slate-50/80 rounded-xl border border-slate-100/80">
-              <div className="flex flex-wrap gap-6" dir="rtl">
+              <div className="flex flex-wrap gap-6">
                 {project.stats.slice(0, 4).map((stat, i) => (
                   <div key={i} className="text-center min-w-[50px]">
                     <span className="block text-xl font-bold text-slate-900">
@@ -167,7 +164,7 @@ export default function FeaturedProject({ project }: FeaturedProjectProps) {
             </div>
           )}
 
-          <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500 mb-6" dir="rtl">
+          <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500 mb-6">
             {project.industry && (
               <span className="inline-flex items-center gap-1.5">
                 <svg className="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -188,14 +185,13 @@ export default function FeaturedProject({ project }: FeaturedProjectProps) {
             )}
           </div>
 
-          <div className="flex flex-wrap items-center gap-3" dir="rtl">
+          <div className="flex flex-wrap items-center gap-3">
             <Link
               to={detailUrl}
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[linear-gradient(135deg,var(--smart-primary),var(--smart-primary-dark))] text-white font-semibold shadow-[0_8px_30px_rgba(0,128,128,0.3)] hover:shadow-[0_12px_40px_rgba(0,128,128,0.4)] transition-all hover:scale-[1.03]"
             >
               <FaSearchPlus className="w-4 h-4" />
-              عرض دراسة الحالة
-              <FiArrowLeft className="w-4 h-4" />
+              {tr("عرض دراسة الحالة")}<FiArrowLeft className="w-4 h-4" />
             </Link>
             {project.projectUrl && (
               <a
@@ -205,8 +201,7 @@ export default function FeaturedProject({ project }: FeaturedProjectProps) {
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-slate-200 bg-white text-slate-700 font-semibold hover:bg-slate-50 hover:border-slate-300 transition-all hover:scale-[1.03] shadow-sm"
               >
                 <FiExternalLink className="w-4 h-4" />
-                زيارة المشروع
-              </a>
+                {tr("زيارة المشروع")}</a>
             )}
           </div>
         </div>

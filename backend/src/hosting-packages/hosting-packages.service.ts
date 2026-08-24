@@ -80,7 +80,9 @@ export class HostingPackagesService {
 
     if (!includeInactive) {
       packagesQuery
-        .select('name slug description price features isPopular isActive order')
+        .select(
+          'name nameEn slug description descriptionEn price currency originalPrice billingCycle category features featuresEn isPopular isBestValue isActive storage storageEn bandwidth bandwidthEn ram ramEn cpu cpuEn domains domainsEn yearlyPrice benefitHints benefitHintsEn sortOrder',
+        )
         .lean();
     }
 

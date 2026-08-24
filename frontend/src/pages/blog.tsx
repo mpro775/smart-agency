@@ -1,3 +1,4 @@
+import { tr } from "@/i18n";
 import { useEffect, useMemo, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { publicBlogService, type BlogTaxonomyItem } from "../services/blog.service";
@@ -64,7 +65,7 @@ export default function BlogPage() {
           setTotalPages(response.meta.totalPages || Math.ceil(response.meta.total / pageSize) || 1);
           setError(null);
         })
-        .catch(() => setError("تعذر تحميل المقالات. حاول مرة أخرى."))
+        .catch(() => setError(tr("تعذر تحميل المقالات. حاول مرة أخرى.")))
         .finally(() => setLoading(false));
     }, 250);
 
@@ -91,7 +92,7 @@ export default function BlogPage() {
       <BlogHero search={search} onSearchChange={setSearch} />
       <FeaturedArticle blog={leadFeatured} />
 
-      <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8" dir="rtl">
+      <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
         <div className="mb-8 space-y-5">
           <CategoryTabs categories={categories} selected={selectedCategory} onSelect={setSelectedCategory} />
 
@@ -101,21 +102,21 @@ export default function BlogPage() {
               onChange={(event) => setContentType(event.target.value)}
               className="h-11 rounded-xl border border-slate-200 bg-white px-4 text-sm text-slate-700 outline-none focus:border-primary"
             >
-              <option value="all">كل الأنواع</option>
-              <option value="article">مقالات</option>
-              <option value="guide">أدلة عملية</option>
-              <option value="case-study">دراسات حالة</option>
-              <option value="insight">رؤى تقنية</option>
-              <option value="news">أخبار</option>
+              <option value="all">{tr("كل الأنواع")}</option>
+              <option value="article">{tr("مقالات")}</option>
+              <option value="guide">{tr("أدلة عملية")}</option>
+              <option value="case-study">{tr("دراسات حالة")}</option>
+              <option value="insight">{tr("رؤى تقنية")}</option>
+              <option value="news">{tr("أخبار")}</option>
             </select>
             <select
               value={sort}
               onChange={(event) => setSort(event.target.value as "latest" | "popular" | "featured")}
               className="h-11 rounded-xl border border-slate-200 bg-white px-4 text-sm text-slate-700 outline-none focus:border-primary"
             >
-              <option value="latest">الأحدث</option>
-              <option value="popular">الأكثر قراءة</option>
-              <option value="featured">المميز أولاً</option>
+              <option value="latest">{tr("الأحدث")}</option>
+              <option value="popular">{tr("الأكثر قراءة")}</option>
+              <option value="featured">{tr("المميز أولاً")}</option>
             </select>
           </div>
         </div>

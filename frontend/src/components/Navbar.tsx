@@ -1,11 +1,14 @@
-"use client";
+import { tr } from "@/i18n";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiMenu, FiX } from "react-icons/fi";
-import { Rocket } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Languages, Rocket } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+import { useLocale } from "@/localization/LocaleLayout";
 
 export default function Navbar() {
+  const { locale, direction, localePath, switchLocale } = useLocale();
+  const { pathname } = useLocation();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -18,11 +21,11 @@ export default function Navbar() {
   }, []);
 
   const navLinks = [
-    { label: "الرئيسية", href: "/", active: true },
-    { label: "من نحن", href: "/about" },
-    { label: "أعمالنا", href: "/projects" },
-    { label: "مدونة", href: "/blog" },
-    { label: "تواصل معنا", href: "/contact" },
+    { label: tr("الرئيسية"), href: localePath("/") },
+    { label: tr("من نحن"), href: localePath("/about") },
+    { label: tr("أعمالنا"), href: localePath("/projects") },
+    { label: tr("مدونة"), href: localePath("/blog") },
+    { label: tr("تواصل معنا"), href: localePath("/contact") },
   ];
 
   return (
@@ -31,7 +34,7 @@ export default function Navbar() {
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6 }}
       className="fixed top-5 left-1/2 -translate-x-1/2 z-50 w-full max-w-5xl px-4 sm:px-6"
-      dir="rtl"
+      dir={direction}
     >
       <motion.div
         className={`relative rounded-full transition-all duration-500 ${
@@ -42,8 +45,8 @@ export default function Navbar() {
       >
         <div className="flex items-center justify-between h-16 md:h-[68px] px-5 md:px-8">
           {/* اللوجو على اليمين */}
-          <Link to="/" className="flex items-center gap-3 group">
-            <img src="/logo2.png" alt="وكالة سمارت" className="h-10 w-auto" />
+          <Link to={localePath("/")} className="flex items-center gap-3 group">
+            <img src="/logo2.png" alt={tr("وكالة سمارت")} className="h-10 w-auto" />
           </Link>
 
           {/* الروابط في الوسط */}
@@ -58,13 +61,13 @@ export default function Navbar() {
                 <Link
                   to={link.href}
                   className={`relative px-4 py-2 text-sm font-medium transition-colors rounded-full ${
-                    link.active
+                    pathname === link.href
                       ? "text-[#008080]"
                       : "text-gray-500 hover:text-[#008080]"
                   }`}
                 >
                   {link.label}
-                  {link.active && (
+                  {pathname === link.href && (
                     <motion.span
                       layoutId="navActive"
                       className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-5 h-[2px] rounded-full bg-[#008080]"
@@ -76,18 +79,27 @@ export default function Navbar() {
           </div>
 
           {/* زر CTA على اليسار */}
-          <div className="hidden lg:flex items-center">
+          <div className="hidden lg:flex items-center gap-2">
+            <button
+              type="button"
+              onClick={switchLocale}
+              className="inline-flex items-center gap-2 rounded-full border border-[#008080]/20 px-3 py-2 text-sm font-semibold text-[#008080] hover:bg-[#008080]/5"
+              aria-label={locale === "ar" ? "Switch to English" : tr("التبديل إلى العربية")}
+            >
+              <Languages size={16} />
+              {locale === "ar" ? "EN" : tr("العربية")}
+            </button>
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.4 }}
             >
               <Link
-                to="/quote"
+                to={localePath("/quote")}
                 className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold text-white bg-[#008080] shadow-lg shadow-[#008080]/20 hover:shadow-xl hover:shadow-[#008080]/30 transition-all duration-300 hover:scale-105"
               >
                 <Rocket size={15} />
-                ابدأ مشروعك
+                {tr("ابدأ مشروعك")}
               </Link>
             </motion.div>
           </div>
@@ -96,7 +108,7 @@ export default function Navbar() {
           <button
             onClick={() => setOpen(!open)}
             className="lg:hidden p-2 rounded-full text-gray-600 hover:bg-white/50 transition-colors"
-            aria-label="فتح القائمة"
+            aria-label={tr("فتح القائمة")}
           >
             {open ? <FiX size={20} /> : <FiMenu size={20} />}
           </button>
@@ -124,7 +136,7 @@ export default function Navbar() {
                       <Link
                         to={link.href}
                         className={`block py-2.5 px-4 rounded-full font-medium transition-colors text-sm ${
-                          link.active
+                          pathname === link.href
                             ? "text-[#008080] bg-[#008080]/5"
                             : "text-gray-600 hover:bg-gray-50"
                         }`}
@@ -141,13 +153,24 @@ export default function Navbar() {
                   transition={{ duration: 0.3, delay: 0.2 }}
                   className="mt-3 pt-3 border-t border-gray-100"
                 >
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setOpen(false);
+                      switchLocale();
+                    }}
+                    className="mb-2 flex w-full items-center justify-center gap-2 rounded-full border border-[#008080]/20 py-2.5 px-4 font-semibold text-[#008080] text-sm"
+                  >
+                    <Languages size={14} />
+                    {locale === "ar" ? "English" : tr("العربية")}
+                  </button>
                   <Link
-                    to="/quote"
+                    to={localePath("/quote")}
                     className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-full font-bold text-white bg-[#008080] shadow-lg text-sm"
                     onClick={() => setOpen(false)}
                   >
                     <Rocket size={14} />
-                    ابدأ مشروعك
+                    {tr("ابدأ مشروعك")}
                   </Link>
                 </motion.div>
               </div>

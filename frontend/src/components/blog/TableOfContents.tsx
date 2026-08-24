@@ -1,3 +1,4 @@
+import { tr } from "@/i18n";
 import { useEffect, useMemo, useState } from "react";
 import { Hash } from "lucide-react";
 
@@ -39,10 +40,10 @@ export default function TableOfContents({ html }: { html: string }) {
   if (headings.length === 0) return null;
 
   return (
-    <nav className="sticky top-28 rounded-2xl border border-slate-100 bg-white/80 p-6 shadow-lg shadow-slate-200/40 ring-1 ring-slate-100 backdrop-blur-md" dir="rtl">
+    <nav className="sticky top-28 rounded-2xl border border-slate-100 bg-white/80 p-6 shadow-lg shadow-slate-200/40 ring-1 ring-slate-100 backdrop-blur-md">
       <div className="mb-4 flex items-center gap-2 text-slate-950">
         <Hash className="h-4 w-4 text-primary" />
-        <h2 className="text-sm font-bold">في هذا المقال</h2>
+        <h2 className="text-sm font-bold">{tr("في هذا المقال")}</h2>
       </div>
       <div className="relative space-y-1">
         {/* vertical line */}

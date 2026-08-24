@@ -1,3 +1,4 @@
+import { tr } from "@/i18n";
 import { motion } from "framer-motion";
 import { type About } from "../../services/about.service";
 import { Link } from "react-router-dom";
@@ -27,15 +28,15 @@ const staggerContainer = {
 
 export function AboutHero({ aboutData }: AboutHeroProps) {
   const workflowSteps = [
-    { label: "الاستراتيجية والتخطيط", Icon: Compass, color: "text-blue-600", bg: "bg-blue-50", border: "border-blue-100" },
-    { label: "تصميم واجهات المستخدم UX/UI", Icon: Palette, color: "text-violet-600", bg: "bg-violet-50", border: "border-violet-100" },
-    { label: "التطوير البرمجي المتقن", Icon: Code, color: "text-emerald-600", bg: "bg-emerald-50", border: "border-emerald-100" },
-    { label: "الإطلاق والتشغيل الآمن", Icon: Rocket, color: "text-amber-600", bg: "bg-amber-50", border: "border-amber-100" },
-    { label: "النمو والتحسين المستمر", Icon: TrendingUp, color: "text-rose-600", bg: "bg-rose-50", border: "border-rose-100" },
+    { label: tr("الاستراتيجية والتخطيط"), Icon: Compass, color: "text-blue-600", bg: "bg-blue-50", border: "border-blue-100" },
+    { label: tr("تصميم واجهات المستخدم UX/UI"), Icon: Palette, color: "text-violet-600", bg: "bg-violet-50", border: "border-violet-100" },
+    { label: tr("التطوير البرمجي المتقن"), Icon: Code, color: "text-emerald-600", bg: "bg-emerald-50", border: "border-emerald-100" },
+    { label: tr("الإطلاق والتشغيل الآمن"), Icon: Rocket, color: "text-amber-600", bg: "bg-amber-50", border: "border-amber-100" },
+    { label: tr("النمو والتحسين المستمر"), Icon: TrendingUp, color: "text-rose-600", bg: "bg-rose-50", border: "border-rose-100" },
   ];
 
   return (
-    <section className="relative pt-32 pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" dir="rtl">
+    <section className="relative pt-32 pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       <div className="grid lg:grid-cols-2 gap-16 lg:gap-20 items-center">
         {/* Right Side Content */}
         <motion.div
@@ -63,7 +64,7 @@ export function AboutHero({ aboutData }: AboutHeroProps) {
             variants={fadeInUp}
             className="text-4xl lg:text-6xl font-black text-slate-900 mb-6 leading-[1.1] tracking-tight"
           >
-            {aboutData.hero?.title || "نصنع المستقبل الرقمي"}
+            {aboutData.hero?.title || tr("نصنع المستقبل الرقمي")}
           </motion.h1>
 
           <motion.p

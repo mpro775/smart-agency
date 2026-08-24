@@ -1,3 +1,4 @@
+import { tr } from "@/i18n";
 import { motion } from "framer-motion";
 import {
   Layers,
@@ -11,17 +12,17 @@ import {
 } from "lucide-react";
 
 const checklist = [
-  "تحليل المتطلبات",
-  "تصميم/UX",
-  "التطوير",
-  "الاختبار",
-  "جاهز للإطلاق",
+  tr("تحليل المتطلبات"),
+  tr("تصميم/UX"),
+  tr("التطوير"),
+  tr("الاختبار"),
+  tr("جاهز للإطلاق"),
 ];
 
 const metrics = [
-  { label: "الأداء", value: "98%", desc: "سرعة واستجابة" },
-  { label: "الاستقرار", value: "99.9%", desc: "جاهزية النظام" },
-  { label: "الأمان", value: "100%", desc: "حماية البيانات" },
+  { label: tr("الأداء"), value: "98%", desc: tr("سرعة واستجابة") },
+  { label: tr("الاستقرار"), value: "99.9%", desc: tr("جاهزية النظام") },
+  { label: tr("الأمان"), value: "100%", desc: tr("حماية البيانات") },
 ];
 
 const floatingBadges = [
@@ -104,16 +105,13 @@ const HeroDashboard = () => {
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="text-[13px] font-bold text-white">
-                  منصة إدارة المشاريع
-                </h3>
+                  {tr("منصة إدارة المشاريع")}</h3>
                 <span className="text-[10px] text-emerald-300 font-medium">
-                  مباشر
-                </span>
+                  {tr("مباشر")}</span>
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
               </div>
               <p className="mt-0.5 text-[10px] text-slate-500">
-                آخر تحديث: منذ 5 دقائق
-              </p>
+                {tr("آخر تحديث: منذ 5 دقائق")}</p>
             </div>
           </div>
         </div>
@@ -123,8 +121,7 @@ const HeroDashboard = () => {
           {/* Progress */}
           <div className="rounded-xl border border-white/[0.06] bg-white/[0.025] p-3">
             <p className="text-[11px] font-bold text-slate-300 mb-2">
-              تقدم المشروع
-            </p>
+              {tr("تقدم المشروع")}</p>
             <div className="flex items-center gap-3">
               {/* Circle */}
               <div className="relative flex h-[72px] w-[72px] shrink-0 items-center justify-center">
@@ -163,7 +160,7 @@ const HeroDashboard = () => {
               {/* Details */}
               <div className="flex-1 space-y-1.5">
                 <div className="flex justify-between text-[10px]">
-                  <span className="text-slate-500">المهام المكتملة</span>
+                  <span className="text-slate-500">{tr("المهام المكتملة")}</span>
                   <span className="text-white font-bold">46 / 50</span>
                 </div>
                 <div className="h-1 w-full rounded-full bg-white/[0.06] overflow-hidden">
@@ -191,8 +188,8 @@ const HeroDashboard = () => {
                 <div className="flex items-center gap-1 text-[10px]">
                   <span className="h-1.5 w-1.5 rounded-full bg-[#14b8a6] animate-pulse" />
                   <span className="text-slate-500">
-                    المرحلة الحالية:{" "}
-                    <span className="text-slate-300 font-medium">اختبار نهائي</span>
+                    {tr("المرحلة الحالية:")}{" "}
+                    <span className="text-slate-300 font-medium">{tr("اختبار نهائي")}</span>
                   </span>
                 </div>
               </div>
@@ -259,7 +256,7 @@ const HeroDashboard = () => {
           <div className="mb-2 flex items-center justify-between">
             <div className="flex items-center gap-1.5 text-[11px] text-slate-400">
               <Code2 size={13} className="text-[#008080]" />
-              <span>كود نظيف ومنظم</span>
+              <span>{tr("كود نظيف ومنظم")}</span>
             </div>
             <Check size={14} className="text-emerald-400" />
           </div>

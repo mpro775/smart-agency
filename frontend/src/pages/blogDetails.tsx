@@ -1,3 +1,4 @@
+import { tr } from "@/i18n";
 import { useEffect, useMemo, useState } from "react";
 import { ArrowRight, Share2, Sparkles } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
@@ -105,7 +106,7 @@ export default function BlogDetailsPage() {
         setRelated(relatedData);
         setError(null);
       })
-      .catch(() => setError("تعذر تحميل المقال. تأكد من الرابط وحاول مرة أخرى."))
+      .catch(() => setError(tr("تعذر تحميل المقال. تأكد من الرابط وحاول مرة أخرى.")))
       .finally(() => setLoading(false));
   }, [slug]);
 
@@ -122,29 +123,28 @@ export default function BlogDetailsPage() {
 
   if (loading) {
     return (
-      <main className="flex min-h-[60vh] flex-col items-center justify-center px-4 py-24" dir="rtl">
+      <main className="flex min-h-[60vh] flex-col items-center justify-center px-4 py-24">
         <div className="relative mx-auto h-14 w-14">
           <div className="absolute inset-0 animate-spin rounded-full border-4 border-slate-200" />
           <div className="absolute inset-0 animate-spin rounded-full border-4 border-transparent border-t-primary" />
         </div>
-        <p className="mt-6 text-lg font-medium text-slate-600">جاري تحميل المقال...</p>
+        <p className="mt-6 text-lg font-medium text-slate-600">{tr("جاري تحميل المقال...")}</p>
       </main>
     );
   }
 
   if (error || !blog) {
     return (
-      <main className="flex min-h-[60vh] flex-col items-center justify-center px-4 py-24" dir="rtl">
+      <main className="flex min-h-[60vh] flex-col items-center justify-center px-4 py-24">
         <div className="mb-6 rounded-full bg-red-50 p-4 text-red-600">
-          <p className="text-lg font-semibold">{error || "المقال غير موجود"}</p>
+          <p className="text-lg font-semibold">{error || tr("المقال غير موجود")}</p>
         </div>
         <Link
           to="/blog"
           className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-primary/20 transition hover:bg-primary-dark"
         >
           <ArrowRight className="h-4 w-4" />
-          العودة إلى المدونة
-        </Link>
+          {tr("العودة إلى المدونة")}</Link>
       </main>
     );
   }
@@ -154,7 +154,7 @@ export default function BlogDetailsPage() {
       <ReadingProgressBar />
       <ArticleHero blog={blog} />
 
-      <section className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[1fr_300px] lg:px-8" dir="rtl">
+      <section className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[1fr_300px] lg:px-8">
         <article className="min-w-0">
           {/* Top toolbar */}
           <div className="mb-10 flex flex-wrap items-center justify-between gap-3">
@@ -163,15 +163,13 @@ export default function BlogDetailsPage() {
               className="inline-flex items-center gap-2 rounded-full bg-slate-50 px-4 py-2 text-sm font-semibold text-slate-600 ring-1 ring-slate-200 transition hover:bg-slate-100 hover:text-primary"
             >
               <ArrowRight className="h-4 w-4" />
-              العودة إلى المدونة
-            </Link>
+              {tr("العودة إلى المدونة")}</Link>
             <button
               onClick={handleShare}
               className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-2 text-sm font-medium text-slate-600 shadow-sm transition hover:border-primary/30 hover:text-primary"
             >
               <Share2 className="h-4 w-4" />
-              مشاركة
-            </button>
+              {tr("مشاركة")}</button>
           </div>
 
           {/* Quick summary */}
@@ -180,7 +178,7 @@ export default function BlogDetailsPage() {
               <div className="absolute -left-6 -top-6 h-24 w-24 rounded-full bg-primary/5 blur-2xl" />
               <div className="relative flex items-center gap-2 text-primary">
                 <Sparkles className="h-5 w-5" />
-                <h2 className="text-base font-bold">ملخص سريع</h2>
+                <h2 className="text-base font-bold">{tr("ملخص سريع")}</h2>
               </div>
               <ul className="relative mt-4 space-y-3 text-slate-700">
                 {blog.summaryPoints.map((point) => (

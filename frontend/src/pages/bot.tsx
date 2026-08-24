@@ -1,3 +1,4 @@
+import { tr } from "@/i18n";
 import { motion } from "framer-motion";
 import { FiArrowRight, FiMessageSquare, FiSmartphone, FiGlobe, FiZap } from "react-icons/fi";
 import { Link } from "react-router-dom";
@@ -6,23 +7,23 @@ export default function BotLanding() {
   const features = [
     {
       icon: <FiMessageSquare className="text-2xl" />,
-      title: "ردود ذكية",
-      description: "يحلل استفسارات العملاء ويقدم إجابات دقيقة بناءً على معلومات نشاطك"
+      title: tr("ردود ذكية"),
+      description: tr("يحلل استفسارات العملاء ويقدم إجابات دقيقة بناءً على معلومات نشاطك")
     },
     {
       icon: <FiSmartphone className="text-2xl" />,
-      title: "متعدد المنصات",
-      description: "يعمل على واتساب، إنستغرام، موقعك وحتى رسائل SMS"
+      title: tr("متعدد المنصات"),
+      description: tr("يعمل على واتساب، إنستغرام، موقعك وحتى رسائل SMS")
     },
     {
       icon: <FiGlobe className="text-2xl" />,
-      title: "دعم 24/7",
-      description: "يقدم خدمة العملاء على مدار الساعة دون توقف"
+      title: tr("دعم 24/7"),
+      description: tr("يقدم خدمة العملاء على مدار الساعة دون توقف")
     },
     {
       icon: <FiZap className="text-2xl" />,
-      title: "تكامل سهل",
-      description: "يتكامل مع أدواتك الحالية في دقائق بدون تعقيد"
+      title: tr("تكامل سهل"),
+      description: tr("يتكامل مع أدواتك الحالية في دقائق بدون تعقيد")
     }
   ];
 
@@ -61,12 +62,10 @@ export default function BotLanding() {
           </motion.div>
 
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-            مساعدك الذكي <span className="text-primary">لخدمة العملاء</span>
+            {tr("مساعدك الذكي")}<span className="text-primary">{tr("لخدمة العملاء")}</span>
           </h1>
           <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
-            بوت ذكي يعمل بالذكاء الاصطناعي لخدمة عملائك تلقائيًا على واتساب، إنستغرام وموقعك،
-            ويتعلم باستمرار لتحسين تجربة العملاء دون تدخل منك.
-          </p>
+            {tr("بوت ذكي يعمل بالذكاء الاصطناعي لخدمة عملائك تلقائيًا على واتساب، إنستغرام وموقعك، ويتعلم باستمرار لتحسين تجربة العملاء دون تدخل منك.")}</p>
 
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <motion.a
@@ -76,8 +75,7 @@ export default function BotLanding() {
               whileTap={{ scale: 0.98 }}
             >
               <span className="relative z-10 flex items-center justify-center gap-2">
-                سجل اهتمامك الآن
-                <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
+                {tr("سجل اهتمامك الآن")}<FiArrowRight className="group-hover:translate-x-1 transition-transform" />
               </span>
               <span className="absolute inset-0 bg-gradient-to-r from-primaryDark to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </motion.a>
@@ -86,8 +84,7 @@ export default function BotLanding() {
               to="#features"
               className="px-8 py-4 rounded-xl border-2 border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition-colors"
             >
-              اكتشف الميزات
-            </Link>
+              {tr("اكتشف الميزات")}</Link>
           </div>
         </motion.div>
 
@@ -110,7 +107,7 @@ export default function BotLanding() {
                 <FiMessageSquare className="text-xl" />
               </div>
               <div className="bg-gray-100 rounded-xl p-4 animate-pulse">
-                <p className="text-gray-700">أهلاً 👋 أنا مساعدك الذكي، كيف يمكنني مساعدتك اليوم؟</p>
+                <p className="text-gray-700">{tr("أهلاً 👋 أنا مساعدك الذكي، كيف يمكنني مساعدتك اليوم؟")}</p>
               </div>
             </div>
           </div>
@@ -128,14 +125,12 @@ export default function BotLanding() {
             className="text-center mb-16"
           >
             <span className="inline-block px-3 py-1 text-sm font-medium rounded-full bg-primary/10 text-primary mb-4">
-              لماذا مساعدنا الذكي؟
-            </span>
+              {tr("لماذا مساعدنا الذكي؟")}</span>
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              ميزات <span className="text-primary">تميزنا</span>
+              {tr("ميزات")}<span className="text-primary">{tr("تميزنا")}</span>
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              حل متكامل يوفر لك الوقت والجهد ويحسن تجربة عملائك
-            </p>
+              {tr("حل متكامل يوفر لك الوقت والجهد ويحسن تجربة عملائك")}</p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -168,16 +163,14 @@ export default function BotLanding() {
           viewport={{ once: true }}
           className="bg-[linear-gradient(to_right,var(--color-primary),var(--color-primary-dark))] rounded-2xl p-12 text-center text-white"
         >
-          <h2 className="text-2xl md:text-3xl font-bold mb-6">جاهز لتحويل خدمة عملائك؟</h2>
+          <h2 className="text-2xl md:text-3xl font-bold mb-6">{tr("جاهز لتحويل خدمة عملائك؟")}</h2>
           <p className="text-xl mb-8 max-w-2xl mx-auto">
-            سجل اهتمامك اليوم واحصل على خصم 20% عند الإطلاق الرسمي
-          </p>
+            {tr("سجل اهتمامك اليوم واحصل على خصم 20% عند الإطلاق الرسمي")}</p>
           <Link
             to="/register"
             className="inline-block px-8 py-4 rounded-xl bg-white text-primary font-bold shadow-lg hover:bg-gray-100 transition"
           >
-            احجز مكانك الآن
-          </Link>
+            {tr("احجز مكانك الآن")}</Link>
         </motion.div>
       </section>
     </main>

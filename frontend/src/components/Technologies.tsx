@@ -1,4 +1,4 @@
-"use client";
+import { tr } from "@/i18n";
 import { useState, useEffect, useMemo } from "react";
 import {
   Layers,
@@ -36,66 +36,66 @@ const categoryMetaMap: Record<
   }
 > = {
   Backend: {
-    titleAr: "هندسة الأنظمة",
+    titleAr: tr("هندسة الأنظمة"),
     label: "Backend",
     description:
-      "نصمم ونبني أنظمة خلفية قوية وواجهات برمجية منظمة قابلة للتوسع، مع التركيز على الأداء، الأمان، وسهولة الصيانة.",
+      tr("نصمم ونبني أنظمة خلفية قوية وواجهات برمجية منظمة قابلة للتوسع، مع التركيز على الأداء، الأمان، وسهولة الصيانة."),
     icon: Layers,
   },
   Frontend: {
-    titleAr: "تجربة الواجهة",
+    titleAr: tr("تجربة الواجهة"),
     label: "Frontend",
     description:
-      "نبني واجهات سريعة، متجاوبة، وأنيقة تمنح المستخدم تجربة واضحة وسلسة على مختلف الأجهزة.",
+      tr("نبني واجهات سريعة، متجاوبة، وأنيقة تمنح المستخدم تجربة واضحة وسلسة على مختلف الأجهزة."),
     icon: Monitor,
   },
   Database: {
-    titleAr: "إدارة البيانات",
+    titleAr: tr("إدارة البيانات"),
     label: "Database",
     description:
-      "ننظم البيانات بطريقة آمنة ومرنة تساعد المنتج على النمو، التحليل، والتكامل مع الخدمات الأخرى.",
+      tr("ننظم البيانات بطريقة آمنة ومرنة تساعد المنتج على النمو، التحليل، والتكامل مع الخدمات الأخرى."),
     icon: DatabaseIcon,
   },
   Mobile: {
-    titleAr: "تطبيقات الجوال",
+    titleAr: tr("تطبيقات الجوال"),
     label: "Mobile",
     description:
-      "نطوّر تطبيقات جوال عملية وسلسة تدعم تجربة المستخدم وتتكامل مع أنظمة المنتج الأساسية.",
+      tr("نطوّر تطبيقات جوال عملية وسلسة تدعم تجربة المستخدم وتتكامل مع أنظمة المنتج الأساسية."),
     icon: Smartphone,
   },
   DevOps: {
-    titleAr: "التشغيل والنشر",
+    titleAr: tr("التشغيل والنشر"),
     label: "DevOps",
     description:
-      "نضمن نشرًا مستقرًا، مراقبة مستمرة، وبيئة تشغيل تساعد على استقرار المنتج واستمراره.",
+      tr("نضمن نشرًا مستقرًا، مراقبة مستمرة، وبيئة تشغيل تساعد على استقرار المنتج واستمراره."),
     icon: Cloud,
   },
   Automation: {
-    titleAr: "الذكاء والأتمتة",
+    titleAr: tr("الذكاء والأتمتة"),
     label: "AI & Automation",
     description:
-      "نستخدم الأتمتة والذكاء الاصطناعي لتقليل العمل اليدوي، ربط الأنظمة، وتحسين كفاءة التشغيل.",
+      tr("نستخدم الأتمتة والذكاء الاصطناعي لتقليل العمل اليدوي، ربط الأنظمة، وتحسين كفاءة التشغيل."),
     icon: Bot,
   },
   AI: {
-    titleAr: "الذكاء الاصطناعي",
+    titleAr: tr("الذكاء الاصطناعي"),
     label: "AI",
     description:
-      "نربط المنتجات بحلول ذكاء اصطناعي عملية تساعد في البحث، التحليل، الدعم، وأتمتة العمليات.",
+      tr("نربط المنتجات بحلول ذكاء اصطناعي عملية تساعد في البحث، التحليل، الدعم، وأتمتة العمليات."),
     icon: Brain,
   },
   Other: {
-    titleAr: "تقنيات مساعدة",
+    titleAr: tr("تقنيات مساعدة"),
     label: "Other",
     description:
-      "تقنيات وأدوات داعمة نستخدمها حسب احتياج كل منتج لضمان تجربة أفضل واستقرار أعلى.",
+      tr("تقنيات وأدوات داعمة نستخدمها حسب احتياج كل منتج لضمان تجربة أفضل واستقرار أعلى."),
     icon: Boxes,
   },
 };
 
 function TechHeader() {
   return (
-    <div className="text-center mb-10 lg:mb-12" dir="rtl">
+    <div className="text-center mb-10 lg:mb-12">
       <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 border border-[#008080]/15 shadow-sm text-[#008080] text-xs font-bold tracking-[0.25em] uppercase mb-5">
         <span className="w-1.5 h-1.5 rounded-full bg-[#008080]" />
         Technology Ecosystem
@@ -103,12 +103,10 @@ function TechHeader() {
       </div>
 
       <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-950 leading-tight mb-4">
-        المنظومة التقنية التي نبني بها منتجات رقمية ناجحة
-      </h2>
+        {tr("المنظومة التقنية التي نبني بها منتجات رقمية ناجحة")}</h2>
 
       <p className="max-w-3xl mx-auto text-slate-500 text-base md:text-lg leading-8">
-        نستخدم التقنية كمنظومة تشغيل متكاملة تجمع بين الأداء، الأمان، الأتمتة، والذكاء الاصطناعي لتحويل الأفكار إلى منتجات قابلة للنمو والاستمرار.
-      </p>
+        {tr("نستخدم التقنية كمنظومة تشغيل متكاملة تجمع بين الأداء، الأمان، الأتمتة، والذكاء الاصطناعي لتحويل الأفكار إلى منتجات قابلة للنمو والاستمرار.")}</p>
     </div>
   );
 }
@@ -121,7 +119,7 @@ function StackSummary({
   totalCategories: number;
 }) {
   return (
-    <div className="rounded-[1.5rem] bg-gradient-to-br from-white via-[#f8ffff] to-[#eefafa] border border-[#008080]/10 p-6 lg:p-7 shadow-sm flex flex-col justify-between min-h-[360px]" dir="rtl">
+    <div className="rounded-[1.5rem] bg-gradient-to-br from-white via-[#f8ffff] to-[#eefafa] border border-[#008080]/10 p-6 lg:p-7 shadow-sm flex flex-col justify-between min-h-[360px]">
       <div>
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#008080]/8 text-[#008080] text-sm font-bold mb-8">
           <Layers className="w-4 h-4" />
@@ -129,23 +127,21 @@ function StackSummary({
         </div>
 
         <h3 className="text-3xl lg:text-4xl font-bold text-slate-950 leading-tight mb-5">
-          منظومة تشغيل تقنية متكاملة
-        </h3>
+          {tr("منظومة تشغيل تقنية متكاملة")}</h3>
 
         <p className="text-slate-500 leading-8 text-base">
-          نربط بين الواجهة، الباك إند، قواعد البيانات، التشغيل، والأتمتة لبناء منتجات رقمية مستقرة وقابلة للتوسع.
-        </p>
+          {tr("نربط بين الواجهة، الباك إند، قواعد البيانات، التشغيل، والأتمتة لبناء منتجات رقمية مستقرة وقابلة للتوسع.")}</p>
       </div>
 
       <div className="grid grid-cols-2 gap-3 mt-8">
         <div className="rounded-2xl bg-white/80 border border-[#008080]/10 p-4 text-center shadow-sm">
           <div className="text-2xl font-bold text-[#008080]">+{totalTechnologies}</div>
-          <div className="text-xs text-slate-500 mt-1">تقنية</div>
+          <div className="text-xs text-slate-500 mt-1">{tr("تقنية")}</div>
         </div>
 
         <div className="rounded-2xl bg-white/80 border border-[#008080]/10 p-4 text-center shadow-sm">
           <div className="text-2xl font-bold text-[#008080]">+{totalCategories}</div>
-          <div className="text-xs text-slate-500 mt-1">طبقات تقنية</div>
+          <div className="text-xs text-slate-500 mt-1">{tr("طبقات تقنية")}</div>
         </div>
 
         <div className="col-span-2 rounded-2xl bg-white/80 border border-[#008080]/10 p-4 shadow-sm">
@@ -153,7 +149,7 @@ function StackSummary({
             <Rocket className="w-4 h-4" />
             UI + Backend + DevOps + AI
           </div>
-          <div className="text-xs text-slate-500 text-center mt-1">منظومة عمل متكاملة</div>
+          <div className="text-xs text-slate-500 text-center mt-1">{tr("منظومة عمل متكاملة")}</div>
         </div>
       </div>
     </div>
@@ -172,7 +168,7 @@ function CategoryTabs({
   setActiveCategory: (category: string) => void;
 }) {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3" dir="rtl">
+    <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
       {categoryNames.map((category) => {
         const meta = categoryMetaMap[category] || categoryMetaMap.Other;
         const Icon = meta.icon;
@@ -192,8 +188,7 @@ function CategoryTabs({
             <Icon className={`w-6 h-6 mb-3 ${isActive ? "text-white" : "text-[#008080]"}`} />
             <div className="font-bold text-sm">{meta.label}</div>
             <div className={`text-xs mt-1 ${isActive ? "text-white/75" : "text-slate-400"}`}>
-              {grouped[category]?.length || 0} أدوات
-            </div>
+              {grouped[category]?.length || 0} {tr("أدوات")}</div>
 
             {isActive && (
               <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-4 h-4 rotate-45 bg-[#008080]" />
@@ -219,7 +214,7 @@ function CategoryPanel({
   technologies: Technology[];
 }) {
   return (
-    <div className="rounded-[1.5rem] bg-white/90 border border-slate-100 shadow-sm p-6 lg:p-8 min-h-[310px]" dir="rtl">
+    <div className="rounded-[1.5rem] bg-white/90 border border-slate-100 shadow-sm p-6 lg:p-8 min-h-[310px]">
       <div className="grid md:grid-cols-[0.95fr_1.05fr] gap-8 items-center">
         <div>
           <div className="inline-flex items-center gap-2 text-[#008080] text-sm font-bold mb-4">
@@ -237,10 +232,10 @@ function CategoryPanel({
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {[
-              "أداء عالي",
-              "هيكلة نظيفة",
-              "قابلية توسع",
-              "أمان متقدم",
+              tr("أداء عالي"),
+              tr("هيكلة نظيفة"),
+              tr("قابلية توسع"),
+              tr("أمان متقدم"),
             ].map((item) => (
               <div
                 key={item}
@@ -327,29 +322,29 @@ function TechCommandCenter({
 function TechValueGrid() {
   const values = [
     {
-      title: "تجربة الواجهة",
-      description: "نصمم واجهات سريعة، متجاوبة، وتقدم أفضل تجربة للمستخدم.",
+      title: tr("تجربة الواجهة"),
+      description: tr("نصمم واجهات سريعة، متجاوبة، وتقدم أفضل تجربة للمستخدم."),
       icon: Monitor,
     },
     {
-      title: "هندسة الأنظمة",
-      description: "نبني أنظمة خلفية قوية وقابلة للتوسع تدعم نمو منتجاتك.",
+      title: tr("هندسة الأنظمة"),
+      description: tr("نبني أنظمة خلفية قوية وقابلة للتوسع تدعم نمو منتجاتك."),
       icon: Layers,
     },
     {
-      title: "التشغيل والنشر",
-      description: "نضمن نشرًا مستقرًا، مراقبة مستمرة، ونسخًا احتياطيًا يحافظ على استمرارية خدماتك.",
+      title: tr("التشغيل والنشر"),
+      description: tr("نضمن نشرًا مستقرًا، مراقبة مستمرة، ونسخًا احتياطيًا يحافظ على استمرارية خدماتك."),
       icon: Cloud,
     },
     {
-      title: "الذكاء والأتمتة",
-      description: "نستخدم الذكاء الاصطناعي والأتمتة لزيادة الكفاءة وتقليل العمل اليدوي.",
+      title: tr("الذكاء والأتمتة"),
+      description: tr("نستخدم الذكاء الاصطناعي والأتمتة لزيادة الكفاءة وتقليل العمل اليدوي."),
       icon: Brain,
     },
   ];
 
   return (
-    <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6 lg:mt-8" dir="rtl">
+    <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6 lg:mt-8">
       {values.map((value) => {
         const Icon = value.icon;
         return (
@@ -399,7 +394,7 @@ export default function Technologies({
         setError(null);
       } catch (err) {
         console.error("Error fetching technologies:", err);
-        setError("فشل تحميل التقنيات. يرجى المحاولة مرة أخرى.");
+        setError(tr("فشل تحميل التقنيات. يرجى المحاولة مرة أخرى."));
       } finally {
         setLoading(false);
       }
@@ -438,7 +433,7 @@ export default function Technologies({
       <SectionShell tone="light" pattern="mesh" patternIntensity="medium">
         <div className="text-center">
           <div className="inline-block rounded-full h-12 w-12 border-2 border-[#008080] border-t-transparent animate-spin" />
-          <p className="mt-4 text-slate-500">جاري تحميل التقنيات...</p>
+          <p className="mt-4 text-slate-500">{tr("جاري تحميل التقنيات...")}</p>
         </div>
       </SectionShell>
     );

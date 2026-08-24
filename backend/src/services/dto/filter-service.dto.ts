@@ -5,10 +5,16 @@ import {
   IsString,
   IsNumber,
   Min,
+  IsIn,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class FilterServiceDto {
+  @ApiPropertyOptional({ enum: ['ar', 'en'], default: 'ar' })
+  @IsOptional()
+  @IsIn(['ar', 'en'])
+  lang?: 'ar' | 'en';
+
   @ApiPropertyOptional({
     description: 'Page number',
     default: 1,

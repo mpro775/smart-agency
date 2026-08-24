@@ -1,3 +1,4 @@
+import { tr } from "@/i18n";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight } from "lucide-react";
@@ -100,7 +101,7 @@ export default function ProjectDetailsPage() {
         setError(null);
       } catch (err) {
         console.error("Error fetching project:", err);
-        setError("فشل تحميل المشروع. يرجى المحاولة مرة أخرى.");
+        setError(tr("فشل تحميل المشروع. يرجى المحاولة مرة أخرى."));
       } finally {
         setLoading(false);
       }
@@ -125,7 +126,7 @@ export default function ProjectDetailsPage() {
       <main className="min-h-screen bg-slate-50 text-slate-800 flex items-center justify-center px-4">
         <div className="text-center">
           <div className="mx-auto mb-5 h-14 w-14 rounded-full border-4 border-teal-500/20 border-t-teal-600 animate-spin" />
-          <p className="text-slate-500 text-lg font-bold">جاري تحميل تفاصيل المشروع الفنية...</p>
+          <p className="text-slate-500 text-lg font-bold">{tr("جاري تحميل تفاصيل المشروع الفنية...")}</p>
         </div>
       </main>
     );
@@ -133,15 +134,15 @@ export default function ProjectDetailsPage() {
 
   if (error || !project) {
     return (
-      <main className="min-h-screen bg-slate-50 text-slate-800 flex items-center justify-center px-4" dir="rtl">
+      <main className="min-h-screen bg-slate-50 text-slate-800 flex items-center justify-center px-4">
         <div className="max-w-xl text-center rounded-3xl border border-slate-200 bg-white p-8 shadow-xl">
-          <p className="text-red-500 mb-6 text-lg font-bold">{error || "المشروع المطلوب غير متوفر حالياً"}</p>
+          <p className="text-red-500 mb-6 text-lg font-bold">{error || tr("المشروع المطلوب غير متوفر حالياً")}</p>
           <Link
             to="/projects"
             className="inline-flex items-center gap-2 rounded-full bg-teal-600 text-white px-6 py-3 hover:bg-teal-700 font-bold transition-all duration-300 shadow-lg shadow-teal-500/10"
           >
             <ArrowRight className="w-5 h-5" />
-            <span>العودة إلى معرض المشاريع</span>
+            <span>{tr("العودة إلى معرض المشاريع")}</span>
           </Link>
         </div>
       </main>
@@ -150,7 +151,6 @@ export default function ProjectDetailsPage() {
 
   return (
     <main
-      dir="rtl"
       className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 text-slate-800 relative overflow-hidden select-none selection:bg-teal-500/10 selection:text-teal-800"
     >
       {/* Ambient backgrounds */}

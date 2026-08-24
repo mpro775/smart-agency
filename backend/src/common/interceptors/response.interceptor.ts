@@ -7,6 +7,9 @@ import {
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Reflector } from '@nestjs/core';
+import type { Request } from 'express';
+import { IS_PUBLIC_KEY } from '../../auth/decorators/public.decorator';
+import { localizePublicData, resolveLocale } from '../localization/locale';
 
 export interface ApiResponse<T> {
   statusCode: number;
@@ -39,28 +42,39 @@ export class ResponseInterceptor<T> implements NestInterceptor<
 
     return next.handle().pipe(
       map((data) => {
+        const isPublic = this.reflector.getAllAndOverride<boolean>(
+          IS_PUBLIC_KEY,
+          [context.getHandler(), context.getClass()],
+        );
+        const request = context.switchToHttp().getRequest<Request>();
+        const includeAllLocales =
+          request.headers['x-admin-localization'] === 'all';
+        const localizedData =
+          isPublic && !includeAllLocales
+            ? localizePublicData(data, resolveLocale(request))
+            : data;
         const response = context.switchToHttp().getResponse();
         const statusCode = response.statusCode;
 
         // Check if data has pagination info
         if (
-          data &&
-          typeof data === 'object' &&
-          'items' in data &&
-          'meta' in data
+          localizedData &&
+          typeof localizedData === 'object' &&
+          'items' in localizedData &&
+          'meta' in localizedData
         ) {
           return {
             statusCode,
             message,
-            data: data.items,
-            meta: data.meta,
+            data: localizedData.items,
+            meta: localizedData.meta,
           };
         }
 
         return {
           statusCode,
           message,
-          data,
+          data: localizedData,
         };
       }),
     );

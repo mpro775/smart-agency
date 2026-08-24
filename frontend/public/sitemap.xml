@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url><loc>https://smartagency-ye.com/ar</loc><xhtml:link rel="alternate" hreflang="ar" href="https://smartagency-ye.com/ar"/><xhtml:link rel="alternate" hreflang="en" href="https://smartagency-ye.com/en"/><xhtml:link rel="alternate" hreflang="x-default" href="https://smartagency-ye.com/ar"/></url>
+  <url><loc>https://smartagency-ye.com/en</loc><xhtml:link rel="alternate" hreflang="ar" href="https://smartagency-ye.com/ar"/><xhtml:link rel="alternate" hreflang="en" href="https://smartagency-ye.com/en"/><xhtml:link rel="alternate" hreflang="x-default" href="https://smartagency-ye.com/ar"/></url>
+  <url><loc>https://smartagency-ye.com/ar/about</loc><xhtml:link rel="alternate" hreflang="ar" href="https://smartagency-ye.com/ar/about"/><xhtml:link rel="alternate" hreflang="en" href="https://smartagency-ye.com/en/about"/></url>
+  <url><loc>https://smartagency-ye.com/en/about</loc><xhtml:link rel="alternate" hreflang="ar" href="https://smartagency-ye.com/ar/about"/><xhtml:link rel="alternate" hreflang="en" href="https://smartagency-ye.com/en/about"/></url>
+  <url><loc>https://smartagency-ye.com/ar/projects</loc><xhtml:link rel="alternate" hreflang="ar" href="https://smartagency-ye.com/ar/projects"/><xhtml:link rel="alternate" hreflang="en" href="https://smartagency-ye.com/en/projects"/></url>
+  <url><loc>https://smartagency-ye.com/en/projects</loc><xhtml:link rel="alternate" hreflang="ar" href="https://smartagency-ye.com/ar/projects"/><xhtml:link rel="alternate" hreflang="en" href="https://smartagency-ye.com/en/projects"/></url>
+  <url><loc>https://smartagency-ye.com/ar/blog</loc><xhtml:link rel="alternate" hreflang="ar" href="https://smartagency-ye.com/ar/blog"/><xhtml:link rel="alternate" hreflang="en" href="https://smartagency-ye.com/en/blog"/></url>
+  <url><loc>https://smartagency-ye.com/en/blog</loc><xhtml:link rel="alternate" hreflang="ar" href="https://smartagency-ye.com/ar/blog"/><xhtml:link rel="alternate" hreflang="en" href="https://smartagency-ye.com/en/blog"/></url>
+  <url><loc>https://smartagency-ye.com/ar/quote</loc><xhtml:link rel="alternate" hreflang="ar" href="https://smartagency-ye.com/ar/quote"/><xhtml:link rel="alternate" hreflang="en" href="https://smartagency-ye.com/en/quote"/></url>
+  <url><loc>https://smartagency-ye.com/en/quote</loc><xhtml:link rel="alternate" hreflang="ar" href="https://smartagency-ye.com/ar/quote"/><xhtml:link rel="alternate" hreflang="en" href="https://smartagency-ye.com/en/quote"/></url>
+  <url><loc>https://smartagency-ye.com/ar/contact</loc><xhtml:link rel="alternate" hreflang="ar" href="https://smartagency-ye.com/ar/contact"/><xhtml:link rel="alternate" hreflang="en" href="https://smartagency-ye.com/en/contact"/></url>
+  <url><loc>https://smartagency-ye.com/en/contact</loc><xhtml:link rel="alternate" hreflang="ar" href="https://smartagency-ye.com/ar/contact"/><xhtml:link rel="alternate" hreflang="en" href="https://smartagency-ye.com/en/contact"/></url>
+</urlset>

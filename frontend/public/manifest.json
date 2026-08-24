@@ -1,7 +1,7 @@
 {
   "name": "وكالة سمارت",
   "short_name": "سمارت",
-  "start_url": "/",
+  "start_url": "/ar",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#008080",

@@ -129,7 +129,7 @@ export class UploadsService {
         const metadata = await sharp(file.buffer).metadata();
         width = metadata.width;
         height = metadata.height;
-      } catch (err) {
+      } catch {
         this.logger.warn(`Could not extract metadata for ${fileName}`);
       }
     }

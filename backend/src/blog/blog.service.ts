@@ -2,6 +2,7 @@ import {
   Injectable,
   NotFoundException,
   ConflictException,
+  BadRequestException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -10,6 +11,16 @@ import { CreateBlogDto } from './dto/create-blog.dto';
 import { UpdateBlogDto } from './dto/update-blog.dto';
 import { FilterBlogDto } from './dto/filter-blog.dto';
 import { PaginatedResponseDto } from '../common/dto/pagination.dto';
+import type { SupportedLocale } from '../common/localization/locale';
+
+const hasRequiredEnglishBlogContent = (blog: CreateBlogDto | UpdateBlogDto) =>
+  Boolean(
+    blog.titleEn?.trim() &&
+    blog.excerptEn?.trim() &&
+    blog.contentEn?.trim() &&
+    blog.seo?.metaTitleEn?.trim() &&
+    blog.seo?.metaDescriptionEn?.trim(),
+  );
 
 @Injectable()
 export class BlogService {
@@ -29,6 +40,16 @@ export class BlogService {
     createBlogDto: CreateBlogDto,
     authorId: string,
   ): Promise<BlogDocument> {
+    if (
+      createBlogDto.isPublished &&
+      !hasRequiredEnglishBlogContent(createBlogDto)
+    ) {
+      throw new BadRequestException({
+        code: 'BILINGUAL_CONTENT_INCOMPLETE',
+        message:
+          'English blog content and SEO must be complete before publishing',
+      });
+    }
     // Check if slug already exists
     const existingBlog = await this.blogModel
       .findOne({ slug: createBlogDto.slug.toLowerCase() })
@@ -79,11 +100,20 @@ export class BlogService {
     }
 
     if (tag) {
-      query.tags = tag;
+      query.$and = [{ $or: [{ tags: tag }, { tagsEn: tag }] }];
     }
 
     if (category) {
-      query.category = category;
+      query.$and = [
+        ...(query.$and ?? []),
+        {
+          $or: [
+            { categoryKey: category },
+            { category },
+            { categoryEn: category },
+          ],
+        },
+      ];
     }
 
     if (contentType) {
@@ -97,10 +127,15 @@ export class BlogService {
     if (search) {
       query.$or = [
         { title: { $regex: search, $options: 'i' } },
+        { titleEn: { $regex: search, $options: 'i' } },
         { excerpt: { $regex: search, $options: 'i' } },
+        { excerptEn: { $regex: search, $options: 'i' } },
         { content: { $regex: search, $options: 'i' } },
+        { contentEn: { $regex: search, $options: 'i' } },
         { tags: { $regex: search, $options: 'i' } },
+        { tagsEn: { $regex: search, $options: 'i' } },
         { category: { $regex: search, $options: 'i' } },
+        { categoryEn: { $regex: search, $options: 'i' } },
       ];
     }
 
@@ -126,7 +161,7 @@ export class BlogService {
     if (!includeUnpublished) {
       blogsQuery
         .select(
-          'title slug excerpt coverImage category tags readingTime publishedAt isFeatured',
+          'title titleEn slug excerpt excerptEn coverImage coverAlt coverAltEn category categoryEn categoryKey tags tagsEn readingTime readingTimeEn publishedAt isFeatured',
         )
         .lean();
     }
@@ -141,7 +176,7 @@ export class BlogService {
       .findOne({ slug: slug.toLowerCase(), isPublished: true })
       .populate('author', 'name email')
       .select(
-        'title slug excerpt content coverImage category tags readingTime publishedAt seo',
+        'title titleEn slug excerpt excerptEn content contentEn coverImage coverAlt coverAltEn category categoryEn categoryKey tags tagsEn readingTime readingTimeEn publishedAt authorName authorNameEn authorRole authorRoleEn summaryPoints summaryPointsEn ctaTitle ctaTitleEn ctaDescription ctaDescriptionEn ctaButtonText ctaButtonTextEn ctaUrl seo',
       )
       .lean()
       .exec()) as BlogDocument | null;
@@ -192,6 +227,22 @@ export class BlogService {
     const currentBlog = await this.blogModel.findById(id).exec();
     const updateData: any = { ...updateBlogDto };
 
+    if (
+      updateBlogDto.isPublished &&
+      currentBlog &&
+      !currentBlog.isPublished &&
+      !hasRequiredEnglishBlogContent({
+        ...(currentBlog.toObject() as CreateBlogDto),
+        ...updateBlogDto,
+      })
+    ) {
+      throw new BadRequestException({
+        code: 'BILINGUAL_CONTENT_INCOMPLETE',
+        message:
+          'English blog content and SEO must be complete before publishing',
+      });
+    }
+
     if (updateBlogDto.content && !updateBlogDto.readingTime) {
       updateData.readingTime = this.calculateReadingTime(updateBlogDto.content);
     }
@@ -219,13 +270,26 @@ export class BlogService {
     }
   }
 
-  async getAllTags(): Promise<
-    { value: string; label: string; count: number }[]
-  > {
+  async getAllTags(
+    locale: SupportedLocale = 'ar',
+  ): Promise<{ value: string; label: string; count: number }[]> {
+    const preferredField = locale === 'en' ? '$tagsEn' : '$tags';
+    const fallbackField = locale === 'en' ? '$tags' : '$tagsEn';
     return this.blogModel.aggregate([
       { $match: { isPublished: true } },
-      { $unwind: '$tags' },
-      { $group: { _id: '$tags', count: { $sum: 1 } } },
+      {
+        $set: {
+          localizedTags: {
+            $cond: [
+              { $gt: [{ $size: { $ifNull: [preferredField, []] } }, 0] },
+              preferredField,
+              { $ifNull: [fallbackField, []] },
+            ],
+          },
+        },
+      },
+      { $unwind: '$localizedTags' },
+      { $group: { _id: '$localizedTags', count: { $sum: 1 } } },
       { $sort: { count: -1, _id: 1 } },
       {
         $project: {
@@ -238,18 +302,25 @@ export class BlogService {
     ]);
   }
 
-  async getAllCategories(): Promise<
-    { value: string; label: string; count: number }[]
-  > {
+  async getAllCategories(
+    locale: SupportedLocale = 'ar',
+  ): Promise<{ value: string; label: string; count: number }[]> {
+    const labelField = locale === 'en' ? '$categoryEn' : '$category';
     return this.blogModel.aggregate([
       { $match: { isPublished: true } },
-      { $group: { _id: '$category', count: { $sum: 1 } } },
+      {
+        $group: {
+          _id: { $ifNull: ['$categoryKey', '$category'] },
+          label: { $first: { $ifNull: [labelField, '$category'] } },
+          count: { $sum: 1 },
+        },
+      },
       { $sort: { count: -1, _id: 1 } },
       {
         $project: {
           _id: 0,
           value: '$_id',
-          label: '$_id',
+          label: { $ifNull: ['$label', '$_id'] },
           count: 1,
         },
       },

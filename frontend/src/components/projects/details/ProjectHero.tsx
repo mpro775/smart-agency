@@ -1,3 +1,4 @@
+import { tr } from "@/i18n";
 import { motion } from "framer-motion";
 import { ArrowRight, Globe, ExternalLink, Award } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -23,7 +24,7 @@ export default function ProjectHero({ project, categoryLabels }: ProjectHeroProp
             className="inline-flex items-center gap-2 rounded-full border border-slate-200/80 bg-white/70 backdrop-blur-md px-5 py-2.5 text-slate-600 hover:text-[#008080] hover:bg-white hover:border-teal-500/30 transition-all duration-300 group shadow-sm hover:shadow-md"
           >
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            <span className="font-semibold text-sm">العودة إلى المشاريع</span>
+            <span className="font-semibold text-sm">{tr("العودة إلى المشاريع")}</span>
           </Link>
         </motion.div>
 
@@ -52,8 +53,7 @@ export default function ProjectHero({ project, categoryLabels }: ProjectHeroProp
                   className="text-xs font-bold bg-amber-50/80 border border-amber-100/70 text-amber-700 rounded-full px-4 py-1.5 shadow-sm flex items-center gap-1.5 hover:bg-amber-100/40 transition-colors"
                 >
                   <Award className="w-3.5 h-3.5" />
-                  مشروع مميز
-                </motion.span>
+                  {tr("مشروع مميز")}</motion.span>
               )}
             </div>
 
@@ -111,7 +111,7 @@ export default function ProjectHero({ project, categoryLabels }: ProjectHeroProp
                 className="inline-flex items-center gap-3 rounded-2xl bg-gradient-to-r from-[#008080] via-[#00a3a3] to-[#00b3b3] px-8 py-4.5 text-white font-extrabold shadow-lg shadow-teal-500/20 hover:shadow-teal-500/35 hover:brightness-105 transition-all duration-300 border border-teal-400/20"
               >
                 <Globe className="w-5 h-5 text-white animate-spin-slow" />
-                <span>زيارة موقع المشروع</span>
+                <span>{tr("زيارة موقع المشروع")}</span>
                 <ExternalLink className="w-4 h-4 opacity-90 text-white" />
               </motion.a>
             )}

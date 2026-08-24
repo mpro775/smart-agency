@@ -1,11 +1,20 @@
 import React, { lazy, Suspense } from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import {
+  BrowserRouter,
+  Navigate,
+  Outlet,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
 import App from "./App";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import CustomCursor from "./components/CustomCursor";
 import ScrollToTop from "./components/ScrollToTop";
+import LocaleLayout from "./localization/LocaleLayout";
+import { isLocale, type Locale } from "./i18n";
 
 const About = lazy(() => import("./pages/about"));
 const Projects = lazy(() => import("./pages/project"));
@@ -19,8 +28,42 @@ const ContactPage = lazy(() => import("./pages/contact"));
 // Conditional Footer: hides on home page (homepage has its own Footer)
 function LayoutFooter() {
   const { pathname } = useLocation();
-  if (pathname === "/") return null;
+  if (/^\/(ar|en)\/?$/.test(pathname)) return null;
   return <Footer />;
+}
+
+function PublicLayout() {
+  return (
+    <LocaleLayout>
+      <Navbar />
+      <main>
+        <Outlet />
+      </main>
+      <LayoutFooter />
+    </LocaleLayout>
+  );
+}
+
+function RootRedirect() {
+  const location = useLocation();
+  const stored = localStorage.getItem("preferredLocale");
+  const browserLocale = navigator.language.toLowerCase().startsWith("en")
+    ? "en"
+    : "ar";
+  const locale: Locale = isLocale(stored ?? undefined)
+    ? (stored as Locale)
+    : browserLocale;
+  return <Navigate replace to={`/${locale}${location.search}${location.hash}`} />;
+}
+
+function LegacyRedirect() {
+  const location = useLocation();
+  return (
+    <Navigate
+      replace
+      to={`/ar${location.pathname}${location.search}${location.hash}`}
+    />
+  );
 }
 
 // Admin imports
@@ -89,32 +132,30 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           <ScrollToTop />
           <Suspense fallback={<RouteFallback />}>
           <Routes>
-            {/* Public Routes */}
-            <Route
-              element={
-                <>
-                  <Navbar />
-                  <main>
-                    <Routes>
-                      <Route path="/" element={<App />} />
-                      <Route path="/about" element={<About />} />
-                      <Route path="/projects" element={<Projects />} />
-                      <Route path="/blog" element={<BlogPage />} />
-                      <Route path="/bot" element={<BotLanding />} />
-                      <Route
-                        path="/projects/:id"
-                        element={<ProjectDetailsPage />}
-                      />
-                      <Route path="/blog/:slug" element={<BlogDetailsPage />} />
-                      <Route path="/quote" element={<QuotePage />} />
-                      <Route path="/contact" element={<ContactPage />} />
-                    </Routes>
-                  </main>
-                  <LayoutFooter />
-                </>
-              }
-              path="/*"
-            />
+            {/* Locale-prefixed public routes */}
+            <Route path="/:locale" element={<PublicLayout />}>
+              <Route index element={<App />} />
+              <Route path="about" element={<About />} />
+              <Route path="projects" element={<Projects />} />
+              <Route path="projects/:id" element={<ProjectDetailsPage />} />
+              <Route path="blog" element={<BlogPage />} />
+              <Route path="blog/:slug" element={<BlogDetailsPage />} />
+              <Route path="bot" element={<BotLanding />} />
+              <Route path="quote" element={<QuotePage />} />
+              <Route path="contact" element={<ContactPage />} />
+              <Route path="*" element={<Navigate replace to=".." />} />
+            </Route>
+
+            {/* Backward-compatible redirects; old URLs remain Arabic. */}
+            <Route path="/" element={<RootRedirect />} />
+            <Route path="/about" element={<LegacyRedirect />} />
+            <Route path="/projects" element={<LegacyRedirect />} />
+            <Route path="/projects/:id" element={<LegacyRedirect />} />
+            <Route path="/blog" element={<LegacyRedirect />} />
+            <Route path="/blog/:slug" element={<LegacyRedirect />} />
+            <Route path="/bot" element={<LegacyRedirect />} />
+            <Route path="/quote" element={<LegacyRedirect />} />
+            <Route path="/contact" element={<LegacyRedirect />} />
 
             {/* Admin Login (Public) */}
             <Route path="/admin/login" element={<LoginPage />} />

@@ -1,4 +1,4 @@
-"use client";
+import { tr } from "@/i18n";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import type { Project } from "../../admin/types";
 import ProjectCard from "./ProjectCard";
@@ -10,7 +10,7 @@ interface ProjectBentoGridProps {
   onResetFilter?: () => void;
 }
 
-function getVariant(_project: Project): CardVariant {
+function getVariant(): CardVariant {
   return "standard";
 }
 
@@ -23,9 +23,9 @@ export default function ProjectBentoGrid({
   if (projects.length === 0) {
     return (
       <ProjectEmptyState
-        message="لا توجد مشاريع في هذا التصنيف حالياً"
-        subMessage="نعمل على إضافة نماذج جديدة قريباً."
-        actionLabel={onResetFilter ? "عرض كل المشاريع" : undefined}
+        message={tr("لا توجد مشاريع في هذا التصنيف حالياً")}
+        subMessage={tr("نعمل على إضافة نماذج جديدة قريباً.")}
+        actionLabel={onResetFilter ? tr("عرض كل المشاريع") : undefined}
         onAction={onResetFilter}
       />
     );
@@ -43,7 +43,7 @@ export default function ProjectBentoGrid({
             exit={shouldReduceMotion ? undefined : { opacity: 0, scale: 0.95 }}
             transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
           >
-            <ProjectCard project={project} variant={getVariant(project)} />
+            <ProjectCard project={project} variant={getVariant()} />
           </motion.div>
         ))}
       </AnimatePresence>

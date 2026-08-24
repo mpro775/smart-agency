@@ -1,3 +1,4 @@
+import { tr } from "@/i18n";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Rocket, ArrowLeft } from "lucide-react";
@@ -28,14 +29,13 @@ export default function RelatedProjects({ relatedProjects }: RelatedProjectsProp
             <div className="p-2.5 rounded-xl bg-slate-100 border border-slate-200/80 text-slate-600 shadow-sm">
               <Rocket className="w-6 h-6" />
             </div>
-            <span>مشاريع مشابهة قد تهمك</span>
+            <span>{tr("مشاريع مشابهة قد تهمك")}</span>
           </h3>
           <Link
             to="/projects"
             className="hidden md:inline-flex items-center gap-2 text-sm font-extrabold text-teal-600 hover:text-teal-700 transition-colors"
           >
-            عرض الكل
-            <ArrowLeft className="w-4 h-4" />
+            {tr("عرض الكل")}<ArrowLeft className="w-4 h-4" />
           </Link>
         </div>
 
@@ -84,7 +84,7 @@ export default function RelatedProjects({ relatedProjects }: RelatedProjectsProp
                   
                   {/* Action link */}
                   <div className="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between text-sm text-teal-600 font-extrabold group-hover:text-[#008080] transition-colors">
-                    <span>عرض تفاصيل المشروع</span>
+                    <span>{tr("عرض تفاصيل المشروع")}</span>
                     <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1.5 transition-transform" />
                   </div>
                 </div>
@@ -99,8 +99,7 @@ export default function RelatedProjects({ relatedProjects }: RelatedProjectsProp
             to="/projects"
             className="inline-flex items-center gap-2 text-sm font-extrabold text-teal-600 hover:text-teal-700 transition-colors"
           >
-            عرض كل المشاريع
-            <ArrowLeft className="w-4 h-4" />
+            {tr("عرض كل المشاريع")}<ArrowLeft className="w-4 h-4" />
           </Link>
         </div>
       </div>

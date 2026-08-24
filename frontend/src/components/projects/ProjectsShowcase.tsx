@@ -1,4 +1,4 @@
-"use client";
+import { tr } from "@/i18n";
 import { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
@@ -29,7 +29,7 @@ const [selectedCategory, setSelectedCategory] = useState("all");
   const [categories, setCategories] = useState<FilterCategory[]>(
     initialCategories
       ? [
-          { value: "all", label: "الكل", count: 0 },
+          { value: "all", label: tr("الكل"), count: 0 },
           ...initialCategories.map((c) => ({
             value: c.value,
             label: c.label,
@@ -51,7 +51,7 @@ const [selectedCategory, setSelectedCategory] = useState("all");
         setCategoriesLoading(true);
         const data = await publicProjectsService.getCategories();
         setCategories([
-          { value: "all", label: "الكل", count: 0 },
+          { value: "all", label: tr("الكل"), count: 0 },
           ...data.map((c) => ({
             value: c._id || c.value,
             label: c.label,
@@ -61,7 +61,7 @@ const [selectedCategory, setSelectedCategory] = useState("all");
       } catch (err) {
         console.error("Error fetching categories:", err);
         setCategories([
-          { value: "all", label: "الكل", count: 0 },
+          { value: "all", label: tr("الكل"), count: 0 },
         ]);
       } finally {
         setCategoriesLoading(false);
@@ -90,7 +90,7 @@ const [selectedCategory, setSelectedCategory] = useState("all");
         setProjects(response.data);
       } catch (err) {
         console.error("Error fetching projects:", err);
-        setError("فشل تحميل المشاريع. يرجى المحاولة مرة أخرى.");
+        setError(tr("فشل تحميل المشاريع. يرجى المحاولة مرة أخرى."));
       } finally {
         setLoading(false);
       }
@@ -120,8 +120,8 @@ const [selectedCategory, setSelectedCategory] = useState("all");
     ).size;
 
     return [
-      { value: `+${totalProjects}`, label: "مشروع" },
-      { value: `+${uniqueCategories}`, label: "تصنيف ومجال" },
+      { value: `+${totalProjects}`, label: tr("مشروع") },
+      { value: `+${uniqueCategories}`, label: tr("تصنيف ومجال") },
     ];
   }, [projects]);
 
@@ -146,14 +146,12 @@ const [selectedCategory, setSelectedCategory] = useState("all");
           className="text-center mb-8"
         >
           <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4">
-            مشاريع{" "}
+            {tr("مشاريع")}{" "}
             <span className="smart-text-gradient">
-              نفتخر بها
-            </span>
+              {tr("نفتخر بها")}</span>
           </h2>
           <p className="text-base md:text-lg text-gray-500 max-w-2xl mx-auto">
-            حلول رقمية حقيقية بنيناها لعملاء في قطاعات مختلفة
-          </p>
+            {tr("حلول رقمية حقيقية بنيناها لعملاء في قطاعات مختلفة")}</p>
         </motion.div>
 
         {!loading && !error && projects.length > 0 && (
@@ -171,7 +169,7 @@ const [selectedCategory, setSelectedCategory] = useState("all");
         {loading && (
           <div className="text-center py-20">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--smart-primary)]"></div>
-            <p className="mt-4 text-gray-600">جاري تحميل المشاريع...</p>
+            <p className="mt-4 text-gray-600">{tr("جاري تحميل المشاريع...")}</p>
           </div>
         )}
 
@@ -201,8 +199,7 @@ const [selectedCategory, setSelectedCategory] = useState("all");
               onClick={() => setSelectedCategory("all")}
               className="px-6 py-2.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium transition-colors"
             >
-              إعادة المحاولة
-            </button>
+              {tr("إعادة المحاولة")}</button>
           </motion.div>
         )}
 
@@ -211,7 +208,6 @@ const [selectedCategory, setSelectedCategory] = useState("all");
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="text-center py-20"
-            dir="rtl"
           >
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gray-100 mb-6">
               <svg
@@ -229,11 +225,9 @@ const [selectedCategory, setSelectedCategory] = useState("all");
               </svg>
             </div>
             <p className="text-gray-500 text-lg font-medium mb-2">
-              لا توجد مشاريع متاحة حالياً
-            </p>
+              {tr("لا توجد مشاريع متاحة حالياً")}</p>
             <p className="text-gray-400 text-sm">
-              نعمل على إضافة مشاريع جديدة قريباً
-            </p>
+              {tr("نعمل على إضافة مشاريع جديدة قريباً")}</p>
           </motion.div>
         )}
 
@@ -257,10 +251,8 @@ const [selectedCategory, setSelectedCategory] = useState("all");
                 <Link
                   to="/projects"
                   className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-gradient-to-r from-[var(--smart-primary)] to-[var(--smart-primary-light)] text-white font-semibold shadow-[var(--smart-shadow-brand)] hover:shadow-xl transition-all hover:scale-105"
-                  dir="rtl"
                 >
-                  عرض كل المشاريع
-                  <FiArrowLeft className="w-4 h-4" />
+                  {tr("عرض كل المشاريع")}<FiArrowLeft className="w-4 h-4" />
                 </Link>
               </motion.div>
             )}

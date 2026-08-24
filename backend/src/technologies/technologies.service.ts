@@ -28,7 +28,9 @@ export class TechnologiesService {
     const results = await this.technologyModel
       .find(query)
       .sort({ name: 1 })
-      .select('name icon category order isActive')
+      .select(
+        'name icon category description descriptionEn tooltip tooltipEn sortOrder isActive',
+      )
       .lean()
       .exec();
     return results as unknown as TechnologyDocument[];

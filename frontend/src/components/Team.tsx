@@ -1,4 +1,4 @@
-"use client";
+import { tr } from "@/i18n";
 import { useState, useEffect } from "react";
 import { SectionShell } from "./brand";
 import { publicTeamService } from "../services/team.service";
@@ -52,11 +52,10 @@ function TeamErrorState({ error, onRetry }: { error: string; onRetry: () => void
     <SectionShell tone="dark" pattern="mesh" id="team">
       <TeamSectionHeader />
       <div className="max-w-md mx-auto px-4">
-        <div className="rounded-2xl border border-red-400/20 bg-red-400/5 backdrop-blur-xl p-6 sm:p-8 text-center" dir="rtl">
+        <div className="rounded-2xl border border-red-400/20 bg-red-400/5 backdrop-blur-xl p-6 sm:p-8 text-center">
           <p className="text-red-300 text-sm sm:text-base mb-4">{error}</p>
           <button type="button" onClick={onRetry} className="inline-flex items-center gap-2 rounded-xl bg-[var(--smart-primary-light)] text-[var(--smart-bg-dark)] font-bold px-5 py-2.5 sm:px-6 sm:py-3 text-sm sm:text-base hover:bg-[var(--smart-primary)] transition-colors">
-            إعادة المحاولة
-          </button>
+            {tr("إعادة المحاولة")}</button>
         </div>
       </div>
     </SectionShell>
@@ -88,7 +87,7 @@ export default function Team({ initialMembers }: TeamProps) {
       setActiveMember(members[0] ?? null);
     } catch (err) {
       console.error("Error fetching team members:", err);
-      setError("فشل تحميل أعضاء الفريق. يرجى المحاولة مرة أخرى.");
+      setError(tr("فشل تحميل أعضاء الفريق. يرجى المحاولة مرة أخرى."));
     } finally {
       setLoading(false);
     }

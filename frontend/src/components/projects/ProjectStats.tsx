@@ -1,4 +1,3 @@
-"use client";
 import { motion } from "framer-motion";
 
 export interface StatItem {
@@ -16,7 +15,6 @@ export default function ProjectStats({ stats }: ProjectStatsProps) {
   return (
     <div
       className="flex flex-wrap items-center justify-center gap-6 md:gap-10 mb-10"
-      dir="rtl"
     >
       {stats.map((stat, i) => (
         <motion.div

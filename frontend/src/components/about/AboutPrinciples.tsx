@@ -1,3 +1,4 @@
+import { tr } from "@/i18n";
 import { motion } from "framer-motion";
 import { type ComponentType } from "react";
 import * as FiIcons from "react-icons/fi";
@@ -29,7 +30,7 @@ export function AboutPrinciples({ values }: AboutPrinciplesProps) {
   if (!values || values.length === 0) return null;
 
   return (
-    <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" dir="rtl">
+    <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       <motion.div
         initial="hidden"
         whileInView="visible"
@@ -38,11 +39,9 @@ export function AboutPrinciples({ values }: AboutPrinciplesProps) {
         className="text-center mb-16"
       >
         <span className="inline-block px-5 py-2 rounded-full bg-primary/5 border border-primary/15 text-primary text-sm font-bold mb-5 tracking-wide">
-          مبادئنا
-        </span>
+          {tr("مبادئنا")}</span>
         <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight">
-          المبادئ التي لا نتنازل عنها
-        </h2>
+          {tr("المبادئ التي لا نتنازل عنها")}</h2>
       </motion.div>
 
       <div className="grid md:grid-cols-2 gap-6">

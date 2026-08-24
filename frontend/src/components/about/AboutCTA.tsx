@@ -36,7 +36,7 @@ export function AboutCTA({ cta }: AboutCTAProps) {
             />
           </div>
 
-          <div className="relative z-10" dir="rtl">
+          <div className="relative z-10">
             <h2 className="text-3xl md:text-5xl font-black mb-6 leading-tight tracking-tight">
               {cta.title}
             </h2>

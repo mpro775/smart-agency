@@ -1,4 +1,4 @@
-"use client";
+import { tr } from "@/i18n";
 import { useState, useEffect } from "react";
 import type { ComponentType } from "react";
 import { motion, useReducedMotion } from "framer-motion";
@@ -39,15 +39,15 @@ const getIconComponent = (iconName?: string, iconType?: string) => {
 const fallbackServices = [
   {
     _id: "fallback-1",
-    title: "تطوير تطبيقات الجوال",
+    title: tr("تطوير تطبيقات الجوال"),
     shortDescription:
-      "تطبيقات iOS و Android عالية الأداء بتجربة مستخدم استثنائية",
+      tr("تطبيقات iOS و Android عالية الأداء بتجربة مستخدم استثنائية"),
     icon: "FaMobileAlt",
     iconType: "react-icon",
     features: [
-      "تطبيقات أصلية ومتعددة المنصات",
-      "تصميم واجهات مستخدم متفاعلة",
-      "تحسين الأداء وتجربة المستخدم",
+      tr("تطبيقات أصلية ومتعددة المنصات"),
+      tr("تصميم واجهات مستخدم متفاعلة"),
+      tr("تحسين الأداء وتجربة المستخدم"),
     ],
     isActive: true,
     slug: "mobile-app-development",
@@ -55,15 +55,15 @@ const fallbackServices = [
   },
   {
     _id: "fallback-2",
-    title: "التسويق الرقمي",
+    title: tr("التسويق الرقمي"),
     shortDescription:
-      "استراتيجيات تسويق رقمية متكاملة لزيادة الظهور وجذب العملاء وتحقيق النمو",
+      tr("استراتيجيات تسويق رقمية متكاملة لزيادة الظهور وجذب العملاء وتحقيق النمو"),
     icon: "FaBullhorn",
     iconType: "react-icon",
     features: [
-      "تحسين محركات البحث SEO",
-      "إدارة حملات الإعلانات المدفوعة",
-      "تحليلات وتقارير الأداء",
+      tr("تحسين محركات البحث SEO"),
+      tr("إدارة حملات الإعلانات المدفوعة"),
+      tr("تحليلات وتقارير الأداء"),
     ],
     isActive: true,
     slug: "digital-marketing",
@@ -71,15 +71,15 @@ const fallbackServices = [
   },
   {
     _id: "fallback-3",
-    title: "الاستشارات التقنية",
+    title: tr("الاستشارات التقنية"),
     shortDescription:
-      "نقدم لك الخبرة التقنية اللازمة لتحويل فكرتك إلى مشروع ناجح ومستدام",
+      tr("نقدم لك الخبرة التقنية اللازمة لتحويل فكرتك إلى مشروع ناجح ومستدام"),
     icon: "FaComments",
     iconType: "react-icon",
     features: [
-      "تحليل المتطلبات وتخطيط المشاريع",
-      "تقييم البنية التحتية التقنية",
-      "وضع خارطة طريق رقمية",
+      tr("تحليل المتطلبات وتخطيط المشاريع"),
+      tr("تقييم البنية التحتية التقنية"),
+      tr("وضع خارطة طريق رقمية"),
     ],
     isActive: true,
     slug: "tech-consulting",
@@ -87,15 +87,15 @@ const fallbackServices = [
   },
   {
     _id: "fallback-4",
-    title: "تصميم وتطوير مواقع الويب",
+    title: tr("تصميم وتطوير مواقع الويب"),
     shortDescription:
-      "مواقع احترافية سريعة، متجاوبة، ومحسنة لتجربة المستخدم ومحركات البحث",
+      tr("مواقع احترافية سريعة، متجاوبة، ومحسنة لتجربة المستخدم ومحركات البحث"),
     icon: "FaCode",
     iconType: "react-icon",
     features: [
-      "مواقع سريعة ومتجاوبة",
-      "تصميم واجهات مخصصة",
-      "تحسين SEO وأمان الموقع",
+      tr("مواقع سريعة ومتجاوبة"),
+      tr("تصميم واجهات مخصصة"),
+      tr("تحسين SEO وأمان الموقع"),
     ],
     isActive: true,
     slug: "web-development",
@@ -103,15 +103,15 @@ const fallbackServices = [
   },
   {
     _id: "fallback-5",
-    title: "تصميم الهوية البصرية",
+    title: tr("تصميم الهوية البصرية"),
     shortDescription:
-      "نبني هوية بصرية قوية تعكس قيم علامتك وتتميز بك في السوق",
+      tr("نبني هوية بصرية قوية تعكس قيم علامتك وتتميز بك في السوق"),
     icon: "FaLightbulb",
     iconType: "react-icon",
     features: [
-      "تصميم الشعارات والهوية البصرية",
-      "دليل الهوية البصرية",
-      "تصميم مواد تسويقية",
+      tr("تصميم الشعارات والهوية البصرية"),
+      tr("دليل الهوية البصرية"),
+      tr("تصميم مواد تسويقية"),
     ],
     isActive: true,
     slug: "brand-identity",
@@ -119,15 +119,15 @@ const fallbackServices = [
   },
   {
     _id: "fallback-6",
-    title: "الأنظمة ولوحات التحكم",
+    title: tr("الأنظمة ولوحات التحكم"),
     shortDescription:
-      "أنظمة مخصصة ولوحات تحكم ذكية لإدارة العمليات واتخاذ قرارات أدق",
+      tr("أنظمة مخصصة ولوحات تحكم ذكية لإدارة العمليات واتخاذ قرارات أدق"),
     icon: "FaChartBar",
     iconType: "react-icon",
     features: [
-      "لوحات تحكم مخصصة",
-      "أنظمة إدارة المحتوى",
-      "تقارير ورسوم بيانية تفاعلية",
+      tr("لوحات تحكم مخصصة"),
+      tr("أنظمة إدارة المحتوى"),
+      tr("تقارير ورسوم بيانية تفاعلية"),
     ],
     isActive: true,
     slug: "dashboards-systems",
@@ -159,7 +159,7 @@ export default function Services({ initialServices }: ServicesProps) {
         setServices(data);
       } catch (err) {
         console.warn("API failed, using static fallback.", err);
-        setError("تعذر تحميل الخدمات من الخادم");
+        setError(tr("تعذر تحميل الخدمات من الخادم"));
         setServices(fallbackServices as Service[]);
       } finally {
         setLoading(false);
@@ -183,8 +183,8 @@ export default function Services({ initialServices }: ServicesProps) {
     return (
       <SectionShell tone="light" pattern="dots" id="services">
         <ErrorState
-          title="لا توجد خدمات متاحة"
-          message={error || "لم نتمكن من تحميل الخدمات"}
+          title={tr("لا توجد خدمات متاحة")}
+          message={error || tr("لم نتمكن من تحميل الخدمات")}
           onRetry={() => window.location.reload()}
         />
       </SectionShell>
@@ -209,8 +209,7 @@ export default function Services({ initialServices }: ServicesProps) {
             className="inline-flex items-center gap-2 rounded-full border border-[var(--smart-border-light)] bg-white/70 px-4 py-2 text-sm font-bold text-[var(--smart-primary)] backdrop-blur-xl"
           >
             <Sparkles size={14} />
-            خدماتنا المتخصصة
-          </motion.span>
+            {tr("خدماتنا المتخصصة")}</motion.span>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -218,8 +217,8 @@ export default function Services({ initialServices }: ServicesProps) {
             viewport={{ once: true }}
             className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-slate-950 mb-4 leading-tight"
           >
-            خدمات رقمية{" "}
-            <span className="smart-text-gradient">تصنع النمو</span>
+            {tr("خدمات رقمية")}{" "}
+            <span className="smart-text-gradient">{tr("تصنع النمو")}</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -228,9 +227,7 @@ export default function Services({ initialServices }: ServicesProps) {
             viewport={{ once: true }}
             className="mt-5 text-base md:text-lg leading-8 text-slate-600 max-w-2xl mx-auto"
           >
-            نحوّل الأفكار إلى منتجات رقمية متكاملة، ونبني أنظمة تدعم النمو وتحقق
-            النتائج المستدامة لأعمالك.
-          </motion.p>
+            {tr("نحوّل الأفكار إلى منتجات رقمية متكاملة، ونبني أنظمة تدعم النمو وتحقق النتائج المستدامة لأعمالك.")}</motion.p>
         </motion.div>
 
         <div className="relative max-w-7xl mx-auto">
@@ -264,8 +261,7 @@ export default function Services({ initialServices }: ServicesProps) {
                 <UserCheck size={20} className="text-[var(--smart-primary)]" />
               </div>
               <span className="text-[var(--smart-text-main)] font-medium text-sm">
-                نهج مخصص لكل عميل
-              </span>
+                {tr("نهج مخصص لكل عميل")}</span>
             </div>
             <div className="hidden md:block w-px h-8 bg-[var(--smart-border-light)]" />
             <div className="flex items-center gap-3">
@@ -273,8 +269,7 @@ export default function Services({ initialServices }: ServicesProps) {
                 <Shield size={20} className="text-[var(--smart-primary)]" />
               </div>
               <span className="text-[var(--smart-text-main)] font-medium text-sm">
-                جودة عالية ومعايير عالمية
-              </span>
+                {tr("جودة عالية ومعايير عالمية")}</span>
             </div>
             <div className="hidden md:block w-px h-8 bg-[var(--smart-border-light)]" />
             <div className="flex items-center gap-3">
@@ -282,8 +277,7 @@ export default function Services({ initialServices }: ServicesProps) {
                 <Headphones size={20} className="text-[var(--smart-primary)]" />
               </div>
               <span className="text-[var(--smart-text-main)] font-medium text-sm">
-                دعم مستمر وشراكة طويلة الأمد
-              </span>
+                {tr("دعم مستمر وشراكة طويلة الأمد")}</span>
             </div>
           </div>
         </motion.div>
@@ -343,8 +337,7 @@ function ServiceCard({
       )}
 
       <span className="inline-flex items-center gap-1 text-sm font-semibold text-[var(--smart-primary)] group-hover:gap-2 transition-all">
-        اكتشف المزيد
-        <ArrowLeft size={16} />
+        {tr("اكتشف المزيد")}<ArrowLeft size={16} />
       </span>
     </motion.div>
   );

@@ -1,3 +1,4 @@
+import { tr } from "@/i18n";
 import { useRef, useState, useEffect, useCallback, type ReactNode } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -176,7 +177,6 @@ const ScrollSnapContainer = ({
           exit={{ opacity: 0, x: 20 }}
           transition={{ duration: 0.5, delay: 0.5 }}
           className="fixed right-8 top-1/2 -translate-y-1/2 z-[60]"
-          dir="rtl"
         >
           <div className="relative">
             <div className={`absolute right-5 top-2 bottom-2 w-0.5 rounded-full overflow-hidden ${isDarkStepper ? "bg-white/10" : "bg-slate-900/10"}`}>
@@ -207,9 +207,9 @@ const ScrollSnapContainer = ({
                       whileTap={{ scale: 0.98 }}
                       aria-label={`${section.label} — ${
                         state === "active"
-                          ? "القسم الحالي"
+                          ? tr("القسم الحالي")
                           : state === "completed"
-                          ? "تمت زيارته"
+                          ? tr("تمت زيارته")
                           : ""
                       }`.trim()}
                     >
@@ -313,8 +313,7 @@ const ScrollSnapContainer = ({
             className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[60] flex flex-col items-center gap-2"
           >
             <span className="text-xs text-[#4a5568] font-medium">
-              اسحب للأسفل
-            </span>
+              {tr("اسحب للأسفل")}</span>
             <motion.div
               animate={{ y: [0, 8, 0] }}
               transition={{ duration: 1.5, repeat: Infinity }}

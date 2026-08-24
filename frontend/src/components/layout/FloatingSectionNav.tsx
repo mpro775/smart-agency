@@ -1,14 +1,15 @@
+import { tr } from "@/i18n";
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 
 const NAV_ITEMS: { id: string; label: string; href?: string }[] = [
-  { id: "services", label: "الخدمات" },
-  { id: "projects", label: "الأعمال" },
-  { id: "technologies", label: "التقنيات" },
-  { id: "testimonials", label: "العملاء" },
-  { id: "hosting", label: "الباقات" },
-  { id: "footer", label: "تواصل" },
+  { id: "services", label: tr("الخدمات") },
+  { id: "projects", label: tr("الأعمال") },
+  { id: "technologies", label: tr("التقنيات") },
+  { id: "testimonials", label: tr("العملاء") },
+  { id: "hosting", label: tr("الباقات") },
+  { id: "footer", label: tr("تواصل") },
 ];
 
 const HERO_THRESHOLD = 200;
@@ -55,7 +56,6 @@ const FloatingSectionNav = () => {
           exit={{ opacity: 0, x: 16 }}
           transition={{ duration: 0.35, ease: "easeOut" }}
           className="fixed right-5 top-1/2 -translate-y-1/2 z-[55] hidden lg:block"
-          dir="rtl"
         >
           <div className="rounded-2xl border border-white/10 bg-white/70 backdrop-blur-xl shadow-lg shadow-black/5 px-2 py-2.5">
             <div className="flex flex-col gap-0.5">

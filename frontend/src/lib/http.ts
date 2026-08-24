@@ -1,5 +1,6 @@
 import axios from "axios";
 import { API_BASE_URL } from "@/config/api";
+import { localeFromPath } from "@/i18n";
 
 export const http = axios.create({
   baseURL: API_BASE_URL,
@@ -10,6 +11,8 @@ export const http = axios.create({
 });
 
 http.interceptors.request.use((config) => {
+  const isPublicSite = /^\/(ar|en)(?:\/|$)/.test(window.location.pathname);
+  const locale = localeFromPath();
   const token =
     localStorage.getItem("accessToken") ||
     localStorage.getItem("admin_token") ||
@@ -17,6 +20,22 @@ http.interceptors.request.use((config) => {
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  if (isPublicSite) {
+    config.headers["Accept-Language"] = locale;
+    if (config.method?.toLowerCase() === "get") {
+      config.params = { ...(config.params ?? {}), lang: locale };
+    }
+    if (
+      config.data &&
+      typeof config.data === "object" &&
+      /\/(leads|newsletter)(?:\/|$)|\/select$/.test(config.url ?? "")
+    ) {
+      config.data = { ...config.data, locale };
+    }
+  } else if (window.location.pathname.startsWith("/admin")) {
+    config.headers["X-Admin-Localization"] = "all";
   }
 
   return config;

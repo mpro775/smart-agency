@@ -1,3 +1,4 @@
+import { tr } from "@/i18n";
 import { CalendarDays, Clock3, Eye, Share2 } from "lucide-react";
 import type { Blog } from "../../admin/types";
 import ContentTypeBadge from "./ContentTypeBadge";
@@ -13,7 +14,7 @@ export default function ArticleHero({ blog }: { blog: Blog }) {
   };
 
   return (
-    <header className="relative overflow-hidden bg-gradient-to-br from-slate-50 via-slate-100 to-slate-200 px-4 pb-16 pt-20 sm:px-6 lg:px-8" dir="rtl">
+    <header className="relative overflow-hidden bg-gradient-to-br from-slate-50 via-slate-100 to-slate-200 px-4 pb-16 pt-20 sm:px-6 lg:px-8">
       {/* Background decorative shapes */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute -right-20 -top-20 h-96 w-96 rounded-full bg-primary/5 blur-3xl" />
@@ -26,8 +27,7 @@ export default function ArticleHero({ blog }: { blog: Blog }) {
           <ContentTypeBadge type={blog.contentType} />
           {blog.isEditorPick && (
             <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700">
-              اختيار التحرير
-            </span>
+              {tr("اختيار التحرير")}</span>
           )}
         </div>
 
@@ -57,22 +57,19 @@ export default function ArticleHero({ blog }: { blog: Blog }) {
             )}
             <span className="inline-flex items-center gap-1.5">
               <Clock3 className="h-4 w-4 text-primary" />
-              {getReadingTime(blog)} دقائق قراءة
-            </span>
+              {getReadingTime(blog)} {tr("دقائق قراءة")}</span>
             <span className="inline-flex items-center gap-1.5">
               <Eye className="h-4 w-4 text-primary" />
-              {blog.views || 0} مشاهدة
-            </span>
+              {blog.views || 0} {tr("مشاهدة")}</span>
           </div>
 
           <button
             onClick={handleShare}
             className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-medium text-slate-600 shadow-sm ring-1 ring-slate-200 transition hover:text-primary hover:ring-primary/30"
-            aria-label="مشاركة المقال"
+            aria-label={tr("مشاركة المقال")}
           >
             <Share2 className="h-4 w-4" />
-            مشاركة
-          </button>
+            {tr("مشاركة")}</button>
         </div>
 
         <div className="relative mt-12 overflow-hidden rounded-3xl shadow-2xl shadow-slate-200/60 ring-1 ring-slate-900/5">

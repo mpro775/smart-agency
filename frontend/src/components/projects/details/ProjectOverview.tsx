@@ -1,3 +1,4 @@
+import { tr } from "@/i18n";
 import { motion } from "framer-motion";
 import { Target, Sparkles, Cpu, Check } from "lucide-react";
 
@@ -42,7 +43,7 @@ export default function ProjectOverview({ challenge, solution, features }: Proje
                     <div className="p-3.5 rounded-2xl bg-amber-100/70 border border-amber-200/80 text-amber-600 shadow-sm group-hover:scale-105 group-hover:rotate-6 transition-all duration-300">
                       <Target className="w-6 h-6" />
                     </div>
-                    <h3 className="text-xl md:text-2xl font-black text-slate-800 tracking-tight">التحدي</h3>
+                    <h3 className="text-xl md:text-2xl font-black text-slate-800 tracking-tight">{tr("التحدي")}</h3>
                   </div>
                   <p className="text-slate-600 leading-relaxed text-sm md:text-base font-semibold text-justify flex-grow">
                     {challenge}
@@ -61,7 +62,7 @@ export default function ProjectOverview({ challenge, solution, features }: Proje
                     <div className="p-3.5 rounded-2xl bg-teal-100/70 border border-teal-200/80 text-teal-600 shadow-sm group-hover:scale-105 group-hover:-rotate-6 transition-all duration-300">
                       <Sparkles className="w-6 h-6" />
                     </div>
-                    <h3 className="text-xl md:text-2xl font-black text-slate-800 tracking-tight">الحل البرمجي</h3>
+                    <h3 className="text-xl md:text-2xl font-black text-slate-800 tracking-tight">{tr("الحل البرمجي")}</h3>
                   </div>
                   <p className="text-slate-600 leading-relaxed text-sm md:text-base font-semibold text-justify flex-grow">
                     {solution}
@@ -82,7 +83,7 @@ export default function ProjectOverview({ challenge, solution, features }: Proje
               <div className="p-3 rounded-2xl bg-teal-50 border border-teal-100 text-teal-600 shadow-sm">
                 <Cpu className="w-6 h-6" />
               </div>
-              <span>المزايا والمواصفات الأساسية</span>
+              <span>{tr("المزايا والمواصفات الأساسية")}</span>
             </h3>
             
             <motion.div

@@ -209,8 +209,13 @@ BlogSchema.index({ publishedAt: -1 });
 BlogSchema.index({ createdAt: -1 });
 BlogSchema.index({
   title: 'text',
+  titleEn: 'text',
   excerpt: 'text',
+  excerptEn: 'text',
   content: 'text',
+  contentEn: 'text',
   tags: 'text',
+  tagsEn: 'text',
   category: 'text',
+  categoryEn: 'text',
 });

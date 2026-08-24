@@ -38,7 +38,6 @@ export default function SectionShell({
         className
       )}
       data-section-tone={tone}
-      dir="rtl"
     >
       <BrandPattern tone={tone} variant={pattern} intensity={patternIntensity} />
 

@@ -1,3 +1,4 @@
+import { tr } from "@/i18n";
 import { motion } from "framer-motion";
 import { type ComponentType } from "react";
 import * as FiIcons from "react-icons/fi";
@@ -31,7 +32,7 @@ export function AboutProcess({ steps }: AboutProcessProps) {
   const sortedSteps = [...steps].sort((a, b) => a.step - b.step);
 
   return (
-    <section className="py-24 px-4 sm:px-6 lg:px-8" dir="rtl">
+    <section className="py-24 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial="hidden"
@@ -41,14 +42,11 @@ export function AboutProcess({ steps }: AboutProcessProps) {
           className="text-center mb-20"
         >
           <span className="inline-block px-5 py-2 rounded-full bg-primary/5 border border-primary/15 text-primary text-sm font-bold mb-5 tracking-wide">
-            طريقة العمل
-          </span>
+            {tr("طريقة العمل")}</span>
           <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight">
-            من الفكرة إلى الإطلاق
-          </h2>
+            {tr("من الفكرة إلى الإطلاق")}</h2>
           <p className="mt-6 text-lg text-slate-500 max-w-2xl mx-auto font-medium leading-relaxed">
-            منهجية واضحة ومجربة لضمان تسليم مشروعك بأعلى جودة
-          </p>
+            {tr("منهجية واضحة ومجربة لضمان تسليم مشروعك بأعلى جودة")}</p>
         </motion.div>
 
         <div className="relative">
@@ -91,7 +89,7 @@ export function AboutProcess({ steps }: AboutProcessProps) {
                     
                     {step.deliverable && (
                       <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-xl bg-slate-50 text-xs text-slate-600 border border-slate-200">
-                        <span className="font-bold text-primary">المخرج النهائي:</span>
+                        <span className="font-bold text-primary">{tr("المخرج النهائي:")}</span>
                         <span className="font-semibold">{step.deliverable}</span>
                       </div>
                     )}

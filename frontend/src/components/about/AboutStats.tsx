@@ -1,3 +1,4 @@
+import { tr } from "@/i18n";
 import { motion } from "framer-motion";
 import { FiUsers } from "react-icons/fi";
 import { type ComponentType } from "react";
@@ -92,8 +93,7 @@ export function AboutStats({ stats, counterValues }: AboutStatsProps) {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-black mb-4 text-white">
-            إنجازاتنا بالأرقام
-          </h2>
+            {tr("إنجازاتنا بالأرقام")}</h2>
           <div className="w-24 h-1 bg-gradient-to-r from-primary via-white to-primary mx-auto rounded-full" />
         </motion.div>
 

@@ -1,3 +1,4 @@
+import { tr } from "@/i18n";
 import { Loader2, AlertCircle, Inbox } from 'lucide-react';
 
 type SkeletonCardProps = {
@@ -68,7 +69,7 @@ type ErrorStateProps = {
   onRetry?: () => void;
 };
 
-export function ErrorState({ title = 'حدث خطأ', message, onRetry }: ErrorStateProps) {
+export function ErrorState({ title = tr("حدث خطأ"), message, onRetry }: ErrorStateProps) {
   return (
     <div className="rounded-3xl border border-red-200 bg-red-50 p-8 text-center">
       <AlertCircle className="mx-auto h-12 w-12 text-red-400 mb-3" />
@@ -82,8 +83,7 @@ export function ErrorState({ title = 'حدث خطأ', message, onRetry }: ErrorS
           onClick={onRetry}
           className="mt-5 rounded-2xl bg-red-600 px-5 py-2.5 text-sm font-bold text-white hover:bg-red-700 transition-colors"
         >
-          إعادة المحاولة
-        </button>
+          {tr("إعادة المحاولة")}</button>
       )}
     </div>
   );

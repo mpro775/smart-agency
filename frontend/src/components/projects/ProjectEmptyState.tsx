@@ -1,4 +1,4 @@
-"use client";
+import { tr } from "@/i18n";
 import { motion } from "framer-motion";
 
 interface ProjectEmptyStateProps {
@@ -9,8 +9,8 @@ interface ProjectEmptyStateProps {
 }
 
 export default function ProjectEmptyState({
-  message = "لا توجد مشاريع في هذا التصنيف حالياً",
-  subMessage = "نعمل على إضافة نماذج جديدة قريباً.",
+  message = tr("لا توجد مشاريع في هذا التصنيف حالياً"),
+  subMessage = tr("نعمل على إضافة نماذج جديدة قريباً."),
   actionLabel,
   onAction,
 }: ProjectEmptyStateProps) {
@@ -19,7 +19,6 @@ export default function ProjectEmptyState({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       className="text-center py-20"
-      dir="rtl"
     >
       <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gray-100 mb-6">
         <svg

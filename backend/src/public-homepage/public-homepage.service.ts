@@ -73,7 +73,7 @@ export class PublicHomepageService {
         .sort({ sortOrder: 1, createdAt: -1 })
         .limit(6)
         .select(
-          'title slug shortDescription description icon iconType features sortOrder',
+          'title titleEn slug shortDescription shortDescriptionEn description descriptionEn icon iconType features featuresEn sortOrder',
         )
         .lean()
         .exec(),
@@ -82,7 +82,7 @@ export class PublicHomepageService {
         .sort({ featuredOrder: 1, sortOrder: 1, createdAt: -1 })
         .limit(6)
         .select(
-          'title slug summary images categoryIds industry year technologies results stats clientName clientLogo projectUrl',
+          'title titleEn slug summary summaryEn images categoryIds industry industryEn year technologies results stats clientName clientNameEn clientLogo projectUrl',
         )
         .populate('technologies', 'name icon category description tooltip')
         .populate('categoryIds')
@@ -92,14 +92,16 @@ export class PublicHomepageService {
         .find({ isActive: true })
         .sort({ sortOrder: 1, label: 1 })
         .limit(12)
-        .select('value label description icon sortOrder')
+        .select('value label labelEn description descriptionEn icon sortOrder')
         .lean()
         .exec(),
       this.technologyModel
         .find()
         .sort({ category: 1, name: 1 })
         .limit(24)
-        .select('name icon category description tooltip')
+        .select(
+          'name icon category description descriptionEn tooltip tooltipEn',
+        )
         .lean()
         .exec(),
       this.teamMemberModel
@@ -107,7 +109,7 @@ export class PublicHomepageService {
         .sort({ sortOrder: 1, createdAt: -1 })
         .limit(8)
         .select(
-          'fullName role department photo bio funFact specializations projectsCount linkedinUrl githubUrl websiteUrl sortOrder',
+          'fullName fullNameEn role roleEn department photo bio bioEn funFact funFactEn specializations specializationsEn projectsCount linkedinUrl githubUrl websiteUrl sortOrder',
         )
         .lean()
         .exec(),
@@ -116,7 +118,7 @@ export class PublicHomepageService {
         .sort({ sortOrder: 1, createdAt: -1 })
         .limit(6)
         .select(
-          'clientName position companyName companyLogo clientPhoto content rating linkedProject sortOrder',
+          'clientName clientNameEn position positionEn companyName companyNameEn companyLogo clientPhoto content contentEn rating linkedProject sortOrder',
         )
         .lean()
         .exec(),
@@ -125,7 +127,7 @@ export class PublicHomepageService {
         .sort({ sortOrder: 1, price: 1 })
         .limit(6)
         .select(
-          'name description price currency originalPrice billingCycle category features isPopular isBestValue storage bandwidth ram cpu domains yearlyPrice benefitHints sortOrder',
+          'name nameEn description descriptionEn price currency originalPrice billingCycle category features featuresEn isPopular isBestValue storage storageEn bandwidth bandwidthEn ram ramEn cpu cpuEn domains domainsEn yearlyPrice benefitHints benefitHintsEn sortOrder',
         )
         .lean()
         .exec(),
@@ -133,7 +135,9 @@ export class PublicHomepageService {
         .find({ isActive: true })
         .sort({ order: 1, createdAt: -1 })
         .limit(6)
-        .select('question answer category order')
+        .select(
+          'question questionEn answer answerEn category categoryEn categoryKey order',
+        )
         .lean()
         .exec(),
       this.blogModel
@@ -141,14 +145,14 @@ export class PublicHomepageService {
         .sort({ publishedAt: -1, createdAt: -1 })
         .limit(3)
         .select(
-          'title slug excerpt coverImage coverAlt category contentType readingTime publishedAt authorName authorRole authorAvatar tags',
+          'title titleEn slug excerpt excerptEn coverImage coverAlt coverAltEn category categoryEn categoryKey contentType readingTime readingTimeEn publishedAt authorName authorNameEn authorRole authorRoleEn authorAvatar tags tagsEn',
         )
         .lean()
         .exec(),
       this.companyInfoModel
         .findOne()
         .select(
-          'address googleMapsUrl workingHours email phone whatsappUrl socialLinks',
+          'address addressEn googleMapsUrl workingHours workingHoursEn email phone whatsappUrl socialLinks',
         )
         .lean()
         .exec(),

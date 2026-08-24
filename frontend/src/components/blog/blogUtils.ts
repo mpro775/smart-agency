@@ -1,11 +1,12 @@
+import { tr } from "@/i18n";
 import type { Blog, BlogContentType, User } from "../../admin/types";
 
 export const contentTypeLabels: Record<BlogContentType, string> = {
-  article: "مقال",
-  guide: "دليل عملي",
-  "case-study": "دراسة حالة",
-  insight: "رؤية تقنية",
-  news: "خبر",
+  article: tr("مقال"),
+  guide: tr("دليل عملي"),
+  "case-study": tr("دراسة حالة"),
+  insight: tr("رؤية تقنية"),
+  news: tr("خبر"),
 };
 
 export function formatBlogDate(dateString?: string) {
@@ -20,9 +21,9 @@ export function formatBlogDate(dateString?: string) {
 export function getAuthorName(blog: Blog) {
   if (blog.authorName) return blog.authorName;
   const author = blog.author as User | string | undefined;
-  if (!author) return "فريق Smart Agency";
+  if (!author) return tr("فريق Smart Agency");
   if (typeof author === "string") return author;
-  return author.name || "فريق Smart Agency";
+  return author.name || tr("فريق Smart Agency");
 }
 
 export function getReadingTime(blog: Blog) {

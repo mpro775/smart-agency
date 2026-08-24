@@ -13,6 +13,8 @@ import FloatingSectionNav from "./components/layout/FloatingSectionNav";
 import { motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { homepageService } from "./services/homepage.service";
+import { useLocale } from "./localization/LocaleLayout";
+import { tr } from "./i18n";
 
 const sectionVariants = {
   hidden: { opacity: 0, y: 40 },
@@ -24,12 +26,13 @@ const sectionVariants = {
 };
 
 function App() {
+  const { locale } = useLocale();
   const {
     data: homepageData,
     isLoading: isHomepageLoading,
     isError: isHomepageError,
   } = useQuery({
-    queryKey: ["public-homepage"],
+    queryKey: ["public-homepage", locale],
     queryFn: homepageService.get,
   });
 
@@ -46,7 +49,7 @@ function App() {
 
         {isHomepageLoading ? (
           <section className="px-4 py-24 text-center text-slate-500">
-            جاري تحميل محتوى الصفحة الرئيسية...
+            {tr("جاري تحميل محتوى الصفحة الرئيسية...")}
           </section>
         ) : (
           <>
