@@ -44,14 +44,15 @@ const status = (
   for (const [sourceField, englishField] of translatedArrays) {
     const source = readPath(record, sourceField);
     const english = readPath(record, englishField);
-    if (
-      Array.isArray(source) &&
-      source.length > 0 &&
-      (!Array.isArray(english) ||
-        source.length !== english.length ||
-        english.some((value) => !hasContent(value)))
-    ) {
-      missingFields.push(englishField);
+    if (Array.isArray(source)) {
+      source.forEach((sourceValue, index) => {
+        if (
+          hasContent(sourceValue) &&
+          (!Array.isArray(english) || !hasContent(english[index]))
+        ) {
+          missingFields.push(`${englishField}[${index}]`);
+        }
+      });
     }
   }
 
@@ -117,9 +118,24 @@ export const getProjectTranslationStatus = (item: unknown) => {
       "seo.metaTitleEn",
       "seo.metaDescriptionEn",
     ],
-    [["features", "featuresEn"]],
+    [
+      ["features", "featuresEn"],
+      ["seo.keywords", "seo.keywordsEn"],
+    ],
+    [
+      ["clientName", "clientNameEn"],
+      ["industry", "industryEn"],
+      ["duration", "durationEn"],
+    ],
   );
-  current = addNestedRequired(current, item, "results", ["labelEn", "valueEn"]);
+
+  current = addNestedRequired(
+    current,
+    item,
+    "results",
+    ["labelEn", "valueEn"],
+  );
+
   return addNestedRequired(
     current,
     item,
@@ -143,11 +159,21 @@ export const getBlogTranslationStatus = (item: unknown) =>
     [
       ["summaryPoints", "summaryPointsEn"],
       ["tags", "tagsEn"],
+      ["seo.keywords", "seo.keywordsEn"],
     ],
     [
       ["coverAlt", "coverAltEn"],
       ["authorName", "authorNameEn"],
       ["authorRole", "authorRoleEn"],
+
+      ["ctaTitle", "ctaTitleEn"],
+      ["ctaDescription", "ctaDescriptionEn"],
+      ["ctaButtonText", "ctaButtonTextEn"],
+
+      ["seo.ogTitle", "seo.ogTitleEn"],
+      ["seo.ogDescription", "seo.ogDescriptionEn"],
+      ["seo.twitterTitle", "seo.twitterTitleEn"],
+      ["seo.twitterDescription", "seo.twitterDescriptionEn"],
     ],
   );
 
