@@ -1,0 +1,76 @@
+{
+  "version": "smart-agency-ar-en-localization-v1",
+  "generatedAt": "2026-08-24T05:38:57.939Z",
+  "databaseName": "smart-agency",
+  "inventoryHash": "85bc50fdeb9ca7f042a1dea5baf84847589027a5cc5eef7fc7a09517dcf78e7d",
+  "baselineCounts": {
+    "abouts": 1,
+    "blogs": 4,
+    "companyinfos": 1,
+    "faqs": 6,
+    "hostingpackages": 4,
+    "leads": 8,
+    "newsletters": 0,
+    "projectcategories": 6,
+    "projects": 15,
+    "services": 7,
+    "teammembers": 3,
+    "technologies": 22,
+    "testimonials": 4
+  },
+  "counts": {
+    "abouts": 1,
+    "blogs": 4,
+    "companyinfos": 1,
+    "faqs": 6,
+    "hostingpackages": 4,
+    "projectcategories": 6,
+    "projects": 15,
+    "services": 7,
+    "teammembers": 3,
+    "technologies": 22,
+    "testimonials": 4,
+    "leads": 8,
+    "newsletters": 0
+  },
+  "operations": [],
+  "issues": {
+    "conflicts": [],
+    "missingTranslations": [],
+    "completeness": [],
+    "warnings": []
+  },
+  "manualQualityWarnings": [
+    {
+      "collection": "projects",
+      "id": "69e899d0c1d39198c090c43f",
+      "label": "tagadod-omnichannel-commerce-services-platform",
+      "path": "features.7",
+      "message": "Known corrupted Arabic feature copy. English translation can migrate; Arabic source should be corrected in a separate approved content patch."
+    },
+    {
+      "collection": "teammembers",
+      "id": "69dd28d9f24e6c6162c5d5ee",
+      "label": "محمد مراد",
+      "path": "photo",
+      "message": "Possible mojibake R2 object key; DO NOT rewrite automatically. Verify object existence in R2 first."
+    },
+    {
+      "collection": "teammembers",
+      "id": "6a0f1be3a1210f85c5bbe5bc",
+      "label": "إيمان جميل",
+      "path": "bio",
+      "message": "Arabic bio contains known corrupted phrase; translation can migrate, but Arabic copy still needs owner-approved correction."
+    }
+  ],
+  "summary": {
+    "documentsChanged": 0,
+    "fieldChanges": 0,
+    "conflicts": 0,
+    "missingTranslations": 0,
+    "completenessFailures": 0,
+    "warnings": 0,
+    "manualQualityWarnings": 3,
+    "byCollection": {}
+  }
+}
