@@ -7,6 +7,7 @@ import {
   IsBoolean,
   IsEnum,
   IsNumber,
+  MinLength,
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
@@ -51,11 +52,6 @@ class BlogSeoDto {
   @IsArray()
   @IsString({ each: true })
   keywordsEn?: string[];
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  canonicalUrl?: string;
 
   @ApiPropertyOptional()
   @IsOptional()
@@ -116,11 +112,6 @@ class BlogSeoDto {
   @IsOptional()
   @IsString()
   schemaType?: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  schemaTypeEn?: string;
 }
 
 export class CreateBlogDto {
@@ -188,10 +179,23 @@ export class CreateBlogDto {
   @IsString()
   coverAltEn?: string;
 
+  @ApiProperty({ example: 'الذكاء الاصطناعي' })
+  @IsString()
+  @MinLength(1)
+  category: string;
+
   @ApiPropertyOptional({ example: 'ai' })
   @IsOptional()
   @IsString()
-  category?: string;
+  categoryEn?: string;
+
+  @ApiProperty({
+    description: 'Stable machine key for the category',
+    example: 'ai',
+  })
+  @IsString()
+  @MinLength(1)
+  categoryKey: string;
 
   @ApiPropertyOptional({ enum: BlogContentType })
   @IsOptional()
@@ -237,11 +241,6 @@ export class CreateBlogDto {
   @IsOptional()
   @IsString()
   authorAvatar?: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  authorAvatarEn?: string;
 
   @ApiPropertyOptional({ type: [String] })
   @IsOptional()

@@ -36,7 +36,7 @@ export function AboutStory({ story }: AboutStoryProps) {
           viewport={{ once: true }}
           variants={fadeInUp}
           transition={{ delay: 0.1 }}
-          className="text-right"
+          className="text-start"
         >
           <p className="text-lg text-slate-600 leading-[1.8] mb-10 font-medium">
             {story.description}
@@ -77,7 +77,7 @@ export function AboutStory({ story }: AboutStoryProps) {
             <div className="absolute top-0 right-0 w-48 h-48 bg-primary/5 rounded-full blur-3xl" />
             <div className="absolute bottom-0 left-0 w-32 h-32 bg-teal-400/5 rounded-full blur-2xl" />
             
-            <div className="relative z-10 text-right">
+            <div className="relative z-10 text-start">
               <div className="w-14 h-14 rounded-2xl bg-primary/5 border border-primary/15 flex items-center justify-center mb-8 text-primary">
                 <Award className="w-7 h-7" />
               </div>

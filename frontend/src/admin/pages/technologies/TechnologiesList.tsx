@@ -4,6 +4,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Pencil, Trash2, Cpu } from "lucide-react";
 import { technologiesService } from "../../services/technologies.service";
 import { PageHeader, ConfirmDialog, TranslationStatus } from "../../components/shared";
+import { getTechnologyTranslationStatus } from "../../utils/translationStatus";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -104,7 +105,7 @@ export default function TechnologiesList() {
                               {tech.category}
                             </Badge>
                             <div dir="rtl">
-                              <TranslationStatus isTranslated={!!tech.tooltipEn || !!tech.descriptionEn} />
+                              <TranslationStatus missingFields={getTechnologyTranslationStatus(tech).missingFields} />
                             </div>
                           </div>
                         </div>

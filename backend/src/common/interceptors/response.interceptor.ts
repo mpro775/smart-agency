@@ -47,12 +47,9 @@ export class ResponseInterceptor<T> implements NestInterceptor<
           [context.getHandler(), context.getClass()],
         );
         const request = context.switchToHttp().getRequest<Request>();
-        const includeAllLocales =
-          request.headers['x-admin-localization'] === 'all';
-        const localizedData =
-          isPublic && !includeAllLocales
-            ? localizePublicData(data, resolveLocale(request))
-            : data;
+        const localizedData = isPublic
+          ? localizePublicData(data, resolveLocale(request))
+          : data;
         const response = context.switchToHttp().getResponse();
         const statusCode = response.statusCode;
 

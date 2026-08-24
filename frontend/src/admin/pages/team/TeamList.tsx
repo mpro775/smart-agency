@@ -4,6 +4,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Pencil, Trash2, UserCircle, Linkedin, Github } from 'lucide-react';
 import { teamService } from '../../services/team.service';
 import { DataTable, type Column, PageHeader, ConfirmDialog, TranslationStatus } from '../../components/shared';
+import { getTeamTranslationStatus } from '../../utils/translationStatus';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -71,7 +72,7 @@ export default function TeamList() {
           <div>
             <p className="font-medium">{member.fullName}</p>
             <p className="text-sm text-slate-500 mb-1">{member.role}</p>
-            <TranslationStatus isTranslated={!!member.fullNameEn} />
+            <TranslationStatus missingFields={getTeamTranslationStatus(member).missingFields} />
           </div>
         </div>
       ),

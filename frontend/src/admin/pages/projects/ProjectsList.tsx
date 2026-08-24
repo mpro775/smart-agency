@@ -5,6 +5,7 @@ import { Eye, Pencil, Trash2, Star, Globe, StarOff, CheckCircle, XCircle } from 
 import { projectsService } from '../../services/projects.service';
 import { projectCategoriesService } from '../../services/project-categories.service';
 import { DataTable, type Column, PageHeader, ConfirmDialog, TranslationStatus } from '../../components/shared';
+import { getProjectTranslationStatus } from '../../utils/translationStatus';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ErrorState } from '@/components/ui/StateViews';
@@ -97,7 +98,7 @@ export default function ProjectsList() {
           <div>
             <p className="font-medium">{project.title}</p>
             <p className="text-sm text-slate-500 mb-1">{project.slug}</p>
-            <TranslationStatus isTranslated={!!project.titleEn} />
+            <TranslationStatus missingFields={getProjectTranslationStatus(project).missingFields} />
           </div>
         </div>
       ),

@@ -61,7 +61,7 @@ export default function BlogInsightCard({ blog, variant = "default" }: { blog: B
 
         {!compact && (
           <Link to={`/blog/${blog.slug}`} className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-primary hover:text-primaryDark">
-            {tr("قراءة المقال")}<ArrowLeft className="h-4 w-4" />
+            {tr("قراءة المقال")}<ArrowLeft className="h-4 w-4 directional-arrow" />
           </Link>
         )}
       </div>

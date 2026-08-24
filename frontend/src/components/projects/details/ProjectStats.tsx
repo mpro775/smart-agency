@@ -154,7 +154,7 @@ export default function ProjectStats({ stats, results }: ProjectStatsProps) {
                     <CheckCircle2 className="w-5 h-5 text-emerald-500 flex-shrink-0" />
                     <p className="text-teal-700 font-extrabold text-base md:text-lg">{result.label}</p>
                   </div>
-                  <p className="text-slate-600 text-sm md:text-base leading-relaxed font-semibold pr-7">{result.value}</p>
+                  <p className="text-slate-600 text-sm md:text-base leading-relaxed font-semibold ps-7">{result.value}</p>
                 </motion.div>
               ))}
             </motion.div>

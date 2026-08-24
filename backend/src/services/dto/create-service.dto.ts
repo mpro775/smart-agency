@@ -52,11 +52,6 @@ export class CreateServiceDto {
   @IsString()
   iconType?: string;
 
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  iconTypeEn?: string;
-
   @ApiPropertyOptional({
     description: 'Tailwind gradient classes',
     example: 'from-teal-500 to-teal-600',
@@ -65,11 +60,6 @@ export class CreateServiceDto {
   @IsOptional()
   @IsString()
   gradient?: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  gradientEn?: string;
 
   @ApiPropertyOptional({
     description: 'List of features',

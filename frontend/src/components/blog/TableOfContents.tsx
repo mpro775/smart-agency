@@ -47,7 +47,7 @@ export default function TableOfContents({ html }: { html: string }) {
       </div>
       <div className="relative space-y-1">
         {/* vertical line */}
-        <div className="absolute right-1.5 top-1 bottom-1 w-px bg-slate-100" />
+        <div className="absolute start-1.5 top-1 bottom-1 w-px bg-slate-100" />
         {headings.map((heading) => {
           const isActive = activeId === heading.id;
           return (
@@ -55,7 +55,7 @@ export default function TableOfContents({ html }: { html: string }) {
               key={heading.id}
               href={`#${heading.id}`}
               className={`relative block rounded-lg px-3 py-2 text-sm leading-6 transition-colors ${
-                heading.level === "h3" ? "pr-8 text-xs" : "pr-6"
+                heading.level === "h3" ? "ps-8 text-xs" : "ps-6"
               } ${
                 isActive
                   ? "bg-primary/5 font-semibold text-primary"
@@ -63,7 +63,7 @@ export default function TableOfContents({ html }: { html: string }) {
               }`}
             >
               {isActive && (
-                <span className="absolute right-1.5 top-1/2 h-5 w-1 -translate-y-1/2 rounded-full bg-primary" />
+                <span className="absolute start-1.5 top-1/2 h-5 w-1 -translate-y-1/2 rounded-full bg-primary" />
               )}
               {heading.text}
             </a>

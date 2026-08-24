@@ -11,22 +11,12 @@ export class FilterBlogDto extends PaginationDto {
   @IsString()
   tag?: string;
 
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  tagEn?: string;
-
   @ApiPropertyOptional({
     description: 'Search in title and content',
   })
   @IsOptional()
   @IsString()
   search?: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  searchEn?: string;
 
   @ApiPropertyOptional({
     description: 'Filter by published status (admin only)',
@@ -42,6 +32,13 @@ export class FilterBlogDto extends PaginationDto {
   @IsOptional()
   @IsString()
   category?: string;
+
+  @ApiPropertyOptional({
+    description: 'Filter by stable category key',
+  })
+  @IsOptional()
+  @IsString()
+  categoryKey?: string;
 
   @ApiPropertyOptional({
     description: 'Filter by content type',

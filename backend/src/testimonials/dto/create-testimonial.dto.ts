@@ -58,11 +58,6 @@ export class CreateTestimonialDto {
   @IsString()
   companyLogo?: string;
 
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  companyLogoEn?: string;
-
   @ApiPropertyOptional({
     description: 'Client photo URL',
     example: 'https://cdn.example.com/photos/client.jpg',
@@ -70,11 +65,6 @@ export class CreateTestimonialDto {
   @IsOptional()
   @IsString()
   clientPhoto?: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  clientPhotoEn?: string;
 
   @ApiProperty({
     description: 'Testimonial content',
@@ -107,11 +97,6 @@ export class CreateTestimonialDto {
   @IsOptional()
   @IsMongoId()
   linkedProject?: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsMongoId()
-  linkedProjectEn?: string;
 
   @ApiPropertyOptional({
     description: 'Is testimonial active',

@@ -11,21 +11,12 @@ export class FilterProjectsDto extends PaginationDto {
   @IsMongoId()
   tech?: string;
 
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsMongoId()
-  techEn?: string;
-
   @ApiPropertyOptional({
     description: 'Filter by category IDs (comma-separated or single ID)',
   })
   @IsOptional()
   @IsString()
   categoryIds?: string;
-
-  @IsOptional()
-  @IsString()
-  categoryIdsEn?: string;
 
   @ApiPropertyOptional({
     description: 'Filter by industry/sector',

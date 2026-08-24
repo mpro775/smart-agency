@@ -34,7 +34,7 @@ export class SubscribeNewsletterDto {
   @IsOptional()
   @IsString()
   @IsIn(['ar', 'en'])
-  locale?: string;
+  locale?: 'ar' | 'en';
 }
 
 export class NewsletterResponseDto {

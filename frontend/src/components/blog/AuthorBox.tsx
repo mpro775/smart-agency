@@ -18,7 +18,7 @@ export default function AuthorBox({ blog }: { blog: Blog }) {
             alt={name}
             className="h-20 w-20 rounded-full object-cover ring-4 ring-slate-50"
           />
-          <span className="absolute -bottom-1 -right-1 inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary text-white ring-2 ring-white">
+          <span className="absolute -bottom-1 -end-1 inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary text-white ring-2 ring-white">
             <Pen className="h-3.5 w-3.5" />
           </span>
         </div>

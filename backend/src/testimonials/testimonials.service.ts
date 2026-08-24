@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Testimonial, TestimonialDocument } from './schemas/testimonial.schema';
@@ -8,6 +12,7 @@ import {
   PaginationDto,
   PaginatedResponseDto,
 } from '../common/dto/pagination.dto';
+import { getMissingEnglishFields } from '../common/localization/translation-completeness';
 
 @Injectable()
 export class TestimonialsService {
@@ -17,6 +22,15 @@ export class TestimonialsService {
   ) {}
 
   async create(createDto: CreateTestimonialDto): Promise<TestimonialDocument> {
+    const missingFields = getMissingEnglishFields('testimonial', createDto);
+    if (createDto.isActive !== false && missingFields.length > 0) {
+      throw new BadRequestException({
+        code: 'BILINGUAL_CONTENT_INCOMPLETE',
+        message:
+          'English testimonial content must be complete before activation',
+        missingFields,
+      });
+    }
     const testimonial = new this.testimonialModel(createDto);
     return testimonial.save();
   }
@@ -87,6 +101,21 @@ export class TestimonialsService {
     id: string,
     updateDto: UpdateTestimonialDto,
   ): Promise<TestimonialDocument> {
+    const current = await this.testimonialModel.findById(id).lean().exec();
+    if (!current) throw new NotFoundException('Testimonial not found');
+    const resultingTestimonial = { ...current, ...updateDto };
+    const missingFields = getMissingEnglishFields(
+      'testimonial',
+      resultingTestimonial,
+    );
+    if (resultingTestimonial.isActive && missingFields.length > 0) {
+      throw new BadRequestException({
+        code: 'BILINGUAL_CONTENT_INCOMPLETE',
+        message:
+          'English testimonial content must be complete before activation',
+        missingFields,
+      });
+    }
     const testimonial = await this.testimonialModel
       .findByIdAndUpdate(id, updateDto, { new: true })
       .populate('linkedProject', 'title slug images')

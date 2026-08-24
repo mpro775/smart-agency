@@ -25,7 +25,7 @@ export default function CategoryTabs({
           }`}
         >
           {item.label}
-          {item.count > 0 && <span className="mr-1 text-xs opacity-80">({item.count})</span>}
+          {item.count > 0 && <span className="ms-1 text-xs opacity-80">({item.count})</span>}
         </button>
       ))}
     </div>

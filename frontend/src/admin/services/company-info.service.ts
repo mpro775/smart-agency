@@ -40,7 +40,7 @@ export interface UpdateCompanyInfoDto {
 
 export const companyInfoService = {
   get: async (): Promise<CompanyInfo | null> => {
-    const response = await api.get<ApiResponse<CompanyInfo>>("/company-info");
+    const response = await api.get<ApiResponse<CompanyInfo>>("/company-info/admin");
     return response.data.data;
   },
 

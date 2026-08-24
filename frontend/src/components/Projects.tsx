@@ -1,9 +1,10 @@
 import ProjectsShowcase from "./projects/ProjectsShowcase";
 import type { Project } from "../admin/types";
+import type { ProjectCategoryOption } from "../services/projects.service";
 
 interface ProjectsProps {
   initialProjects?: Project[];
-  initialCategories?: { value: string; label: string; count?: number }[];
+  initialCategories?: ProjectCategoryOption[];
 }
 
 export default function Projects({

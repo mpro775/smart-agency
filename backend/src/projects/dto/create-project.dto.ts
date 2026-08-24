@@ -44,11 +44,6 @@ class ProjectImagesDto {
   @IsString()
   cover?: string;
 
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  coverEn?: string;
-
   @ApiPropertyOptional({
     description: 'Gallery images URLs',
     type: [String],
@@ -57,12 +52,6 @@ class ProjectImagesDto {
   @IsArray()
   @IsString({ each: true })
   gallery?: string[];
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
-  galleryEn?: string[];
 }
 
 class ProjectSeoDto {
@@ -223,12 +212,6 @@ export class CreateProjectDto {
   @IsMongoId({ each: true })
   technologies?: string[];
 
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsArray()
-  @IsMongoId({ each: true })
-  technologiesEn?: string[];
-
   @ApiPropertyOptional({
     description: 'Project images',
     type: ProjectImagesDto,
@@ -250,10 +233,6 @@ export class CreateProjectDto {
   @IsUrl({}, { message: 'Invalid project URL' })
   projectUrl?: string;
 
-  @IsOptional()
-  @IsUrl({}, { message: 'Invalid project URL' })
-  projectUrlEn?: string;
-
   @ApiPropertyOptional({ description: 'Client name', example: 'شركة ريم' })
   @IsOptional()
   @IsString()
@@ -272,12 +251,6 @@ export class CreateProjectDto {
   @IsArray()
   @IsMongoId({ each: true })
   categoryIds?: string[];
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsArray()
-  @IsMongoId({ each: true })
-  categoryIdsEn?: string[];
 
   @ApiPropertyOptional({
     description: 'Industry/sector',
@@ -313,11 +286,6 @@ export class CreateProjectDto {
   @IsString()
   year?: string;
 
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  yearEn?: string;
-
   @ApiPropertyOptional({
     description: 'Client logo URL',
     example: 'https://cdn.example.com/logos/client.png',
@@ -325,11 +293,6 @@ export class CreateProjectDto {
   @IsOptional()
   @IsString()
   clientLogo?: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  clientLogoEn?: string;
 
   @ApiPropertyOptional({
     description: 'Sort order for display',
@@ -354,11 +317,6 @@ export class CreateProjectDto {
   @IsOptional()
   @IsString()
   videoUrl?: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  videoUrlEn?: string;
 
   @ApiPropertyOptional({
     description: 'Project statistics',

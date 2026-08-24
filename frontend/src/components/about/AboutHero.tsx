@@ -43,7 +43,7 @@ export function AboutHero({ aboutData }: AboutHeroProps) {
           initial="hidden"
           animate="visible"
           variants={staggerContainer}
-          className="text-right flex flex-col items-start"
+          className="text-start flex flex-col items-start"
         >
           {aboutData.hero?.badge && (
             <motion.div
@@ -84,7 +84,7 @@ export function AboutHero({ aboutData }: AboutHeroProps) {
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl bg-primary hover:bg-primary-dark text-white font-bold transition-all duration-300 hover:shadow-lg hover:shadow-primary/20 hover:-translate-y-0.5 text-base"
               >
                 <span>{aboutData.hero.primaryButtonText}</span>
-                <ArrowLeft className="w-5 h-5" />
+                <ArrowLeft className="w-5 h-5 directional-arrow" />
               </Link>
             )}
             {aboutData.hero?.secondaryButtonText && (
@@ -149,7 +149,7 @@ export function AboutHero({ aboutData }: AboutHeroProps) {
                     <div className={`w-11 h-11 rounded-xl ${step.bg} ${step.color} flex items-center justify-center flex-shrink-0 transition-transform group-hover:scale-110`}>
                       <StepIcon className="w-5 h-5" />
                     </div>
-                    <div className="flex-1 text-right">
+                    <div className="flex-1 text-start">
                       <span className="font-bold text-slate-700 text-sm block group-hover:text-primary transition-colors">
                         {step.label}
                       </span>

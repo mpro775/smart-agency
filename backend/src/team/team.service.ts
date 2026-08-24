@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { TeamMember, TeamMemberDocument } from './schemas/team-member.schema';
@@ -6,6 +10,7 @@ import { CreateTeamMemberDto } from './dto/create-team-member.dto';
 import { UpdateTeamMemberDto } from './dto/update-team-member.dto';
 import { FilterTeamDto } from './dto/filter-team.dto';
 import { PaginatedResponseDto } from '../common/dto/pagination.dto';
+import { getMissingEnglishFields } from '../common/localization/translation-completeness';
 
 @Injectable()
 export class TeamService {
@@ -15,6 +20,14 @@ export class TeamService {
   ) {}
 
   async create(createDto: CreateTeamMemberDto): Promise<TeamMemberDocument> {
+    const missingFields = getMissingEnglishFields('team', createDto);
+    if (createDto.isActive !== false && missingFields.length > 0) {
+      throw new BadRequestException({
+        code: 'BILINGUAL_CONTENT_INCOMPLETE',
+        message: 'English team content must be complete before activation',
+        missingFields,
+      });
+    }
     const teamMember = new this.teamMemberModel(createDto);
     return teamMember.save();
   }
@@ -98,6 +111,17 @@ export class TeamService {
     id: string,
     updateDto: UpdateTeamMemberDto,
   ): Promise<TeamMemberDocument> {
+    const current = await this.teamMemberModel.findById(id).lean().exec();
+    if (!current) throw new NotFoundException('Team member not found');
+    const resultingMember = { ...current, ...updateDto };
+    const missingFields = getMissingEnglishFields('team', resultingMember);
+    if (resultingMember.isActive && missingFields.length > 0) {
+      throw new BadRequestException({
+        code: 'BILINGUAL_CONTENT_INCOMPLETE',
+        message: 'English team content must be complete before activation',
+        missingFields,
+      });
+    }
     const member = await this.teamMemberModel
       .findByIdAndUpdate(id, updateDto, { new: true })
       .exec();

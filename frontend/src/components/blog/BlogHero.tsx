@@ -22,11 +22,11 @@ export default function BlogHero({
 
         <div className="mt-10 max-w-2xl">
           <label className="relative block">
-            <Search className="pointer-events-none absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
+            <Search className="pointer-events-none absolute start-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
             <input
               value={search}
               onChange={(event) => onSearchChange(event.target.value)}
-              className="h-14 w-full rounded-2xl border border-slate-200 bg-white pr-12 pl-4 text-right shadow-sm outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/10"
+              className="h-14 w-full rounded-2xl border border-slate-200 bg-white ps-12 pe-4 text-start shadow-sm outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/10"
               placeholder={tr("ابحث في المقالات والأدلة...")}
               type="search"
             />

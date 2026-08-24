@@ -22,12 +22,12 @@ export const technologiesService = {
     const params = new URLSearchParams();
     if (filters?.category) params.append('category', filters.category);
 
-    const response = await api.get<ApiResponse<Technology[]>>(`/technologies?${params.toString()}`);
+    const response = await api.get<ApiResponse<Technology[]>>(`/technologies/admin?${params.toString()}`);
     return response.data.data;
   },
 
   getById: async (id: string): Promise<Technology> => {
-    const response = await api.get<ApiResponse<Technology>>(`/technologies/${id}`);
+    const response = await api.get<ApiResponse<Technology>>(`/technologies/admin/${id}`);
     return response.data.data;
   },
 
@@ -45,4 +45,3 @@ export const technologiesService = {
     await api.delete(`/technologies/${id}`);
   },
 };
-

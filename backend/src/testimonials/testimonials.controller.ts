@@ -69,6 +69,14 @@ export class TestimonialsController {
     return this.testimonialsService.findAll(paginationDto, true);
   }
 
+  @Get('admin/:id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @ApiBearerAuth('JWT-auth')
+  @ResponseMessage('Testimonial fetched successfully')
+  findOneAdmin(@Param('id') id: string) {
+    return this.testimonialsService.findOne(id);
+  }
+
   @Get('featured')
   @Public()
   @ApiOperation({ summary: 'Get featured testimonials for homepage' })

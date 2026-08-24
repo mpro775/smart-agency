@@ -25,8 +25,6 @@ const seoSchema = z.object({
   metaDescriptionEn: z.string().optional(),
   keywords: z.array(z.string()).default([]),
   keywordsEn: z.array(z.string()).default([]),
-  canonicalUrl: z.string().optional(),
-  canonicalUrlEn: z.string().optional(),
   ogTitle: z.string().optional(),
   ogTitleEn: z.string().optional(),
   ogDescription: z.string().optional(),
@@ -54,14 +52,14 @@ const blogSchema = z.object({
   coverAltEn: z.string().optional(),
   tags: z.array(z.string()).default([]),
   tagsEn: z.array(z.string()).default([]),
-  category: z.string().default("general"),
+  category: z.string().min(1, "اسم التصنيف العربي مطلوب"),
   categoryEn: z.string().optional(),
+  categoryKey: z.string().min(1, "رمز التصنيف مطلوب"),
   contentType: z.enum(["article", "guide", "case-study", "insight", "news"]).default("article"),
   isPublished: z.boolean().default(false),
   isFeatured: z.boolean().default(false),
   featuredOrder: z.coerce.number().default(0),
   readingTime: z.coerce.number().default(0),
-  readingTimeEn: z.coerce.number().default(0),
   authorName: z.string().optional(),
   authorNameEn: z.string().optional(),
   authorRole: z.string().optional(),
@@ -96,14 +94,14 @@ const defaultValues: BlogFormData = {
   coverAltEn: "",
   tags: [],
   tagsEn: [],
-  category: "general",
+  category: "",
   categoryEn: "",
+  categoryKey: "general",
   contentType: "article",
   isPublished: false,
   isFeatured: false,
   featuredOrder: 0,
   readingTime: 0,
-  readingTimeEn: 0,
   authorName: "",
   authorNameEn: "",
   authorRole: "",
@@ -127,8 +125,6 @@ const defaultValues: BlogFormData = {
     metaDescriptionEn: "",
     keywords: [],
     keywordsEn: [],
-    canonicalUrl: "",
-    canonicalUrlEn: "",
     ogTitle: "",
     ogTitleEn: "",
     ogDescription: "",
@@ -209,12 +205,12 @@ export default function BlogForm() {
       tagsEn: blog.tagsEn || [],
       category: blog.category || "general",
       categoryEn: blog.categoryEn || "",
+      categoryKey: blog.categoryKey || "general",
       contentType: blog.contentType || "article",
       isPublished: blog.isPublished,
       isFeatured: !!blog.isFeatured,
       featuredOrder: blog.featuredOrder || 0,
       readingTime: blog.readingTime || 0,
-      readingTimeEn: blog.readingTimeEn || 0,
       authorName: blog.authorName || "",
       authorNameEn: blog.authorNameEn || "",
       authorRole: blog.authorRole || "",
@@ -356,6 +352,11 @@ export default function BlogForm() {
                   </select>
                 </Field>
 
+                <Field label="رمز التصنيف الثابت (Category Key)">
+                  <Input {...register("categoryKey")} dir="ltr" className="bg-slate-700/50 border-slate-600 text-white" placeholder="general" />
+                  {errors.categoryKey && <p className="mt-1 text-sm text-red-400">{errors.categoryKey.message}</p>}
+                </Field>
+
                 <Tabs defaultValue="ar" className="space-y-4">
                   <TabsList className="bg-slate-900 border border-slate-700 w-full flex">
                     <TabsTrigger value="ar" className="flex-1 data-[state=active]:bg-slate-800">العربية ✓</TabsTrigger>
@@ -427,10 +428,7 @@ export default function BlogForm() {
                   </TabsList>
                   
                   <TabsContent value="ar" className="space-y-4">
-                    <div className="grid gap-4 md:grid-cols-2">
-                      <Field label="Meta Title"><Input {...register("seo.metaTitle")} className="bg-slate-700/50 border-slate-600 text-white" /></Field>
-                      <Field label="Canonical URL"><Input {...register("seo.canonicalUrl")} dir="ltr" className="bg-slate-700/50 border-slate-600 text-white" /></Field>
-                    </div>
+                    <Field label="Meta Title"><Input {...register("seo.metaTitle")} className="bg-slate-700/50 border-slate-600 text-white" /></Field>
                     <Field label="Meta Description"><Textarea {...register("seo.metaDescription")} className="bg-slate-700/50 border-slate-600 text-white" /></Field>
                     <ListInput label="Keywords" placeholder="أضف كلمة واضغط Enter" items={watch("seo.keywords")} onAdd={(value) => addListItem("seo.keywords", value)} onRemove={(index) => removeListItem("seo.keywords", index)} />
                     <div className="grid gap-4 md:grid-cols-2">
@@ -442,10 +440,7 @@ export default function BlogForm() {
                   </TabsContent>
                   
                   <TabsContent value="en" className="space-y-4" dir="ltr">
-                    <div className="grid gap-4 md:grid-cols-2">
-                      <Field label="Meta Title"><Input {...register("seo.metaTitleEn")} className="bg-slate-700/50 border-slate-600 text-white" /></Field>
-                      <Field label="Canonical URL"><Input {...register("seo.canonicalUrlEn")} dir="ltr" className="bg-slate-700/50 border-slate-600 text-white" /></Field>
-                    </div>
+                    <Field label="Meta Title"><Input {...register("seo.metaTitleEn")} className="bg-slate-700/50 border-slate-600 text-white" /></Field>
                     <Field label="Meta Description"><Textarea {...register("seo.metaDescriptionEn")} className="bg-slate-700/50 border-slate-600 text-white" /></Field>
                     <ListInput label="Keywords" placeholder="Add keyword and press Enter" items={watch("seo.keywordsEn") || []} onAdd={(value) => addListItem("seo.keywordsEn", value)} onRemove={(index) => removeListItem("seo.keywordsEn", index)} />
                     <div className="grid gap-4 md:grid-cols-2">

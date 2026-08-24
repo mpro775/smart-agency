@@ -11,7 +11,7 @@ import {
   Code2,
 } from "lucide-react";
 
-const checklist = [
+const getChecklist = () => [
   tr("تحليل المتطلبات"),
   tr("تصميم/UX"),
   tr("التطوير"),
@@ -19,7 +19,7 @@ const checklist = [
   tr("جاهز للإطلاق"),
 ];
 
-const metrics = [
+const getMetrics = () => [
   { label: tr("الأداء"), value: "98%", desc: tr("سرعة واستجابة") },
   { label: tr("الاستقرار"), value: "99.9%", desc: tr("جاهزية النظام") },
   { label: tr("الأمان"), value: "100%", desc: tr("حماية البيانات") },
@@ -53,6 +53,8 @@ const floatingBadges = [
 ];
 
 const HeroDashboard = () => {
+  const checklist = getChecklist();
+  const metrics = getMetrics();
   return (
     <div className="relative w-full max-w-[540px]">
       {/* Floating Badges */}

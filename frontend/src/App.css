@@ -11,6 +11,10 @@
   --color-secondary-light: #565a5a;
 }
 
+[dir="ltr"] .directional-arrow {
+  transform: rotate(180deg);
+}
+
 /* IBM Plex Sans Arabic Font Face - Local Fonts */
 @font-face {
   font-family: "IBM Plex Sans Arabic";

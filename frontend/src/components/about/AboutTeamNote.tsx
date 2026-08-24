@@ -26,7 +26,7 @@ export function AboutTeamNote({ teamNote }: AboutTeamNoteProps) {
         <div className="absolute bottom-0 left-0 w-80 h-80 bg-teal-400/5 rounded-full blur-[100px]" />
 
         <div className="relative z-10 grid lg:grid-cols-2 gap-12 p-8 md:p-12 items-center">
-          <div className="text-right">
+          <div className="text-start">
             <span className="inline-block px-5 py-2 rounded-full bg-primary/5 border border-primary/15 text-primary text-sm font-bold mb-6 tracking-wide">
               {tr("فريق العمل")}</span>
             <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-6 tracking-tight leading-tight">

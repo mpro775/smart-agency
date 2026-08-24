@@ -22,8 +22,9 @@ import { FaWhatsapp } from "react-icons/fa";
 import { SectionShell } from "./brand";
 import { publicFaqsService } from "../services/faqs.service";
 import type { FAQ } from "../services/faqs.service";
+import type { FAQCategory } from "../services/faqs.service";
 
-const categoryDisplayMap: Record<string, string> = {
+const getCategoryDisplayMap = (): Record<string, string> => ({
   General: tr("قبل بدء المشروع"),
   عام: tr("قبل بدء المشروع"),
   تقني: tr("التقنية والتنفيذ"),
@@ -31,11 +32,11 @@ const categoryDisplayMap: Record<string, string> = {
   دفع: tr("التكلفة والمدة"),
   مالي: tr("التكلفة والمدة"),
   خدمات: tr("التقنية والتنفيذ"),
-};
+});
 
 const getCategoryLabel = (category?: string) => {
   if (!category) return tr("عام");
-  return categoryDisplayMap[category] || category;
+  return getCategoryDisplayMap()[category] || category;
 };
 
 const getCategoryIcon = (category?: string, question?: string) => {
@@ -199,18 +200,22 @@ interface FAQsProps {
   initialFaqs?: FAQ[];
 }
 
+const deriveCategories = (faqs: FAQ[]): FAQCategory[] =>
+  Array.from(
+    new Map(
+      faqs
+        .filter((faq) => faq.category)
+        .map((faq) => [
+          faq.categoryKey || faq.category!,
+          { key: faq.categoryKey || faq.category!, label: faq.category! },
+        ]),
+    ).values(),
+  );
+
 export default function FAQs({ initialFaqs }: FAQsProps) {
   const [faqs, setFaqs] = useState<FAQ[]>(initialFaqs || []);
-  const [categories, setCategories] = useState<string[]>(
-    initialFaqs
-      ? Array.from(
-          new Set(
-            initialFaqs
-              .map((faq) => faq.category)
-              .filter((category): category is string => Boolean(category)),
-          ),
-        )
-      : [],
+  const [categories, setCategories] = useState<FAQCategory[]>(
+    initialFaqs ? deriveCategories(initialFaqs) : [],
   );
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -221,15 +226,7 @@ export default function FAQs({ initialFaqs }: FAQsProps) {
   useEffect(() => {
     if (initialFaqs) {
       setFaqs(initialFaqs);
-      setCategories(
-        Array.from(
-          new Set(
-            initialFaqs
-              .map((faq) => faq.category)
-              .filter((category): category is string => Boolean(category)),
-          ),
-        ),
-      );
+      setCategories(deriveCategories(initialFaqs));
       setLoading(false);
       return;
     }
@@ -301,7 +298,9 @@ export default function FAQs({ initialFaqs }: FAQsProps) {
     let filtered =
       selectedCategory === "all"
         ? faqs
-        : faqs.filter((faq) => faq.category === selectedCategory);
+        : faqs.filter(
+            (faq) => (faq.categoryKey || faq.category) === selectedCategory,
+          );
 
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase().trim();
@@ -384,17 +383,17 @@ export default function FAQs({ initialFaqs }: FAQsProps) {
               {tr("جميع الأسئلة")}</motion.button>
             {categories.map((category) => (
               <motion.button
-                key={category}
+                key={category.key}
                 whileHover={{ scale: 1.04 }}
                 whileTap={{ scale: 0.96 }}
-                onClick={() => setSelectedCategory(category)}
+                onClick={() => setSelectedCategory(category.key)}
                 className={`px-5 py-2.5 rounded-2xl text-sm font-medium transition-all duration-300 border ${
-                  selectedCategory === category
+                  selectedCategory === category.key
                     ? "bg-primary/20 border-primary/40 text-primary shadow-lg shadow-primary/10"
                     : "border-white/10 bg-white/[0.04] text-white/60 hover:bg-white/[0.08] hover:text-white/80"
                 }`}
               >
-                {getCategoryLabel(category)}
+                {getCategoryLabel(category.label)}
               </motion.button>
             ))}
           </motion.div>
@@ -411,13 +410,13 @@ export default function FAQs({ initialFaqs }: FAQsProps) {
           <div className="lg:col-span-8">
             {/* Search Box */}
             <div className="relative mb-6">
-              <FiSearch className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 text-lg" />
+              <FiSearch className="absolute start-4 top-1/2 -translate-y-1/2 text-white/40 text-lg" />
               <input
                 type="text"
                 placeholder={tr("ابحث عن التكلفة، المدة، الدعم، أو طريقة العمل...")}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full rounded-2xl border border-white/10 bg-white/[0.05] py-4 pr-12 pl-4 text-white placeholder:text-white/40 outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all duration-300"
+                className="w-full rounded-2xl border border-white/10 bg-white/[0.05] py-4 ps-12 pe-4 text-white placeholder:text-white/40 outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all duration-300"
               />
             </div>
 
@@ -450,7 +449,7 @@ export default function FAQs({ initialFaqs }: FAQsProps) {
                     }`}
                   >
                     {expandedId === faq._id && (
-                      <div className="absolute right-0 top-0 h-full w-1 bg-primary" />
+                      <div className="absolute start-0 top-0 h-full w-1 bg-primary" />
                     )}
 
                     <button
@@ -458,7 +457,7 @@ export default function FAQs({ initialFaqs }: FAQsProps) {
                         setExpandedId(expandedId === faq._id ? null : faq._id)
                       }
                       aria-expanded={expandedId === faq._id}
-                      className="w-full px-6 py-5 flex items-center gap-4 text-right hover:bg-white/[0.02] transition-colors"
+                      className="w-full px-6 py-5 flex items-center gap-4 text-start hover:bg-white/[0.02] transition-colors"
                     >
                       <span className="text-white/20 text-sm font-mono font-bold flex-shrink-0">
                         {formatIndex(index)}
@@ -495,7 +494,7 @@ export default function FAQs({ initialFaqs }: FAQsProps) {
                           transition={{ duration: 0.3 }}
                           className="overflow-hidden"
                         >
-                          <div className="px-6 pb-5 pr-16">
+                          <div className="px-6 pb-5 ps-16">
                             <div
                               className="text-white/70 leading-relaxed prose prose-sm prose-invert max-w-none"
                               dangerouslySetInnerHTML={{ __html: faq.answer }}

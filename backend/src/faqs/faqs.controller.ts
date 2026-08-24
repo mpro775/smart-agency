@@ -92,6 +92,16 @@ export class FaqsController {
     return this.faqsService.findOne(id);
   }
 
+  @Patch('reorder')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @ApiBearerAuth('JWT-auth')
+  @ApiOperation({ summary: 'Reorder FAQs (Admin)' })
+  @ApiResponse({ status: 200, description: 'FAQs reordered successfully' })
+  @ResponseMessage('FAQs reordered successfully')
+  reorder(@Body() ids: string[]) {
+    return this.faqsService.reorder(ids);
+  }
+
   @Patch(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('JWT-auth')
@@ -112,16 +122,6 @@ export class FaqsController {
   @ResponseMessage('FAQ status toggled successfully')
   toggleActive(@Param('id') id: string) {
     return this.faqsService.toggleActive(id);
-  }
-
-  @Patch('reorder')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @ApiBearerAuth('JWT-auth')
-  @ApiOperation({ summary: 'Reorder FAQs (Admin)' })
-  @ApiResponse({ status: 200, description: 'FAQs reordered successfully' })
-  @ResponseMessage('FAQs reordered successfully')
-  reorder(@Body() ids: string[]) {
-    return this.faqsService.reorder(ids);
   }
 
   @Delete(':id')

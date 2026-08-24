@@ -126,7 +126,7 @@ function Spec({
 }
 
 // --- نقاط القيمة ---
-const valuePoints = [
+const getValuePoints = () => [
   { label: tr("دعم فني سريع"), icon: FiHeadphones },
   { label: tr("حماية SSL"), icon: FiShield },
   { label: tr("أداء عالي"), icon: FiZap },
@@ -140,6 +140,7 @@ interface HostingPackagesProps {
 export default function HostingPackages({
   initialPackages,
 }: HostingPackagesProps) {
+  const valuePoints = getValuePoints();
   const [packages, setPackages] = useState<HostingPackage[]>(
     initialPackages || [],
   );
@@ -394,7 +395,7 @@ export default function HostingPackages({
               const base = getBasePackage(pkg.basePackageId);
               if (base)
                 allFeatures.push({
-                  text: `كل مميزات ${base.name}`,
+                  text: tr("hosting.allFeaturesOf", { name: base.name }),
                   highlight: true,
                 });
             }
@@ -618,7 +619,7 @@ export default function HostingPackages({
                   >
                     {isPopular ? tr("اختر الخطة") : tr("ابدأ الآن")}
                     <FiArrowLeft
-                      className={isPopular ? "animate-pulse" : ""}
+                      className={`directional-arrow ${isPopular ? "animate-pulse" : ""}`}
                     />
                   </motion.button>
                 </div>

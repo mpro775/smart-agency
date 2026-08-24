@@ -24,14 +24,8 @@ export class ProjectImages {
   @Prop()
   cover: string;
 
-  @Prop({ required: false })
-  coverEn?: string;
-
   @Prop({ type: [String], default: [] })
   gallery: string[];
-
-  @Prop({ required: false })
-  galleryEn?: string[];
 }
 
 @Schema({ _id: false })
@@ -123,9 +117,6 @@ export class Project {
   @Prop()
   projectUrl: string;
 
-  @Prop({ required: false })
-  projectUrlEn?: string;
-
   @Prop()
   clientName: string;
 
@@ -153,14 +144,8 @@ export class Project {
   @Prop()
   year?: string;
 
-  @Prop({ required: false })
-  yearEn?: string;
-
   @Prop()
   clientLogo?: string;
-
-  @Prop({ required: false })
-  clientLogoEn?: string;
 
   @Prop({ default: 0 })
   sortOrder?: number;
@@ -170,9 +155,6 @@ export class Project {
 
   @Prop()
   videoUrl?: string;
-
-  @Prop({ required: false })
-  videoUrlEn?: string;
 
   @Prop({ type: [ProjectStat], default: [] })
   stats?: ProjectStat[];

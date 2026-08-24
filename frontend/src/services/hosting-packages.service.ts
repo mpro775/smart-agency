@@ -49,6 +49,7 @@ export interface PackageSelectionRequest {
   companyName?: string;
   message?: string;
   billingCycle: "Monthly" | "Yearly";
+  locale?: "ar" | "en";
 }
 
 export const publicHostingPackagesService = {

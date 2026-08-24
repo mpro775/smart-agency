@@ -44,6 +44,8 @@ const hostingSchema = z.object({
   cpuEn: z.string().optional(),
   domains: z.string().optional(),
   domainsEn: z.string().optional(),
+  benefitHints: z.record(z.string(), z.string()).optional(),
+  benefitHintsEn: z.record(z.string(), z.string()).optional(),
 });
 
 type HostingFormData = z.infer<typeof hostingSchema>;
@@ -62,12 +64,12 @@ export default function HostingForm() {
 
   const { register, control, handleSubmit, watch, setValue, reset, formState: { errors } } = useForm<HostingFormData>({
     resolver: zodResolver(hostingSchema),
-    defaultValues: { name: '', nameEn: '', description: '', descriptionEn: '', price: 0, currency: 'USD', billingCycle: BillingCycle.MONTHLY, category: PackageCategory.SHARED_HOSTING, features: [], featuresEn: [], isPopular: false, isBestValue: false, isActive: true, sortOrder: 0, storage: '', storageEn: '', bandwidth: '', bandwidthEn: '', ram: '', ramEn: '', cpu: '', cpuEn: '', domains: '', domainsEn: '' },
+    defaultValues: { name: '', nameEn: '', description: '', descriptionEn: '', price: 0, currency: 'USD', billingCycle: BillingCycle.MONTHLY, category: PackageCategory.SHARED_HOSTING, features: [], featuresEn: [], isPopular: false, isBestValue: false, isActive: true, sortOrder: 0, storage: '', storageEn: '', bandwidth: '', bandwidthEn: '', ram: '', ramEn: '', cpu: '', cpuEn: '', domains: '', domainsEn: '', benefitHints: {}, benefitHintsEn: {} },
   });
 
   useEffect(() => {
     if (pkg) {
-      reset({ name: pkg.name, nameEn: pkg.nameEn || '', description: pkg.description || '', descriptionEn: pkg.descriptionEn || '', price: pkg.price, currency: pkg.currency, originalPrice: pkg.originalPrice, billingCycle: pkg.billingCycle, category: pkg.category, features: pkg.features || [], featuresEn: pkg.featuresEn || [], isPopular: pkg.isPopular, isBestValue: pkg.isBestValue, isActive: pkg.isActive, sortOrder: pkg.sortOrder, storage: pkg.storage || '', storageEn: pkg.storageEn || '', bandwidth: pkg.bandwidth || '', bandwidthEn: pkg.bandwidthEn || '', ram: pkg.ram || '', ramEn: pkg.ramEn || '', cpu: pkg.cpu || '', cpuEn: pkg.cpuEn || '', domains: pkg.domains || '', domainsEn: pkg.domainsEn || '' });
+      reset({ name: pkg.name, nameEn: pkg.nameEn || '', description: pkg.description || '', descriptionEn: pkg.descriptionEn || '', price: pkg.price, currency: pkg.currency, originalPrice: pkg.originalPrice, billingCycle: pkg.billingCycle, category: pkg.category, features: pkg.features || [], featuresEn: pkg.featuresEn || [], isPopular: pkg.isPopular, isBestValue: pkg.isBestValue, isActive: pkg.isActive, sortOrder: pkg.sortOrder, storage: pkg.storage || '', storageEn: pkg.storageEn || '', bandwidth: pkg.bandwidth || '', bandwidthEn: pkg.bandwidthEn || '', ram: pkg.ram || '', ramEn: pkg.ramEn || '', cpu: pkg.cpu || '', cpuEn: pkg.cpuEn || '', domains: pkg.domains || '', domainsEn: pkg.domainsEn || '', benefitHints: pkg.benefitHints || {}, benefitHintsEn: pkg.benefitHintsEn || {} });
     }
   }, [pkg, reset]);
 
@@ -176,6 +178,14 @@ export default function HostingForm() {
                       <div className="space-y-2"><Label className="text-slate-200">CPU</Label><Input {...register('cpu')} className="bg-slate-700/50 border-slate-600 text-white" placeholder="2 vCPU" /></div>
                       <div className="space-y-2"><Label className="text-slate-200">النطاقات</Label><Input {...register('domains')} className="bg-slate-700/50 border-slate-600 text-white" placeholder="5 Domains" /></div>
                     </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-5">
+                      {['storage', 'bandwidth', 'ram', 'cpu', 'domains'].map((key) => (
+                        <div className="space-y-2" key={key}>
+                          <Label className="text-slate-200">تلميح {key}</Label>
+                          <Input {...register(`benefitHints.${key}`)} className="bg-slate-700/50 border-slate-600 text-white" />
+                        </div>
+                      ))}
+                    </div>
                   </TabsContent>
                   
                   <TabsContent value="en" dir="ltr">
@@ -185,6 +195,14 @@ export default function HostingForm() {
                       <div className="space-y-2"><Label className="text-slate-200">RAM</Label><Input {...register('ramEn')} className="bg-slate-700/50 border-slate-600 text-white" placeholder="4GB" /></div>
                       <div className="space-y-2"><Label className="text-slate-200">CPU</Label><Input {...register('cpuEn')} className="bg-slate-700/50 border-slate-600 text-white" placeholder="2 vCPU" /></div>
                       <div className="space-y-2"><Label className="text-slate-200">Domains</Label><Input {...register('domainsEn')} className="bg-slate-700/50 border-slate-600 text-white" placeholder="5 Domains" /></div>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-5">
+                      {['storage', 'bandwidth', 'ram', 'cpu', 'domains'].map((key) => (
+                        <div className="space-y-2" key={key}>
+                          <Label className="text-slate-200">{key} hint</Label>
+                          <Input {...register(`benefitHintsEn.${key}`)} className="bg-slate-700/50 border-slate-600 text-white" />
+                        </div>
+                      ))}
                     </div>
                   </TabsContent>
                 </Tabs>
@@ -247,4 +265,3 @@ export default function HostingForm() {
     </div>
   );
 }
-

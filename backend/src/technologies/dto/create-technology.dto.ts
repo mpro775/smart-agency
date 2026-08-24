@@ -11,11 +11,6 @@ export class CreateTechnologyDto {
   @IsNotEmpty({ message: 'Technology name is required' })
   name: string;
 
-  @IsOptional()
-  @ApiPropertyOptional()
-  @IsString()
-  nameEn?: string;
-
   @ApiPropertyOptional({
     description: 'Technology icon URL (SVG)',
     example: 'https://cdn.example.com/icons/nestjs.svg',

@@ -24,7 +24,7 @@ export default function TeamMemberRail({ members, activeMember, onSelect }: Prop
             whileInView={{ opacity: 1, x: 0 }}
             transition={shouldReduceMotion ? { duration: 0 } : { delay: index * 0.05, duration: 0.4 }}
             onClick={() => onSelect(member)}
-            className={`relative min-w-[200px] xs:min-w-[230px] sm:min-w-[260px] lg:min-w-0 w-full snap-start text-right rounded-2xl border p-2.5 sm:p-3 transition-all duration-300 group ${
+            className={`relative min-w-[200px] xs:min-w-[230px] sm:min-w-[260px] lg:min-w-0 w-full snap-start text-start rounded-2xl border p-2.5 sm:p-3 transition-all duration-300 group ${
               isActive
                 ? "border-cyan-400/70 bg-cyan-400/10 shadow-lg shadow-cyan-500/20"
                 : "border-white/10 bg-white/[0.035] hover:bg-white/[0.06] hover:border-cyan-400/30"

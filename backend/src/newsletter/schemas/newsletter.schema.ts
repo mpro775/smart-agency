@@ -24,8 +24,7 @@ export class Newsletter {
   isActive: boolean;
 
   @Prop({ default: 'ar', enum: ['ar', 'en'] })
-  @Prop()
-  locale: string;
+  locale: 'ar' | 'en';
 
   @Prop()
   subscribedAt: Date;

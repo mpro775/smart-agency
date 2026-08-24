@@ -141,7 +141,7 @@ export default function ProjectDetailsPage() {
             to="/projects"
             className="inline-flex items-center gap-2 rounded-full bg-teal-600 text-white px-6 py-3 hover:bg-teal-700 font-bold transition-all duration-300 shadow-lg shadow-teal-500/10"
           >
-            <ArrowRight className="w-5 h-5" />
+            <ArrowRight className="w-5 h-5 directional-arrow" />
             <span>{tr("العودة إلى معرض المشاريع")}</span>
           </Link>
         </div>

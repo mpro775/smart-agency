@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import {
@@ -8,6 +12,7 @@ import {
 } from './schemas/technology.schema';
 import { CreateTechnologyDto } from './dto/create-technology.dto';
 import { UpdateTechnologyDto } from './dto/update-technology.dto';
+import { getMissingEnglishFields } from '../common/localization/translation-completeness';
 
 @Injectable()
 export class TechnologiesService {
@@ -19,6 +24,17 @@ export class TechnologiesService {
   async create(
     createTechnologyDto: CreateTechnologyDto,
   ): Promise<TechnologyDocument> {
+    const missingFields = getMissingEnglishFields(
+      'technology',
+      createTechnologyDto,
+    );
+    if (missingFields.length > 0) {
+      throw new BadRequestException({
+        code: 'BILINGUAL_CONTENT_INCOMPLETE',
+        message: 'English technology content must be complete before display',
+        missingFields,
+      });
+    }
     const technology = new this.technologyModel(createTechnologyDto);
     return technology.save();
   }
@@ -52,6 +68,20 @@ export class TechnologiesService {
     id: string,
     updateTechnologyDto: UpdateTechnologyDto,
   ): Promise<TechnologyDocument> {
+    const current = await this.technologyModel.findById(id).lean().exec();
+    if (!current) throw new NotFoundException('Technology not found');
+    const resultingTechnology = { ...current, ...updateTechnologyDto };
+    const missingFields = getMissingEnglishFields(
+      'technology',
+      resultingTechnology,
+    );
+    if (missingFields.length > 0) {
+      throw new BadRequestException({
+        code: 'BILINGUAL_CONTENT_INCOMPLETE',
+        message: 'English technology content must be complete before display',
+        missingFields,
+      });
+    }
     const technology = await this.technologyModel
       .findByIdAndUpdate(id, updateTechnologyDto, { new: true })
       .exec();

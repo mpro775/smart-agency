@@ -202,7 +202,7 @@ const ScrollSnapContainer = ({
                     <motion.button
                       key={section.id}
                       onClick={() => navigateToSection(index)}
-                      className="group flex items-center gap-4 py-1.5 cursor-pointer bg-transparent border-0 outline-none w-full text-right"
+                      className="group flex items-center gap-4 py-1.5 cursor-pointer bg-transparent border-0 outline-none w-full text-start"
                       whileHover={{ x: -2 }}
                       whileTap={{ scale: 0.98 }}
                       aria-label={`${section.label} — ${
@@ -288,7 +288,7 @@ const ScrollSnapContainer = ({
           </div>
 
           <motion.div
-            className="mt-5 text-right pr-[22px]"
+            className="mt-5 text-start ps-[22px]"
             key={activeSection}
             initial={{ opacity: 0, y: 5 }}
             animate={{ opacity: 1, y: 0 }}

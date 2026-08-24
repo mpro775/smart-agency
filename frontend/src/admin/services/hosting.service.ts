@@ -37,6 +37,10 @@ export interface CreateHostingPackageDto {
   domainsEn?: string;
   discountPercentage?: number;
   promotionEndsAt?: string;
+  yearlyPrice?: number;
+  basePackageId?: string;
+  benefitHints?: Record<string, string>;
+  benefitHintsEn?: Record<string, string>;
 }
 
 export type UpdateHostingPackageDto = Partial<CreateHostingPackageDto>;
@@ -58,7 +62,7 @@ export const hostingService = {
   },
 
   getById: async (id: string): Promise<HostingPackage> => {
-    const response = await api.get<ApiResponse<HostingPackage>>(`/hosting-packages/${id}`);
+    const response = await api.get<ApiResponse<HostingPackage>>(`/hosting-packages/admin/${id}`);
     return response.data.data;
   },
 

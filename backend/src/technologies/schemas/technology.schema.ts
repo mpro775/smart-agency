@@ -18,9 +18,6 @@ export class Technology {
   @Prop({ required: true })
   name: string;
 
-  @Prop({ required: false })
-  nameEn?: string;
-
   @Prop()
   icon: string;
 

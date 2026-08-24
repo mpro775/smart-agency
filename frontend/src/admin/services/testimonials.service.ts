@@ -44,7 +44,7 @@ export const testimonialsService = {
   },
 
   getById: async (id: string): Promise<Testimonial> => {
-    const response = await api.get<ApiResponse<Testimonial>>(`/testimonials/${id}`);
+    const response = await api.get<ApiResponse<Testimonial>>(`/testimonials/admin/${id}`);
     return response.data.data;
   },
 

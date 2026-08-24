@@ -50,7 +50,7 @@ export function AboutCTA({ cta }: AboutCTAProps) {
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl bg-primary hover:bg-primary-dark text-white font-bold text-lg transition-all duration-300 hover:shadow-lg hover:shadow-primary/30 hover:-translate-y-0.5"
               >
                 <span>{cta.buttonText}</span>
-                <ArrowLeft className="w-5 h-5" />
+                <ArrowLeft className="w-5 h-5 directional-arrow" />
               </Link>
               
               {cta.secondaryButtonText && (

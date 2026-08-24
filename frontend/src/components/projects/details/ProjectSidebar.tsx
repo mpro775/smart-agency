@@ -4,17 +4,18 @@ import { motion } from "framer-motion";
 import { Info, User, Layers, Calendar, Cpu, Zap, Bookmark, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 import type { Project, Technology } from "../../../admin/types";
+import { useLocale } from "@/localization/LocaleLayout";
 
 interface ProjectSidebarProps {
   project: Project;
   categoryLabels: string[];
 }
 
-function formatArabicDate(value?: string) {
+function formatProjectDate(value: string | undefined, locale: "ar" | "en") {
   if (!value) return "-";
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return "-";
-  return new Intl.DateTimeFormat("ar", { year: "numeric", month: "long", day: "numeric" }).format(date);
+  return new Intl.DateTimeFormat(locale === "ar" ? "ar-SA" : "en-US", { year: "numeric", month: "long", day: "numeric" }).format(date);
 }
 
 const fadeUp = {
@@ -25,6 +26,7 @@ const fadeUp = {
 };
 
 export default function ProjectSidebar({ project, categoryLabels }: ProjectSidebarProps) {
+  const { locale } = useLocale();
   const groupedTechnologies = useMemo(() => {
     if (!Array.isArray(project.technologies)) return {};
     return project.technologies.reduce((groups, tech) => {
@@ -66,7 +68,7 @@ export default function ProjectSidebar({ project, categoryLabels }: ProjectSideb
               <span className="text-slate-500 flex items-center gap-2.5 text-sm font-bold">
                 <Layers className="w-4 h-4 text-teal-600" /> {tr("التصنيف")}</span>
               <span
-                className="font-extrabold text-slate-800 text-sm text-left truncate max-w-[170px]"
+                className="font-extrabold text-slate-800 text-sm text-end truncate max-w-[170px]"
                 title={categoryLabels.join(" / ")}
               >
                 {categoryLabels.join(" / ")}
@@ -94,7 +96,7 @@ export default function ProjectSidebar({ project, categoryLabels }: ProjectSideb
             <span className="text-slate-500 flex items-center gap-2.5 text-sm font-bold">
               <Calendar className="w-4 h-4 text-teal-600" /> {tr("سنة التنفيذ")}</span>
             <span className="font-extrabold text-slate-800 text-sm">
-              {project.year || formatArabicDate(project.createdAt)}
+              {project.year || formatProjectDate(project.createdAt, locale)}
             </span>
           </div>
         </div>
@@ -160,7 +162,7 @@ export default function ProjectSidebar({ project, categoryLabels }: ProjectSideb
             className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-teal-600 to-[#008080] text-white font-extrabold px-5 py-4 hover:shadow-lg hover:shadow-teal-500/15 active:scale-[0.98] transition-all duration-200"
           >
             <span>{tr("ابدأ مشروعك الآن")}</span>
-            <ArrowLeft className="w-4 h-4" />
+            <ArrowLeft className="w-4 h-4 directional-arrow" />
           </Link>
         </div>
       </motion.section>

@@ -14,9 +14,6 @@ export class CompanyInfo {
   @Prop({ required: true })
   googleMapsUrl: string;
 
-  @Prop({ required: false })
-  googleMapsUrlEn?: string;
-
   @Prop({ required: true })
   workingHours: string;
 
@@ -31,9 +28,6 @@ export class CompanyInfo {
 
   @Prop({ required: true })
   whatsappUrl: string;
-
-  @Prop({ required: false })
-  whatsappUrlEn?: string;
 
   @Prop({
     type: {

@@ -1,16 +1,32 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Faq, FaqDocument } from './schemas/faq.schema';
 import { CreateFaqDto, UpdateFaqDto, FilterFaqDto } from './dto';
 import { PaginatedResponseDto } from '../common/dto/pagination.dto';
+import { getMissingEnglishFields } from '../common/localization/translation-completeness';
 
 @Injectable()
 export class FaqsService {
   constructor(@InjectModel(Faq.name) private faqModel: Model<FaqDocument>) {}
 
   async create(createFaqDto: CreateFaqDto): Promise<FaqDocument> {
-    const faq = new this.faqModel(createFaqDto);
+    const missingFields = getMissingEnglishFields('faq', createFaqDto);
+    if (createFaqDto.isActive !== false && missingFields.length > 0) {
+      throw new BadRequestException({
+        code: 'BILINGUAL_CONTENT_INCOMPLETE',
+        message: 'English FAQ content must be complete before activation',
+        missingFields,
+      });
+    }
+    const faq = new this.faqModel({
+      ...createFaqDto,
+      categoryKey: createFaqDto.categoryKey.toLowerCase(),
+    });
     return faq.save();
   }
 
@@ -18,7 +34,14 @@ export class FaqsService {
     filterDto: FilterFaqDto,
     includeInactive = false,
   ): Promise<PaginatedResponseDto<FaqDocument>> {
-    const { page = 1, limit = 10, category, search, isActive } = filterDto;
+    const {
+      page = 1,
+      limit = 10,
+      category,
+      categoryKey,
+      search,
+      isActive,
+    } = filterDto;
 
     const query: any = {};
 
@@ -29,11 +52,13 @@ export class FaqsService {
       query.isActive = isActive;
     }
 
-    if (category) {
+    const selectedCategoryKey = categoryKey ?? category;
+    if (selectedCategoryKey) {
       query.$or = [
-        { categoryKey: category },
-        { category },
-        { categoryEn: category },
+        { categoryKey: selectedCategoryKey },
+        // Transitional fallback for records that predate categoryKey.
+        { category: selectedCategoryKey },
+        { categoryEn: selectedCategoryKey },
       ];
     }
 
@@ -82,19 +107,50 @@ export class FaqsService {
 
   async findByCategory(category: string): Promise<FaqDocument[]> {
     return this.faqModel
-      .find({ category, isActive: true })
+      .find({
+        isActive: true,
+        $or: [
+          { categoryKey: category },
+          { category },
+          { categoryEn: category },
+        ],
+      })
       .sort({ order: 1, createdAt: -1 })
       .exec();
   }
 
-  async getCategories(): Promise<string[]> {
-    const categories = await this.faqModel.distinct('category', {
-      isActive: true,
-    });
-    return categories;
+  async getCategories(): Promise<
+    { key: string; label: string; labelEn?: string }[]
+  > {
+    return this.faqModel.aggregate([
+      { $match: { isActive: true } },
+      {
+        $group: {
+          _id: { $ifNull: ['$categoryKey', '$category'] },
+          label: { $first: '$category' },
+          labelEn: { $first: '$categoryEn' },
+        },
+      },
+      { $sort: { _id: 1 } },
+      { $project: { _id: 0, key: '$_id', label: 1, labelEn: 1 } },
+    ]);
   }
 
   async update(id: string, updateFaqDto: UpdateFaqDto): Promise<FaqDocument> {
+    const current = await this.faqModel.findById(id).lean().exec();
+    if (!current) throw new NotFoundException(`FAQ with ID ${id} not found`);
+    const resultingFaq = { ...current, ...updateFaqDto };
+    const missingFields = getMissingEnglishFields('faq', resultingFaq);
+    if (resultingFaq.isActive && missingFields.length > 0) {
+      throw new BadRequestException({
+        code: 'BILINGUAL_CONTENT_INCOMPLETE',
+        message: 'English FAQ content must be complete before activation',
+        missingFields,
+      });
+    }
+    if (updateFaqDto.categoryKey) {
+      updateFaqDto.categoryKey = updateFaqDto.categoryKey.toLowerCase();
+    }
     const faq = await this.faqModel
       .findByIdAndUpdate(id, updateFaqDto, { new: true })
       .exec();
@@ -119,6 +175,16 @@ export class FaqsService {
       throw new NotFoundException(`FAQ with ID ${id} not found`);
     }
 
+    if (!faq.isActive) {
+      const missingFields = getMissingEnglishFields('faq', faq.toObject());
+      if (missingFields.length > 0) {
+        throw new BadRequestException({
+          code: 'BILINGUAL_CONTENT_INCOMPLETE',
+          message: 'English FAQ content must be complete before activation',
+          missingFields,
+        });
+      }
+    }
     faq.isActive = !faq.isActive;
     return faq.save();
   }

@@ -45,7 +45,7 @@ const initialFormData: ContactFormData = {
   message: "",
 };
 
-const contactReasons: { value: ContactReason; label: string; icon: string }[] = [
+const getContactReasons = (): { value: ContactReason; label: string; icon: string }[] => [
   { value: "general", label: tr("استفسار عام"), icon: "💬" },
   { value: "partnership", label: tr("شراكة"), icon: "🤝" },
   { value: "support", label: tr("دعم فني"), icon: "🛠️" },
@@ -53,7 +53,7 @@ const contactReasons: { value: ContactReason; label: string; icon: string }[] = 
   { value: "sales", label: tr("طلب عرض سعر"), icon: "💰" },
 ];
 
-const faqItems = [
+const getFaqItems = () => [
   {
     question: tr("هل الاستشارة الأولية مجانية؟"),
     answer:
@@ -75,7 +75,7 @@ const faqItems = [
   },
 ];
 
-const decisionGuide = [
+const getDecisionGuide = () => [
   {
     condition: tr("لديك فكرة مشروع واضحة"),
     action: tr("ابدأ مشروعك"),
@@ -106,6 +106,9 @@ const decisionGuide = [
 
 export default function ContactPage() {
   const { locale } = useLocale();
+  const contactReasons = getContactReasons();
+  const faqItems = getFaqItems();
+  const decisionGuide = getDecisionGuide();
   const [formData, setFormData] = useState<ContactFormData>(initialFormData);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
@@ -235,7 +238,7 @@ export default function ContactPage() {
                   transition={{ delay: 0.3 + i * 0.1 }}
                   className="px-4 py-2 rounded-full smart-card-dark text-gray-300 text-sm backdrop-blur-sm border border-white/5"
                 >
-                  <FiCheck className="inline-block ml-1 text-[#008080]" />{" "}
+                  <FiCheck className="inline-block ms-1 text-[#008080]" />{" "}
                   {badge}
                 </motion.span>
               ))}
@@ -549,7 +552,7 @@ export default function ContactPage() {
                 />
                 <label
                   htmlFor="fullName"
-                  className="absolute right-4 top-4 text-gray-500 text-sm transition-all peer-placeholder-shown:text-gray-400 peer-focus:text-[#008080] peer-focus:text-xs peer-focus:-top-1 peer-focus:pr-0"
+                  className="absolute start-4 top-4 text-gray-500 text-sm transition-all peer-placeholder-shown:text-gray-400 peer-focus:text-[#008080] peer-focus:text-xs peer-focus:-top-1 peer-focus:ps-0"
                 >
                   {tr("الاسم الكامل *")}</label>
               </div>
@@ -566,7 +569,7 @@ export default function ContactPage() {
                 />
                 <label
                   htmlFor="email"
-                  className="absolute right-4 top-4 text-gray-500 text-sm transition-all peer-placeholder-shown:text-gray-400 peer-focus:text-[#008080] peer-focus:text-xs peer-focus:-top-1 peer-focus:pr-0"
+                  className="absolute start-4 top-4 text-gray-500 text-sm transition-all peer-placeholder-shown:text-gray-400 peer-focus:text-[#008080] peer-focus:text-xs peer-focus:-top-1 peer-focus:ps-0"
                 >
                   {tr("البريد الإلكتروني *")}</label>
               </div>
@@ -584,7 +587,7 @@ export default function ContactPage() {
               />
               <label
                 htmlFor="phone"
-                className="absolute right-4 top-4 text-gray-500 text-sm transition-all peer-placeholder-shown:text-gray-400 peer-focus:text-[#008080] peer-focus:text-xs peer-focus:-top-1 peer-focus:pr-0"
+                className="absolute start-4 top-4 text-gray-500 text-sm transition-all peer-placeholder-shown:text-gray-400 peer-focus:text-[#008080] peer-focus:text-xs peer-focus:-top-1 peer-focus:ps-0"
               >
                 {tr("رقم الهاتف (اختياري)")}</label>
             </div>
@@ -631,7 +634,7 @@ export default function ContactPage() {
               />
               <label
                 htmlFor="message"
-                className="absolute right-4 top-4 text-gray-500 text-sm transition-all peer-placeholder-shown:text-gray-400 peer-focus:text-[#008080] peer-focus:text-xs peer-focus:-top-1 peer-focus:pr-0"
+                className="absolute start-4 top-4 text-gray-500 text-sm transition-all peer-placeholder-shown:text-gray-400 peer-focus:text-[#008080] peer-focus:text-xs peer-focus:-top-1 peer-focus:ps-0"
               >
                 {tr("رسالتك *")}</label>
             </div>
@@ -777,9 +780,9 @@ export default function ContactPage() {
                 <motion.button
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
                   whileHover={{ backgroundColor: "rgba(255,255,255,0.03)" }}
-                  className="w-full flex items-center justify-between p-5 text-right transition-colors"
+                  className="w-full flex items-center justify-between p-5 text-start transition-colors"
                 >
-                  <span className="font-medium text-white text-right flex-1 ml-4">
+                  <span className="font-medium text-white text-start flex-1 ms-4">
                     {faq.question}
                   </span>
                   <motion.div

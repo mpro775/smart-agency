@@ -2,6 +2,7 @@ import {
   Injectable,
   NotFoundException,
   ConflictException,
+  BadRequestException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -11,6 +12,7 @@ import {
 } from './schemas/project-category.schema';
 import { CreateProjectCategoryDto } from './dto/create-project-category.dto';
 import { UpdateProjectCategoryDto } from './dto/update-project-category.dto';
+import { getMissingEnglishFields } from '../common/localization/translation-completeness';
 
 @Injectable()
 export class ProjectCategoriesService {
@@ -22,6 +24,17 @@ export class ProjectCategoriesService {
   async create(
     createCategoryDto: CreateProjectCategoryDto,
   ): Promise<ProjectCategoryDocument> {
+    const missingFields = getMissingEnglishFields(
+      'projectCategory',
+      createCategoryDto,
+    );
+    if (createCategoryDto.isActive !== false && missingFields.length > 0) {
+      throw new BadRequestException({
+        code: 'BILINGUAL_CONTENT_INCOMPLETE',
+        message: 'English category content must be complete before activation',
+        missingFields,
+      });
+    }
     // Check if value already exists
     const existingCategory = await this.categoryModel
       .findOne({ value: createCategoryDto.value })
@@ -69,6 +82,20 @@ export class ProjectCategoriesService {
     id: string,
     updateCategoryDto: UpdateProjectCategoryDto,
   ): Promise<ProjectCategoryDocument> {
+    const current = await this.categoryModel.findById(id).lean().exec();
+    if (!current) throw new NotFoundException('Category not found');
+    const resultingCategory = { ...current, ...updateCategoryDto };
+    const missingFields = getMissingEnglishFields(
+      'projectCategory',
+      resultingCategory,
+    );
+    if (resultingCategory.isActive && missingFields.length > 0) {
+      throw new BadRequestException({
+        code: 'BILINGUAL_CONTENT_INCOMPLETE',
+        message: 'English category content must be complete before activation',
+        missingFields,
+      });
+    }
     // Check if value already exists (excluding current category)
     if (updateCategoryDto.value) {
       const existingCategory = await this.categoryModel

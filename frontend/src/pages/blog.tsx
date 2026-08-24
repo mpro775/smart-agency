@@ -55,7 +55,7 @@ export default function BlogPage() {
           page,
           limit: pageSize,
           tag: selectedTag !== "all" ? selectedTag : undefined,
-          category: selectedCategory !== "all" ? selectedCategory : undefined,
+          categoryKey: selectedCategory !== "all" ? selectedCategory : undefined,
           contentType: contentType !== "all" ? contentType : undefined,
           search: search || undefined,
           sort,
@@ -152,7 +152,7 @@ export default function BlogPage() {
                       disabled={page === 1}
                       className="rounded-xl border border-slate-200 p-3 text-slate-600 disabled:opacity-40"
                     >
-                      <ChevronRight className="h-4 w-4" />
+                      <ChevronRight className="h-4 w-4 directional-arrow" />
                     </button>
                     <span className="rounded-xl bg-slate-100 px-4 py-3 text-sm text-slate-700">
                       {page} / {totalPages}
@@ -162,7 +162,7 @@ export default function BlogPage() {
                       disabled={page === totalPages}
                       className="rounded-xl border border-slate-200 p-3 text-slate-600 disabled:opacity-40"
                     >
-                      <ChevronLeft className="h-4 w-4" />
+                      <ChevronLeft className="h-4 w-4 directional-arrow" />
                     </button>
                   </div>
                 )}

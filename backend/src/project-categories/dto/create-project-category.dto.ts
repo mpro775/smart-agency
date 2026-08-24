@@ -16,10 +16,6 @@ export class CreateProjectCategoryDto {
   @IsNotEmpty({ message: 'Value is required' })
   value: string;
 
-  @IsOptional()
-  @IsString()
-  valueEn?: string;
-
   @ApiProperty({
     description: 'Category label in Arabic',
     example: 'مواقع إلكترونية',

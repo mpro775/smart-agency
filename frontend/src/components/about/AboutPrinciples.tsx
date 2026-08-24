@@ -55,7 +55,7 @@ export function AboutPrinciples({ values }: AboutPrinciplesProps) {
             transition={{ delay: index * 0.1 }}
             className="group bg-white rounded-3xl p-8 border border-slate-200/80 hover:border-primary/25 hover:shadow-xl hover:shadow-slate-200/40 transition-all duration-300 hover:-translate-y-1"
           >
-            <div className="flex items-start gap-5 text-right">
+            <div className="flex items-start gap-5 text-start">
               <div className="w-14 h-14 rounded-2xl bg-primary/5 border border-primary/15 flex items-center justify-center text-primary flex-shrink-0 group-hover:bg-primary group-hover:text-white transition-all duration-300">
                 {getIconComponent(value.icon, 26) || <FiIcons.FiTarget size={26} />}
               </div>

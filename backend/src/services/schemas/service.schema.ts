@@ -23,14 +23,8 @@ export class Service {
   @Prop()
   iconType: string;
 
-  @Prop({ required: false })
-  iconTypeEn?: string; // 'react-icon' | 'image' | 'emoji'
-
   @Prop({ default: 'from-teal-500 to-teal-600' })
   gradient: string;
-
-  @Prop({ required: false })
-  gradientEn?: string; // Tailwind gradient classes
 
   @Prop({ type: [String], default: [] })
   features: string[];

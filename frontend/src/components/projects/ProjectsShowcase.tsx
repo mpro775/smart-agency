@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
 import { SectionShell } from "../brand";
 import { publicProjectsService } from "../../services/projects.service";
+import type { ProjectCategoryOption } from "../../services/projects.service";
 import type { Project } from "../../admin/types";
 import type { FilterCategory } from "./ProjectFilters";
 import type { StatItem } from "./ProjectStats";
@@ -16,7 +17,7 @@ import ProjectBentoGrid from "./ProjectBentoGrid";
 interface ProjectsShowcaseProps {
   showViewAllLink?: boolean;
   initialProjects?: Project[];
-  initialCategories?: { value: string; label: string; count?: number }[];
+  initialCategories?: ProjectCategoryOption[];
 }
 
 export default function ProjectsShowcase({
@@ -31,8 +32,8 @@ const [selectedCategory, setSelectedCategory] = useState("all");
       ? [
           { value: "all", label: tr("الكل"), count: 0 },
           ...initialCategories.map((c) => ({
-            value: c.value,
-            label: c.label,
+            value: c._id,
+            label: c.name,
             count: c.count || 0,
           })),
         ]
@@ -53,9 +54,9 @@ const [selectedCategory, setSelectedCategory] = useState("all");
         setCategories([
           { value: "all", label: tr("الكل"), count: 0 },
           ...data.map((c) => ({
-            value: c._id || c.value,
-            label: c.label,
-            count: c.count,
+            value: c._id,
+            label: c.name,
+            count: c.count || 0,
           })),
         ]);
       } catch (err) {
@@ -252,7 +253,7 @@ const [selectedCategory, setSelectedCategory] = useState("all");
                   to="/projects"
                   className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-gradient-to-r from-[var(--smart-primary)] to-[var(--smart-primary-light)] text-white font-semibold shadow-[var(--smart-shadow-brand)] hover:shadow-xl transition-all hover:scale-105"
                 >
-                  {tr("عرض كل المشاريع")}<FiArrowLeft className="w-4 h-4" />
+                  {tr("عرض كل المشاريع")}<FiArrowLeft className="w-4 h-4 directional-arrow" />
                 </Link>
               </motion.div>
             )}

@@ -64,7 +64,7 @@ export const teamService = {
   },
 
   getById: async (id: string): Promise<TeamMember> => {
-    const response = await api.get<ApiResponse<TeamMember>>(`/team/${id}`);
+    const response = await api.get<ApiResponse<TeamMember>>(`/team/admin/${id}`);
     return response.data.data;
   },
 

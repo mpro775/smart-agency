@@ -79,7 +79,7 @@ const initialData: WizardData = {
   projectAnswers: {},
 };
 
-const serviceCards = [
+const getServiceCards = () => [
   {
     value: ServiceType.WEB_APP,
     label: tr("موقع إلكتروني"),
@@ -124,7 +124,7 @@ const serviceCards = [
   },
 ];
 
-const budgetCards = [
+const getBudgetCards = () => [
   { value: BudgetRange.SMALL, label: tr("أقل من 1,000 دولار") },
   { value: BudgetRange.MEDIUM, label: tr("1,000 - 5,000 دولار") },
   { value: BudgetRange.LARGE, label: tr("5,000 - 15,000 دولار") },
@@ -132,28 +132,28 @@ const budgetCards = [
   { value: BudgetRange.NOT_SPECIFIED, label: tr("غير محدد") },
 ];
 
-const timelineCards = [
+const getTimelineCards = () => [
   { value: Timeline.URGENT, label: tr("عاجل") },
   { value: Timeline.ONE_MONTH, label: tr("خلال شهر") },
   { value: Timeline.TWO_THREE_MONTHS, label: tr("خلال 2 - 3 أشهر") },
   { value: Timeline.FLEXIBLE, label: tr("مرن") },
 ];
 
-const companySizeOptions = [
+const getCompanySizeOptions = () => [
   { value: CompanySize.INDIVIDUAL, label: tr("فرد / مستقل") },
   { value: CompanySize.STARTUP, label: tr("شركة ناشئة") },
   { value: CompanySize.SMALL_BUSINESS, label: tr("مشروع صغير") },
   { value: CompanySize.COMPANY, label: tr("شركة متوسطة / كبيرة") },
 ];
 
-const projectStageOptions = [
+const getProjectStageOptions = () => [
   { value: ProjectStage.IDEA, label: tr("فكرة أولية") },
   { value: ProjectStage.EXISTING_BUSINESS, label: tr("مشروع قائم") },
   { value: ProjectStage.REDESIGN, label: tr("إعادة تصميم") },
   { value: ProjectStage.SCALING, label: tr("توسع وتطوير") },
 ];
 
-const contactMethodOptions = [
+const getContactMethodOptions = () => [
   { value: PreferredContactMethod.WHATSAPP, label: tr("واتساب"), icon: <MessageCircle size={18} /> },
   { value: PreferredContactMethod.PHONE, label: tr("مكالمة هاتفية"), icon: <Phone size={18} /> },
   { value: PreferredContactMethod.EMAIL, label: tr("بريد إلكتروني"), icon: <Mail size={18} /> },
@@ -169,36 +169,42 @@ function calculatePriority(data: Partial<WizardData>): LeadPriority {
 }
 
 function getServiceLabel(value: ServiceType | ""): string {
-  const card = serviceCards.find((c) => c.value === value);
+  const card = getServiceCards().find((c) => c.value === value);
   return card?.label || "-";
 }
 
 function getBudgetLabel(value: BudgetRange | ""): string {
-  const card = budgetCards.find((c) => c.value === value);
+  const card = getBudgetCards().find((c) => c.value === value);
   return card?.label || "-";
 }
 
 function getTimelineLabel(value: Timeline | ""): string {
-  const card = timelineCards.find((c) => c.value === value);
+  const card = getTimelineCards().find((c) => c.value === value);
   return card?.label || "-";
 }
 
 function getStageLabel(value: ProjectStage | ""): string {
-  const opt = projectStageOptions.find((o) => o.value === value);
+  const opt = getProjectStageOptions().find((o) => o.value === value);
   return opt?.label || "-";
 }
 
 function getCompanySizeLabel(value: CompanySize | ""): string {
-  const opt = companySizeOptions.find((o) => o.value === value);
+  const opt = getCompanySizeOptions().find((o) => o.value === value);
   return opt?.label || "-";
 }
 
 function getContactMethodLabel(value: PreferredContactMethod | ""): string {
-  const opt = contactMethodOptions.find((o) => o.value === value);
+  const opt = getContactMethodOptions().find((o) => o.value === value);
   return opt?.label || "-";
 }
 
 export default function QuotePage() {
+  const serviceCards = getServiceCards();
+  const budgetCards = getBudgetCards();
+  const timelineCards = getTimelineCards();
+  const companySizeOptions = getCompanySizeOptions();
+  const projectStageOptions = getProjectStageOptions();
+  const contactMethodOptions = getContactMethodOptions();
   const [currentStep, setCurrentStep] = useState<Step>(1);
   const [data, setData] = useState<WizardData>(initialData);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -542,7 +548,7 @@ export default function QuotePage() {
           <p className="text-gray-600 text-lg mb-8 leading-relaxed">
             {tr("سيقوم فريق سمارت بمراجعة الطلب وتحضير تصوّر أولي خلال 24 ساعة عمل.")}</p>
 
-          <div className="space-y-3 mb-10 text-right">
+          <div className="space-y-3 mb-10 text-start">
             {[tr("مراجعة الطلب"), tr("تحديد أفضل حل تقني"), tr("التواصل معك"), tr("إرسال تصوّر أولي أو تحديد اجتماع")].map(
               (step, i) => (
                 <motion.div
@@ -764,7 +770,7 @@ export default function QuotePage() {
                           key={card.value}
                           type="button"
                           onClick={() => updateField("serviceType", card.value)}
-                          className={`p-5 rounded-xl border text-right transition-all ${
+                          className={`p-5 rounded-xl border text-start transition-all ${
                             data.serviceType === card.value
                               ? "border-[#008080] bg-[#008080]/5 shadow-md"
                               : "border-gray-200 hover:border-gray-300 hover:shadow-sm"
@@ -1025,7 +1031,7 @@ export default function QuotePage() {
                       : "text-gray-600 hover:bg-gray-100"
                   }`}
                 >
-                  <FiArrowRight size={16} />
+                  <FiArrowRight size={16} className="directional-arrow" />
                   {tr("السابق")}</button>
 
                 {currentStep < 5 ? (
@@ -1039,7 +1045,7 @@ export default function QuotePage() {
                         : "bg-gray-200 text-gray-400 cursor-not-allowed"
                     }`}
                   >
-                    {tr("التالي")}<FiArrowLeft size={16} />
+                    {tr("التالي")}<FiArrowLeft size={16} className="directional-arrow" />
                   </button>
                 ) : (
                   <motion.button

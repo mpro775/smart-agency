@@ -57,7 +57,7 @@ export default function LatestBlogs({ initialBlogs }: LatestBlogsProps) {
               {tr("محتوى عملي حول بناء المواقع، المتاجر، الأتمتة، وتجربة المستخدم التي تصنع فرقاً في النمو.")}</p>
           </div>
           <Link to="/blog" className="inline-flex items-center gap-2 font-semibold text-[var(--smart-primary)] hover:text-[var(--smart-primary-dark)]">
-            {tr("عرض كل المقالات")}<ArrowLeft className="h-4 w-4" />
+            {tr("عرض كل المقالات")}<ArrowLeft className="h-4 w-4 directional-arrow" />
           </Link>
         </div>
 

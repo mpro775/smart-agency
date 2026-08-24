@@ -39,9 +39,6 @@ export class HostingPackage {
   @Prop({ default: 'USD' })
   currency: string;
 
-  @Prop({ required: false })
-  currencyEn?: string;
-
   @Prop()
   originalPrice: number; // For showing discounts (strike-through price)
 
@@ -122,11 +119,11 @@ export class HostingPackage {
   @Prop({ type: 'ObjectId', ref: 'HostingPackage' })
   basePackageId?: string;
 
-  @Prop({ required: false })
-  basePackageIdEn?: string; // Reference to base package for feature stacking
-
   @Prop({ type: Object })
   benefitHints?: { [key: string]: string }; // Tooltips for technical specs
+
+  @Prop({ type: Object, required: false })
+  benefitHintsEn?: { [key: string]: string };
 
   createdAt?: Date;
   updatedAt?: Date;

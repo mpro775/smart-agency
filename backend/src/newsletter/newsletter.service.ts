@@ -17,7 +17,7 @@ export class NewsletterService {
     subscribeDto: SubscribeNewsletterDto,
   ): Promise<{ message: string; success: boolean }> {
     try {
-      const { email, source = 'footer' } = subscribeDto;
+      const { email, source = 'footer', locale = 'ar' } = subscribeDto;
 
       // التحقق من وجود البريد الإلكتروني بالفعل
       const existingSubscription = await this.newsletterModel.findOne({
@@ -35,6 +35,7 @@ export class NewsletterService {
       const newSubscription = new this.newsletterModel({
         email: email.toLowerCase().trim(),
         source,
+        locale,
         subscribedAt: new Date(),
         isActive: true,
       });

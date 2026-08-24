@@ -26,7 +26,7 @@ const preferredCategoryOrder = [
   "Other",
 ];
 
-const categoryMetaMap: Record<
+const getCategoryMetaMap = (): Record<
   string,
   {
     titleAr: string;
@@ -34,7 +34,7 @@ const categoryMetaMap: Record<
     description: string;
     icon: React.ElementType;
   }
-> = {
+> => ({
   Backend: {
     titleAr: tr("هندسة الأنظمة"),
     label: "Backend",
@@ -91,7 +91,7 @@ const categoryMetaMap: Record<
       tr("تقنيات وأدوات داعمة نستخدمها حسب احتياج كل منتج لضمان تجربة أفضل واستقرار أعلى."),
     icon: Boxes,
   },
-};
+});
 
 function TechHeader() {
   return (
@@ -170,6 +170,7 @@ function CategoryTabs({
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
       {categoryNames.map((category) => {
+        const categoryMetaMap = getCategoryMetaMap();
         const meta = categoryMetaMap[category] || categoryMetaMap.Other;
         const Icon = meta.icon;
         const isActive = activeCategory === category;
@@ -287,6 +288,7 @@ function TechCommandCenter({
   setActiveCategory: (category: string) => void;
 }) {
   const activeTechnologies = grouped[activeCategory] || [];
+  const categoryMetaMap = getCategoryMetaMap();
   const meta = categoryMetaMap[activeCategory] || categoryMetaMap.Other;
   const Icon = meta.icon;
 

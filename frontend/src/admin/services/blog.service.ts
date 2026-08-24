@@ -6,7 +6,7 @@ export interface BlogFilters {
   limit?: number;
   tag?: string;
   isPublished?: boolean;
-  category?: string;
+  categoryKey?: string;
   contentType?: string;
   isFeatured?: boolean;
   search?: string;
@@ -26,14 +26,14 @@ export interface CreateBlogDto {
   coverAltEn?: string;
   tags?: string[];
   tagsEn?: string[];
-  category?: string;
+  category: string;
   categoryEn?: string;
+  categoryKey: string;
   contentType?: 'article' | 'guide' | 'case-study' | 'insight' | 'news';
   isPublished?: boolean;
   isFeatured?: boolean;
   featuredOrder?: number;
   readingTime?: number;
-  readingTimeEn?: number;
   authorName?: string;
   authorNameEn?: string;
   authorRole?: string;
@@ -57,8 +57,6 @@ export interface CreateBlogDto {
     metaDescriptionEn?: string;
     keywords?: string[];
     keywordsEn?: string[];
-    canonicalUrl?: string;
-    canonicalUrlEn?: string;
     ogTitle?: string;
     ogTitleEn?: string;
     ogDescription?: string;
@@ -83,7 +81,7 @@ export const blogService = {
     if (filters?.limit) params.append('limit', String(filters.limit));
     if (filters?.tag) params.append('tag', filters.tag);
     if (filters?.isPublished !== undefined) params.append('isPublished', String(filters.isPublished));
-    if (filters?.category) params.append('category', filters.category);
+    if (filters?.categoryKey) params.append('categoryKey', filters.categoryKey);
     if (filters?.contentType) params.append('contentType', filters.contentType);
     if (filters?.isFeatured !== undefined) params.append('isFeatured', String(filters.isFeatured));
     if (filters?.search) params.append('search', filters.search);

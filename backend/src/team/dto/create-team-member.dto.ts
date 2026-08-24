@@ -56,11 +56,6 @@ export class CreateTeamMemberDto {
   @IsString()
   photo?: string;
 
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  photoEn?: string;
-
   @ApiPropertyOptional({
     description: 'Short bio',
     example: 'مطور خبير مع 5 سنوات خبرة في تطوير تطبيقات الويب',
@@ -127,11 +122,6 @@ export class CreateTeamMemberDto {
   @IsOptional()
   @IsString()
   websiteUrl?: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  websiteUrlEn?: string;
 
   @ApiPropertyOptional({
     description: 'Skills and specializations',

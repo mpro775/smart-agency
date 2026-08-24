@@ -15,18 +15,7 @@ import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { FilterProjectsDto } from './dto/filter-projects.dto';
 import { PaginatedResponseDto } from '../common/dto/pagination.dto';
-
-const hasRequiredEnglishProjectContent = (
-  project: CreateProjectDto | UpdateProjectDto,
-) =>
-  Boolean(
-    project.titleEn?.trim() &&
-    project.summaryEn?.trim() &&
-    project.challengeEn?.trim() &&
-    project.solutionEn?.trim() &&
-    project.seo?.metaTitleEn?.trim() &&
-    project.seo?.metaDescriptionEn?.trim(),
-  );
+import { getMissingEnglishFields } from '../common/localization/translation-completeness';
 
 @Injectable()
 export class ProjectsService {
@@ -37,14 +26,13 @@ export class ProjectsService {
   ) {}
 
   async create(createProjectDto: CreateProjectDto): Promise<ProjectDocument> {
-    if (
-      createProjectDto.isPublished !== false &&
-      !hasRequiredEnglishProjectContent(createProjectDto)
-    ) {
+    const missingFields = getMissingEnglishFields('project', createProjectDto);
+    if (createProjectDto.isPublished !== false && missingFields.length > 0) {
       throw new BadRequestException({
         code: 'BILINGUAL_CONTENT_INCOMPLETE',
         message:
           'English project content and SEO must be complete before publishing',
+        missingFields,
       });
     }
     const existingProject = await this.projectModel
@@ -147,7 +135,10 @@ export class ProjectsService {
     // Get paginated results
     const projectsQuery: any = this.projectModel
       .find(query)
-      .populate('technologies', 'name icon category description tooltip')
+      .populate(
+        'technologies',
+        'name icon category description descriptionEn tooltip tooltipEn',
+      )
       .populate('categoryIds')
       .sort({ sortOrder: 1, createdAt: -1 })
       .skip((page - 1) * limit)
@@ -169,7 +160,10 @@ export class ProjectsService {
   async findFeatured(): Promise<ProjectDocument[]> {
     return this.projectModel
       .find({ isFeatured: true, isPublished: true })
-      .populate('technologies', 'name icon category description tooltip')
+      .populate(
+        'technologies',
+        'name icon category description descriptionEn tooltip tooltipEn',
+      )
       .populate('categoryIds')
       .sort({ featuredOrder: 1, sortOrder: 1, createdAt: -1 })
       .limit(6)
@@ -179,7 +173,10 @@ export class ProjectsService {
   async findBySlug(slug: string): Promise<ProjectDocument> {
     const project = (await this.projectModel
       .findOne({ slug: slug.toLowerCase(), isPublished: true })
-      .populate('technologies', 'name icon category description tooltip')
+      .populate(
+        'technologies',
+        'name icon category description descriptionEn tooltip tooltipEn',
+      )
       .populate('categoryIds')
       .select(
         'title titleEn slug summary summaryEn challenge challengeEn solution solutionEn results features featuresEn images technologies clientName clientNameEn clientLogo categoryIds industry industryEn duration durationEn year videoUrl stats projectUrl isFeatured seo',
@@ -197,7 +194,10 @@ export class ProjectsService {
   async findOne(id: string): Promise<ProjectDocument> {
     const project = await this.projectModel
       .findById(id)
-      .populate('technologies', 'name icon category description tooltip')
+      .populate(
+        'technologies',
+        'name icon category description descriptionEn tooltip tooltipEn',
+      )
       .populate('categoryIds')
       .exec();
 
@@ -211,7 +211,10 @@ export class ProjectsService {
   async findPublicById(id: string): Promise<ProjectDocument> {
     const project = (await this.projectModel
       .findOne({ _id: id, isPublished: true })
-      .populate('technologies', 'name icon category description tooltip')
+      .populate(
+        'technologies',
+        'name icon category description descriptionEn tooltip tooltipEn',
+      )
       .populate('categoryIds')
       .select(
         'title titleEn slug summary summaryEn challenge challengeEn solution solutionEn results features featuresEn images technologies clientName clientNameEn clientLogo categoryIds industry industryEn duration durationEn year videoUrl stats projectUrl isFeatured seo',
@@ -233,18 +236,21 @@ export class ProjectsService {
     const currentProject = await this.projectModel.findById(id).lean().exec();
     if (!currentProject) throw new NotFoundException('Project not found');
 
-    if (
-      updateProjectDto.isPublished &&
-      !currentProject.isPublished &&
-      !hasRequiredEnglishProjectContent({
-        ...(currentProject as unknown as CreateProjectDto),
-        ...updateProjectDto,
-      })
-    ) {
+    const resultingProject = {
+      ...(currentProject as unknown as CreateProjectDto),
+      ...updateProjectDto,
+      seo: {
+        ...(currentProject.seo as Record<string, unknown>),
+        ...updateProjectDto.seo,
+      },
+    };
+    const missingFields = getMissingEnglishFields('project', resultingProject);
+    if (resultingProject.isPublished && missingFields.length > 0) {
       throw new BadRequestException({
         code: 'BILINGUAL_CONTENT_INCOMPLETE',
         message:
           'English project content and SEO must be complete before publishing',
+        missingFields,
       });
     }
     if (updateProjectDto.slug) {
@@ -293,7 +299,10 @@ export class ProjectsService {
 
     const project = await this.projectModel
       .findByIdAndUpdate(id, finalUpdatePayload, { new: true })
-      .populate('technologies', 'name icon category description tooltip')
+      .populate(
+        'technologies',
+        'name icon category description descriptionEn tooltip tooltipEn',
+      )
       .populate('categoryIds')
       .exec();
 
@@ -312,7 +321,7 @@ export class ProjectsService {
   }
 
   async getCategories(): Promise<
-    { _id?: string; value: string; label: string; count: number }[]
+    { _id: string; key: string; name: string; nameEn?: string; count: number }[]
   > {
     // Get categories from the database collection
     const dbCategories = await this.categoryModel
@@ -331,11 +340,9 @@ export class ProjectsService {
           .exec();
         return {
           _id: cat._id.toString(),
-          value: cat.value,
-          label: cat.label,
-          labelEn: cat.labelEn,
-          description: cat.description,
-          descriptionEn: cat.descriptionEn,
+          key: cat.value,
+          name: cat.label,
+          nameEn: cat.labelEn,
           count,
         };
       }),

@@ -20,6 +20,14 @@ import { ResponseMessage } from '../common/decorators';
 export class CompanyInfoController {
   constructor(private readonly companyInfoService: CompanyInfoService) {}
 
+  @Get('admin')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @ApiBearerAuth('JWT-auth')
+  @ResponseMessage('Company information fetched successfully')
+  findOneAdmin() {
+    return this.companyInfoService.findOne();
+  }
+
   @Get()
   @Public()
   @ApiOperation({ summary: 'Get company information' })

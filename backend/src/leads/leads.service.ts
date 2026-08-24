@@ -19,7 +19,10 @@ export class LeadsService {
   ) {}
 
   async create(createLeadDto: CreateLeadDto): Promise<LeadDocument> {
-    const lead = new this.leadModel(createLeadDto);
+    const lead = new this.leadModel({
+      ...createLeadDto,
+      locale: createLeadDto.locale ?? 'ar',
+    });
     const savedLead = await lead.save();
 
     // Send to n8n webhook (fire and forget)
@@ -47,6 +50,7 @@ export class LeadsService {
         serviceType: lead.serviceType,
         message: lead.message,
         source: lead.source,
+        locale: lead.locale,
         createdAt: lead.createdAt,
       });
 

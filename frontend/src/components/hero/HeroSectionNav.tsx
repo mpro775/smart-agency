@@ -1,7 +1,7 @@
 import { tr } from "@/i18n";
 import { motion } from "framer-motion";
 
-const sections = [
+const getSections = () => [
   { number: "01", label: tr("الرئيسية"), active: true },
   { number: "02", label: tr("من نحن") },
   { number: "03", label: tr("أعمالنا") },
@@ -11,6 +11,7 @@ const sections = [
 ];
 
 const HeroSectionNav = () => {
+  const sections = getSections();
   return (
     <motion.div
       initial={{ opacity: 0, x: 20 }}

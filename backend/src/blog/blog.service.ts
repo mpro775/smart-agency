@@ -12,15 +12,7 @@ import { UpdateBlogDto } from './dto/update-blog.dto';
 import { FilterBlogDto } from './dto/filter-blog.dto';
 import { PaginatedResponseDto } from '../common/dto/pagination.dto';
 import type { SupportedLocale } from '../common/localization/locale';
-
-const hasRequiredEnglishBlogContent = (blog: CreateBlogDto | UpdateBlogDto) =>
-  Boolean(
-    blog.titleEn?.trim() &&
-    blog.excerptEn?.trim() &&
-    blog.contentEn?.trim() &&
-    blog.seo?.metaTitleEn?.trim() &&
-    blog.seo?.metaDescriptionEn?.trim(),
-  );
+import { getMissingEnglishFields } from '../common/localization/translation-completeness';
 
 @Injectable()
 export class BlogService {
@@ -40,14 +32,13 @@ export class BlogService {
     createBlogDto: CreateBlogDto,
     authorId: string,
   ): Promise<BlogDocument> {
-    if (
-      createBlogDto.isPublished &&
-      !hasRequiredEnglishBlogContent(createBlogDto)
-    ) {
+    const missingFields = getMissingEnglishFields('blog', createBlogDto);
+    if (createBlogDto.isPublished && missingFields.length > 0) {
       throw new BadRequestException({
         code: 'BILINGUAL_CONTENT_INCOMPLETE',
         message:
           'English blog content and SEO must be complete before publishing',
+        missingFields,
       });
     }
     // Check if slug already exists
@@ -63,7 +54,8 @@ export class BlogService {
       ...createBlogDto,
       slug: createBlogDto.slug.toLowerCase(),
       author: authorId,
-      category: createBlogDto.category || 'general',
+      category: createBlogDto.category,
+      categoryKey: createBlogDto.categoryKey.toLowerCase(),
       contentType: createBlogDto.contentType || 'article',
       readingTime:
         createBlogDto.readingTime ||
@@ -83,6 +75,7 @@ export class BlogService {
       limit = 10,
       tag,
       category,
+      categoryKey,
       contentType,
       search,
       isPublished,
@@ -103,14 +96,16 @@ export class BlogService {
       query.$and = [{ $or: [{ tags: tag }, { tagsEn: tag }] }];
     }
 
-    if (category) {
+    const selectedCategoryKey = categoryKey ?? category;
+    if (selectedCategoryKey) {
       query.$and = [
         ...(query.$and ?? []),
         {
           $or: [
-            { categoryKey: category },
-            { category },
-            { categoryEn: category },
+            { categoryKey: selectedCategoryKey },
+            // Transitional fallback for records that predate categoryKey.
+            { category: selectedCategoryKey },
+            { categoryEn: selectedCategoryKey },
           ],
         },
       ];
@@ -161,7 +156,7 @@ export class BlogService {
     if (!includeUnpublished) {
       blogsQuery
         .select(
-          'title titleEn slug excerpt excerptEn coverImage coverAlt coverAltEn category categoryEn categoryKey tags tagsEn readingTime readingTimeEn publishedAt isFeatured',
+          'title titleEn slug excerpt excerptEn coverImage coverAlt coverAltEn category categoryEn categoryKey tags tagsEn readingTime publishedAt isFeatured',
         )
         .lean();
     }
@@ -176,7 +171,7 @@ export class BlogService {
       .findOne({ slug: slug.toLowerCase(), isPublished: true })
       .populate('author', 'name email')
       .select(
-        'title titleEn slug excerpt excerptEn content contentEn coverImage coverAlt coverAltEn category categoryEn categoryKey tags tagsEn readingTime readingTimeEn publishedAt authorName authorNameEn authorRole authorRoleEn summaryPoints summaryPointsEn ctaTitle ctaTitleEn ctaDescription ctaDescriptionEn ctaButtonText ctaButtonTextEn ctaUrl seo',
+        'title titleEn slug excerpt excerptEn content contentEn coverImage coverAlt coverAltEn category categoryEn categoryKey tags tagsEn readingTime publishedAt authorName authorNameEn authorRole authorRoleEn authorAvatar summaryPoints summaryPointsEn ctaTitle ctaTitleEn ctaDescription ctaDescriptionEn ctaButtonText ctaButtonTextEn ctaButtonUrl seo',
       )
       .lean()
       .exec()) as BlogDocument | null;
@@ -227,24 +222,32 @@ export class BlogService {
     const currentBlog = await this.blogModel.findById(id).exec();
     const updateData: any = { ...updateBlogDto };
 
-    if (
-      updateBlogDto.isPublished &&
-      currentBlog &&
-      !currentBlog.isPublished &&
-      !hasRequiredEnglishBlogContent({
-        ...(currentBlog.toObject() as CreateBlogDto),
-        ...updateBlogDto,
-      })
-    ) {
+    const currentBlogObject = currentBlog?.toObject() as
+      | CreateBlogDto
+      | undefined;
+    const resultingBlog = currentBlogObject
+      ? {
+          ...currentBlogObject,
+          ...updateBlogDto,
+          seo: { ...currentBlogObject.seo, ...updateBlogDto.seo },
+        }
+      : updateBlogDto;
+    const missingFields = getMissingEnglishFields('blog', resultingBlog);
+    if (resultingBlog.isPublished && missingFields.length > 0) {
       throw new BadRequestException({
         code: 'BILINGUAL_CONTENT_INCOMPLETE',
         message:
           'English blog content and SEO must be complete before publishing',
+        missingFields,
       });
     }
 
     if (updateBlogDto.content && !updateBlogDto.readingTime) {
       updateData.readingTime = this.calculateReadingTime(updateBlogDto.content);
+    }
+
+    if (updateBlogDto.categoryKey) {
+      updateData.categoryKey = updateBlogDto.categoryKey.toLowerCase();
     }
 
     if (updateBlogDto.isPublished && currentBlog && !currentBlog.isPublished) {

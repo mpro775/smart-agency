@@ -6,14 +6,20 @@ export interface FAQ {
   question: string;
   answer: string;
   category?: string;
+  categoryKey?: string;
   order?: number;
   isActive?: boolean;
   createdAt?: string;
   updatedAt?: string;
 }
 
+export interface FAQCategory {
+  key: string;
+  label: string;
+}
+
 export interface FAQFilters {
-  category?: string;
+  categoryKey?: string;
   limit?: number;
 }
 
@@ -21,7 +27,7 @@ export const publicFaqsService = {
   // Get all active FAQs
   getAll: async (filters?: FAQFilters): Promise<FAQ[]> => {
     const params = new URLSearchParams();
-    if (filters?.category) params.append("category", filters.category);
+    if (filters?.categoryKey) params.append("categoryKey", filters.categoryKey);
     if (filters?.limit) params.append("limit", String(filters.limit));
 
     const response = await publicApi.get<ApiResponse<FAQ[]>>(
@@ -39,8 +45,8 @@ export const publicFaqsService = {
   },
 
   // Get all categories
-  getCategories: async (): Promise<string[]> => {
-    const response = await publicApi.get<ApiResponse<string[]>>(
+  getCategories: async (): Promise<FAQCategory[]> => {
+    const response = await publicApi.get<ApiResponse<FAQCategory[]>>(
       "/faqs/categories"
     );
     return response.data.data ?? [];

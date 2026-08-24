@@ -5,6 +5,7 @@ import {
   IsEmail,
   IsOptional,
   IsEnum,
+  IsIn,
 } from 'class-validator';
 import { BillingCycle } from '../schemas/hosting-package.schema';
 
@@ -17,11 +18,6 @@ export class CreatePackageSelectionDto {
   @IsNotEmpty({ message: 'Package ID is required' })
   packageId: string;
 
-  @IsOptional()
-  @ApiPropertyOptional()
-  @IsString()
-  packageIdEn?: string;
-
   @ApiProperty({
     description: 'Full name of the person requesting the package',
     example: 'أحمد محمد',
@@ -29,11 +25,6 @@ export class CreatePackageSelectionDto {
   @IsString()
   @IsNotEmpty({ message: 'Full name is required' })
   fullName: string;
-
-  @IsOptional()
-  @ApiPropertyOptional()
-  @IsString()
-  fullNameEn?: string;
 
   @ApiProperty({
     description: 'Email address',
@@ -60,10 +51,6 @@ export class CreatePackageSelectionDto {
   @IsString()
   companyName?: string;
 
-  @IsOptional()
-  @IsString()
-  companyNameEn?: string;
-
   @ApiPropertyOptional({
     description: 'Additional message or requirements',
     example: 'أحتاج إلى دعم WordPress وSSL مجاني',
@@ -72,11 +59,6 @@ export class CreatePackageSelectionDto {
   @IsString()
   message?: string;
 
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  messageEn?: string;
-
   @ApiProperty({
     description: 'Selected billing cycle',
     enum: BillingCycle,
@@ -84,4 +66,9 @@ export class CreatePackageSelectionDto {
   })
   @IsEnum(BillingCycle)
   billingCycle: BillingCycle;
+
+  @ApiPropertyOptional({ enum: ['ar', 'en'], default: 'ar' })
+  @IsOptional()
+  @IsIn(['ar', 'en'])
+  locale?: 'ar' | 'en';
 }

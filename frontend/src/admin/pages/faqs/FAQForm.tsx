@@ -20,10 +20,10 @@ const faqSchema = z.object({
   questionEn: z.string().optional(),
   answer: z.string().min(1, 'الإجابة مطلوبة'),
   answerEn: z.string().optional(),
-  category: z.string(),
+  category: z.string().min(1, 'التصنيف العربي مطلوب'),
   categoryEn: z.string().optional(),
-  categoryKey: z.string().optional(),
-  orderNumber: z.number(),
+  categoryKey: z.string().min(1, 'رمز التصنيف مطلوب'),
+  order: z.number(),
   isActive: z.boolean(),
 });
 
@@ -43,12 +43,12 @@ export default function FAQForm() {
 
   const { register, control, handleSubmit, reset, formState: { errors } } = useForm<FAQFormData>({
     resolver: zodResolver(faqSchema),
-    defaultValues: { question: '', questionEn: '', answer: '', answerEn: '', category: 'General', categoryEn: '', categoryKey: 'general', orderNumber: 0, isActive: true },
+    defaultValues: { question: '', questionEn: '', answer: '', answerEn: '', category: 'عام', categoryEn: '', categoryKey: 'general', order: 0, isActive: true },
   });
 
   useEffect(() => {
     if (faq) {
-      reset({ question: faq.question, questionEn: faq.questionEn || '', answer: faq.answer, answerEn: faq.answerEn || '', category: faq.category, categoryEn: faq.categoryEn || '', categoryKey: faq.categoryKey || 'general', orderNumber: faq.orderNumber, isActive: faq.isActive });
+      reset({ question: faq.question, questionEn: faq.questionEn || '', answer: faq.answer, answerEn: faq.answerEn || '', category: faq.category, categoryEn: faq.categoryEn || '', categoryKey: faq.categoryKey || 'general', order: faq.order, isActive: faq.isActive });
     }
   }, [faq, reset]);
 
@@ -121,7 +121,7 @@ export default function FAQForm() {
               </div>
               <div className="space-y-2">
                 <Label className="text-slate-200">ترتيب العرض</Label>
-                <Input type="number" {...register('orderNumber', { valueAsNumber: true })} className="bg-slate-700/50 border-slate-600 text-white" />
+                <Input type="number" {...register('order', { valueAsNumber: true })} className="bg-slate-700/50 border-slate-600 text-white" />
               </div>
             </div>
             <Controller name="isActive" control={control} render={({ field }) => <div className="flex items-center gap-2 pt-2"><Switch checked={field.value} onCheckedChange={field.onChange} /><Label className="text-slate-200">نشط</Label></div>} />
@@ -137,4 +137,3 @@ export default function FAQForm() {
     </div>
   );
 }
-

@@ -131,12 +131,12 @@ export default function PackageSelectionModal({
   // مكون حقل الإدخال المعاد استخدامه للتنظيم
   const InputField = ({ icon: Icon, ...props }: InputFieldProps) => (
     <div className="relative group">
-      <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-gray-400 group-focus-within:text-primary transition-colors">
+      <div className="absolute inset-y-0 start-0 ps-3 flex items-center pointer-events-none text-gray-400 group-focus-within:text-primary transition-colors">
         <Icon size={18} />
       </div>
       <input
         {...props}
-        className="w-full pr-10 pl-4 py-3 bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary focus:bg-white transition-all outline-none placeholder:text-gray-400"
+        className="w-full ps-10 pe-4 py-3 bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary focus:bg-white transition-all outline-none placeholder:text-gray-400"
       />
     </div>
   );
@@ -162,7 +162,7 @@ export default function PackageSelectionModal({
             {/* زر الإغلاق */}
             <button
               onClick={resetModal}
-              className="absolute top-4 left-4 p-2 bg-gray-100 hover:bg-gray-200 text-gray-500 rounded-full transition-colors z-20"
+              className="absolute top-4 end-4 p-2 bg-gray-100 hover:bg-gray-200 text-gray-500 rounded-full transition-colors z-20"
             >
               <X size={20} />
             </button>
@@ -203,7 +203,7 @@ export default function PackageSelectionModal({
                           <div className="bg-blue-50 p-2.5 rounded-xl text-primary">
                             <Package size={20} />
                           </div>
-                          <div className="text-right">
+                          <div className="text-start">
                             <p className="text-xs text-gray-500">
                               {tr("الباقة المختارة")}</p>
                             <p className="font-semibold text-gray-900">
@@ -213,7 +213,7 @@ export default function PackageSelectionModal({
                         </div>
                         <div className="w-px h-8 bg-gray-100 mx-2"></div>
                         <div className="flex items-center gap-3">
-                          <div className="text-right">
+                          <div className="text-start">
                             <p className="text-xs text-gray-500">
                               {billingCycle === "Monthly" ? tr("شهرياً") : tr("سنوياً")}
                             </p>
@@ -241,7 +241,7 @@ export default function PackageSelectionModal({
                   <form onSubmit={handleSubmit} className="p-8 space-y-5">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                       <div className="space-y-1.5">
-                        <label className="text-xs font-semibold text-gray-700 mr-1">
+                        <label className="text-xs font-semibold text-gray-700 me-1">
                           {tr("الاسم الكامل")}<span className="text-red-500">*</span>
                         </label>
                         <InputField
@@ -254,7 +254,7 @@ export default function PackageSelectionModal({
                         />
                       </div>
                       <div className="space-y-1.5">
-                        <label className="text-xs font-semibold text-gray-700 mr-1">
+                        <label className="text-xs font-semibold text-gray-700 me-1">
                           {tr("رقم الهاتف")}<span className="text-red-500">*</span>
                         </label>
                         <InputField
@@ -266,13 +266,13 @@ export default function PackageSelectionModal({
                           required
                           placeholder="05xxxxxxxx"
                           dir="ltr"
-                          className="text-right"
+                          className="text-start"
                         />
                       </div>
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-xs font-semibold text-gray-700 mr-1">
+                      <label className="text-xs font-semibold text-gray-700 me-1">
                         {tr("البريد الإلكتروني")}{" "}
                         <span className="text-red-500">*</span>
                       </label>
@@ -288,7 +288,7 @@ export default function PackageSelectionModal({
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-xs font-semibold text-gray-700 mr-1">
+                      <label className="text-xs font-semibold text-gray-700 me-1">
                         {tr("اسم الشركة (اختياري)")}</label>
                       <InputField
                         icon={Building2}
@@ -300,10 +300,10 @@ export default function PackageSelectionModal({
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-xs font-semibold text-gray-700 mr-1">
+                      <label className="text-xs font-semibold text-gray-700 me-1">
                         {tr("ملاحظات إضافية")}</label>
                       <div className="relative group">
-                        <div className="absolute top-3 right-0 pr-3 pointer-events-none text-gray-400 group-focus-within:text-primary transition-colors">
+                        <div className="absolute top-3 start-0 ps-3 pointer-events-none text-gray-400 group-focus-within:text-primary transition-colors">
                           <MessageSquare size={18} />
                         </div>
                         <textarea
@@ -311,7 +311,7 @@ export default function PackageSelectionModal({
                           value={formData.message}
                           onChange={handleInputChange}
                           rows={3}
-                          className="w-full pr-10 pl-4 py-3 bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary focus:bg-white transition-all outline-none placeholder:text-gray-400 resize-none"
+                          className="w-full ps-10 pe-4 py-3 bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary focus:bg-white transition-all outline-none placeholder:text-gray-400 resize-none"
                           placeholder={
                             isEnterprise
                               ? tr("صف لنا متطلبات السيرفر والمواصفات التي تحتاجها...")

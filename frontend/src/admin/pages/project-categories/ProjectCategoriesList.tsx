@@ -4,6 +4,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Pencil, Trash2, FolderKanban } from 'lucide-react';
 import { projectCategoriesService } from '../../services/project-categories.service';
 import { PageHeader, ConfirmDialog, TranslationStatus } from '../../components/shared';
+import { getProjectCategoryTranslationStatus } from '../../utils/translationStatus';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
@@ -85,7 +86,7 @@ export default function ProjectCategoriesList() {
                       {category.value}
                     </Badge>
                     <div className="mb-2">
-                      <TranslationStatus isTranslated={!!category.labelEn} />
+                      <TranslationStatus missingFields={getProjectCategoryTranslationStatus(category).missingFields} />
                     </div>
                     {category.description && (
                       <p className="text-sm text-slate-400 mt-2">

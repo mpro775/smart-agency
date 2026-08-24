@@ -44,6 +44,22 @@ export class TechnologiesController {
     return this.technologiesService.create(createTechnologyDto);
   }
 
+  @Get('admin')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @ApiBearerAuth('JWT-auth')
+  @ResponseMessage('Technologies fetched successfully')
+  findAllAdmin(@Query('category') category?: TechnologyCategory) {
+    return this.technologiesService.findAll(category);
+  }
+
+  @Get('admin/:id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @ApiBearerAuth('JWT-auth')
+  @ResponseMessage('Technology fetched successfully')
+  findOneAdmin(@Param('id') id: string) {
+    return this.technologiesService.findOne(id);
+  }
+
   @Get()
   @Public()
   @ApiOperation({ summary: 'Get all technologies' })

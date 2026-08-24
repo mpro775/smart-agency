@@ -13,6 +13,14 @@ export interface ProjectFilters {
   tech?: string;
 }
 
+export interface ProjectCategoryOption {
+  _id: string;
+  key?: string;
+  name: string;
+  nameEn?: string;
+  count?: number;
+}
+
 export const publicProjectsService = {
   // Get all published projects with optional filters
   getAll: async (
@@ -64,12 +72,10 @@ export const publicProjectsService = {
   },
 
   // Get available categories with counts
-  getCategories: async (): Promise<
-    { _id?: string; value: string; label: string; count: number }[]
-  > => {
-    const response = await publicApi.get<
-      ApiResponse<{ _id?: string; value: string; label: string; count: number }[]>
-    >("/projects/categories");
+  getCategories: async (): Promise<ProjectCategoryOption[]> => {
+    const response = await publicApi.get<ApiResponse<ProjectCategoryOption[]>>(
+      "/projects/categories"
+    );
     return response.data.data ?? [];
   },
 

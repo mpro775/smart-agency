@@ -8,9 +8,6 @@ export class ProjectCategory {
   @Prop({ required: true, unique: true })
   value: string;
 
-  @Prop({ required: false })
-  valueEn?: string; // e.g., 'Web App', 'Mobile App'
-
   @Prop({ required: true })
   label: string;
 

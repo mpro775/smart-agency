@@ -51,7 +51,7 @@ export function AboutProcess({ steps }: AboutProcessProps) {
 
         <div className="relative">
           {/* Timeline Center Line */}
-          <div className="absolute right-6 md:right-1/2 top-0 bottom-0 w-px bg-slate-200 md:translate-x-[0.5px]" />
+          <div className="absolute start-6 md:start-1/2 top-0 bottom-0 w-px bg-slate-200 md:translate-x-[0.5px]" />
 
           <div className="space-y-14">
             {sortedSteps.map((step, index) => (
@@ -67,9 +67,9 @@ export function AboutProcess({ steps }: AboutProcessProps) {
                 }`}
               >
                 {/* Timeline Node Badge */}
-                <div className="absolute right-6 md:right-1/2 w-3 h-3 rounded-full bg-primary border-[3px] border-white shadow-md shadow-primary/20 translate-x-1/2 z-10 mt-6" />
+                <div className="absolute start-6 md:start-1/2 w-3 h-3 rounded-full bg-primary border-[3px] border-white shadow-md shadow-primary/20 -translate-x-1/2 rtl:translate-x-1/2 z-10 mt-6" />
 
-                <div className={`mr-12 md:mr-0 md:w-1/2 ${index % 2 === 0 ? "md:pl-12 text-right" : "md:pr-12 text-right"}`}>
+                <div className={`ms-12 md:ms-0 md:w-1/2 ${index % 2 === 0 ? "md:pl-12 text-start" : "md:pr-12 text-start"}`}>
                   <div className="bg-white rounded-3xl p-7 border border-slate-200/80 hover:border-primary/25 hover:shadow-xl hover:shadow-slate-200/40 transition-all duration-300 relative group">
                     <div className="flex items-center gap-4 mb-4 justify-start">
                       <span className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-primary/5 border border-primary/15 text-primary font-black text-sm">

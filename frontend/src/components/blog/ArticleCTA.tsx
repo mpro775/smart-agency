@@ -33,7 +33,7 @@ export default function ArticleCTA({ blog }: { blog: Blog }) {
           className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-primary px-7 py-3.5 text-sm font-bold text-white shadow-lg shadow-primary/25 transition hover:bg-primary-dark hover:shadow-xl hover:shadow-primary/30"
         >
           {buttonText}
-          <ArrowLeft className="h-4 w-4" />
+          <ArrowLeft className="h-4 w-4 directional-arrow" />
         </Link>
       </div>
     </section>

@@ -20,6 +20,14 @@ import { ResponseMessage } from '../common/decorators';
 export class AboutController {
   constructor(private readonly aboutService: AboutService) {}
 
+  @Get('admin')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @ApiBearerAuth('JWT-auth')
+  @ResponseMessage('About us information fetched successfully')
+  findOneAdmin() {
+    return this.aboutService.findOne();
+  }
+
   @Get()
   @Public()
   @ApiOperation({ summary: 'Get about us information' })

@@ -17,8 +17,14 @@ export class Faq {
   @Prop({ required: false })
   answerEn?: string; // Rich text supported
 
-  @Prop({ default: 'General' })
+  @Prop({ required: true, default: 'عام' })
   category: string;
+
+  @Prop({ required: false })
+  categoryEn?: string;
+
+  @Prop({ required: true, default: 'general', trim: true, lowercase: true })
+  categoryKey: string;
 
   @Prop({ default: 0 })
   order: number;
@@ -34,5 +40,6 @@ export const FaqSchema = SchemaFactory.createForClass(Faq);
 
 // Indexes for fast querying and ordering
 FaqSchema.index({ category: 1 });
+FaqSchema.index({ categoryKey: 1 });
 FaqSchema.index({ isActive: 1 });
 FaqSchema.index({ order: 1 });

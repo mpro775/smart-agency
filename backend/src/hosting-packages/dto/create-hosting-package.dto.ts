@@ -60,11 +60,6 @@ export class CreateHostingPackageDto {
   @IsString()
   currency?: string;
 
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  currencyEn?: string;
-
   @ApiPropertyOptional({
     description: 'Original price (for showing discount)',
     example: 70,
@@ -239,11 +234,6 @@ export class CreateHostingPackageDto {
   @IsString()
   basePackageId?: string;
 
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  basePackageIdEn?: string;
-
   @ApiPropertyOptional({
     description: 'Benefit hints for technical specs',
     type: 'object',
@@ -256,4 +246,12 @@ export class CreateHostingPackageDto {
   })
   @IsOptional()
   benefitHints?: { [key: string]: string };
+
+  @ApiPropertyOptional({
+    description: 'English benefit hints keyed by technical specification',
+    type: 'object',
+    additionalProperties: { type: 'string' },
+  })
+  @IsOptional()
+  benefitHintsEn?: { [key: string]: string };
 }

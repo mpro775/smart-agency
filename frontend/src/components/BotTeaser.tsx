@@ -86,7 +86,7 @@ export default function BotTeaser() {
               className="relative inline-flex items-center px-8 py-4 rounded-xl bg-[linear-gradient(to_right,var(--color-primary),var(--color-primary-dark))] text-white font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] group overflow-hidden"
             >
               <span className="relative z-10 flex items-center justify-center gap-2">
-                {tr("سجل اهتمامك الآن")}<FiArrowLeft className="group-hover:translate-x-1 transition-transform" />
+                {tr("سجل اهتمامك الآن")}<FiArrowLeft className="directional-arrow group-hover:translate-x-1 transition-transform" />
               </span>
               <span className="absolute inset-0 bg-gradient-to-r from-primaryDark to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </Link>

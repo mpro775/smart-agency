@@ -75,7 +75,7 @@ export default function BotLanding() {
               whileTap={{ scale: 0.98 }}
             >
               <span className="relative z-10 flex items-center justify-center gap-2">
-                {tr("سجل اهتمامك الآن")}<FiArrowRight className="group-hover:translate-x-1 transition-transform" />
+                {tr("سجل اهتمامك الآن")}<FiArrowRight className="directional-arrow group-hover:translate-x-1 transition-transform" />
               </span>
               <span className="absolute inset-0 bg-gradient-to-r from-primaryDark to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </motion.a>

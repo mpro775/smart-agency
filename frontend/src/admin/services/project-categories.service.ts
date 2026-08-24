@@ -31,21 +31,21 @@ export type UpdateProjectCategoryDto = Partial<CreateProjectCategoryDto>;
 export const projectCategoriesService = {
   getAll: async (): Promise<ProjectCategory[]> => {
     const response = await api.get<ApiResponse<ProjectCategory[]>>(
-      '/project-categories'
+      '/project-categories/admin'
     );
     return response.data.data;
   },
 
   getActive: async (): Promise<ProjectCategory[]> => {
     const response = await api.get<ApiResponse<ProjectCategory[]>>(
-      '/project-categories/active'
+      '/project-categories/admin'
     );
     return response.data.data;
   },
 
   getById: async (id: string): Promise<ProjectCategory> => {
     const response = await api.get<ApiResponse<ProjectCategory>>(
-      `/project-categories/${id}`
+      `/project-categories/admin/${id}`
     );
     return response.data.data;
   },

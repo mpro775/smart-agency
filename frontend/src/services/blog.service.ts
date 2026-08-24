@@ -6,7 +6,7 @@ export interface BlogFilters {
   page?: number;
   limit?: number;
   tag?: string;
-  category?: string;
+  categoryKey?: string;
   contentType?: string;
   search?: string;
   isFeatured?: boolean;
@@ -22,7 +22,7 @@ export const publicBlogService = {
     if (filters?.page) params.append("page", String(filters.page));
     if (filters?.limit) params.append("limit", String(filters.limit));
     if (filters?.tag) params.append("tag", filters.tag);
-    if (filters?.category) params.append("category", filters.category);
+    if (filters?.categoryKey) params.append("categoryKey", filters.categoryKey);
     if (filters?.contentType) params.append("contentType", filters.contentType);
     if (filters?.search) params.append("search", filters.search);
     if (filters?.isFeatured !== undefined) params.append("isFeatured", String(filters.isFeatured));

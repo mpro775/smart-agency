@@ -68,7 +68,7 @@ export const servicesService = {
   },
 
   getById: async (id: string): Promise<Service> => {
-    const response = await api.get<ApiResponse<Service>>(`/services/${id}`);
+    const response = await api.get<ApiResponse<Service>>(`/services/admin/${id}`);
     return response.data.data;
   },
 

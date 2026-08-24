@@ -109,8 +109,6 @@ export interface BlogSeo {
   metaDescriptionEn?: string;
   keywords: string[];
   keywordsEn?: string[];
-  canonicalUrl?: string;
-  canonicalUrlEn?: string;
   ogTitle?: string;
   ogTitleEn?: string;
   ogDescription?: string;
@@ -147,14 +145,14 @@ export interface Blog {
   authorAvatar?: string;
   tags: string[];
   tagsEn?: string[];
-  category?: string;
+  category: string;
   categoryEn?: string;
+  categoryKey: string;
   contentType?: BlogContentType;
   isPublished: boolean;
   isFeatured?: boolean;
   featuredOrder?: number;
   readingTime?: number;
-  readingTimeEn?: number;
   summaryPoints?: string[];
   summaryPointsEn?: string[];
   isEditorPick?: boolean;
@@ -271,6 +269,7 @@ export interface Lead {
   contactReason?: string;
   projectAnswers?: Record<string, unknown>;
   priority?: LeadPriority;
+  locale: "ar" | "en";
 }
 
 // Team Member Types
@@ -407,6 +406,10 @@ export interface HostingPackage {
   domainsEn?: string;
   discountPercentage?: number;
   promotionEndsAt?: string;
+  yearlyPrice?: number;
+  basePackageId?: string;
+  benefitHints?: Record<string, string>;
+  benefitHintsEn?: Record<string, string>;
   createdAt: string;
   updatedAt: string;
 }
@@ -420,8 +423,8 @@ export interface FAQ {
   answerEn?: string;
   category: string;
   categoryEn?: string;
-  categoryKey?: string;
-  orderNumber: number;
+  categoryKey: string;
+  order: number;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;

@@ -25,9 +25,6 @@ export class BlogSeo {
   keywordsEn?: string[];
 
   @Prop()
-  canonicalUrl: string;
-
-  @Prop()
   ogTitle: string;
 
   @Prop({ required: false })
@@ -62,9 +59,6 @@ export class BlogSeo {
 
   @Prop({ default: 'Article' })
   schemaType: string;
-
-  @Prop({ required: false })
-  schemaTypeEn?: string;
 }
 
 @Schema({ timestamps: true })
@@ -117,9 +111,6 @@ export class Blog {
   @Prop()
   authorAvatar: string;
 
-  @Prop({ required: false })
-  authorAvatarEn?: string;
-
   @Prop({ type: [String], default: [] })
   tags: string[];
 
@@ -128,6 +119,12 @@ export class Blog {
 
   @Prop({ required: true, default: 'general' })
   category: string;
+
+  @Prop({ required: false })
+  categoryEn?: string;
+
+  @Prop({ required: true, default: 'general', trim: true, lowercase: true })
+  categoryKey: string;
 
   @Prop({
     enum: ['article', 'guide', 'case-study', 'insight', 'news'],
@@ -200,6 +197,7 @@ BlogSchema.index({ slug: 1 }, { unique: true });
 BlogSchema.index({ isPublished: 1 });
 BlogSchema.index({ isPublished: 1, publishedAt: -1 });
 BlogSchema.index({ category: 1 });
+BlogSchema.index({ categoryKey: 1 });
 BlogSchema.index({ contentType: 1 });
 BlogSchema.index({ tags: 1 });
 BlogSchema.index({ isFeatured: 1, featuredOrder: 1 });

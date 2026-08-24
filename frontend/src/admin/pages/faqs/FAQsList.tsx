@@ -4,6 +4,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Pencil, Trash2, HelpCircle, ChevronDown, ChevronUp } from 'lucide-react';
 import { faqsService } from '../../services/faqs.service';
 import { PageHeader, ConfirmDialog, TranslationStatus } from '../../components/shared';
+import { getFaqTranslationStatus } from '../../utils/translationStatus';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
@@ -16,14 +17,14 @@ import type { FAQ } from '../../types';
 export default function FAQsList() {
   const queryClient = useQueryClient();
   const [page] = useState(1);
-  const [category, setCategory] = useState<string>('all');
+  const [categoryKey, setCategoryKey] = useState<string>('all');
   const [search, setSearch] = useState('');
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['faqs', page, category, search],
-    queryFn: () => faqsService.getAll({ page, limit: 20, category: category !== 'all' ? category : undefined, search: search || undefined }),
+    queryKey: ['faqs', page, categoryKey, search],
+    queryFn: () => faqsService.getAll({ page, limit: 20, categoryKey: categoryKey !== 'all' ? categoryKey : undefined, search: search || undefined }),
   });
 
   const deleteMutation = useMutation({
@@ -36,7 +37,9 @@ export default function FAQsList() {
     onError: () => toast.error('فشل حذف السؤال'),
   });
 
-  const categories = [...new Set(data?.data.map((faq) => faq.category) || [])];
+  const categories = [...new Map(
+    (data?.data || []).map((faq) => [faq.categoryKey, { key: faq.categoryKey, label: faq.category }]),
+  ).values()];
 
   if (error) return <ErrorState message="فشل تحميل الأسئلة الشائعة" onRetry={() => refetch()} />;
 
@@ -46,11 +49,11 @@ export default function FAQsList() {
 
       <div className="flex flex-wrap gap-4 mb-6">
         <Input type="search" placeholder="بحث..." className="max-w-xs bg-slate-800 border-slate-700 text-white" value={search} onChange={(e) => setSearch(e.target.value)} />
-        <Select value={category} onValueChange={setCategory}>
+        <Select value={categoryKey} onValueChange={setCategoryKey}>
           <SelectTrigger className="w-48 bg-slate-800 border-slate-700 text-white"><SelectValue placeholder="جميع التصنيفات" /></SelectTrigger>
           <SelectContent className="bg-slate-800 border-slate-700">
             <SelectItem value="all" className="text-white hover:bg-slate-700">جميع التصنيفات</SelectItem>
-            {categories.map((cat) => <SelectItem key={cat} value={cat} className="text-white hover:bg-slate-700">{cat}</SelectItem>)}
+            {categories.map((cat) => <SelectItem key={cat.key} value={cat.key} className="text-white hover:bg-slate-700">{cat.label}</SelectItem>)}
           </SelectContent>
         </Select>
       </div>
@@ -75,7 +78,7 @@ export default function FAQsList() {
                         </div>
                         <div className="flex gap-2">
                           <Badge variant="outline" className="border-slate-600 text-slate-400 text-xs">{faq.category}</Badge>
-                          <TranslationStatus isTranslated={!!faq.questionEn} />
+                          <TranslationStatus missingFields={getFaqTranslationStatus(faq).missingFields} />
                         </div>
                       </div>
                       {expandedId === faq._id ? <ChevronUp className="h-5 w-5 text-slate-400" /> : <ChevronDown className="h-5 w-5 text-slate-400" />}

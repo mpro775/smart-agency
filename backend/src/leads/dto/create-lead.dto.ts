@@ -9,6 +9,7 @@ import {
   IsBoolean,
   IsDateString,
   IsObject,
+  IsIn,
 } from 'class-validator';
 import {
   ServiceType,
@@ -30,11 +31,6 @@ export class CreateLeadDto {
   @IsNotEmpty({ message: 'Full name is required' })
   fullName: string;
 
-  @IsOptional()
-  @ApiPropertyOptional()
-  @IsString()
-  fullNameEn?: string;
-
   @ApiPropertyOptional({
     description: 'Company name',
     example: 'شركة النجاح',
@@ -42,11 +38,6 @@ export class CreateLeadDto {
   @IsOptional()
   @IsString()
   companyName?: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  companyNameEn?: string;
 
   @ApiProperty({
     description: 'Email address',
@@ -89,11 +80,6 @@ export class CreateLeadDto {
   @IsString()
   message?: string;
 
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  messageEn?: string;
-
   @ApiPropertyOptional({
     description: 'Lead source',
     example: 'Website Contact Form',
@@ -127,11 +113,6 @@ export class CreateLeadDto {
   @IsString()
   projectGoal?: string;
 
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  projectGoalEn?: string;
-
   @ApiPropertyOptional({
     description: 'Timeline',
     enum: Timeline,
@@ -163,11 +144,6 @@ export class CreateLeadDto {
   @IsOptional()
   @IsString()
   currentWebsite?: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  currentWebsiteEn?: string;
 
   @ApiPropertyOptional({
     description: 'Reference links',
@@ -239,6 +215,6 @@ export class CreateLeadDto {
     default: 'ar',
   })
   @IsOptional()
-  @IsString()
-  locale?: string;
+  @IsIn(['ar', 'en'])
+  locale?: 'ar' | 'en';
 }

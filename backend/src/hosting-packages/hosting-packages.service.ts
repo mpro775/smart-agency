@@ -3,6 +3,7 @@ import {
   NotFoundException,
   Inject,
   forwardRef,
+  BadRequestException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
@@ -15,8 +16,9 @@ import { UpdateHostingPackageDto } from './dto/update-hosting-package.dto';
 import { FilterHostingPackageDto } from './dto/filter-hosting-package.dto';
 import { CreatePackageSelectionDto } from './dto/create-package-selection.dto';
 import { LeadsService } from '../leads/leads.service';
-import { ServiceType } from '../leads/schemas/lead.schema';
+import { LeadType, ServiceType } from '../leads/schemas/lead.schema';
 import { PaginatedResponseDto } from '../common/dto/pagination.dto';
+import { getMissingEnglishFields } from '../common/localization/translation-completeness';
 
 @Injectable()
 export class HostingPackagesService {
@@ -30,6 +32,14 @@ export class HostingPackagesService {
   async create(
     createDto: CreateHostingPackageDto,
   ): Promise<HostingPackageDocument> {
+    const missingFields = getMissingEnglishFields('hosting', createDto);
+    if (createDto.isActive !== false && missingFields.length > 0) {
+      throw new BadRequestException({
+        code: 'BILINGUAL_CONTENT_INCOMPLETE',
+        message: 'English hosting content must be complete before activation',
+        missingFields,
+      });
+    }
     const hostingPackage = new this.hostingPackageModel(createDto);
     return hostingPackage.save();
   }
@@ -112,6 +122,17 @@ export class HostingPackagesService {
     id: string,
     updateDto: UpdateHostingPackageDto,
   ): Promise<HostingPackageDocument> {
+    const current = await this.hostingPackageModel.findById(id).lean().exec();
+    if (!current) throw new NotFoundException('Hosting package not found');
+    const resultingPackage = { ...current, ...updateDto };
+    const missingFields = getMissingEnglishFields('hosting', resultingPackage);
+    if (resultingPackage.isActive && missingFields.length > 0) {
+      throw new BadRequestException({
+        code: 'BILINGUAL_CONTENT_INCOMPLETE',
+        message: 'English hosting content must be complete before activation',
+        missingFields,
+      });
+    }
     const hostingPackage = await this.hostingPackageModel
       .findByIdAndUpdate(id, updateDto, { new: true })
       .exec();
@@ -162,6 +183,8 @@ export class HostingPackagesService {
       serviceType: ServiceType.OTHER, // Use OTHER since we don't have a specific HOSTING type
       message: `Hosting Package Selection: ${hostingPackage.name} (${createPackageSelectionDto.billingCycle})\n\n${createPackageSelectionDto.message || ''}`,
       source: `Hosting Package Selection - ${hostingPackage.name}`,
+      leadType: LeadType.PACKAGE_REQUEST,
+      locale: createPackageSelectionDto.locale ?? 'ar',
     };
 
     await this.leadsService.create(leadData);

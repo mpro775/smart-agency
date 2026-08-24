@@ -2,6 +2,7 @@ import {
   Injectable,
   NotFoundException,
   ConflictException,
+  BadRequestException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -10,6 +11,7 @@ import { CreateServiceDto } from './dto/create-service.dto';
 import { UpdateServiceDto } from './dto/update-service.dto';
 import { FilterServiceDto } from './dto/filter-service.dto';
 import { PaginatedResponseDto } from '../common/dto/pagination.dto';
+import { getMissingEnglishFields } from '../common/localization/translation-completeness';
 
 @Injectable()
 export class ServicesService {
@@ -18,6 +20,14 @@ export class ServicesService {
   ) {}
 
   async create(createServiceDto: CreateServiceDto): Promise<ServiceDocument> {
+    const missingFields = getMissingEnglishFields('service', createServiceDto);
+    if (createServiceDto.isActive !== false && missingFields.length > 0) {
+      throw new BadRequestException({
+        code: 'BILINGUAL_CONTENT_INCOMPLETE',
+        message: 'English service content must be complete before activation',
+        missingFields,
+      });
+    }
     // Generate slug if not provided
     if (!createServiceDto.slug) {
       createServiceDto.slug = this.generateSlug(createServiceDto.title);
@@ -103,6 +113,17 @@ export class ServicesService {
     id: string,
     updateServiceDto: UpdateServiceDto,
   ): Promise<ServiceDocument> {
+    const current = await this.serviceModel.findById(id).lean().exec();
+    if (!current) throw new NotFoundException('Service not found');
+    const resultingService = { ...current, ...updateServiceDto };
+    const missingFields = getMissingEnglishFields('service', resultingService);
+    if (resultingService.isActive && missingFields.length > 0) {
+      throw new BadRequestException({
+        code: 'BILINGUAL_CONTENT_INCOMPLETE',
+        message: 'English service content must be complete before activation',
+        missingFields,
+      });
+    }
     // Generate slug if title is updated and slug is not provided
     if (updateServiceDto.title && !updateServiceDto.slug) {
       updateServiceDto.slug = this.generateSlug(updateServiceDto.title);

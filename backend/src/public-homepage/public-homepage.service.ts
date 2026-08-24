@@ -84,7 +84,10 @@ export class PublicHomepageService {
         .select(
           'title titleEn slug summary summaryEn images categoryIds industry industryEn year technologies results stats clientName clientNameEn clientLogo projectUrl',
         )
-        .populate('technologies', 'name icon category description tooltip')
+        .populate(
+          'technologies',
+          'name icon category description descriptionEn tooltip tooltipEn',
+        )
         .populate('categoryIds')
         .lean()
         .exec(),
@@ -145,7 +148,7 @@ export class PublicHomepageService {
         .sort({ publishedAt: -1, createdAt: -1 })
         .limit(3)
         .select(
-          'title titleEn slug excerpt excerptEn coverImage coverAlt coverAltEn category categoryEn categoryKey contentType readingTime readingTimeEn publishedAt authorName authorNameEn authorRole authorRoleEn authorAvatar tags tagsEn',
+          'title titleEn slug excerpt excerptEn coverImage coverAlt coverAltEn category categoryEn categoryKey contentType readingTime publishedAt authorName authorNameEn authorRole authorRoleEn authorAvatar tags tagsEn',
         )
         .lean()
         .exec(),
@@ -161,7 +164,13 @@ export class PublicHomepageService {
     return {
       services,
       featuredProjects,
-      projectCategories,
+      projectCategories: projectCategories.map((category) => ({
+        _id: category._id.toString(),
+        key: category.value,
+        name: category.label,
+        nameEn: category.labelEn,
+        count: 0,
+      })),
       technologies,
       teamMembers,
       testimonials,

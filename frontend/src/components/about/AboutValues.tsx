@@ -244,7 +244,7 @@ export function AboutValues({ values }: AboutValuesProps) {
                       <FiCheckCircle className="text-primary-dark" size={20} />
                     </motion.div>
                     <span className="text-primary-dark">{tr("قيمة أساسية")}</span>
-                    <div className="flex-1 h-px bg-gradient-to-r from-primary/40 to-transparent ml-2" />
+                    <div className="flex-1 h-px bg-gradient-to-r from-primary/40 to-transparent ms-2" />
                   </motion.div>
                 </div>
 

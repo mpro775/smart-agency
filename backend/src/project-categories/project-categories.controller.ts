@@ -45,6 +45,22 @@ export class ProjectCategoriesController {
     return this.categoriesService.create(createCategoryDto);
   }
 
+  @Get('admin')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @ApiBearerAuth('JWT-auth')
+  @ResponseMessage('Categories fetched successfully')
+  findAllAdmin() {
+    return this.categoriesService.findAll();
+  }
+
+  @Get('admin/:id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @ApiBearerAuth('JWT-auth')
+  @ResponseMessage('Category fetched successfully')
+  findOneAdmin(@Param('id') id: string) {
+    return this.categoriesService.findOne(id);
+  }
+
   @Get()
   @Public()
   @ApiOperation({ summary: 'Get all project categories' })

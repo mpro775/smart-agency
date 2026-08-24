@@ -69,6 +69,14 @@ export class TeamController {
     return this.teamService.findAll(filterDto, true);
   }
 
+  @Get('admin/:id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @ApiBearerAuth('JWT-auth')
+  @ResponseMessage('Team member fetched successfully')
+  findOneAdmin(@Param('id') id: string) {
+    return this.teamService.findOne(id);
+  }
+
   @Get('homepage')
   @Public()
   @ApiOperation({ summary: 'Get team members for homepage display' })

@@ -35,14 +35,26 @@ export class CreateFaqDto {
   @IsString()
   answerEn?: string;
 
-  @ApiPropertyOptional({
+  @ApiProperty({
     description: 'Category of the FAQ',
-    default: 'General',
-    example: 'Services',
+    example: 'الخدمات',
   })
+  @IsString()
+  @IsNotEmpty()
+  category: string;
+
+  @ApiPropertyOptional({ description: 'English category label' })
   @IsOptional()
   @IsString()
-  category?: string;
+  categoryEn?: string;
+
+  @ApiProperty({
+    description: 'Stable machine key for the category',
+    example: 'general',
+  })
+  @IsString()
+  @IsNotEmpty()
+  categoryKey: string;
 
   @ApiPropertyOptional({
     description: 'Display order (lower numbers appear first)',

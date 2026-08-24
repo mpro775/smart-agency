@@ -160,7 +160,7 @@ export interface UpdateAboutDto {
 
 export const aboutService = {
   get: async (): Promise<About | null> => {
-    const response = await api.get<ApiResponse<About>>("/about");
+    const response = await api.get<ApiResponse<About>>("/about/admin");
     return response.data.data;
   },
 

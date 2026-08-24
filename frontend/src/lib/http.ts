@@ -34,8 +34,6 @@ http.interceptors.request.use((config) => {
     ) {
       config.data = { ...config.data, locale };
     }
-  } else if (window.location.pathname.startsWith("/admin")) {
-    config.headers["X-Admin-Localization"] = "all";
   }
 
   return config;

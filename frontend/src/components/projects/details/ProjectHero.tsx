@@ -23,7 +23,7 @@ export default function ProjectHero({ project, categoryLabels }: ProjectHeroProp
             to="/projects"
             className="inline-flex items-center gap-2 rounded-full border border-slate-200/80 bg-white/70 backdrop-blur-md px-5 py-2.5 text-slate-600 hover:text-[#008080] hover:bg-white hover:border-teal-500/30 transition-all duration-300 group shadow-sm hover:shadow-md"
           >
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            <ArrowRight className="w-4 h-4 directional-arrow" />
             <span className="font-semibold text-sm">{tr("العودة إلى المشاريع")}</span>
           </Link>
         </motion.div>

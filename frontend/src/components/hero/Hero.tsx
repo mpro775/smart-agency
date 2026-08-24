@@ -10,7 +10,7 @@ const Hero = () => {
   return (
     <SectionShell tone="light" pattern="grid" patternIntensity="medium" id="hero">
       <div className="relative z-10 mx-auto grid min-h-screen max-w-[1320px] grid-cols-1 items-center gap-8 px-4 pb-20 pt-28 sm:px-6 lg:grid-cols-[1fr_1.1fr] lg:px-8 xl:gap-12">
-        <div className="order-1 text-center lg:text-right">
+        <div className="order-1 text-center lg:text-start">
           <motion.div
             initial={{ opacity: 0, scale: 0 }}
             animate={{ opacity: 1, scale: 1 }}

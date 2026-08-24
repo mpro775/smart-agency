@@ -1,4 +1,6 @@
 {
+  "جاري التحميل...": "Loading...",
+  "جاري تحميل محتوى الصفحة الرئيسية...": "Loading homepage content...",
   "من نحن | Smart Agency": "About Us | Smart Agency",
   "تعرف على وكالة سمارت ورؤيتنا وقصتنا في تقديم الحلول الرقمية المبتكرة.": "Learn about Smart Agency, our vision, our story, and how we deliver innovative digital solutions.",
   "وكالة سمارت, حلول رقمية, تطوير مواقع, تصميم واجهات": "Smart Agency, digital solutions, web development, interface design",
@@ -228,7 +230,7 @@
   "فشل تحميل البيانات، يرجى المحاولة لاحقاً.": "Failed to load data. Please try again later.",
   "شهري": "Monthly",
   "سنوي": "Yearly",
-  "كل مميزات ${base.name}": "All ${base.name} features",
+  "hosting.allFeaturesOf": "All features of {{name}}",
   "الأكثر طلبًا": "Most Popular",
   "شهرياً": "per month",
   "سنوياً": "per year",

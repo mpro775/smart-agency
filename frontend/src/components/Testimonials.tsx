@@ -26,7 +26,7 @@ function RatingBadge({ rating }: { rating: number }) {
       {[...Array(5)].map((_, i) => (
         <FiStar key={i} className={`w-4 h-4 ${i < rating ? "text-[var(--smart-primary-light)] fill-[var(--smart-primary-light)]" : "text-white/20"}`} />
       ))}
-      <span className="mr-2 text-sm text-[var(--smart-text-muted-on-dark)]">{rating.toFixed(1)}</span>
+      <span className="ms-2 text-sm text-[var(--smart-text-muted-on-dark)]">{rating.toFixed(1)}</span>
     </div>
   );
 }

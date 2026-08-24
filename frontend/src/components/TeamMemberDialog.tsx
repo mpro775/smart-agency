@@ -95,7 +95,7 @@ export default function TeamMemberDialog({
               </div>
 
               {/* معلومات سريعة */}
-              <div className="space-y-4 w-full text-sm text-gray-400 border-t border-white/5 pt-6 text-center md:text-right">
+              <div className="space-y-4 w-full text-sm text-gray-400 border-t border-white/5 pt-6 text-center md:text-start">
                 {member.department && (
                   <div className="flex items-center justify-center md:justify-end gap-3 group">
                     <span className="transition-colors group-hover:text-gray-200">

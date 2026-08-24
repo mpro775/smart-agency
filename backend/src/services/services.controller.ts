@@ -64,6 +64,14 @@ export class ServicesController {
     return this.servicesService.findAll(filterDto);
   }
 
+  @Get('admin/:id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @ApiBearerAuth('JWT-auth')
+  @ResponseMessage('Service fetched successfully')
+  findOneAdmin(@Param('id') id: string) {
+    return this.servicesService.findOne(id);
+  }
+
   @Get('active')
   @Public()
   @ApiOperation({ summary: 'Get all active services' })

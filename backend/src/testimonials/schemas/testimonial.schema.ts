@@ -27,14 +27,8 @@ export class Testimonial {
   @Prop()
   companyLogo: string;
 
-  @Prop({ required: false })
-  companyLogoEn?: string; // URL
-
   @Prop()
   clientPhoto: string;
-
-  @Prop({ required: false })
-  clientPhotoEn?: string; // URL
 
   @Prop({ required: true })
   content: string;

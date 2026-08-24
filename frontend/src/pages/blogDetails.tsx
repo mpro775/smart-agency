@@ -29,7 +29,6 @@ function useArticleSeo(blog: Blog | null) {
 
     const title = blog.seo?.metaTitle || blog.title;
     const description = blog.seo?.metaDescription || blog.excerpt || "";
-    const canonical = blog.seo?.canonicalUrl || window.location.href;
     const image = blog.seo?.ogImage || blog.coverImage || "";
     const previousTitle = document.title;
 
@@ -55,14 +54,6 @@ function useArticleSeo(blog: Blog | null) {
     const ogImage = upsertMeta('meta[property="og:image"]', { property: "og:image", content: image });
     const twitterTitle = upsertMeta('meta[name="twitter:title"]', { name: "twitter:title", content: blog.seo?.twitterTitle || title });
     const twitterDescription = upsertMeta('meta[name="twitter:description"]', { name: "twitter:description", content: blog.seo?.twitterDescription || description });
-
-    let canonicalLink = document.head.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
-    if (!canonicalLink) {
-      canonicalLink = document.createElement("link");
-      canonicalLink.rel = "canonical";
-      document.head.appendChild(canonicalLink);
-    }
-    canonicalLink.href = canonical;
 
     const schema = document.createElement("script");
     schema.type = "application/ld+json";
@@ -143,7 +134,7 @@ export default function BlogDetailsPage() {
           to="/blog"
           className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-primary/20 transition hover:bg-primary-dark"
         >
-          <ArrowRight className="h-4 w-4" />
+          <ArrowRight className="h-4 w-4 directional-arrow" />
           {tr("العودة إلى المدونة")}</Link>
       </main>
     );
@@ -162,7 +153,7 @@ export default function BlogDetailsPage() {
               to="/blog"
               className="inline-flex items-center gap-2 rounded-full bg-slate-50 px-4 py-2 text-sm font-semibold text-slate-600 ring-1 ring-slate-200 transition hover:bg-slate-100 hover:text-primary"
             >
-              <ArrowRight className="h-4 w-4" />
+              <ArrowRight className="h-4 w-4 directional-arrow" />
               {tr("العودة إلى المدونة")}</Link>
             <button
               onClick={handleShare}

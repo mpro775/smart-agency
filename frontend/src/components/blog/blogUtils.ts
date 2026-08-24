@@ -1,17 +1,18 @@
-import { tr } from "@/i18n";
+import i18n, { tr } from "@/i18n";
 import type { Blog, BlogContentType, User } from "../../admin/types";
 
 export const contentTypeLabels: Record<BlogContentType, string> = {
-  article: tr("مقال"),
-  guide: tr("دليل عملي"),
-  "case-study": tr("دراسة حالة"),
-  insight: tr("رؤية تقنية"),
-  news: tr("خبر"),
+  article: "مقال",
+  guide: "دليل عملي",
+  "case-study": "دراسة حالة",
+  insight: "رؤية تقنية",
+  news: "خبر",
 };
 
 export function formatBlogDate(dateString?: string) {
   if (!dateString) return "";
-  return new Date(dateString).toLocaleDateString("ar-SA", {
+  const intlLocale = i18n.resolvedLanguage === "en" ? "en-US" : "ar-SA";
+  return new Date(dateString).toLocaleDateString(intlLocale, {
     year: "numeric",
     month: "long",
     day: "numeric",

@@ -5,6 +5,7 @@ import { Calendar, Clock, Eye, FileText, Pencil, Star, Trash2 } from "lucide-rea
 import { toast } from "sonner";
 import { blogService } from "../../services/blog.service";
 import { ConfirmDialog, DataTable, type Column, PageHeader, TranslationStatus } from "../../components/shared";
+import { getBlogTranslationStatus } from "../../utils/translationStatus";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -17,20 +18,20 @@ export default function BlogList() {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("all");
-  const [category, setCategory] = useState("");
+  const [categoryKey, setCategoryKey] = useState("");
   const [contentType, setContentType] = useState("all");
   const [featured, setFeatured] = useState("all");
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ["blogs", page, search, status, category, contentType, featured],
+    queryKey: ["blogs", page, search, status, categoryKey, contentType, featured],
     queryFn: () =>
       blogService.getAll({
         page,
         limit: 10,
         search: search || undefined,
         isPublished: status === "all" ? undefined : status === "published",
-        category: category || undefined,
+        categoryKey: categoryKey || undefined,
         contentType: contentType === "all" ? undefined : contentType,
         isFeatured: featured === "all" ? undefined : featured === "featured",
       }),
@@ -63,7 +64,7 @@ export default function BlogList() {
             <p className="font-medium text-white">{blog.title}</p>
             <p className="line-clamp-1 text-sm text-slate-500">{blog.excerpt}</p>
             <p className="mt-1 text-xs text-slate-500 mb-1">/{blog.slug}</p>
-            <TranslationStatus isTranslated={!!blog.titleEn} />
+            <TranslationStatus missingFields={getBlogTranslationStatus(blog).missingFields} />
           </div>
         </div>
       ),
@@ -166,7 +167,7 @@ export default function BlogList() {
           <option value="published">منشور</option>
           <option value="draft">مسودة</option>
         </select>
-        <Input placeholder="التصنيف" className="bg-slate-800 border-slate-700 text-white" value={category} onChange={(e) => setCategory(e.target.value)} />
+        <Input placeholder="مفتاح التصنيف" className="bg-slate-800 border-slate-700 text-white" value={categoryKey} onChange={(e) => setCategoryKey(e.target.value)} />
         <select value={contentType} onChange={(e) => setContentType(e.target.value)} className="h-10 rounded-md border border-slate-700 bg-slate-800 px-3 text-sm text-white">
           <option value="all">كل الأنواع</option>
           <option value="article">مقال</option>

@@ -184,7 +184,7 @@ export default function Footer() {
                       className="group relative inline-flex items-center px-10 py-4 rounded-2xl bg-gradient-to-r from-primary to-primary-dark text-white font-semibold text-base shadow-xl hover:shadow-2xl hover:shadow-primary/30 transition-all duration-300"
                     >
                       <span className="relative z-10 flex items-center gap-3">
-                        {tr("ابدأ استشارتك المجانية")}<FiArrowLeft className="group-hover:translate-x-1 transition-transform duration-300" />
+                        {tr("ابدأ استشارتك المجانية")}<FiArrowLeft className="directional-arrow group-hover:translate-x-1 transition-transform duration-300" />
                       </span>
                     </motion.button>
                   </Link>
@@ -295,10 +295,10 @@ export default function Footer() {
                       to={link.href}
                       className="group flex items-center gap-2 text-gray-400 hover:text-white transition-colors duration-300 text-sm"
                     >
-                      <FiChevronLeft className="text-primary opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" size={14} />
+                      <FiChevronLeft className="directional-arrow text-primary opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" size={14} />
                       <span className="relative">
                         {link.label}
-                        <span className="absolute bottom-0 right-0 w-0 h-px bg-primary group-hover:w-full transition-all duration-300" />
+                        <span className="absolute bottom-0 start-0 w-0 h-px bg-primary group-hover:w-full transition-all duration-300" />
                       </span>
                     </Link>
                   </motion.li>

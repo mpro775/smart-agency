@@ -2,7 +2,7 @@ import { tr } from "@/i18n";
 import { motion } from "framer-motion";
 import { PenTool, Smartphone, Layers } from "lucide-react";
 
-const values = [
+const getValues = () => [
   {
     title: tr("تصميم UX/UI"),
     desc: tr("تجربة رقمية مميزة"),
@@ -21,6 +21,7 @@ const values = [
 ];
 
 const HeroValueBadges = () => {
+  const values = getValues();
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}

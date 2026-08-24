@@ -39,9 +39,6 @@ export class TeamMember {
   @Prop()
   photo: string;
 
-  @Prop({ required: false })
-  photoEn?: string;
-
   @Prop()
   bio: string;
 
@@ -69,9 +66,6 @@ export class TeamMember {
 
   @Prop()
   websiteUrl: string;
-
-  @Prop({ required: false })
-  websiteUrlEn?: string;
 
   // Skills & Specializations
   @Prop({ type: [String], default: [] })

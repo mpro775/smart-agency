@@ -230,7 +230,7 @@ export default function ProjectCard({
                 to={detailUrl}
                 className="inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--smart-primary)] hover:text-[var(--smart-primary-dark)] transition-colors"
               >
-                {tr("عرض دراسة الحالة")}<FiArrowLeft className="w-3 h-3" />
+                {tr("عرض دراسة الحالة")}<FiArrowLeft className="w-3 h-3 directional-arrow" />
               </Link>
             </div>
           </div>

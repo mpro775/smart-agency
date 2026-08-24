@@ -8,11 +8,12 @@ import type { TeamMember } from "./team.service";
 import type { Technology } from "./technologies.service";
 import type { Testimonial } from "./testimonials.service";
 import type { ApiResponse } from "@/types/api";
+import type { ProjectCategoryOption } from "./projects.service";
 
 export interface HomepageData {
   services: Service[];
   featuredProjects: Project[];
-  projectCategories: { value: string; label: string; count?: number }[];
+  projectCategories: ProjectCategoryOption[];
   technologies: Technology[];
   teamMembers: TeamMember[];
   testimonials: Testimonial[];

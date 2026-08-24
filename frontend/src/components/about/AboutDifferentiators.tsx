@@ -66,7 +66,7 @@ export function AboutDifferentiators({ items }: AboutDifferentiatorsProps) {
               <div className="w-14 h-14 rounded-2xl bg-primary/5 border border-primary/15 flex items-center justify-center text-primary flex-shrink-0 group-hover:bg-primary group-hover:text-white transition-all duration-300">
                 {getIconComponent(item.icon, 26) || <FiIcons.FiLayers size={26} />}
               </div>
-              <div className="text-right">
+              <div className="text-start">
                 <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-primary transition-colors tracking-tight">
                   {item.title}
                 </h3>

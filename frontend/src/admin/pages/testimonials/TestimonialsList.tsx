@@ -4,6 +4,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Pencil, Trash2, Star, Quote } from 'lucide-react';
 import { testimonialsService } from '../../services/testimonials.service';
 import { DataTable, type Column, PageHeader, ConfirmDialog, TranslationStatus } from '../../components/shared';
+import { getTestimonialTranslationStatus } from '../../utils/translationStatus';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
@@ -48,7 +49,7 @@ export default function TestimonialsList() {
           <div>
             <p className="font-medium">{item.clientName}</p>
             <p className="text-sm text-slate-500 mb-1">{item.position}</p>
-            <TranslationStatus isTranslated={!!item.clientNameEn} />
+            <TranslationStatus missingFields={getTestimonialTranslationStatus(item).missingFields} />
           </div>
         </div>
       ),

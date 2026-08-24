@@ -3,13 +3,13 @@ import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 
-const NAV_ITEMS: { id: string; label: string; href?: string }[] = [
-  { id: "services", label: tr("الخدمات") },
-  { id: "projects", label: tr("الأعمال") },
-  { id: "technologies", label: tr("التقنيات") },
-  { id: "testimonials", label: tr("العملاء") },
-  { id: "hosting", label: tr("الباقات") },
-  { id: "footer", label: tr("تواصل") },
+const NAV_ITEMS: { id: string; labelKey: string; href?: string }[] = [
+  { id: "services", labelKey: "الخدمات" },
+  { id: "projects", labelKey: "الأعمال" },
+  { id: "technologies", labelKey: "التقنيات" },
+  { id: "testimonials", labelKey: "العملاء" },
+  { id: "hosting", labelKey: "الباقات" },
+  { id: "footer", labelKey: "تواصل" },
 ];
 
 const HERO_THRESHOLD = 200;
@@ -55,7 +55,7 @@ const FloatingSectionNav = () => {
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: 16 }}
           transition={{ duration: 0.35, ease: "easeOut" }}
-          className="fixed right-5 top-1/2 -translate-y-1/2 z-[55] hidden lg:block"
+          className="fixed end-5 top-1/2 -translate-y-1/2 z-[55] hidden lg:block"
         >
           <div className="rounded-2xl border border-white/10 bg-white/70 backdrop-blur-xl shadow-lg shadow-black/5 px-2 py-2.5">
             <div className="flex flex-col gap-0.5">
@@ -67,9 +67,9 @@ const FloatingSectionNav = () => {
                     <Link
                       key={item.id}
                       to={item.href}
-                      className="w-full text-right px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-slate-600 hover:bg-slate-100/60 transition-all duration-200 cursor-pointer border-0 outline-none"
+                      className="w-full text-start px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-slate-600 hover:bg-slate-100/60 transition-all duration-200 cursor-pointer border-0 outline-none"
                     >
-                      {item.label}
+                      {tr(item.labelKey)}
                     </Link>
                   );
                 }
@@ -78,21 +78,21 @@ const FloatingSectionNav = () => {
                   <button
                     key={item.id}
                     onClick={() => scrollTo(item.id)}
-                    className={`relative w-full text-right px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 cursor-pointer border-0 outline-none ${
+                    className={`relative w-full text-start px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 cursor-pointer border-0 outline-none ${
                       isActive
                         ? "text-[var(--smart-primary)] bg-[var(--smart-primary)]/8"
                         : "text-slate-400 hover:text-slate-600 hover:bg-slate-100/60"
                     }`}
-                    aria-label={item.label}
+                    aria-label={tr(item.labelKey)}
                   >
                     {isActive && (
                       <motion.div
                         layoutId="active-dot"
-                        className="absolute right-1.5 top-1/2 -translate-y-1/2 w-1 h-1 rounded-full bg-[var(--smart-primary)]"
+                        className="absolute start-1.5 top-1/2 -translate-y-1/2 w-1 h-1 rounded-full bg-[var(--smart-primary)]"
                         transition={{ type: "spring", stiffness: 400, damping: 30 }}
                       />
                     )}
-                    <span className={isActive ? "pr-3" : ""}>{item.label}</span>
+                    <span className={isActive ? "ps-3" : ""}>{tr(item.labelKey)}</span>
                   </button>
                 );
               })}

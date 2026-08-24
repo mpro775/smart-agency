@@ -68,6 +68,14 @@ export class HostingPackagesController {
     return this.hostingPackagesService.findAll(filterDto, true);
   }
 
+  @Get('admin/:id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @ApiBearerAuth('JWT-auth')
+  @ResponseMessage('Hosting package fetched successfully')
+  findOneAdmin(@Param('id') id: string) {
+    return this.hostingPackagesService.findOne(id);
+  }
+
   @Get('category/:category')
   @Public()
   @ApiOperation({ summary: 'Get packages by category' })

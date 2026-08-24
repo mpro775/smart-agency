@@ -4,7 +4,7 @@ import type { FAQ, ApiResponse, PaginatedResponse } from '../types';
 export interface FAQFilters {
   page?: number;
   limit?: number;
-  category?: string;
+  categoryKey?: string;
   isActive?: boolean;
   search?: string;
 }
@@ -14,10 +14,10 @@ export interface CreateFAQDto {
   questionEn?: string;
   answer: string;
   answerEn?: string;
-  category?: string;
+  category: string;
   categoryEn?: string;
-  categoryKey?: string;
-  orderNumber?: number;
+  categoryKey: string;
+  order?: number;
   isActive?: boolean;
 }
 
@@ -28,7 +28,7 @@ export const faqsService = {
     const params = new URLSearchParams();
     if (filters?.page) params.append('page', String(filters.page));
     if (filters?.limit) params.append('limit', String(filters.limit));
-    if (filters?.category) params.append('category', filters.category);
+    if (filters?.categoryKey) params.append('categoryKey', filters.categoryKey);
     if (filters?.isActive !== undefined) params.append('isActive', String(filters.isActive));
     if (filters?.search) params.append('search', filters.search);
 

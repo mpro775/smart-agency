@@ -15,6 +15,7 @@ import CustomCursor from "./components/CustomCursor";
 import ScrollToTop from "./components/ScrollToTop";
 import LocaleLayout from "./localization/LocaleLayout";
 import { isLocale, type Locale } from "./i18n";
+import { tr } from "./i18n";
 
 const About = lazy(() => import("./pages/about"));
 const Projects = lazy(() => import("./pages/project"));
@@ -116,7 +117,7 @@ const AboutForm = lazy(() => import("./admin/pages/about/AboutForm"));
 function RouteFallback() {
   return (
     <div className="min-h-[50vh] flex items-center justify-center text-slate-500">
-      جاري التحميل...
+      {tr("جاري التحميل...")}
     </div>
   );
 }

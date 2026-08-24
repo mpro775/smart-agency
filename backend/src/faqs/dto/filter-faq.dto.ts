@@ -13,17 +13,20 @@ export class FilterFaqDto extends PaginationDto {
   category?: string;
 
   @ApiPropertyOptional({
+    description: 'Filter by stable category key',
+    example: 'services',
+  })
+  @IsOptional()
+  @IsString()
+  categoryKey?: string;
+
+  @ApiPropertyOptional({
     description: 'Search in question and answer',
     example: 'hosting',
   })
   @IsOptional()
   @IsString()
   search?: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  searchEn?: string;
 
   @ApiPropertyOptional({
     description: 'Filter by active status',

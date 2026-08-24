@@ -36,7 +36,7 @@ const getIconComponent = (iconName?: string, iconType?: string) => {
   return null;
 };
 
-const fallbackServices = [
+const getFallbackServices = () => [
   {
     _id: "fallback-1",
     title: tr("تطوير تطبيقات الجوال"),
@@ -160,7 +160,7 @@ export default function Services({ initialServices }: ServicesProps) {
       } catch (err) {
         console.warn("API failed, using static fallback.", err);
         setError(tr("تعذر تحميل الخدمات من الخادم"));
-        setServices(fallbackServices as Service[]);
+        setServices(getFallbackServices() as Service[]);
       } finally {
         setLoading(false);
       }
@@ -337,7 +337,7 @@ function ServiceCard({
       )}
 
       <span className="inline-flex items-center gap-1 text-sm font-semibold text-[var(--smart-primary)] group-hover:gap-2 transition-all">
-        {tr("اكتشف المزيد")}<ArrowLeft size={16} />
+        {tr("اكتشف المزيد")}<ArrowLeft size={16} className="directional-arrow" />
       </span>
     </motion.div>
   );
