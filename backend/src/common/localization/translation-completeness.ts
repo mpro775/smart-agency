@@ -19,6 +19,12 @@ const asRecord = (value: unknown): ContentRecord =>
 const asArray = (value: unknown): unknown[] =>
   Array.isArray(value) ? value : [];
 
+const readPath = (record: ContentRecord, path: string): unknown =>
+  path.split('.').reduce<unknown>((current, key) => {
+    if (!current || typeof current !== 'object') return undefined;
+    return (current as ContentRecord)[key];
+  }, record);
+
 const hasContent = (value: unknown): boolean => {
   if (typeof value === 'string') return value.trim().length > 0;
   if (Array.isArray(value)) return value.length > 0;
@@ -33,10 +39,7 @@ const requireField = (
   record: ContentRecord,
   path: string,
 ) => {
-  const value = path.split('.').reduce<unknown>((current, key) => {
-    if (!current || typeof current !== 'object') return undefined;
-    return (current as ContentRecord)[key];
-  }, record);
+  const value = readPath(record, path);
   if (!hasContent(value)) missing.push(path);
 };
 
@@ -46,12 +49,10 @@ const requireCompanionWhenSourceExists = (
   sourcePath: string,
   englishPath: string,
 ) => {
-  const read = (path: string) =>
-    path.split('.').reduce<unknown>((current, key) => {
-      if (!current || typeof current !== 'object') return undefined;
-      return (current as ContentRecord)[key];
-    }, record);
-  if (hasContent(read(sourcePath)) && !hasContent(read(englishPath))) {
+  if (
+    hasContent(readPath(record, sourcePath)) &&
+    !hasContent(readPath(record, englishPath))
+  ) {
     missing.push(englishPath);
   }
 };
@@ -62,16 +63,13 @@ const requireTranslatedArray = (
   sourceField: string,
   englishField: string,
 ) => {
-  const source = record[sourceField];
-  const english = record[englishField];
-  if (
-    Array.isArray(source) &&
-    source.length > 0 &&
-    (!Array.isArray(english) ||
-      english.length !== source.length ||
-      english.some((item) => !hasContent(item)))
-  ) {
-    missing.push(englishField);
+  const source = asArray(readPath(record, sourceField));
+  const english = asArray(readPath(record, englishField));
+
+  for (const [index, sourceItem] of source.entries()) {
+    if (hasContent(sourceItem) && !hasContent(english[index])) {
+      missing.push(`${englishField}[${index}]`);
+    }
   }
 };
 
@@ -81,14 +79,14 @@ const requireTranslatedRecord = (
   sourceField: string,
   englishField: string,
 ) => {
-  const source = asRecord(record[sourceField]);
-  const english = asRecord(record[englishField]);
+  const source = asRecord(readPath(record, sourceField));
+  const english = asRecord(readPath(record, englishField));
   const sourceKeys = Object.keys(source);
-  if (
-    sourceKeys.length > 0 &&
-    sourceKeys.some((key) => !hasContent(english[key]))
-  ) {
-    missing.push(englishField);
+
+  for (const key of sourceKeys) {
+    if (hasContent(source[key]) && !hasContent(english[key])) {
+      missing.push(`${englishField}.${key}`);
+    }
   }
 };
 
@@ -143,6 +141,10 @@ export function getMissingEnglishFields(
 
   if (model === 'project') {
     requireTranslatedArray(missing, record, 'features', 'featuresEn');
+    for (const field of ['clientName', 'industry', 'duration']) {
+      requireCompanionWhenSourceExists(missing, record, field, `${field}En`);
+    }
+    requireTranslatedArray(missing, record, 'seo.keywords', 'seo.keywordsEn');
     for (const [index, value] of asArray(record.results).entries()) {
       const item = asRecord(value);
       const itemMissing: string[] = [];
@@ -181,6 +183,23 @@ export function getMissingEnglishFields(
       'authorRole',
       'authorRoleEn',
     );
+    for (const field of ['ctaTitle', 'ctaDescription', 'ctaButtonText']) {
+      requireCompanionWhenSourceExists(missing, record, field, `${field}En`);
+    }
+    requireTranslatedArray(missing, record, 'seo.keywords', 'seo.keywordsEn');
+    for (const field of [
+      'ogTitle',
+      'ogDescription',
+      'twitterTitle',
+      'twitterDescription',
+    ]) {
+      requireCompanionWhenSourceExists(
+        missing,
+        record,
+        `seo.${field}`,
+        `seo.${field}En`,
+      );
+    }
   }
 
   if (model === 'service') {
@@ -236,17 +255,56 @@ export function getMissingEnglishFields(
   }
 
   if (model === 'about') {
-    for (const section of [
-      'thinking',
-      'differentiators',
-      'process',
-      'values',
-    ]) {
+    for (const field of ['badge', 'primaryButtonText', 'secondaryButtonText']) {
+      requireCompanionWhenSourceExists(
+        missing,
+        record,
+        `hero.${field}`,
+        `hero.${field}En`,
+      );
+    }
+    requireTranslatedArray(
+      missing,
+      record,
+      'hero.trustBadges',
+      'hero.trustBadgesEn',
+    );
+
+    for (const field of ['title', 'description', 'closingStatement']) {
+      requireCompanionWhenSourceExists(
+        missing,
+        record,
+        `story.${field}`,
+        `story.${field}En`,
+      );
+    }
+    requireTranslatedArray(
+      missing,
+      record,
+      'story.painPoints',
+      'story.painPointsEn',
+    );
+
+    const nestedSections: Record<string, string[]> = {
+      thinking: ['result'],
+      differentiators: ['badge'],
+      process: ['deliverable'],
+      values: ['example'],
+    };
+    for (const [section, optionalFields] of Object.entries(nestedSections)) {
       for (const [index, value] of asArray(record[section]).entries()) {
         const item = asRecord(value);
         const itemMissing: string[] = [];
         requireField(itemMissing, item, 'titleEn');
         requireField(itemMissing, item, 'descriptionEn');
+        for (const field of optionalFields) {
+          requireCompanionWhenSourceExists(
+            itemMissing,
+            item,
+            field,
+            `${field}En`,
+          );
+        }
         missing.push(
           ...itemMissing.map((field) => `${section}.${index}.${field}`),
         );
@@ -262,6 +320,7 @@ export function getMissingEnglishFields(
         'description',
         'descriptionEn',
       );
+      requireCompanionWhenSourceExists(itemMissing, item, 'suffix', 'suffixEn');
       missing.push(...itemMissing.map((field) => `stats.${index}.${field}`));
     }
     requireCompanionWhenSourceExists(
@@ -276,6 +335,19 @@ export function getMissingEnglishFields(
       'teamNote.description',
       'teamNote.descriptionEn',
     );
+    requireTranslatedArray(
+      missing,
+      record,
+      'teamNote.highlights',
+      'teamNote.highlightsEn',
+    );
+    requireCompanionWhenSourceExists(
+      missing,
+      record,
+      'cta.secondaryButtonText',
+      'cta.secondaryButtonTextEn',
+    );
+    requireTranslatedArray(missing, record, 'seo.keywords', 'seo.keywordsEn');
   }
 
   return [...new Set(missing)];

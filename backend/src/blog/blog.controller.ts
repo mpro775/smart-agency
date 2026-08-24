@@ -7,8 +7,10 @@ import {
   Param,
   Delete,
   Query,
+  Req,
   UseGuards,
 } from '@nestjs/common';
+import type { Request } from 'express';
 import {
   ApiTags,
   ApiOperation,
@@ -26,6 +28,7 @@ import { Roles } from '../auth/decorators/roles.decorator';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { UserRole } from '../users/schemas/user.schema';
 import { ResponseMessage } from '../common/decorators';
+import { resolveLocale } from '../common/localization/locale';
 
 @ApiTags('Blog')
 @Controller('blog')
@@ -73,8 +76,8 @@ export class BlogController {
   @ApiOperation({ summary: 'Get all unique tags' })
   @ApiResponse({ status: 200, description: 'Tags fetched successfully' })
   @ResponseMessage('Tags fetched successfully')
-  getAllTags(@Query('lang') lang?: string) {
-    return this.blogService.getAllTags(lang === 'en' ? 'en' : 'ar');
+  getAllTags(@Req() request: Request) {
+    return this.blogService.getAllTags(resolveLocale(request));
   }
 
   @Get('categories')
@@ -82,8 +85,8 @@ export class BlogController {
   @ApiOperation({ summary: 'Get all blog categories' })
   @ApiResponse({ status: 200, description: 'Categories fetched successfully' })
   @ResponseMessage('Categories fetched successfully')
-  getCategories(@Query('lang') lang?: string) {
-    return this.blogService.getAllCategories(lang === 'en' ? 'en' : 'ar');
+  getCategories(@Req() request: Request) {
+    return this.blogService.getAllCategories(resolveLocale(request));
   }
 
   @Get('featured')

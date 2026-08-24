@@ -10,6 +10,20 @@ describe('localization', () => {
     ).toBe('en');
   });
 
+  it('resolves equivalent English query and Accept-Language requests', () => {
+    const queryLocale = resolveLocale({
+      query: { lang: 'en' },
+      headers: {},
+    });
+    const headerLocale = resolveLocale({
+      query: {},
+      headers: { 'accept-language': 'en-US,en;q=0.9' },
+    });
+
+    expect(queryLocale).toBe('en');
+    expect(headerLocale).toBe(queryLocale);
+  });
+
   it('falls back to Arabic for unsupported locales', () => {
     expect(resolveLocale({ query: { lang: 'fr' }, headers: {} } as never)).toBe(
       'ar',

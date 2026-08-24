@@ -6,6 +6,9 @@ WORKDIR /app
 ARG VITE_API_URL=/api
 ENV VITE_API_URL=$VITE_API_URL
 
+ARG SITEMAP_API_URL
+ENV SITEMAP_API_URL=$SITEMAP_API_URL
+
 # Increase Node memory limit for build
 ENV NODE_OPTIONS="--max-old-space-size=2048"
 
