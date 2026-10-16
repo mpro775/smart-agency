@@ -16,6 +16,8 @@ import {
   X,
   Building2,
   Info,
+  Award,
+  GraduationCap,
 } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 import { cn } from "@/lib/utils";
@@ -35,6 +37,8 @@ const menuItems = [
   { path: "/admin/blog", label: "المدونة", icon: FileText },
   { path: "/admin/leads", label: "العملاء المحتملين", icon: Users },
   { path: "/admin/team", label: "الفريق", icon: UserCircle },
+  { path: '/admin/certificates', label: 'الشهادات', icon: Award },
+  { path: '/admin/trainees', label: 'المتدربون', icon: GraduationCap },
   {
     path: "/admin/testimonials",
     label: "آراء العملاء",
@@ -101,6 +105,8 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                   : location.pathname.startsWith(item.path);
 
                 return (
+                  <div key={item.path}>
+                  {item.path === '/admin/certificates' && <p className="px-4 pt-5 pb-2 text-xs text-slate-500">الشهادات والتدريب</p>}
                   <NavLink
                     key={item.path}
                     to={item.path}
@@ -124,6 +130,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                       <ChevronRight className="h-4 w-4 ml-auto text-emerald-400 shrink-0" />
                     )}
                   </NavLink>
+                  </div>
                 );
               })}
             </nav>

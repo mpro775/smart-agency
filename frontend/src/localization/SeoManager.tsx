@@ -13,6 +13,7 @@ const seoCopy = {
     quote: ["اطلب عرض سعر | وكالة سمارت", "ابدأ مشروعك الرقمي واحصل على استشارة وعرض سعر مناسب."],
     contact: ["تواصل معنا | وكالة سمارت", "تواصل مع فريق وكالة سمارت لمناقشة مشروعك الرقمي."],
     bot: ["Smart Bot | وكالة سمارت", "مساعد ذكي لأعمالك وخدمة عملائك."],
+    verify: ['التحقق من الشهادة | وكالة سمارت', 'التحقق من حالة وصحة شهادات التدريب الصادرة عن وكالة سمارت.'],
   },
   en: {
     home: ["Smart Agency | Digital Solutions", "Integrated digital solutions for websites, apps, digital marketing, and creative design."],
@@ -22,6 +23,7 @@ const seoCopy = {
     quote: ["Request a Quote | Smart Agency", "Start your digital project with a tailored consultation and quote."],
     contact: ["Contact Us | Smart Agency", "Contact the Smart Agency team to discuss your digital project."],
     bot: ["Smart Bot | Smart Agency", "An intelligent assistant for your business and customers."],
+    verify: ['Certificate Verification | Smart Agency', 'Verify the authenticity and status of credentials issued by Smart Agency.'],
   },
 } as const;
 
@@ -62,6 +64,7 @@ export default function SeoManager() {
     const enUrl = `${siteUrl}/en${pathWithoutLocale === "/" ? "" : pathWithoutLocale}`;
 
     document.title = title;
+    upsertMeta('meta[name="robots"]', { name: 'robots', content: pathWithoutLocale.startsWith('/verify/') ? 'noindex, nofollow' : 'index, follow' });
     upsertMeta('meta[name="description"]', { name: "description", content: description });
     upsertMeta('meta[property="og:title"]', { property: "og:title", content: title });
     upsertMeta('meta[property="og:description"]', { property: "og:description", content: description });

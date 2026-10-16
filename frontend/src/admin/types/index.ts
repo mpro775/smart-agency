@@ -1,4 +1,5 @@
 // User & Auth Types
+export type { ManagedAsset, Trainee, TraineeInput, Certificate, CertificateInput, CertificateStatus, CertificateType, CertificateSkill, CertificateAdminListItem, PublicCertificateVerification } from '../../types/credentials';
 export interface User {
   _id: string;
   name: string;

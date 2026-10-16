@@ -24,6 +24,8 @@ import { CompanyInfoModule } from './company-info/company-info.module';
 import { AboutModule } from './about/about.module';
 import { PublicHomepageModule } from './public-homepage/public-homepage.module';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { TraineesModule } from './trainees/trainees.module';
+import { CertificatesModule } from './certificates/certificates.module';
 
 @Module({
   imports: [
@@ -75,6 +77,8 @@ import { DashboardModule } from './dashboard/dashboard.module';
     AboutModule,
     PublicHomepageModule,
     DashboardModule,
+    TraineesModule,
+    CertificatesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -13,6 +13,7 @@ import {
 import { Upload } from '@aws-sdk/lib-storage';
 import { UploadResponseDto } from './dto/upload-response.dto';
 import sharp from 'sharp';
+import { createHash, randomUUID } from 'node:crypto';
 
 export interface UploadOptions {
   folder?: string;
@@ -164,11 +165,67 @@ export class UploadsService {
         bytes: fileBuffer.length,
         width,
         height,
+        mimeType,
+        originalName: file.originalname,
+        sha256: createHash('sha256').update(fileBuffer).digest('hex'),
       };
     } catch (error) {
       const message = this.getErrorMessage(error);
       this.logger.error(`Failed to upload file: ${message}`);
       throw new BadRequestException('Failed to upload file');
+    }
+  }
+
+  async uploadDocument(
+    file: Express.Multer.File,
+    options: UploadOptions = {},
+  ): Promise<UploadResponseDto> {
+    if (
+      !file ||
+      file.mimetype !== 'application/pdf' ||
+      !file.buffer?.subarray(0, 5).equals(Buffer.from('%PDF-'))
+    ) {
+      throw new BadRequestException('Only valid PDF documents are allowed');
+    }
+    if (!file.size || file.size > 15 * 1024 * 1024)
+      throw new BadRequestException('PDF size must be between 1 byte and 15MB');
+    const folder = options.folder || 'certificates/pdf';
+    if (!/^[a-zA-Z0-9_-]+(?:\/[a-zA-Z0-9_-]+)*$/.test(folder))
+      throw new BadRequestException('Invalid upload folder');
+    this.assertStorageConfigured();
+    const filename =
+      file.originalname
+        .replace(/\\/g, '/')
+        .split('/')
+        .pop()!
+        .replace(/\.pdf$/i, '')
+        .replace(/[^a-zA-Z0-9_-]/g, '_')
+        .slice(0, 100) || 'certificate';
+    const key = `smart-agency/${folder}/${new Date().getUTCFullYear()}/${randomUUID()}-${filename}.pdf`;
+    const sha256 = createHash('sha256').update(file.buffer).digest('hex');
+    try {
+      await new Upload({
+        client: this.s3Client!,
+        params: {
+          Bucket: this.bucketName!,
+          Key: key,
+          Body: file.buffer,
+          ContentType: 'application/pdf',
+          ContentDisposition: `attachment; filename="${filename}.pdf"`,
+          CacheControl: 'public, max-age=31536000, immutable',
+        },
+      }).done();
+      return {
+        url: this.buildPublicUrl(key),
+        publicId: key,
+        mimeType: 'application/pdf',
+        format: 'pdf',
+        bytes: file.buffer.length,
+        originalName: file.originalname,
+        sha256,
+      };
+    } catch {
+      throw new BadRequestException('Failed to upload PDF document');
     }
   }
 

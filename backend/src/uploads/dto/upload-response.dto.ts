@@ -1,6 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UploadResponseDto {
+  @ApiProperty({ required: false }) mimeType?: string;
+  @ApiProperty({ required: false }) originalName?: string;
+  @ApiProperty({ required: false }) sha256?: string;
   @ApiProperty({
     description: 'Public URL of the uploaded file (Cloudflare R2)',
     example: 'https://assets.smartagency.com/projects/1700000000_logo.png',

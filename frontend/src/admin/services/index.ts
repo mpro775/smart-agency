@@ -13,3 +13,6 @@ export { projectCategoriesService } from "./project-categories.service";
 export { companyInfoService } from "./company-info.service";
 export type { CompanyInfo, UpdateCompanyInfoDto } from "./company-info.service";
 export { dashboardService } from "./dashboard.service";
+export { traineesService } from './trainees.service';
+export { certificatesService } from './certificates.service';
+export { uploadManagedImage, uploadPdfDocument } from './api';

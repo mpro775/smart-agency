@@ -35,6 +35,21 @@ import { UploadResponseDto } from './dto/upload-response.dto';
 export class UploadsController {
   constructor(private readonly uploadsService: UploadsService) {}
 
+  @Post('document')
+  @UseInterceptors(
+    FileInterceptor('file', { limits: { fileSize: 15 * 1024 * 1024 } }),
+  )
+  @ApiOperation({ summary: 'Upload a PDF document (maximum 15 MB)' })
+  @ApiConsumes('multipart/form-data')
+  @ApiQuery({ name: 'folder', required: false })
+  @ApiResponse({ status: 201, type: UploadResponseDto })
+  uploadDocument(
+    @UploadedFile() file: Express.Multer.File,
+    @Query('folder') folder?: string,
+  ) {
+    return this.uploadsService.uploadDocument(file, { folder });
+  }
+
   @Post('image')
   @UseInterceptors(FileInterceptor('file'))
   @ApiOperation({ summary: 'Upload a single image' })

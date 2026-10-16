@@ -25,6 +25,11 @@ const BlogPage = lazy(() => import("./pages/blog"));
 const BlogDetailsPage = lazy(() => import("./pages/blogDetails"));
 const BotLanding = lazy(() => import("./pages/bot"));
 const ContactPage = lazy(() => import("./pages/contact"));
+const VerifyPage = lazy(() => import('./pages/verify'));
+const TraineesList = lazy(() => import('./admin/pages/trainees/TraineesList'));
+const TraineeForm = lazy(() => import('./admin/pages/trainees/TraineeForm'));
+const CertificatesList = lazy(() => import('./admin/pages/certificates/CertificatesList'));
+const CertificateForm = lazy(() => import('./admin/pages/certificates/CertificateForm'));
 
 // Conditional Footer: hides on home page (homepage has its own Footer)
 function LayoutFooter() {
@@ -65,6 +70,13 @@ function LegacyRedirect() {
       to={`/ar${location.pathname}${location.search}${location.hash}`}
     />
   );
+}
+
+function VerifyRedirect() {
+  const location = useLocation();
+  const stored = localStorage.getItem('preferredLocale');
+  const locale: Locale = isLocale(stored ?? undefined) ? stored as Locale : navigator.language.toLowerCase().startsWith('en') ? 'en' : 'ar';
+  return <Navigate replace to={`/${locale}${location.pathname}${location.search}${location.hash}`} />;
 }
 
 // Admin imports
@@ -144,11 +156,15 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               <Route path="bot" element={<BotLanding />} />
               <Route path="quote" element={<QuotePage />} />
               <Route path="contact" element={<ContactPage />} />
+              <Route path="verify" element={<VerifyPage />} />
+              <Route path="verify/:certificateId" element={<VerifyPage />} />
               <Route path="*" element={<Navigate replace to=".." />} />
             </Route>
 
             {/* Backward-compatible redirects; old URLs remain Arabic. */}
             <Route path="/" element={<RootRedirect />} />
+            <Route path="/verify" element={<VerifyRedirect />} />
+            <Route path="/verify/:certificateId" element={<VerifyRedirect />} />
             <Route path="/about" element={<LegacyRedirect />} />
             <Route path="/projects" element={<LegacyRedirect />} />
             <Route path="/projects/:id" element={<LegacyRedirect />} />
@@ -186,6 +202,12 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               <Route path="leads" element={<LeadsList />} />
 
               {/* Team */}
+              <Route path="trainees" element={<TraineesList />} />
+              <Route path="trainees/new" element={<TraineeForm />} />
+              <Route path="trainees/:id/edit" element={<TraineeForm />} />
+              <Route path="certificates" element={<CertificatesList />} />
+              <Route path="certificates/new" element={<CertificateForm />} />
+              <Route path="certificates/:id/edit" element={<CertificateForm />} />
               <Route path="team" element={<TeamList />} />
               <Route path="team/new" element={<TeamForm />} />
               <Route path="team/:id/edit" element={<TeamForm />} />

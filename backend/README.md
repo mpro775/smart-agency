@@ -233,3 +233,13 @@ src/
 ## License
 
 Private - Smart Agency
+# Certificate verification
+
+Set `PUBLIC_SITE_URL=https://smartagency-ye.com` to the canonical public website origin.
+Certificate links use `/verify/{certificateId}` and never the incoming request host.
+When unset, the first `FRONTEND_URL` is used, then `https://smartagency-ye.com`.
+PDF uploads use the existing R2 configuration and accept PDF documents up to 15 MB.
+Only administrators can issue or revoke credentials. Editors can manage trainees and drafts.
+Issued credentials retain their holder snapshot; only privacy switches can be changed.
+For corrections, revoke the credential and create a draft with `supersedesCertificateId`.
+
