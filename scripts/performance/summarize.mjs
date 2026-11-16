@@ -1,10 +1,11 @@
 import { fileURLToPath } from 'node:url';
 process.chdir(fileURLToPath(new URL('../../', import.meta.url)));
 import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 const stages=process.argv.slice(2);
-if(!stages.length)stages.push('baseline','verified');
+if(!stages.length)stages.push('baseline','release');
 const median=values=>[...values].sort((a,b)=>a-b)[Math.floor(values.length/2)];
-const output={date:'2026-11-17',baselineCommit:'9483fd4bef25c49204b1a4d5dbf71f9cf8d0b10c',environment:'Local Nginx 1.28.0, cold Chrome, live public CMS snapshots; not production PageSpeed',stages:{}};
+const output={date:'2026-11-17',baselineCommit:'9483fd4bef25c49204b1a4d5dbf71f9cf8d0b10c',measuredCommit:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),environment:'Local Nginx 1.28.0, cold Chrome, live public CMS snapshots; not production PageSpeed',stages:{}};
 for(const stage of stages){
   const folder=`performance-artifacts/${stage}`;
   const runs=readdirSync(folder).filter(name=>/^(ar|en)-(mobile|desktop)-[123]\.json$/.test(name)).map(file=>{

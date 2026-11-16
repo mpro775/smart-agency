@@ -1,0 +1,830 @@
+{
+  "date": "2026-11-17",
+  "baselineCommit": "9483fd4bef25c49204b1a4d5dbf71f9cf8d0b10c",
+  "measuredCommit": "0f75806c5c6af00761ecce531a57a310f17fcb95",
+  "environment": "Local Nginx 1.28.0, cold Chrome, live public CMS snapshots; not production PageSpeed",
+  "stages": {
+    "baseline": {
+      "medians": [
+        {
+          "locale": "ar",
+          "device": "mobile",
+          "performance": 43,
+          "accessibility": 88,
+          "bestPractices": 100,
+          "seo": 100,
+          "lcpMs": 13683.545999999998,
+          "cls": 0,
+          "tbtMs": 3219,
+          "scriptTransferBytes": 1312623
+        },
+        {
+          "locale": "ar",
+          "device": "desktop",
+          "performance": 69,
+          "accessibility": 88,
+          "bestPractices": 100,
+          "seo": 100,
+          "lcpMs": 2304.902,
+          "cls": 0.003288969598723565,
+          "tbtMs": 384,
+          "scriptTransferBytes": 1312623
+        },
+        {
+          "locale": "en",
+          "device": "mobile",
+          "performance": 33,
+          "accessibility": 88,
+          "bestPractices": 100,
+          "seo": 100,
+          "lcpMs": 14714.999999999998,
+          "cls": 0.1918666464155528,
+          "tbtMs": 3396.000000000002,
+          "scriptTransferBytes": 1312623
+        },
+        {
+          "locale": "en",
+          "device": "desktop",
+          "performance": 38,
+          "accessibility": 88,
+          "bestPractices": 100,
+          "seo": 100,
+          "lcpMs": 2308.616,
+          "cls": 0.8648642322097378,
+          "tbtMs": 571,
+          "scriptTransferBytes": 1312623
+        }
+      ],
+      "runs": [
+        {
+          "file": "ar-desktop-1.json",
+          "locale": "ar",
+          "device": "desktop",
+          "run": 1,
+          "fetchTime": "2026-11-16T22:58:51.135Z",
+          "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/159.0.0.0 Safari/537.36",
+          "scores": {
+            "performance": 78,
+            "accessibility": 88,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "lcpMs": 2304.902,
+          "cls": 0.003288969598723565,
+          "tbtMs": 244.55050000000006,
+          "scriptTransferBytes": 1312623,
+          "scriptUrls": [
+            "http://127.0.0.1:4173/assets/index-EQIET_mT.js",
+            "http://127.0.0.1:4173/assets/editor-QqV87v8y.js",
+            "http://127.0.0.1:4173/assets/react-vendor-DOC9rY5m.js",
+            "http://127.0.0.1:4173/assets/motion-DqiiRemo.js",
+            "http://127.0.0.1:4173/assets/icons-D_u1r4eg.js",
+            "http://127.0.0.1:4173/assets/vendor-axios-B9ygI19o.js",
+            "http://127.0.0.1:4173/assets/radix-CjHiJR_q.js",
+            "http://127.0.0.1:4173/assets/query-DKnNoWue.js"
+          ],
+          "runtimeError": null
+        },
+        {
+          "file": "ar-desktop-2.json",
+          "locale": "ar",
+          "device": "desktop",
+          "run": 2,
+          "fetchTime": "2026-11-16T22:59:17.014Z",
+          "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/159.0.0.0 Safari/537.36",
+          "scores": {
+            "performance": 69,
+            "accessibility": 88,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "lcpMs": 2307.683,
+          "cls": 0.003288969598723565,
+          "tbtMs": 384,
+          "scriptTransferBytes": 1312623,
+          "scriptUrls": [
+            "http://127.0.0.1:4173/assets/index-EQIET_mT.js",
+            "http://127.0.0.1:4173/assets/editor-QqV87v8y.js",
+            "http://127.0.0.1:4173/assets/react-vendor-DOC9rY5m.js",
+            "http://127.0.0.1:4173/assets/motion-DqiiRemo.js",
+            "http://127.0.0.1:4173/assets/icons-D_u1r4eg.js",
+            "http://127.0.0.1:4173/assets/vendor-axios-B9ygI19o.js",
+            "http://127.0.0.1:4173/assets/radix-CjHiJR_q.js",
+            "http://127.0.0.1:4173/assets/query-DKnNoWue.js"
+          ],
+          "runtimeError": null
+        },
+        {
+          "file": "ar-desktop-3.json",
+          "locale": "ar",
+          "device": "desktop",
+          "run": 3,
+          "fetchTime": "2026-11-16T22:59:46.803Z",
+          "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/159.0.0.0 Safari/537.36",
+          "scores": {
+            "performance": 63,
+            "accessibility": 88,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "lcpMs": 2281.5959999999995,
+          "cls": 0.003288969598723565,
+          "tbtMs": 543.4679999999998,
+          "scriptTransferBytes": 1312623,
+          "scriptUrls": [
+            "http://127.0.0.1:4173/assets/index-EQIET_mT.js",
+            "http://127.0.0.1:4173/assets/editor-QqV87v8y.js",
+            "http://127.0.0.1:4173/assets/react-vendor-DOC9rY5m.js",
+            "http://127.0.0.1:4173/assets/motion-DqiiRemo.js",
+            "http://127.0.0.1:4173/assets/icons-D_u1r4eg.js",
+            "http://127.0.0.1:4173/assets/vendor-axios-B9ygI19o.js",
+            "http://127.0.0.1:4173/assets/radix-CjHiJR_q.js",
+            "http://127.0.0.1:4173/assets/query-DKnNoWue.js"
+          ],
+          "runtimeError": null
+        },
+        {
+          "file": "ar-mobile-1.json",
+          "locale": "ar",
+          "device": "mobile",
+          "run": 1,
+          "fetchTime": "2026-11-16T22:57:11.943Z",
+          "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/159.0.0.0 Safari/537.36",
+          "scores": {
+            "performance": 43,
+            "accessibility": 88,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "lcpMs": 13683.545999999998,
+          "cls": 0,
+          "tbtMs": 3219,
+          "scriptTransferBytes": 1312623,
+          "scriptUrls": [
+            "http://127.0.0.1:4173/assets/index-EQIET_mT.js",
+            "http://127.0.0.1:4173/assets/editor-QqV87v8y.js",
+            "http://127.0.0.1:4173/assets/react-vendor-DOC9rY5m.js",
+            "http://127.0.0.1:4173/assets/motion-DqiiRemo.js",
+            "http://127.0.0.1:4173/assets/icons-D_u1r4eg.js",
+            "http://127.0.0.1:4173/assets/vendor-axios-B9ygI19o.js",
+            "http://127.0.0.1:4173/assets/radix-CjHiJR_q.js",
+            "http://127.0.0.1:4173/assets/query-DKnNoWue.js"
+          ],
+          "runtimeError": null
+        },
+        {
+          "file": "ar-mobile-2.json",
+          "locale": "ar",
+          "device": "mobile",
+          "run": 2,
+          "fetchTime": "2026-11-16T22:57:42.776Z",
+          "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/159.0.0.0 Safari/537.36",
+          "scores": {
+            "performance": 43,
+            "accessibility": 88,
+            "best-practices": 96,
+            "seo": 100
+          },
+          "lcpMs": 13658.937000000002,
+          "cls": 0,
+          "tbtMs": 3012.000000000002,
+          "scriptTransferBytes": 1312623,
+          "scriptUrls": [
+            "http://127.0.0.1:4173/assets/index-EQIET_mT.js",
+            "http://127.0.0.1:4173/assets/editor-QqV87v8y.js",
+            "http://127.0.0.1:4173/assets/react-vendor-DOC9rY5m.js",
+            "http://127.0.0.1:4173/assets/motion-DqiiRemo.js",
+            "http://127.0.0.1:4173/assets/icons-D_u1r4eg.js",
+            "http://127.0.0.1:4173/assets/vendor-axios-B9ygI19o.js",
+            "http://127.0.0.1:4173/assets/radix-CjHiJR_q.js",
+            "http://127.0.0.1:4173/assets/query-DKnNoWue.js"
+          ],
+          "runtimeError": null
+        },
+        {
+          "file": "ar-mobile-3.json",
+          "locale": "ar",
+          "device": "mobile",
+          "run": 3,
+          "fetchTime": "2026-11-16T22:58:23.547Z",
+          "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/159.0.0.0 Safari/537.36",
+          "scores": {
+            "performance": 43,
+            "accessibility": 88,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "lcpMs": 13737.645,
+          "cls": 0,
+          "tbtMs": 3221,
+          "scriptTransferBytes": 1312623,
+          "scriptUrls": [
+            "http://127.0.0.1:4173/assets/index-EQIET_mT.js",
+            "http://127.0.0.1:4173/assets/editor-QqV87v8y.js",
+            "http://127.0.0.1:4173/assets/react-vendor-DOC9rY5m.js",
+            "http://127.0.0.1:4173/assets/motion-DqiiRemo.js",
+            "http://127.0.0.1:4173/assets/icons-D_u1r4eg.js",
+            "http://127.0.0.1:4173/assets/vendor-axios-B9ygI19o.js",
+            "http://127.0.0.1:4173/assets/radix-CjHiJR_q.js",
+            "http://127.0.0.1:4173/assets/query-DKnNoWue.js"
+          ],
+          "runtimeError": null
+        },
+        {
+          "file": "en-desktop-1.json",
+          "locale": "en",
+          "device": "desktop",
+          "run": 1,
+          "fetchTime": "2026-11-16T23:01:49.298Z",
+          "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/159.0.0.0 Safari/537.36",
+          "scores": {
+            "performance": 38,
+            "accessibility": 88,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "lcpMs": 2301.575,
+          "cls": 0.8648642322097378,
+          "tbtMs": 571,
+          "scriptTransferBytes": 1312623,
+          "scriptUrls": [
+            "http://127.0.0.1:4173/assets/index-EQIET_mT.js",
+            "http://127.0.0.1:4173/assets/editor-QqV87v8y.js",
+            "http://127.0.0.1:4173/assets/react-vendor-DOC9rY5m.js",
+            "http://127.0.0.1:4173/assets/motion-DqiiRemo.js",
+            "http://127.0.0.1:4173/assets/icons-D_u1r4eg.js",
+            "http://127.0.0.1:4173/assets/vendor-axios-B9ygI19o.js",
+            "http://127.0.0.1:4173/assets/radix-CjHiJR_q.js",
+            "http://127.0.0.1:4173/assets/query-DKnNoWue.js"
+          ],
+          "runtimeError": null
+        },
+        {
+          "file": "en-desktop-2.json",
+          "locale": "en",
+          "device": "desktop",
+          "run": 2,
+          "fetchTime": "2026-11-16T23:02:18.475Z",
+          "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/159.0.0.0 Safari/537.36",
+          "scores": {
+            "performance": 34,
+            "accessibility": 88,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "lcpMs": 2308.616,
+          "cls": 0.8648642322097378,
+          "tbtMs": 709.1279999999997,
+          "scriptTransferBytes": 1312623,
+          "scriptUrls": [
+            "http://127.0.0.1:4173/assets/index-EQIET_mT.js",
+            "http://127.0.0.1:4173/assets/editor-QqV87v8y.js",
+            "http://127.0.0.1:4173/assets/react-vendor-DOC9rY5m.js",
+            "http://127.0.0.1:4173/assets/motion-DqiiRemo.js",
+            "http://127.0.0.1:4173/assets/icons-D_u1r4eg.js",
+            "http://127.0.0.1:4173/assets/vendor-axios-B9ygI19o.js",
+            "http://127.0.0.1:4173/assets/radix-CjHiJR_q.js",
+            "http://127.0.0.1:4173/assets/query-DKnNoWue.js"
+          ],
+          "runtimeError": null
+        },
+        {
+          "file": "en-desktop-3.json",
+          "locale": "en",
+          "device": "desktop",
+          "run": 3,
+          "fetchTime": "2026-11-16T23:02:45.891Z",
+          "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/159.0.0.0 Safari/537.36",
+          "scores": {
+            "performance": 50,
+            "accessibility": 88,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "lcpMs": 2310.0919999999996,
+          "cls": 0.8648642322097378,
+          "tbtMs": 296.5,
+          "scriptTransferBytes": 1312623,
+          "scriptUrls": [
+            "http://127.0.0.1:4173/assets/index-EQIET_mT.js",
+            "http://127.0.0.1:4173/assets/editor-QqV87v8y.js",
+            "http://127.0.0.1:4173/assets/react-vendor-DOC9rY5m.js",
+            "http://127.0.0.1:4173/assets/motion-DqiiRemo.js",
+            "http://127.0.0.1:4173/assets/icons-D_u1r4eg.js",
+            "http://127.0.0.1:4173/assets/vendor-axios-B9ygI19o.js",
+            "http://127.0.0.1:4173/assets/radix-CjHiJR_q.js",
+            "http://127.0.0.1:4173/assets/query-DKnNoWue.js"
+          ],
+          "runtimeError": null
+        },
+        {
+          "file": "en-mobile-1.json",
+          "locale": "en",
+          "device": "mobile",
+          "run": 1,
+          "fetchTime": "2026-11-16T23:00:20.362Z",
+          "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/159.0.0.0 Safari/537.36",
+          "scores": {
+            "performance": 33,
+            "accessibility": 88,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "lcpMs": 14640,
+          "cls": 0.1918666464155528,
+          "tbtMs": 3396.000000000002,
+          "scriptTransferBytes": 1312623,
+          "scriptUrls": [
+            "http://127.0.0.1:4173/assets/index-EQIET_mT.js",
+            "http://127.0.0.1:4173/assets/editor-QqV87v8y.js",
+            "http://127.0.0.1:4173/assets/react-vendor-DOC9rY5m.js",
+            "http://127.0.0.1:4173/assets/motion-DqiiRemo.js",
+            "http://127.0.0.1:4173/assets/icons-D_u1r4eg.js",
+            "http://127.0.0.1:4173/assets/vendor-axios-B9ygI19o.js",
+            "http://127.0.0.1:4173/assets/radix-CjHiJR_q.js",
+            "http://127.0.0.1:4173/assets/query-DKnNoWue.js"
+          ],
+          "runtimeError": null
+        },
+        {
+          "file": "en-mobile-2.json",
+          "locale": "en",
+          "device": "mobile",
+          "run": 2,
+          "fetchTime": "2026-11-16T23:00:57.137Z",
+          "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/159.0.0.0 Safari/537.36",
+          "scores": {
+            "performance": 31,
+            "accessibility": 88,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "lcpMs": 14856.966,
+          "cls": 0.1918666464155528,
+          "tbtMs": 4411.678000000002,
+          "scriptTransferBytes": 1312623,
+          "scriptUrls": [
+            "http://127.0.0.1:4173/assets/index-EQIET_mT.js",
+            "http://127.0.0.1:4173/assets/editor-QqV87v8y.js",
+            "http://127.0.0.1:4173/assets/react-vendor-DOC9rY5m.js",
+            "http://127.0.0.1:4173/assets/motion-DqiiRemo.js",
+            "http://127.0.0.1:4173/assets/icons-D_u1r4eg.js",
+            "http://127.0.0.1:4173/assets/vendor-axios-B9ygI19o.js",
+            "http://127.0.0.1:4173/assets/radix-CjHiJR_q.js",
+            "http://127.0.0.1:4173/assets/query-DKnNoWue.js"
+          ],
+          "runtimeError": null
+        },
+        {
+          "file": "en-mobile-3.json",
+          "locale": "en",
+          "device": "mobile",
+          "run": 3,
+          "fetchTime": "2026-11-16T23:01:27.319Z",
+          "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/159.0.0.0 Safari/537.36",
+          "scores": {
+            "performance": 35,
+            "accessibility": 88,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "lcpMs": 14714.999999999998,
+          "cls": 0.1918666464155528,
+          "tbtMs": 2939.999999999998,
+          "scriptTransferBytes": 1312623,
+          "scriptUrls": [
+            "http://127.0.0.1:4173/assets/index-EQIET_mT.js",
+            "http://127.0.0.1:4173/assets/editor-QqV87v8y.js",
+            "http://127.0.0.1:4173/assets/react-vendor-DOC9rY5m.js",
+            "http://127.0.0.1:4173/assets/motion-DqiiRemo.js",
+            "http://127.0.0.1:4173/assets/icons-D_u1r4eg.js",
+            "http://127.0.0.1:4173/assets/vendor-axios-B9ygI19o.js",
+            "http://127.0.0.1:4173/assets/radix-CjHiJR_q.js",
+            "http://127.0.0.1:4173/assets/query-DKnNoWue.js"
+          ],
+          "runtimeError": null
+        }
+      ]
+    },
+    "release": {
+      "medians": [
+        {
+          "locale": "ar",
+          "device": "mobile",
+          "performance": 99,
+          "accessibility": 100,
+          "bestPractices": 100,
+          "seo": 100,
+          "lcpMs": 960,
+          "cls": 0,
+          "tbtMs": 121,
+          "scriptTransferBytes": 222936
+        },
+        {
+          "locale": "ar",
+          "device": "desktop",
+          "performance": 100,
+          "accessibility": 100,
+          "bestPractices": 100,
+          "seo": 100,
+          "lcpMs": 300,
+          "cls": 0,
+          "tbtMs": 9.5,
+          "scriptTransferBytes": 239361
+        },
+        {
+          "locale": "en",
+          "device": "mobile",
+          "performance": 96,
+          "accessibility": 100,
+          "bestPractices": 100,
+          "seo": 100,
+          "lcpMs": 960,
+          "cls": 0,
+          "tbtMs": 243,
+          "scriptTransferBytes": 222936
+        },
+        {
+          "locale": "en",
+          "device": "desktop",
+          "performance": 100,
+          "accessibility": 100,
+          "bestPractices": 100,
+          "seo": 100,
+          "lcpMs": 300,
+          "cls": 0,
+          "tbtMs": 1.5,
+          "scriptTransferBytes": 239361
+        }
+      ],
+      "runs": [
+        {
+          "file": "ar-desktop-1.json",
+          "locale": "ar",
+          "device": "desktop",
+          "run": 1,
+          "fetchTime": "2026-11-16T23:32:32.791Z",
+          "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/159.0.0.0 Safari/537.36",
+          "scores": {
+            "performance": 100,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "lcpMs": 300,
+          "cls": 0,
+          "tbtMs": 9.5,
+          "scriptTransferBytes": 239361,
+          "scriptUrls": [
+            "http://127.0.0.1:4174/assets/index-DZ7LZvYk.js",
+            "http://127.0.0.1:4174/assets/react-vendor-DYAEMiDm.js",
+            "http://127.0.0.1:4174/assets/motion-Mr1kPFJ6.js",
+            "http://127.0.0.1:4174/assets/HeroDashboard-D4pJcIVL.js",
+            "http://127.0.0.1:4174/assets/circle-check--1JZo18m.js",
+            "http://127.0.0.1:4174/assets/check-4cMTz1r9.js",
+            "http://127.0.0.1:4174/assets/zap-D3KeHM42.js",
+            "http://127.0.0.1:4174/assets/chart-column-5qdROS5M.js",
+            "http://127.0.0.1:4174/assets/shield-BKRP8BeK.js",
+            "http://127.0.0.1:4174/assets/Services-bMvKXaDe.js",
+            "http://127.0.0.1:4174/assets/CmsIcon-CAOjKjtU.js",
+            "http://127.0.0.1:4174/assets/StateViews-lkcf_5Ma.js",
+            "http://127.0.0.1:4174/assets/loader-circle-CQlA0ypb.js",
+            "http://127.0.0.1:4174/assets/circle-alert-D0FS0KtZ.js",
+            "http://127.0.0.1:4174/assets/inbox-pXh9yOuO.js",
+            "http://127.0.0.1:4174/assets/arrow-left-CgKp3VjG.js"
+          ],
+          "runtimeError": null
+        },
+        {
+          "file": "ar-desktop-2.json",
+          "locale": "ar",
+          "device": "desktop",
+          "run": 2,
+          "fetchTime": "2026-11-16T23:32:42.130Z",
+          "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/159.0.0.0 Safari/537.36",
+          "scores": {
+            "performance": 100,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "lcpMs": 300,
+          "cls": 0,
+          "tbtMs": 0,
+          "scriptTransferBytes": 239361,
+          "scriptUrls": [
+            "http://127.0.0.1:4174/assets/index-DZ7LZvYk.js",
+            "http://127.0.0.1:4174/assets/react-vendor-DYAEMiDm.js",
+            "http://127.0.0.1:4174/assets/motion-Mr1kPFJ6.js",
+            "http://127.0.0.1:4174/assets/HeroDashboard-D4pJcIVL.js",
+            "http://127.0.0.1:4174/assets/circle-check--1JZo18m.js",
+            "http://127.0.0.1:4174/assets/check-4cMTz1r9.js",
+            "http://127.0.0.1:4174/assets/zap-D3KeHM42.js",
+            "http://127.0.0.1:4174/assets/chart-column-5qdROS5M.js",
+            "http://127.0.0.1:4174/assets/shield-BKRP8BeK.js",
+            "http://127.0.0.1:4174/assets/Services-bMvKXaDe.js",
+            "http://127.0.0.1:4174/assets/CmsIcon-CAOjKjtU.js",
+            "http://127.0.0.1:4174/assets/StateViews-lkcf_5Ma.js",
+            "http://127.0.0.1:4174/assets/loader-circle-CQlA0ypb.js",
+            "http://127.0.0.1:4174/assets/circle-alert-D0FS0KtZ.js",
+            "http://127.0.0.1:4174/assets/inbox-pXh9yOuO.js",
+            "http://127.0.0.1:4174/assets/arrow-left-CgKp3VjG.js"
+          ],
+          "runtimeError": null
+        },
+        {
+          "file": "ar-desktop-3.json",
+          "locale": "ar",
+          "device": "desktop",
+          "run": 3,
+          "fetchTime": "2026-11-16T23:32:52.299Z",
+          "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/159.0.0.0 Safari/537.36",
+          "scores": {
+            "performance": 100,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "lcpMs": 300,
+          "cls": 0,
+          "tbtMs": 18,
+          "scriptTransferBytes": 239361,
+          "scriptUrls": [
+            "http://127.0.0.1:4174/assets/index-DZ7LZvYk.js",
+            "http://127.0.0.1:4174/assets/react-vendor-DYAEMiDm.js",
+            "http://127.0.0.1:4174/assets/motion-Mr1kPFJ6.js",
+            "http://127.0.0.1:4174/assets/HeroDashboard-D4pJcIVL.js",
+            "http://127.0.0.1:4174/assets/circle-check--1JZo18m.js",
+            "http://127.0.0.1:4174/assets/check-4cMTz1r9.js",
+            "http://127.0.0.1:4174/assets/zap-D3KeHM42.js",
+            "http://127.0.0.1:4174/assets/chart-column-5qdROS5M.js",
+            "http://127.0.0.1:4174/assets/shield-BKRP8BeK.js",
+            "http://127.0.0.1:4174/assets/Services-bMvKXaDe.js",
+            "http://127.0.0.1:4174/assets/CmsIcon-CAOjKjtU.js",
+            "http://127.0.0.1:4174/assets/StateViews-lkcf_5Ma.js",
+            "http://127.0.0.1:4174/assets/loader-circle-CQlA0ypb.js",
+            "http://127.0.0.1:4174/assets/circle-alert-D0FS0KtZ.js",
+            "http://127.0.0.1:4174/assets/inbox-pXh9yOuO.js",
+            "http://127.0.0.1:4174/assets/arrow-left-CgKp3VjG.js"
+          ],
+          "runtimeError": null
+        },
+        {
+          "file": "ar-mobile-1.json",
+          "locale": "ar",
+          "device": "mobile",
+          "run": 1,
+          "fetchTime": "2026-11-16T23:32:05.201Z",
+          "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/159.0.0.0 Safari/537.36",
+          "scores": {
+            "performance": 100,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "lcpMs": 960,
+          "cls": 0,
+          "tbtMs": 68,
+          "scriptTransferBytes": 222936,
+          "scriptUrls": [
+            "http://127.0.0.1:4174/assets/index-DZ7LZvYk.js",
+            "http://127.0.0.1:4174/assets/react-vendor-DYAEMiDm.js",
+            "http://127.0.0.1:4174/assets/motion-Mr1kPFJ6.js"
+          ],
+          "runtimeError": null
+        },
+        {
+          "file": "ar-mobile-2.json",
+          "locale": "ar",
+          "device": "mobile",
+          "run": 2,
+          "fetchTime": "2026-11-16T23:32:14.186Z",
+          "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/159.0.0.0 Safari/537.36",
+          "scores": {
+            "performance": 99,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "lcpMs": 960,
+          "cls": 0,
+          "tbtMs": 121,
+          "scriptTransferBytes": 222936,
+          "scriptUrls": [
+            "http://127.0.0.1:4174/assets/index-DZ7LZvYk.js",
+            "http://127.0.0.1:4174/assets/react-vendor-DYAEMiDm.js",
+            "http://127.0.0.1:4174/assets/motion-Mr1kPFJ6.js"
+          ],
+          "runtimeError": null
+        },
+        {
+          "file": "ar-mobile-3.json",
+          "locale": "ar",
+          "device": "mobile",
+          "run": 3,
+          "fetchTime": "2026-11-16T23:32:23.835Z",
+          "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/159.0.0.0 Safari/537.36",
+          "scores": {
+            "performance": 99,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "lcpMs": 960,
+          "cls": 0,
+          "tbtMs": 142,
+          "scriptTransferBytes": 222936,
+          "scriptUrls": [
+            "http://127.0.0.1:4174/assets/index-DZ7LZvYk.js",
+            "http://127.0.0.1:4174/assets/react-vendor-DYAEMiDm.js",
+            "http://127.0.0.1:4174/assets/motion-Mr1kPFJ6.js"
+          ],
+          "runtimeError": null
+        },
+        {
+          "file": "en-desktop-1.json",
+          "locale": "en",
+          "device": "desktop",
+          "run": 1,
+          "fetchTime": "2026-11-16T23:33:34.207Z",
+          "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/159.0.0.0 Safari/537.36",
+          "scores": {
+            "performance": 100,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "lcpMs": 300,
+          "cls": 0,
+          "tbtMs": 1,
+          "scriptTransferBytes": 239361,
+          "scriptUrls": [
+            "http://127.0.0.1:4174/assets/index-DZ7LZvYk.js",
+            "http://127.0.0.1:4174/assets/react-vendor-DYAEMiDm.js",
+            "http://127.0.0.1:4174/assets/motion-Mr1kPFJ6.js",
+            "http://127.0.0.1:4174/assets/HeroDashboard-D4pJcIVL.js",
+            "http://127.0.0.1:4174/assets/circle-check--1JZo18m.js",
+            "http://127.0.0.1:4174/assets/check-4cMTz1r9.js",
+            "http://127.0.0.1:4174/assets/zap-D3KeHM42.js",
+            "http://127.0.0.1:4174/assets/chart-column-5qdROS5M.js",
+            "http://127.0.0.1:4174/assets/shield-BKRP8BeK.js",
+            "http://127.0.0.1:4174/assets/Services-bMvKXaDe.js",
+            "http://127.0.0.1:4174/assets/CmsIcon-CAOjKjtU.js",
+            "http://127.0.0.1:4174/assets/StateViews-lkcf_5Ma.js",
+            "http://127.0.0.1:4174/assets/loader-circle-CQlA0ypb.js",
+            "http://127.0.0.1:4174/assets/circle-alert-D0FS0KtZ.js",
+            "http://127.0.0.1:4174/assets/inbox-pXh9yOuO.js",
+            "http://127.0.0.1:4174/assets/arrow-left-CgKp3VjG.js"
+          ],
+          "runtimeError": null
+        },
+        {
+          "file": "en-desktop-2.json",
+          "locale": "en",
+          "device": "desktop",
+          "run": 2,
+          "fetchTime": "2026-11-16T23:33:45.032Z",
+          "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/159.0.0.0 Safari/537.36",
+          "scores": {
+            "performance": 100,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "lcpMs": 300,
+          "cls": 0,
+          "tbtMs": 1.5,
+          "scriptTransferBytes": 239361,
+          "scriptUrls": [
+            "http://127.0.0.1:4174/assets/index-DZ7LZvYk.js",
+            "http://127.0.0.1:4174/assets/react-vendor-DYAEMiDm.js",
+            "http://127.0.0.1:4174/assets/motion-Mr1kPFJ6.js",
+            "http://127.0.0.1:4174/assets/HeroDashboard-D4pJcIVL.js",
+            "http://127.0.0.1:4174/assets/circle-check--1JZo18m.js",
+            "http://127.0.0.1:4174/assets/check-4cMTz1r9.js",
+            "http://127.0.0.1:4174/assets/zap-D3KeHM42.js",
+            "http://127.0.0.1:4174/assets/chart-column-5qdROS5M.js",
+            "http://127.0.0.1:4174/assets/shield-BKRP8BeK.js",
+            "http://127.0.0.1:4174/assets/Services-bMvKXaDe.js",
+            "http://127.0.0.1:4174/assets/CmsIcon-CAOjKjtU.js",
+            "http://127.0.0.1:4174/assets/StateViews-lkcf_5Ma.js",
+            "http://127.0.0.1:4174/assets/loader-circle-CQlA0ypb.js",
+            "http://127.0.0.1:4174/assets/circle-alert-D0FS0KtZ.js",
+            "http://127.0.0.1:4174/assets/inbox-pXh9yOuO.js",
+            "http://127.0.0.1:4174/assets/arrow-left-CgKp3VjG.js"
+          ],
+          "runtimeError": null
+        },
+        {
+          "file": "en-desktop-3.json",
+          "locale": "en",
+          "device": "desktop",
+          "run": 3,
+          "fetchTime": "2026-11-16T23:33:55.012Z",
+          "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/159.0.0.0 Safari/537.36",
+          "scores": {
+            "performance": 100,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "lcpMs": 300,
+          "cls": 0,
+          "tbtMs": 3,
+          "scriptTransferBytes": 239361,
+          "scriptUrls": [
+            "http://127.0.0.1:4174/assets/index-DZ7LZvYk.js",
+            "http://127.0.0.1:4174/assets/react-vendor-DYAEMiDm.js",
+            "http://127.0.0.1:4174/assets/motion-Mr1kPFJ6.js",
+            "http://127.0.0.1:4174/assets/HeroDashboard-D4pJcIVL.js",
+            "http://127.0.0.1:4174/assets/circle-check--1JZo18m.js",
+            "http://127.0.0.1:4174/assets/check-4cMTz1r9.js",
+            "http://127.0.0.1:4174/assets/zap-D3KeHM42.js",
+            "http://127.0.0.1:4174/assets/chart-column-5qdROS5M.js",
+            "http://127.0.0.1:4174/assets/shield-BKRP8BeK.js",
+            "http://127.0.0.1:4174/assets/Services-bMvKXaDe.js",
+            "http://127.0.0.1:4174/assets/CmsIcon-CAOjKjtU.js",
+            "http://127.0.0.1:4174/assets/StateViews-lkcf_5Ma.js",
+            "http://127.0.0.1:4174/assets/loader-circle-CQlA0ypb.js",
+            "http://127.0.0.1:4174/assets/circle-alert-D0FS0KtZ.js",
+            "http://127.0.0.1:4174/assets/inbox-pXh9yOuO.js",
+            "http://127.0.0.1:4174/assets/arrow-left-CgKp3VjG.js"
+          ],
+          "runtimeError": null
+        },
+        {
+          "file": "en-mobile-1.json",
+          "locale": "en",
+          "device": "mobile",
+          "run": 1,
+          "fetchTime": "2026-11-16T23:33:04.156Z",
+          "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/159.0.0.0 Safari/537.36",
+          "scores": {
+            "performance": 96,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "lcpMs": 960,
+          "cls": 0,
+          "tbtMs": 243,
+          "scriptTransferBytes": 222936,
+          "scriptUrls": [
+            "http://127.0.0.1:4174/assets/index-DZ7LZvYk.js",
+            "http://127.0.0.1:4174/assets/react-vendor-DYAEMiDm.js",
+            "http://127.0.0.1:4174/assets/motion-Mr1kPFJ6.js"
+          ],
+          "runtimeError": null
+        },
+        {
+          "file": "en-mobile-2.json",
+          "locale": "en",
+          "device": "mobile",
+          "run": 2,
+          "fetchTime": "2026-11-16T23:33:13.809Z",
+          "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/159.0.0.0 Safari/537.36",
+          "scores": {
+            "performance": 93,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "lcpMs": 960,
+          "cls": 0,
+          "tbtMs": 302,
+          "scriptTransferBytes": 222936,
+          "scriptUrls": [
+            "http://127.0.0.1:4174/assets/index-DZ7LZvYk.js",
+            "http://127.0.0.1:4174/assets/react-vendor-DYAEMiDm.js",
+            "http://127.0.0.1:4174/assets/motion-Mr1kPFJ6.js"
+          ],
+          "runtimeError": null
+        },
+        {
+          "file": "en-mobile-3.json",
+          "locale": "en",
+          "device": "mobile",
+          "run": 3,
+          "fetchTime": "2026-11-16T23:33:24.565Z",
+          "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/159.0.0.0 Safari/537.36",
+          "scores": {
+            "performance": 99,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "lcpMs": 960,
+          "cls": 0,
+          "tbtMs": 137,
+          "scriptTransferBytes": 222936,
+          "scriptUrls": [
+            "http://127.0.0.1:4174/assets/index-DZ7LZvYk.js",
+            "http://127.0.0.1:4174/assets/react-vendor-DYAEMiDm.js",
+            "http://127.0.0.1:4174/assets/motion-Mr1kPFJ6.js"
+          ],
+          "runtimeError": null
+        }
+      ]
+    }
+  }
+}
