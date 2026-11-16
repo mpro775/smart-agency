@@ -30,6 +30,7 @@ import {
 } from '../testimonials/schemas/testimonial.schema';
 import { PublicHomepageController } from './public-homepage.controller';
 import { PublicHomepageService } from './public-homepage.service';
+import { PublicImagesController } from './public-images.controller';
 
 @Module({
   imports: [
@@ -46,7 +47,7 @@ import { PublicHomepageService } from './public-homepage.service';
       { name: CompanyInfo.name, schema: CompanyInfoSchema },
     ]),
   ],
-  controllers: [PublicHomepageController],
+  controllers: [PublicHomepageController, PublicImagesController],
   providers: [PublicHomepageService],
 })
 export class PublicHomepageModule {}

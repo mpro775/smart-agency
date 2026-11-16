@@ -1,13 +1,23 @@
+import ResponsiveImage from "@/components/ui/ResponsiveImage";
 import { tr } from "@/i18n";
 import { CalendarDays, Clock3, Eye, Share2 } from "lucide-react";
 import type { Blog } from "../../admin/types";
 import ContentTypeBadge from "./ContentTypeBadge";
-import { formatBlogDate, getAuthorName, getBlogImage, getReadingTime } from "./blogUtils";
+import {
+  formatBlogDate,
+  getAuthorName,
+  getBlogImage,
+  getReadingTime,
+} from "./blogUtils";
 
 export default function ArticleHero({ blog }: { blog: Blog }) {
   const handleShare = async () => {
     if (navigator.share) {
-      await navigator.share({ title: blog.title, text: blog.excerpt, url: window.location.href });
+      await navigator.share({
+        title: blog.title,
+        text: blog.excerpt,
+        url: window.location.href,
+      });
       return;
     }
     await navigator.clipboard.writeText(window.location.href);
@@ -27,7 +37,8 @@ export default function ArticleHero({ blog }: { blog: Blog }) {
           <ContentTypeBadge type={blog.contentType} />
           {blog.isEditorPick && (
             <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700">
-              {tr("اختيار التحرير")}</span>
+              {tr("اختيار التحرير")}
+            </span>
           )}
         </div>
 
@@ -47,7 +58,9 @@ export default function ArticleHero({ blog }: { blog: Blog }) {
               <span className="inline-block h-6 w-6 rounded-full bg-primary/10 text-center text-xs font-bold leading-6 text-primary">
                 {getAuthorName(blog).charAt(0)}
               </span>
-              <span className="font-medium text-slate-700">{getAuthorName(blog)}</span>
+              <span className="font-medium text-slate-700">
+                {getAuthorName(blog)}
+              </span>
             </span>
             {blog.publishedAt && (
               <span className="inline-flex items-center gap-1.5">
@@ -57,10 +70,12 @@ export default function ArticleHero({ blog }: { blog: Blog }) {
             )}
             <span className="inline-flex items-center gap-1.5">
               <Clock3 className="h-4 w-4 text-primary" />
-              {getReadingTime(blog)} {tr("دقائق قراءة")}</span>
+              {getReadingTime(blog)} {tr("دقائق قراءة")}
+            </span>
             <span className="inline-flex items-center gap-1.5">
               <Eye className="h-4 w-4 text-primary" />
-              {blog.views || 0} {tr("مشاهدة")}</span>
+              {blog.views || 0} {tr("مشاهدة")}
+            </span>
           </div>
 
           <button
@@ -69,14 +84,16 @@ export default function ArticleHero({ blog }: { blog: Blog }) {
             aria-label={tr("مشاركة المقال")}
           >
             <Share2 className="h-4 w-4" />
-            {tr("مشاركة")}</button>
+            {tr("مشاركة")}
+          </button>
         </div>
 
         <div className="relative mt-12 overflow-hidden rounded-3xl shadow-2xl shadow-slate-200/60 ring-1 ring-slate-900/5">
-          <img
+          <ResponsiveImage
             src={getBlogImage(blog)}
             alt={blog.coverAlt || blog.title}
-            className="max-h-[520px] w-full object-cover transition-transform duration-700 hover:scale-105"
+            priority
+            className="aspect-[12/7] max-h-[520px] w-full object-cover transition-transform duration-700 hover:scale-105"
           />
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
         </div>

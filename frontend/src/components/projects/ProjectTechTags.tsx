@@ -13,9 +13,7 @@ export default function ProjectTechTags({
 }: ProjectTechTagsProps) {
   if (!technologies || technologies.length === 0) return null;
 
-  const names = technologies.map((t) =>
-    typeof t === "string" ? t : t.name
-  );
+  const names = technologies.map((t) => (typeof t === "string" ? t : t.name));
   const visible = names.slice(0, max);
   const remaining = names.length - max;
 
@@ -30,7 +28,7 @@ export default function ProjectTechTags({
         </span>
       ))}
       {remaining > 0 && (
-        <span className="inline-flex items-center justify-center px-2 py-0.5 bg-slate-50 text-slate-400 text-[11px] font-medium rounded-md border border-slate-100">
+        <span className="inline-flex items-center justify-center px-2 py-0.5 bg-slate-50 text-slate-600 text-[11px] font-medium rounded-md border border-slate-100">
           +{remaining}
         </span>
       )}

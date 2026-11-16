@@ -1,7 +1,17 @@
+import ResponsiveImage from "@/components/ui/ResponsiveImage";
 import { tr } from "@/i18n";
 import { useMemo } from "react";
 import { motion } from "framer-motion";
-import { Info, User, Layers, Calendar, Cpu, Zap, Bookmark, ArrowLeft } from "lucide-react";
+import {
+  Info,
+  User,
+  Layers,
+  Calendar,
+  Cpu,
+  Zap,
+  Bookmark,
+  ArrowLeft,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 import type { Project, Technology } from "../../../admin/types";
 import { useLocale } from "@/localization/LocaleLayout";
@@ -15,7 +25,11 @@ function formatProjectDate(value: string | undefined, locale: "ar" | "en") {
   if (!value) return "-";
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return "-";
-  return new Intl.DateTimeFormat(locale === "ar" ? "ar-SA" : "en-US", { year: "numeric", month: "long", day: "numeric" }).format(date);
+  return new Intl.DateTimeFormat(locale === "ar" ? "ar-SA" : "en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  }).format(date);
 }
 
 const fadeUp = {
@@ -25,18 +39,24 @@ const fadeUp = {
   transition: { duration: 0.7 },
 };
 
-export default function ProjectSidebar({ project, categoryLabels }: ProjectSidebarProps) {
+export default function ProjectSidebar({
+  project,
+  categoryLabels,
+}: ProjectSidebarProps) {
   const { locale } = useLocale();
   const groupedTechnologies = useMemo(() => {
     if (!Array.isArray(project.technologies)) return {};
-    return project.technologies.reduce((groups, tech) => {
-      if (typeof tech !== "object" || tech === null) return groups;
-      const t = tech as Technology;
-      const category = t.category || "Other";
-      if (!groups[category]) groups[category] = [];
-      groups[category].push(t);
-      return groups;
-    }, {} as Record<string, Technology[]>);
+    return project.technologies.reduce(
+      (groups, tech) => {
+        if (typeof tech !== "object" || tech === null) return groups;
+        const t = tech as Technology;
+        const category = t.category || "Other";
+        if (!groups[category]) groups[category] = [];
+        groups[category].push(t);
+        return groups;
+      },
+      {} as Record<string, Technology[]>,
+    );
   }, [project.technologies]);
 
   return (
@@ -58,15 +78,19 @@ export default function ProjectSidebar({ project, categoryLabels }: ProjectSideb
           {project.clientName && (
             <div className="flex items-center justify-between rounded-2xl bg-slate-50/50 border border-slate-100/80 px-4 py-3.5 hover:border-teal-200/40 hover:bg-white transition-all duration-300">
               <span className="text-slate-500 flex items-center gap-2.5 text-sm font-bold">
-                <User className="w-4 h-4 text-teal-600" /> {tr("العميل")}</span>
-              <span className="font-extrabold text-slate-800 text-sm">{project.clientName}</span>
+                <User className="w-4 h-4 text-teal-600" /> {tr("العميل")}
+              </span>
+              <span className="font-extrabold text-slate-800 text-sm">
+                {project.clientName}
+              </span>
             </div>
           )}
 
           {categoryLabels.length > 0 && (
             <div className="flex items-center justify-between rounded-2xl bg-slate-50/50 border border-slate-100/80 px-4 py-3.5 hover:border-teal-200/40 hover:bg-white transition-all duration-300">
               <span className="text-slate-500 flex items-center gap-2.5 text-sm font-bold">
-                <Layers className="w-4 h-4 text-teal-600" /> {tr("التصنيف")}</span>
+                <Layers className="w-4 h-4 text-teal-600" /> {tr("التصنيف")}
+              </span>
               <span
                 className="font-extrabold text-slate-800 text-sm text-end truncate max-w-[170px]"
                 title={categoryLabels.join(" / ")}
@@ -79,22 +103,30 @@ export default function ProjectSidebar({ project, categoryLabels }: ProjectSideb
           {project.industry && (
             <div className="flex items-center justify-between rounded-2xl bg-slate-50/50 border border-slate-100/80 px-4 py-3.5 hover:border-teal-200/40 hover:bg-white transition-all duration-300">
               <span className="text-slate-500 flex items-center gap-2.5 text-sm font-bold">
-                <Layers className="w-4 h-4 text-teal-600" /> {tr("القطاع")}</span>
-              <span className="font-extrabold text-slate-800 text-sm">{project.industry}</span>
+                <Layers className="w-4 h-4 text-teal-600" /> {tr("القطاع")}
+              </span>
+              <span className="font-extrabold text-slate-800 text-sm">
+                {project.industry}
+              </span>
             </div>
           )}
 
           {project.duration && (
             <div className="flex items-center justify-between rounded-2xl bg-slate-50/50 border border-slate-100/80 px-4 py-3.5 hover:border-teal-200/40 hover:bg-white transition-all duration-300">
               <span className="text-slate-500 flex items-center gap-2.5 text-sm font-bold">
-                <Calendar className="w-4 h-4 text-teal-600" /> {tr("مدة التنفيذ")}</span>
-              <span className="font-extrabold text-slate-800 text-sm">{project.duration}</span>
+                <Calendar className="w-4 h-4 text-teal-600" />{" "}
+                {tr("مدة التنفيذ")}
+              </span>
+              <span className="font-extrabold text-slate-800 text-sm">
+                {project.duration}
+              </span>
             </div>
           )}
 
           <div className="flex items-center justify-between rounded-2xl bg-slate-50/50 border border-slate-100/80 px-4 py-3.5 hover:border-teal-200/40 hover:bg-white transition-all duration-300">
             <span className="text-slate-500 flex items-center gap-2.5 text-sm font-bold">
-              <Calendar className="w-4 h-4 text-teal-600" /> {tr("سنة التنفيذ")}</span>
+              <Calendar className="w-4 h-4 text-teal-600" /> {tr("سنة التنفيذ")}
+            </span>
             <span className="font-extrabold text-slate-800 text-sm">
               {project.year || formatProjectDate(project.createdAt, locale)}
             </span>
@@ -128,7 +160,13 @@ export default function ProjectSidebar({ project, categoryLabels }: ProjectSideb
                       className="inline-flex items-center gap-2.5 text-xs font-extrabold rounded-xl bg-slate-50 border border-slate-200 hover:border-teal-500/30 hover:bg-teal-50/20 text-slate-700 px-3.5 py-2.5 transition-all duration-200 cursor-default shadow-sm"
                       title={tech.description || tech.tooltip || ""}
                     >
-                      {tech.icon && <img src={tech.icon} alt="" className="w-4.5 h-4.5 object-contain" />}
+                      {tech.icon && (
+                        <ResponsiveImage
+                          src={tech.icon}
+                          alt=""
+                          className="w-4.5 h-4.5 object-contain"
+                        />
+                      )}
                       {tech.name}
                     </motion.span>
                   ))}
@@ -153,10 +191,15 @@ export default function ProjectSidebar({ project, categoryLabels }: ProjectSideb
             <div className="p-2.5 rounded-xl bg-teal-100/50 border border-teal-200/50 text-teal-600">
               <Zap className="w-5 h-5 animate-pulse" />
             </div>
-            <h3 className="text-xl font-black text-slate-800">{tr("هل تريد مشروعًا مشابهًا؟")}</h3>
+            <h3 className="text-xl font-black text-slate-800">
+              {tr("هل تريد مشروعًا مشابهًا؟")}
+            </h3>
           </div>
           <p className="text-sm text-slate-500 mb-6 leading-relaxed font-semibold">
-            {tr("نحن في وكالة سمارت نحوّل فكرتك الطموحة إلى منتج رقمي متكامل وقابل للنمو السريع.")}</p>
+            {tr(
+              "نحن في وكالة سمارت نحوّل فكرتك الطموحة إلى منتج رقمي متكامل وقابل للنمو السريع.",
+            )}
+          </p>
           <Link
             to="/contact"
             className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-teal-600 to-[#008080] text-white font-extrabold px-5 py-4 hover:shadow-lg hover:shadow-teal-500/15 active:scale-[0.98] transition-all duration-200"
@@ -174,7 +217,9 @@ export default function ProjectSidebar({ project, categoryLabels }: ProjectSideb
         viewport={{ once: true }}
         className="rounded-2xl border border-slate-200/60 bg-white/60 backdrop-blur-sm p-4 flex items-center justify-between shadow-sm hover:border-slate-300 transition-colors duration-300"
       >
-        <span className="text-sm font-semibold text-slate-500">{tr("أعجبك المشروع؟")}</span>
+        <span className="text-sm font-semibold text-slate-500">
+          {tr("أعجبك المشروع؟")}
+        </span>
         <button
           type="button"
           className="inline-flex items-center gap-2 text-sm font-extrabold text-teal-600 hover:text-teal-700 transition-colors"

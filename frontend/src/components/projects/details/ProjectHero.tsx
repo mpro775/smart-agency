@@ -1,3 +1,4 @@
+import ResponsiveImage from "@/components/ui/ResponsiveImage";
 import { tr } from "@/i18n";
 import { motion } from "framer-motion";
 import { ArrowRight, Globe, ExternalLink, Award } from "lucide-react";
@@ -9,7 +10,10 @@ interface ProjectHeroProps {
   categoryLabels: string[];
 }
 
-export default function ProjectHero({ project, categoryLabels }: ProjectHeroProps) {
+export default function ProjectHero({
+  project,
+  categoryLabels,
+}: ProjectHeroProps) {
   return (
     <section className="relative pt-28 md:pt-36 pb-12 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -24,7 +28,9 @@ export default function ProjectHero({ project, categoryLabels }: ProjectHeroProp
             className="inline-flex items-center gap-2 rounded-full border border-slate-200/80 bg-white/70 backdrop-blur-md px-5 py-2.5 text-slate-600 hover:text-[#008080] hover:bg-white hover:border-teal-500/30 transition-all duration-300 group shadow-sm hover:shadow-md"
           >
             <ArrowRight className="w-4 h-4 directional-arrow" />
-            <span className="font-semibold text-sm">{tr("العودة إلى المشاريع")}</span>
+            <span className="font-semibold text-sm">
+              {tr("العودة إلى المشاريع")}
+            </span>
           </Link>
         </motion.div>
 
@@ -53,7 +59,8 @@ export default function ProjectHero({ project, categoryLabels }: ProjectHeroProp
                   className="text-xs font-bold bg-amber-50/80 border border-amber-100/70 text-amber-700 rounded-full px-4 py-1.5 shadow-sm flex items-center gap-1.5 hover:bg-amber-100/40 transition-colors"
                 >
                   <Award className="w-3.5 h-3.5" />
-                  {tr("مشروع مميز")}</motion.span>
+                  {tr("مشروع مميز")}
+                </motion.span>
               )}
             </div>
 
@@ -66,7 +73,7 @@ export default function ProjectHero({ project, categoryLabels }: ProjectHeroProp
                   transition={{ type: "spring", stiffness: 220, damping: 15 }}
                   className="h-16 w-16 bg-white rounded-2xl p-2.5 border border-slate-200/80 shadow-md flex items-center justify-center shrink-0 hover:scale-105 transition-transform duration-300"
                 >
-                  <img
+                  <ResponsiveImage
                     src={project.clientLogo}
                     alt={project.clientName || ""}
                     className="h-full w-full object-contain"

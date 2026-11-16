@@ -84,3 +84,4 @@ const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.s
 const outputPath = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../public/sitemap.xml");
 await writeFile(outputPath, xml, "utf8");
 console.log(`[sitemap] Wrote ${uniquePaths.length * 2} localized URLs to ${outputPath}`);
+await import('./build-info.mjs');

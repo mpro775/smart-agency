@@ -1,8 +1,7 @@
 import { tr } from "@/i18n";
 import { useState, useEffect } from "react";
-import type { ComponentType } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import * as FaIcons from "react-icons/fa";
+import CmsIcon from "./icons/CmsIcon";
 import {
   Sparkles,
   BarChart3,
@@ -21,16 +20,21 @@ const getIconComponent = (iconName?: string, iconType?: string) => {
   if (!iconName || !iconType) return null;
 
   if (iconType === "react-icon") {
-    const IconComponent = (
-      FaIcons as Record<string, ComponentType<{ className?: string }>>
-    )[iconName];
-    if (IconComponent) {
-      return <IconComponent className="text-3xl" />;
-    }
+    return <CmsIcon name={iconName} className="text-3xl" size={30} />;
   } else if (iconType === "emoji") {
     return <span className="text-3xl">{iconName}</span>;
   } else if (iconType === "image") {
-    return <img src={iconName} alt="" className="w-8 h-8" />;
+    return (
+      <img
+        width={32}
+        height={32}
+        loading="lazy"
+        decoding="async"
+        src={iconName}
+        alt=""
+        className="w-8 h-8"
+      />
+    );
   }
 
   return null;
@@ -40,8 +44,9 @@ const getFallbackServices = () => [
   {
     _id: "fallback-1",
     title: tr("تطوير تطبيقات الجوال"),
-    shortDescription:
-      tr("تطبيقات iOS و Android عالية الأداء بتجربة مستخدم استثنائية"),
+    shortDescription: tr(
+      "تطبيقات iOS و Android عالية الأداء بتجربة مستخدم استثنائية",
+    ),
     icon: "FaMobileAlt",
     iconType: "react-icon",
     features: [
@@ -56,8 +61,9 @@ const getFallbackServices = () => [
   {
     _id: "fallback-2",
     title: tr("التسويق الرقمي"),
-    shortDescription:
-      tr("استراتيجيات تسويق رقمية متكاملة لزيادة الظهور وجذب العملاء وتحقيق النمو"),
+    shortDescription: tr(
+      "استراتيجيات تسويق رقمية متكاملة لزيادة الظهور وجذب العملاء وتحقيق النمو",
+    ),
     icon: "FaBullhorn",
     iconType: "react-icon",
     features: [
@@ -72,8 +78,9 @@ const getFallbackServices = () => [
   {
     _id: "fallback-3",
     title: tr("الاستشارات التقنية"),
-    shortDescription:
-      tr("نقدم لك الخبرة التقنية اللازمة لتحويل فكرتك إلى مشروع ناجح ومستدام"),
+    shortDescription: tr(
+      "نقدم لك الخبرة التقنية اللازمة لتحويل فكرتك إلى مشروع ناجح ومستدام",
+    ),
     icon: "FaComments",
     iconType: "react-icon",
     features: [
@@ -88,8 +95,9 @@ const getFallbackServices = () => [
   {
     _id: "fallback-4",
     title: tr("تصميم وتطوير مواقع الويب"),
-    shortDescription:
-      tr("مواقع احترافية سريعة، متجاوبة، ومحسنة لتجربة المستخدم ومحركات البحث"),
+    shortDescription: tr(
+      "مواقع احترافية سريعة، متجاوبة، ومحسنة لتجربة المستخدم ومحركات البحث",
+    ),
     icon: "FaCode",
     iconType: "react-icon",
     features: [
@@ -104,8 +112,9 @@ const getFallbackServices = () => [
   {
     _id: "fallback-5",
     title: tr("تصميم الهوية البصرية"),
-    shortDescription:
-      tr("نبني هوية بصرية قوية تعكس قيم علامتك وتتميز بك في السوق"),
+    shortDescription: tr(
+      "نبني هوية بصرية قوية تعكس قيم علامتك وتتميز بك في السوق",
+    ),
     icon: "FaLightbulb",
     iconType: "react-icon",
     features: [
@@ -120,8 +129,9 @@ const getFallbackServices = () => [
   {
     _id: "fallback-6",
     title: tr("الأنظمة ولوحات التحكم"),
-    shortDescription:
-      tr("أنظمة مخصصة ولوحات تحكم ذكية لإدارة العمليات واتخاذ قرارات أدق"),
+    shortDescription: tr(
+      "أنظمة مخصصة ولوحات تحكم ذكية لإدارة العمليات واتخاذ قرارات أدق",
+    ),
     icon: "FaChartBar",
     iconType: "react-icon",
     features: [
@@ -209,7 +219,8 @@ export default function Services({ initialServices }: ServicesProps) {
             className="inline-flex items-center gap-2 rounded-full border border-[var(--smart-border-light)] bg-white/70 px-4 py-2 text-sm font-bold text-[var(--smart-primary)] backdrop-blur-xl"
           >
             <Sparkles size={14} />
-            {tr("خدماتنا المتخصصة")}</motion.span>
+            {tr("خدماتنا المتخصصة")}
+          </motion.span>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -227,7 +238,10 @@ export default function Services({ initialServices }: ServicesProps) {
             viewport={{ once: true }}
             className="mt-5 text-base md:text-lg leading-8 text-slate-600 max-w-2xl mx-auto"
           >
-            {tr("نحوّل الأفكار إلى منتجات رقمية متكاملة، ونبني أنظمة تدعم النمو وتحقق النتائج المستدامة لأعمالك.")}</motion.p>
+            {tr(
+              "نحوّل الأفكار إلى منتجات رقمية متكاملة، ونبني أنظمة تدعم النمو وتحقق النتائج المستدامة لأعمالك.",
+            )}
+          </motion.p>
         </motion.div>
 
         <div className="relative max-w-7xl mx-auto">
@@ -239,11 +253,7 @@ export default function Services({ initialServices }: ServicesProps) {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {activeServices.map((service, index) => (
-              <ServiceCard
-                key={service._id}
-                service={service}
-                index={index}
-              />
+              <ServiceCard key={service._id} service={service} index={index} />
             ))}
           </div>
         </div>
@@ -261,7 +271,8 @@ export default function Services({ initialServices }: ServicesProps) {
                 <UserCheck size={20} className="text-[var(--smart-primary)]" />
               </div>
               <span className="text-[var(--smart-text-main)] font-medium text-sm">
-                {tr("نهج مخصص لكل عميل")}</span>
+                {tr("نهج مخصص لكل عميل")}
+              </span>
             </div>
             <div className="hidden md:block w-px h-8 bg-[var(--smart-border-light)]" />
             <div className="flex items-center gap-3">
@@ -269,7 +280,8 @@ export default function Services({ initialServices }: ServicesProps) {
                 <Shield size={20} className="text-[var(--smart-primary)]" />
               </div>
               <span className="text-[var(--smart-text-main)] font-medium text-sm">
-                {tr("جودة عالية ومعايير عالمية")}</span>
+                {tr("جودة عالية ومعايير عالمية")}
+              </span>
             </div>
             <div className="hidden md:block w-px h-8 bg-[var(--smart-border-light)]" />
             <div className="flex items-center gap-3">
@@ -277,7 +289,8 @@ export default function Services({ initialServices }: ServicesProps) {
                 <Headphones size={20} className="text-[var(--smart-primary)]" />
               </div>
               <span className="text-[var(--smart-text-main)] font-medium text-sm">
-                {tr("دعم مستمر وشراكة طويلة الأمد")}</span>
+                {tr("دعم مستمر وشراكة طويلة الأمد")}
+              </span>
             </div>
           </div>
         </motion.div>
@@ -286,13 +299,7 @@ export default function Services({ initialServices }: ServicesProps) {
   );
 }
 
-function ServiceCard({
-  service,
-  index,
-}: {
-  service: Service;
-  index: number;
-}) {
+function ServiceCard({ service, index }: { service: Service; index: number }) {
   const shouldReduceMotion = useReducedMotion();
   const iconComponent = getIconComponent(service.icon, service.iconType);
   const slug = service.slug || service._id;
@@ -302,7 +309,11 @@ function ServiceCard({
     <motion.div
       initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.5, delay: index * 0.1 }}
+      transition={
+        shouldReduceMotion
+          ? { duration: 0 }
+          : { duration: 0.5, delay: index * 0.1 }
+      }
       className="relative group smart-card-light rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--smart-shadow-brand)] h-full flex flex-col"
       data-cursor="hover"
     >
@@ -328,8 +339,14 @@ function ServiceCard({
       {features.length > 0 && (
         <ul className="space-y-2 mb-5">
           {features.map((feature, i) => (
-            <li key={i} className="flex items-start gap-2 text-sm text-[var(--smart-text-muted)]">
-              <Shield size={14} className="text-[var(--smart-primary)] mt-0.5 flex-shrink-0" />
+            <li
+              key={i}
+              className="flex items-start gap-2 text-sm text-[var(--smart-text-muted)]"
+            >
+              <Shield
+                size={14}
+                className="text-[var(--smart-primary)] mt-0.5 flex-shrink-0"
+              />
               <span>{feature}</span>
             </li>
           ))}
@@ -337,7 +354,8 @@ function ServiceCard({
       )}
 
       <span className="inline-flex items-center gap-1 text-sm font-semibold text-[var(--smart-primary)] group-hover:gap-2 transition-all">
-        {tr("اكتشف المزيد")}<ArrowLeft size={16} className="directional-arrow" />
+        {tr("اكتشف المزيد")}
+        <ArrowLeft size={16} className="directional-arrow" />
       </span>
     </motion.div>
   );

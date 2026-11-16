@@ -1,3 +1,4 @@
+import ResponsiveImage from "@/components/ui/ResponsiveImage";
 import { tr } from "@/i18n";
 import { motion } from "framer-motion";
 import {
@@ -27,7 +28,11 @@ interface Props {
   onOpenChange: (open: boolean) => void;
 }
 
-export default function TeamProfileDrawer({ member, open, onOpenChange }: Props) {
+export default function TeamProfileDrawer({
+  member,
+  open,
+  onOpenChange,
+}: Props) {
   if (!member) return null;
 
   const accentColor = "text-cyan-400";
@@ -61,7 +66,7 @@ export default function TeamProfileDrawer({ member, open, onOpenChange }: Props)
               className="relative w-28 h-36 sm:w-36 sm:h-48 rounded-2xl overflow-hidden shadow-2xl ring-1 ring-white/10 mb-4 sm:mb-6"
             >
               {member.photo ? (
-                <img
+                <ResponsiveImage
                   src={member.photo}
                   alt={member.fullName}
                   className="w-full h-full object-cover object-center"
@@ -83,8 +88,12 @@ export default function TeamProfileDrawer({ member, open, onOpenChange }: Props)
               <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">
                 {member.fullName}
               </h2>
-              <div className={`inline-flex items-center px-3 py-1 sm:px-4 sm:py-1.5 rounded-full ${accentBg} border ${accentBorder} mb-4 sm:mb-5`}>
-                <span className={`text-xs sm:text-sm font-medium ${accentColor}`}>
+              <div
+                className={`inline-flex items-center px-3 py-1 sm:px-4 sm:py-1.5 rounded-full ${accentBg} border ${accentBorder} mb-4 sm:mb-5`}
+              >
+                <span
+                  className={`text-xs sm:text-sm font-medium ${accentColor}`}
+                >
                   {member.role}
                 </span>
               </div>
@@ -92,13 +101,18 @@ export default function TeamProfileDrawer({ member, open, onOpenChange }: Props)
               <div className="space-y-2 sm:space-y-3 text-xs sm:text-sm text-gray-400">
                 {member.department && (
                   <div className="flex items-center justify-center gap-2 sm:gap-3">
-                    <span className="text-gray-300">{getDepartmentLabel(member.department)}</span>
+                    <span className="text-gray-300">
+                      {getDepartmentLabel(member.department)}
+                    </span>
                     <FiBriefcase className="text-gray-600 shrink-0" />
                   </div>
                 )}
                 {member.joinedAt && (
                   <div className="flex items-center justify-center gap-2 sm:gap-3">
-                    <span className="text-gray-300">{tr("منذ")}{new Date(member.joinedAt).getFullYear()}</span>
+                    <span className="text-gray-300">
+                      {tr("منذ")}
+                      {new Date(member.joinedAt).getFullYear()}
+                    </span>
                     <FiCalendar className="text-gray-600 shrink-0" />
                   </div>
                 )}
@@ -112,7 +126,10 @@ export default function TeamProfileDrawer({ member, open, onOpenChange }: Props)
                 { icon: FiGithub, href: member.githubUrl },
                 { icon: FiTwitter, href: member.twitterUrl },
                 { icon: FiGlobe, href: member.websiteUrl },
-                { icon: FiMail, href: member.email ? `mailto:${member.email}` : null },
+                {
+                  icon: FiMail,
+                  href: member.email ? `mailto:${member.email}` : null,
+                },
               ].map(
                 (social, idx) =>
                   social.href && (
@@ -126,7 +143,7 @@ export default function TeamProfileDrawer({ member, open, onOpenChange }: Props)
                     >
                       <social.icon className="w-4 h-4 sm:w-4 sm:h-4" />
                     </motion.a>
-                  )
+                  ),
               )}
             </div>
           </div>
@@ -141,7 +158,8 @@ export default function TeamProfileDrawer({ member, open, onOpenChange }: Props)
               >
                 <h3 className="flex items-center gap-2 text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4">
                   <FiUser className={accentColor} />
-                  {tr("نبذة تعريفية")}</h3>
+                  {tr("نبذة تعريفية")}
+                </h3>
                 <p className="text-gray-400 leading-relaxed text-sm sm:text-base">
                   {member.bio}
                 </p>
@@ -156,7 +174,8 @@ export default function TeamProfileDrawer({ member, open, onOpenChange }: Props)
               >
                 <h3 className="flex items-center gap-2 text-base sm:text-lg font-semibold text-white mb-3 sm:mb-5">
                   <FiAward className={accentColor} />
-                  {tr("المهارات والتخصصات")}</h3>
+                  {tr("المهارات والتخصصات")}
+                </h3>
                 <div className="flex flex-wrap gap-2">
                   {member.specializations.map((spec, index) => (
                     <span
@@ -180,8 +199,11 @@ export default function TeamProfileDrawer({ member, open, onOpenChange }: Props)
                   <div className="absolute top-0 right-0 p-4 opacity-10">
                     <FiAward size={80} />
                   </div>
-                  <h4 className={`text-xs sm:text-sm font-medium ${accentColor} mb-2 uppercase tracking-wider`}>
-                    {tr("شيء يميز هذا العضو")}</h4>
+                  <h4
+                    className={`text-xs sm:text-sm font-medium ${accentColor} mb-2 uppercase tracking-wider`}
+                  >
+                    {tr("شيء يميز هذا العضو")}
+                  </h4>
                   <p className="text-gray-300 text-xs sm:text-sm italic relative z-10 leading-relaxed">
                     "{member.funFact}"
                   </p>

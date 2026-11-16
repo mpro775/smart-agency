@@ -4,8 +4,7 @@ import "../styles/custom-cursor.css";
 
 const INTERACTIVE_SELECTOR =
   "a, button, [role='button'], .cursor-pointer, [data-cursor='hover']";
-const TEXT_INPUT_SELECTOR =
-  "input, textarea, [contenteditable='true']";
+const TEXT_INPUT_SELECTOR = "input, textarea, [contenteditable='true']";
 
 const ADMIN_PATHS = ["/admin", "/dashboard", "/cms"];
 
@@ -23,17 +22,18 @@ const CustomCursor = () => {
   useEffect(() => {
     const pathname = location.pathname;
     const isAdmin = ADMIN_PATHS.some(
-      (p) => pathname === p || pathname.startsWith(p + "/")
+      (p) => pathname === p || pathname.startsWith(p + "/"),
     );
     if (isAdmin) {
       setIsEnabled(false);
       return;
     }
 
-    const isTouch =
-      window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+    const isTouch = window.matchMedia(
+      "(hover: none) and (pointer: coarse)",
+    ).matches;
     const prefersReduced = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
+      "(prefers-reduced-motion: reduce)",
     ).matches;
     if (isTouch || prefersReduced) {
       setIsEnabled(false);
@@ -53,8 +53,10 @@ const CustomCursor = () => {
     cursor.classList.add("is-visible");
     follower.classList.add("is-visible");
 
+    let rafId = 0;
     const onPointerMove = (e: MouseEvent) => {
       mousePos.current = { x: e.clientX, y: e.clientY };
+      if (!rafId && !document.hidden) rafId = requestAnimationFrame(animate);
 
       const target = e.target as HTMLElement | null;
       const interactiveEl = target?.closest(INTERACTIVE_SELECTOR);
@@ -85,13 +87,10 @@ const CustomCursor = () => {
       document.body.classList.remove("cursor-click");
     };
 
-    let rafId: number;
     const animate = () => {
       const ds = 0.92;
-      cursorPos.current.x +=
-        (mousePos.current.x - cursorPos.current.x) * ds;
-      cursorPos.current.y +=
-        (mousePos.current.y - cursorPos.current.y) * ds;
+      cursorPos.current.x += (mousePos.current.x - cursorPos.current.x) * ds;
+      cursorPos.current.y += (mousePos.current.y - cursorPos.current.y) * ds;
 
       const fs = 0.1;
       followerPos.current.x +=
@@ -102,23 +101,35 @@ const CustomCursor = () => {
       cursor.style.transform = `translate(${cursorPos.current.x}px, ${cursorPos.current.y}px) translate(-50%, -50%)`;
       follower.style.transform = `translate(${followerPos.current.x}px, ${followerPos.current.y}px) translate(-50%, -50%)`;
 
-      rafId = requestAnimationFrame(animate);
+      const remaining =
+        Math.abs(mousePos.current.x - followerPos.current.x) +
+        Math.abs(mousePos.current.y - followerPos.current.y);
+      rafId =
+        remaining > 0.1 && !document.hidden
+          ? requestAnimationFrame(animate)
+          : 0;
     };
 
     document.addEventListener("pointermove", onPointerMove);
     document.addEventListener("mousedown", onMouseDown);
     document.addEventListener("mouseup", onMouseUp);
-    rafId = requestAnimationFrame(animate);
+
+    const onVisibility = () => {
+      cancelAnimationFrame(rafId);
+      rafId = 0;
+    };
+    document.addEventListener("visibilitychange", onVisibility);
 
     return () => {
       document.removeEventListener("pointermove", onPointerMove);
       document.removeEventListener("mousedown", onMouseDown);
       document.removeEventListener("mouseup", onMouseUp);
+      document.removeEventListener("visibilitychange", onVisibility);
       cancelAnimationFrame(rafId);
       document.body.classList.remove(
         "cursor-hover",
         "cursor-text",
-        "cursor-click"
+        "cursor-click",
       );
       cursor.classList.remove("is-visible");
       follower.classList.remove("is-visible");

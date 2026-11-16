@@ -1,3 +1,4 @@
+import ResponsiveImage from "@/components/ui/ResponsiveImage";
 import { tr } from "@/i18n";
 import type { Blog } from "../../admin/types";
 import { getAuthorName } from "./blogUtils";
@@ -13,8 +14,11 @@ export default function AuthorBox({ blog }: { blog: Blog }) {
 
       <div className="flex flex-col items-start gap-5 sm:flex-row sm:items-center">
         <div className="relative">
-          <img
-            src={blog.authorAvatar || "https://placehold.co/120x120/0f766e/ffffff?text=SA"}
+          <ResponsiveImage
+            src={
+              blog.authorAvatar ||
+              "https://placehold.co/120x120/0f766e/ffffff?text=SA"
+            }
             alt={name}
             className="h-20 w-20 rounded-full object-cover ring-4 ring-slate-50"
           />
@@ -24,12 +28,17 @@ export default function AuthorBox({ blog }: { blog: Blog }) {
         </div>
         <div>
           <h2 className="text-lg font-bold text-slate-950">{name}</h2>
-          <p className="mt-1 text-sm font-medium text-primary">{blog.authorRole || tr("فريق المنتجات الرقمية")}</p>
+          <p className="mt-1 text-sm font-medium text-primary">
+            {blog.authorRole || tr("فريق المنتجات الرقمية")}
+          </p>
         </div>
       </div>
 
       <p className="mt-5 leading-7 text-slate-600">
-        {tr("فريق متخصص في بناء المنتجات الرقمية، المواقع، المتاجر، وتجارب المستخدم العملية لعملاء Smart Agency.")}</p>
+        {tr(
+          "فريق متخصص في بناء المنتجات الرقمية، المواقع، المتاجر، وتجارب المستخدم العملية لعملاء Smart Agency.",
+        )}
+      </p>
     </section>
   );
 }

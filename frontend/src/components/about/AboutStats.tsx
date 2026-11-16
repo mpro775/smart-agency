@@ -1,10 +1,7 @@
+import CmsIcon from "../icons/CmsIcon";
 import { tr } from "@/i18n";
 import { motion } from "framer-motion";
 import { FiUsers } from "react-icons/fi";
-import { type ComponentType } from "react";
-import * as FiIcons from "react-icons/fi";
-import * as FaIcons from "react-icons/fa";
-import * as RiIcons from "react-icons/ri";
 
 interface Stat {
   value: number;
@@ -17,16 +14,9 @@ interface AboutStatsProps {
   counterValues: number[];
 }
 
-const getIconComponent = (iconName: string, size: number = 24) => {
-  if (!iconName) return null;
-  const icons: Record<string, ComponentType<{ size?: number }>> = {
-    ...FiIcons,
-    ...FaIcons,
-    ...RiIcons,
-  };
-  const Icon = icons[iconName];
-  return Icon ? <Icon size={size} /> : null;
-};
+const getIconComponent = (iconName: string, size = 24) => (
+  <CmsIcon name={iconName} size={size} />
+);
 
 export function AboutStats({ stats, counterValues }: AboutStatsProps) {
   return (
@@ -93,7 +83,8 @@ export function AboutStats({ stats, counterValues }: AboutStatsProps) {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-black mb-4 text-white">
-            {tr("إنجازاتنا بالأرقام")}</h2>
+            {tr("إنجازاتنا بالأرقام")}
+          </h2>
           <div className="w-24 h-1 bg-gradient-to-r from-primary via-white to-primary mx-auto rounded-full" />
         </motion.div>
 

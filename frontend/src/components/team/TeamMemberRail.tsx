@@ -1,3 +1,4 @@
+import ResponsiveImage from "@/components/ui/ResponsiveImage";
 import { motion, useReducedMotion } from "framer-motion";
 import type { TeamMember } from "../../services/team.service";
 import { getDepartmentAccent, getDepartmentLabel } from "./team-utils";
@@ -8,7 +9,11 @@ interface Props {
   onSelect: (member: TeamMember) => void;
 }
 
-export default function TeamMemberRail({ members, activeMember, onSelect }: Props) {
+export default function TeamMemberRail({
+  members,
+  activeMember,
+  onSelect,
+}: Props) {
   const shouldReduceMotion = useReducedMotion();
 
   return (
@@ -22,7 +27,11 @@ export default function TeamMemberRail({ members, activeMember, onSelect }: Prop
             type="button"
             initial={shouldReduceMotion ? false : { opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
-            transition={shouldReduceMotion ? { duration: 0 } : { delay: index * 0.05, duration: 0.4 }}
+            transition={
+              shouldReduceMotion
+                ? { duration: 0 }
+                : { delay: index * 0.05, duration: 0.4 }
+            }
             onClick={() => onSelect(member)}
             className={`relative min-w-[200px] xs:min-w-[230px] sm:min-w-[260px] lg:min-w-0 w-full snap-start text-start rounded-2xl border p-2.5 sm:p-3 transition-all duration-300 group ${
               isActive
@@ -33,7 +42,11 @@ export default function TeamMemberRail({ members, activeMember, onSelect }: Prop
             <div className="flex items-center gap-2.5 sm:gap-3">
               <div className="h-11 w-11 sm:h-14 sm:w-14 rounded-xl overflow-hidden border border-white/10 bg-white/5 shrink-0">
                 {member.photo ? (
-                  <img src={member.photo} alt={member.fullName} className="w-full h-full object-cover" />
+                  <ResponsiveImage
+                    src={member.photo}
+                    alt={member.fullName}
+                    className="w-full h-full object-cover"
+                  />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-cyan-300 font-bold text-sm sm:text-base">
                     {member.fullName.charAt(0)}
@@ -42,11 +55,19 @@ export default function TeamMemberRail({ members, activeMember, onSelect }: Prop
               </div>
 
               <div className="min-w-0 flex-1">
-                <h3 className="text-white font-bold text-xs xs:text-sm sm:text-base truncate">{member.fullName}</h3>
-                <p className="text-gray-300 text-[11px] sm:text-sm truncate mt-0.5 sm:mt-1">{member.role}</p>
+                <h3 className="text-white font-bold text-xs xs:text-sm sm:text-base truncate">
+                  {member.fullName}
+                </h3>
+                <p className="text-gray-300 text-[11px] sm:text-sm truncate mt-0.5 sm:mt-1">
+                  {member.role}
+                </p>
                 <div className="flex items-center gap-1.5 sm:gap-2 mt-1 sm:mt-2 text-[10px] sm:text-xs text-gray-400">
-                  <span className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full ${getDepartmentAccent(member.department)}`} />
-                  <span className="truncate">{getDepartmentLabel(member.department)}</span>
+                  <span
+                    className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full ${getDepartmentAccent(member.department)}`}
+                  />
+                  <span className="truncate">
+                    {getDepartmentLabel(member.department)}
+                  </span>
                 </div>
               </div>
             </div>

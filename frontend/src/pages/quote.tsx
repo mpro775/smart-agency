@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import type { FormEvent } from "react";
 import { Link } from "react-router-dom";
+const MotionLink = motion.create(Link);
 import {
   FiSend,
   FiCheck,
@@ -576,20 +577,16 @@ export default function QuotePage() {
             >
               <MessageCircle size={18} />
               {tr("تواصل عبر واتساب")}</a>
-            <Link to="/">
-              <motion.button
+            <MotionLink to="/"
                 whileHover={{ scale: 1.05 }}
                 className="px-6 py-3 rounded-xl bg-gray-100 text-gray-700 font-semibold hover:bg-gray-200 transition-all"
               >
-                {tr("العودة للرئيسية")}</motion.button>
-            </Link>
-            <Link to="/projects">
-              <motion.button
+                {tr("العودة للرئيسية")}</MotionLink>
+            <MotionLink to="/projects"
                 whileHover={{ scale: 1.05 }}
                 className="px-6 py-3 rounded-xl border border-gray-300 text-gray-700 font-semibold hover:bg-gray-50 transition-all"
               >
-                {tr("استعراض أعمالنا")}</motion.button>
-            </Link>
+                {tr("استعراض أعمالنا")}</MotionLink>
           </div>
         </div>
       </motion.main>

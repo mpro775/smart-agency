@@ -38,57 +38,65 @@ const getCategoryMetaMap = (): Record<
   Backend: {
     titleAr: tr("هندسة الأنظمة"),
     label: "Backend",
-    description:
-      tr("نصمم ونبني أنظمة خلفية قوية وواجهات برمجية منظمة قابلة للتوسع، مع التركيز على الأداء، الأمان، وسهولة الصيانة."),
+    description: tr(
+      "نصمم ونبني أنظمة خلفية قوية وواجهات برمجية منظمة قابلة للتوسع، مع التركيز على الأداء، الأمان، وسهولة الصيانة.",
+    ),
     icon: Layers,
   },
   Frontend: {
     titleAr: tr("تجربة الواجهة"),
     label: "Frontend",
-    description:
-      tr("نبني واجهات سريعة، متجاوبة، وأنيقة تمنح المستخدم تجربة واضحة وسلسة على مختلف الأجهزة."),
+    description: tr(
+      "نبني واجهات سريعة، متجاوبة، وأنيقة تمنح المستخدم تجربة واضحة وسلسة على مختلف الأجهزة.",
+    ),
     icon: Monitor,
   },
   Database: {
     titleAr: tr("إدارة البيانات"),
     label: "Database",
-    description:
-      tr("ننظم البيانات بطريقة آمنة ومرنة تساعد المنتج على النمو، التحليل، والتكامل مع الخدمات الأخرى."),
+    description: tr(
+      "ننظم البيانات بطريقة آمنة ومرنة تساعد المنتج على النمو، التحليل، والتكامل مع الخدمات الأخرى.",
+    ),
     icon: DatabaseIcon,
   },
   Mobile: {
     titleAr: tr("تطبيقات الجوال"),
     label: "Mobile",
-    description:
-      tr("نطوّر تطبيقات جوال عملية وسلسة تدعم تجربة المستخدم وتتكامل مع أنظمة المنتج الأساسية."),
+    description: tr(
+      "نطوّر تطبيقات جوال عملية وسلسة تدعم تجربة المستخدم وتتكامل مع أنظمة المنتج الأساسية.",
+    ),
     icon: Smartphone,
   },
   DevOps: {
     titleAr: tr("التشغيل والنشر"),
     label: "DevOps",
-    description:
-      tr("نضمن نشرًا مستقرًا، مراقبة مستمرة، وبيئة تشغيل تساعد على استقرار المنتج واستمراره."),
+    description: tr(
+      "نضمن نشرًا مستقرًا، مراقبة مستمرة، وبيئة تشغيل تساعد على استقرار المنتج واستمراره.",
+    ),
     icon: Cloud,
   },
   Automation: {
     titleAr: tr("الذكاء والأتمتة"),
     label: "AI & Automation",
-    description:
-      tr("نستخدم الأتمتة والذكاء الاصطناعي لتقليل العمل اليدوي، ربط الأنظمة، وتحسين كفاءة التشغيل."),
+    description: tr(
+      "نستخدم الأتمتة والذكاء الاصطناعي لتقليل العمل اليدوي، ربط الأنظمة، وتحسين كفاءة التشغيل.",
+    ),
     icon: Bot,
   },
   AI: {
     titleAr: tr("الذكاء الاصطناعي"),
     label: "AI",
-    description:
-      tr("نربط المنتجات بحلول ذكاء اصطناعي عملية تساعد في البحث، التحليل، الدعم، وأتمتة العمليات."),
+    description: tr(
+      "نربط المنتجات بحلول ذكاء اصطناعي عملية تساعد في البحث، التحليل، الدعم، وأتمتة العمليات.",
+    ),
     icon: Brain,
   },
   Other: {
     titleAr: tr("تقنيات مساعدة"),
     label: "Other",
-    description:
-      tr("تقنيات وأدوات داعمة نستخدمها حسب احتياج كل منتج لضمان تجربة أفضل واستقرار أعلى."),
+    description: tr(
+      "تقنيات وأدوات داعمة نستخدمها حسب احتياج كل منتج لضمان تجربة أفضل واستقرار أعلى.",
+    ),
     icon: Boxes,
   },
 });
@@ -103,10 +111,14 @@ function TechHeader() {
       </div>
 
       <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-950 leading-tight mb-4">
-        {tr("المنظومة التقنية التي نبني بها منتجات رقمية ناجحة")}</h2>
+        {tr("المنظومة التقنية التي نبني بها منتجات رقمية ناجحة")}
+      </h2>
 
       <p className="max-w-3xl mx-auto text-slate-500 text-base md:text-lg leading-8">
-        {tr("نستخدم التقنية كمنظومة تشغيل متكاملة تجمع بين الأداء، الأمان، الأتمتة، والذكاء الاصطناعي لتحويل الأفكار إلى منتجات قابلة للنمو والاستمرار.")}</p>
+        {tr(
+          "نستخدم التقنية كمنظومة تشغيل متكاملة تجمع بين الأداء، الأمان، الأتمتة، والذكاء الاصطناعي لتحويل الأفكار إلى منتجات قابلة للنمو والاستمرار.",
+        )}
+      </p>
     </div>
   );
 }
@@ -127,20 +139,28 @@ function StackSummary({
         </div>
 
         <h3 className="text-3xl lg:text-4xl font-bold text-slate-950 leading-tight mb-5">
-          {tr("منظومة تشغيل تقنية متكاملة")}</h3>
+          {tr("منظومة تشغيل تقنية متكاملة")}
+        </h3>
 
         <p className="text-slate-500 leading-8 text-base">
-          {tr("نربط بين الواجهة، الباك إند، قواعد البيانات، التشغيل، والأتمتة لبناء منتجات رقمية مستقرة وقابلة للتوسع.")}</p>
+          {tr(
+            "نربط بين الواجهة، الباك إند، قواعد البيانات، التشغيل، والأتمتة لبناء منتجات رقمية مستقرة وقابلة للتوسع.",
+          )}
+        </p>
       </div>
 
       <div className="grid grid-cols-2 gap-3 mt-8">
         <div className="rounded-2xl bg-white/80 border border-[#008080]/10 p-4 text-center shadow-sm">
-          <div className="text-2xl font-bold text-[#008080]">+{totalTechnologies}</div>
+          <div className="text-2xl font-bold text-[#008080]">
+            +{totalTechnologies}
+          </div>
           <div className="text-xs text-slate-500 mt-1">{tr("تقنية")}</div>
         </div>
 
         <div className="rounded-2xl bg-white/80 border border-[#008080]/10 p-4 text-center shadow-sm">
-          <div className="text-2xl font-bold text-[#008080]">+{totalCategories}</div>
+          <div className="text-2xl font-bold text-[#008080]">
+            +{totalCategories}
+          </div>
           <div className="text-xs text-slate-500 mt-1">{tr("طبقات تقنية")}</div>
         </div>
 
@@ -149,7 +169,9 @@ function StackSummary({
             <Rocket className="w-4 h-4" />
             UI + Backend + DevOps + AI
           </div>
-          <div className="text-xs text-slate-500 text-center mt-1">{tr("منظومة عمل متكاملة")}</div>
+          <div className="text-xs text-slate-500 text-center mt-1">
+            {tr("منظومة عمل متكاملة")}
+          </div>
         </div>
       </div>
     </div>
@@ -186,10 +208,15 @@ function CategoryTabs({
                 : "bg-white/80 text-slate-700 border-slate-100 hover:border-[#008080]/25 hover:-translate-y-1 hover:shadow-md"
             }`}
           >
-            <Icon className={`w-6 h-6 mb-3 ${isActive ? "text-white" : "text-[#008080]"}`} />
+            <Icon
+              className={`w-6 h-6 mb-3 ${isActive ? "text-white" : "text-[#008080]"}`}
+            />
             <div className="font-bold text-sm">{meta.label}</div>
-            <div className={`text-xs mt-1 ${isActive ? "text-white/75" : "text-slate-400"}`}>
-              {grouped[category]?.length || 0} {tr("أدوات")}</div>
+            <div
+              className={`text-xs mt-1 ${isActive ? "text-white/75" : "text-slate-400"}`}
+            >
+              {grouped[category]?.length || 0} {tr("أدوات")}
+            </div>
 
             {isActive && (
               <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-4 h-4 rotate-45 bg-[#008080]" />
@@ -227,9 +254,7 @@ function CategoryPanel({
             {meta.label}
           </h3>
 
-          <p className="text-slate-500 leading-8 mb-6">
-            {meta.description}
-          </p>
+          <p className="text-slate-500 leading-8 mb-6">{meta.description}</p>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {[
@@ -257,6 +282,9 @@ function CategoryPanel({
             >
               {tech.icon ? (
                 <img
+                  width={32}
+                  height={32}
+                  decoding="async"
                   src={tech.icon}
                   alt={tech.name}
                   className="w-8 h-8 object-contain mb-3"
@@ -265,7 +293,9 @@ function CategoryPanel({
               ) : (
                 <Icon className="w-8 h-8 text-[#008080] mb-3" />
               )}
-              <span className="text-xs font-bold text-slate-700">{tech.name}</span>
+              <span className="text-xs font-bold text-slate-700">
+                {tech.name}
+              </span>
             </div>
           ))}
         </div>
@@ -335,12 +365,16 @@ function TechValueGrid() {
     },
     {
       title: tr("التشغيل والنشر"),
-      description: tr("نضمن نشرًا مستقرًا، مراقبة مستمرة، ونسخًا احتياطيًا يحافظ على استمرارية خدماتك."),
+      description: tr(
+        "نضمن نشرًا مستقرًا، مراقبة مستمرة، ونسخًا احتياطيًا يحافظ على استمرارية خدماتك.",
+      ),
       icon: Cloud,
     },
     {
       title: tr("الذكاء والأتمتة"),
-      description: tr("نستخدم الذكاء الاصطناعي والأتمتة لزيادة الكفاءة وتقليل العمل اليدوي."),
+      description: tr(
+        "نستخدم الذكاء الاصطناعي والأتمتة لزيادة الكفاءة وتقليل العمل اليدوي.",
+      ),
       icon: Brain,
     },
   ];
@@ -358,7 +392,9 @@ function TechValueGrid() {
               <Icon className="w-5 h-5" />
             </div>
             <h4 className="font-bold text-slate-950 mb-2">{value.title}</h4>
-            <p className="text-sm text-slate-500 leading-7">{value.description}</p>
+            <p className="text-sm text-slate-500 leading-7">
+              {value.description}
+            </p>
             <div className="w-12 h-px bg-[#008080] mt-4" />
           </div>
         );
@@ -413,11 +449,13 @@ export default function Technologies({
     }
 
     const extraCategories = Object.keys(groupedMap).filter(
-      (category) => !preferredCategoryOrder.includes(category)
+      (category) => !preferredCategoryOrder.includes(category),
     );
 
     const names = [
-      ...preferredCategoryOrder.filter((category) => groupedMap[category]?.length),
+      ...preferredCategoryOrder.filter(
+        (category) => groupedMap[category]?.length,
+      ),
       ...extraCategories,
     ];
 

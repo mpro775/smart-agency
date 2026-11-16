@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import type { FormEvent, ChangeEvent } from "react";
 import { Link } from "react-router-dom";
+const MotionLink = motion.create(Link);
 import {
   FiSend,
   FiMessageCircle,
@@ -246,8 +247,7 @@ export default function ContactPage() {
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link to="/quote">
-                <motion.button
+              <MotionLink to="/quote"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.98 }}
                   className="flex items-center gap-2 px-8 py-3.5 rounded-xl smart-primary text-white font-semibold shadow-lg shadow-[#008080]/30 hover:shadow-xl hover:shadow-[#008080]/40 transition-all relative overflow-hidden group"
@@ -255,8 +255,7 @@ export default function ContactPage() {
                   <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-gradient-x transition-opacity" />
                   <Rocket size={18} className="relative z-10" />
                   <span className="relative z-10">{tr("ابدأ مشروعك")}</span>
-                </motion.button>
-              </Link>
+                </MotionLink>
               <motion.a
                 href="#contact-form"
                 whileHover={{ scale: 1.05 }}
@@ -856,8 +855,7 @@ export default function ContactPage() {
               {tr("ابدأ مشروعك معنا اليوم واحصل على استشارة مجانية وتصوّر أولي خلال 24 ساعة.")}</p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link to="/quote">
-                <motion.button
+              <MotionLink to="/quote"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.98 }}
                   className="flex items-center gap-2 px-10 py-4 rounded-xl smart-primary text-white font-semibold text-lg shadow-lg shadow-[#008080]/30 hover:shadow-xl hover:shadow-[#008080]/40 transition-all relative overflow-hidden group"
@@ -865,8 +863,7 @@ export default function ContactPage() {
                   <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                   <Rocket size={20} className="relative z-10" />
                   <span className="relative z-10">{tr("ابدأ مشروعك الآن")}</span>
-                </motion.button>
-              </Link>
+                </MotionLink>
               <motion.a
                 href={whatsappUrl}
                 target="_blank"

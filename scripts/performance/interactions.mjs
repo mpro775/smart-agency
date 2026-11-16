@@ -1,0 +1,36 @@
+import { fileURLToPath } from "node:url";
+process.chdir(fileURLToPath(new URL("../../", import.meta.url)));
+import { chromium } from 'playwright';
+import assert from 'node:assert/strict';
+import { writeFileSync } from 'node:fs';
+const browser=await chromium.launch({executablePath:chromium.executablePath(),headless:true});
+const results=[];
+const origin=process.env.AUDIT_ORIGIN ?? 'http://127.0.0.1:4174';
+try {
+  const context=await browser.newContext({viewport:{width:1350,height:940}});
+  const page=await context.newPage();
+  const errors=[];
+  page.on('pageerror',e=>errors.push(e.stack));
+  await page.addInitScript(()=>{localStorage.setItem('accessToken','audit-local-token');localStorage.setItem('user',JSON.stringify({_id:'audit',name:'Audit',email:'audit@example.com',role:'admin'}));});
+  await page.route('**/api/**',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({statusCode:200,data:[],meta:{total:0,totalPages:0}})}));
+  await page.goto(`${origin}/admin/blog/new`,{waitUntil:'networkidle'});
+  if (errors.length) throw new Error(errors.join('\n'));
+  console.log('admin editor URL', page.url());
+  await page.getByRole('tab', {name:'المحتوى',exact:true}).click();
+  await page.locator('[contenteditable="true"]').first().waitFor();
+  await page.locator('[contenteditable="true"]').first().fill('Performance audit editor smoke test');
+  assert.ok((await page.locator('[contenteditable="true"]').first().innerText()).includes('audit'));
+  assert.equal(errors.length,0,JSON.stringify(errors));
+  results.push({test:'admin editor loads and edits with mocked authentication/API',pass:true});
+  await context.close();
+  const mobile=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,reducedMotion:'reduce'});
+  const publicPage=await mobile.newPage();
+  await publicPage.goto(`${origin}/ar`,{waitUntil:'networkidle'});
+  assert.equal(await publicPage.locator('.custom-cursor').count(),0);
+  await publicPage.locator('button[aria-label="فتح القائمة"]').click();
+  await publicPage.locator('nav a[href="/ar/projects"]').last().waitFor({state:'visible'});
+  results.push({test:'mobile menu and reduced motion',pass:true});
+  await mobile.close();
+  writeFileSync('performance-artifacts/smoke/interactions.json',JSON.stringify(results,null,2));
+  console.log(JSON.stringify(results));
+} finally {await browser.close();}

@@ -6,7 +6,7 @@ import {
   useMemo,
   type ReactNode,
 } from "react";
-import { Navigate, useLocation, useNavigate, useParams } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import i18n, { isLocale, type Locale } from "@/i18n";
 import SeoManager from "./SeoManager";
 
@@ -35,8 +35,8 @@ function prefixPath(path: string, locale: Locale): string {
 }
 
 export default function LocaleLayout({ children }: { children: ReactNode }) {
-  const { locale: localeParam } = useParams();
   const location = useLocation();
+  const localeParam = location.pathname.split("/")[1];
   const navigate = useNavigate();
 
   const invalidLocale = !isLocale(localeParam);
@@ -50,7 +50,10 @@ export default function LocaleLayout({ children }: { children: ReactNode }) {
     document.body.dir = direction;
     localStorage.setItem("preferredLocale", locale);
     const manifest = document.head.querySelector('link[rel="manifest"]');
-    manifest?.setAttribute("href", locale === "en" ? "/manifest-en.json" : "/manifest.json");
+    manifest?.setAttribute(
+      "href",
+      locale === "en" ? "/manifest-en.json" : "/manifest.json",
+    );
   }, [direction, locale]);
 
   const localePath = useCallback(
@@ -70,13 +73,30 @@ export default function LocaleLayout({ children }: { children: ReactNode }) {
   // Keep legacy absolute links inside components on the active locale.
   useEffect(() => {
     const handleClick = (event: MouseEvent) => {
-      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey) return;
-      const anchor = (event.target as Element | null)?.closest("a[href]") as HTMLAnchorElement | null;
-      if (!anchor || anchor.target === "_blank" || anchor.hasAttribute("download")) return;
+      if (
+        event.defaultPrevented ||
+        event.button !== 0 ||
+        event.metaKey ||
+        event.ctrlKey
+      )
+        return;
+      const anchor = (event.target as Element | null)?.closest(
+        "a[href]",
+      ) as HTMLAnchorElement | null;
+      if (
+        !anchor ||
+        anchor.target === "_blank" ||
+        anchor.hasAttribute("download")
+      )
+        return;
 
       const url = new URL(anchor.href, window.location.origin);
       if (url.origin !== window.location.origin) return;
-      if (/^\/(ar|en)(?:\/|$)/.test(url.pathname) || url.pathname.startsWith("/admin")) return;
+      if (
+        /^\/(ar|en)(?:\/|$)/.test(url.pathname) ||
+        url.pathname.startsWith("/admin")
+      )
+        return;
       if (!url.pathname.startsWith("/")) return;
 
       event.preventDefault();

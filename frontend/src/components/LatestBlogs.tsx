@@ -30,7 +30,10 @@ export default function LatestBlogs({ initialBlogs }: LatestBlogsProps) {
         if (featured.length > 0) {
           setBlogs(featured);
         } else {
-          const latest = await publicBlogService.getAll({ limit: 3, sort: "latest" });
+          const latest = await publicBlogService.getAll({
+            limit: 3,
+            sort: "latest",
+          });
           setBlogs(latest.data);
         }
         setError(null);
@@ -45,31 +48,47 @@ export default function LatestBlogs({ initialBlogs }: LatestBlogsProps) {
   }, [initialBlogs]);
 
   return (
-    <SectionShell tone="light" pattern="grid" id="blog" withContainer={false}>
+    <SectionShell tone="light" pattern="grid" id="blogs" withContainer={false}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-12 flex flex-col justify-between gap-4 md:flex-row md:items-end">
           <div>
             <span className="inline-flex items-center gap-2 rounded-full border border-[var(--smart-border-light)] bg-white/70 px-4 py-2 text-sm font-bold text-[var(--smart-primary)] backdrop-blur-xl">
-              {tr("مركز المعرفة")}</span>
+              {tr("مركز المعرفة")}
+            </span>
             <h2 className="mt-5 text-3xl md:text-5xl font-black tracking-tight text-slate-950">
-              {tr("أحدث رؤى Smart Agency")}</h2>
+              {tr("أحدث رؤى Smart Agency")}
+            </h2>
             <p className="mt-4 max-w-2xl text-slate-600">
-              {tr("محتوى عملي حول بناء المواقع، المتاجر، الأتمتة، وتجربة المستخدم التي تصنع فرقاً في النمو.")}</p>
+              {tr(
+                "محتوى عملي حول بناء المواقع، المتاجر، الأتمتة، وتجربة المستخدم التي تصنع فرقاً في النمو.",
+              )}
+            </p>
           </div>
-          <Link to="/blog" className="inline-flex items-center gap-2 font-semibold text-[var(--smart-primary)] hover:text-[var(--smart-primary-dark)]">
-            {tr("عرض كل المقالات")}<ArrowLeft className="h-4 w-4 directional-arrow" />
+          <Link
+            to="/blog"
+            className="inline-flex items-center gap-2 font-semibold text-[var(--smart-primary)] hover:text-[var(--smart-primary-dark)]"
+          >
+            {tr("عرض كل المقالات")}
+            <ArrowLeft className="h-4 w-4 directional-arrow" />
           </Link>
         </div>
 
         {loading && (
           <div className="grid gap-6 md:grid-cols-3">
             {Array.from({ length: 3 }).map((_, index) => (
-              <div key={index} className="h-96 animate-pulse rounded-2xl bg-slate-100" />
+              <div
+                key={index}
+                className="h-96 animate-pulse rounded-2xl bg-slate-100"
+              />
             ))}
           </div>
         )}
 
-        {error && !loading && <div className="rounded-2xl bg-red-50 p-6 text-center text-red-700">{error}</div>}
+        {error && !loading && (
+          <div className="rounded-2xl bg-red-50 p-6 text-center text-red-700">
+            {error}
+          </div>
+        )}
 
         {!loading && !error && blogs.length > 0 && (
           <div className="grid gap-6 md:grid-cols-3">
@@ -81,7 +100,8 @@ export default function LatestBlogs({ initialBlogs }: LatestBlogsProps) {
 
         {!loading && !error && blogs.length === 0 && (
           <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center text-slate-500">
-            {tr("لا توجد مقالات منشورة حالياً.")}</div>
+            {tr("لا توجد مقالات منشورة حالياً.")}
+          </div>
         )}
       </div>
     </SectionShell>

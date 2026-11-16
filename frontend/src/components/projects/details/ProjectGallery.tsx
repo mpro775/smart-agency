@@ -1,7 +1,15 @@
+import ResponsiveImage from "@/components/ui/ResponsiveImage";
 import { tr } from "@/i18n";
 import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Monitor, Play, Rocket, X, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  Monitor,
+  Play,
+  Rocket,
+  X,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 
 interface ProjectGalleryProps {
   displayImages: string[];
@@ -15,9 +23,17 @@ function isYoutubeUrl(url?: string) {
   return url.includes("youtube.com") || url.includes("youtu.be");
 }
 
-export default function ProjectGallery({ displayImages, videoUrl, heroImage, title }: ProjectGalleryProps) {
-  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
-  const currentImage = selectedImageIndex !== null ? displayImages[selectedImageIndex] : null;
+export default function ProjectGallery({
+  displayImages,
+  videoUrl,
+  heroImage,
+  title,
+}: ProjectGalleryProps) {
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(
+    null,
+  );
+  const currentImage =
+    selectedImageIndex !== null ? displayImages[selectedImageIndex] : null;
   const isVideoYoutube = isYoutubeUrl(videoUrl);
 
   useEffect(() => {
@@ -26,12 +42,14 @@ export default function ProjectGallery({ displayImages, videoUrl, heroImage, tit
       if (e.key === "Escape") setSelectedImageIndex(null);
       if (e.key === "ArrowRight") {
         setSelectedImageIndex((i) =>
-          i === null ? null : (i - 1 + displayImages.length) % displayImages.length
+          i === null
+            ? null
+            : (i - 1 + displayImages.length) % displayImages.length,
         );
       }
       if (e.key === "ArrowLeft") {
         setSelectedImageIndex((i) =>
-          i === null ? null : (i + 1) % displayImages.length
+          i === null ? null : (i + 1) % displayImages.length,
         );
       }
     };
@@ -67,7 +85,7 @@ export default function ProjectGallery({ displayImages, videoUrl, heroImage, tit
                 rel="noopener noreferrer"
                 className="relative block"
               >
-                <img
+                <ResponsiveImage
                   src={heroImage}
                   alt={title}
                   className="w-full h-72 object-cover group-hover:scale-[1.01] transition-transform duration-700"
@@ -100,7 +118,7 @@ export default function ProjectGallery({ displayImages, videoUrl, heroImage, tit
                   index === 0 ? "col-span-2 aspect-[16/9] md:aspect-[8/3]" : ""
                 }`}
               >
-                <img
+                <ResponsiveImage
                   src={img}
                   alt={`${title} ${index + 1}`}
                   className="w-full h-full object-cover transition duration-700 group-hover:scale-105"
@@ -166,7 +184,9 @@ export default function ProjectGallery({ displayImages, videoUrl, heroImage, tit
                   onClick={(e) => {
                     e.stopPropagation();
                     setSelectedImageIndex((i) =>
-                      i === null ? null : (i - 1 + displayImages.length) % displayImages.length
+                      i === null
+                        ? null
+                        : (i - 1 + displayImages.length) % displayImages.length,
                     );
                   }}
                 >
@@ -181,7 +201,7 @@ export default function ProjectGallery({ displayImages, videoUrl, heroImage, tit
                   onClick={(e) => {
                     e.stopPropagation();
                     setSelectedImageIndex((i) =>
-                      i === null ? null : (i + 1) % displayImages.length
+                      i === null ? null : (i + 1) % displayImages.length,
                     );
                   }}
                 >
@@ -212,7 +232,11 @@ export default function ProjectGallery({ displayImages, videoUrl, heroImage, tit
                         : "border-transparent opacity-60 hover:opacity-100"
                     }`}
                   >
-                    <img src={img} alt="" className="w-full h-full object-cover" />
+                    <ResponsiveImage
+                      src={img}
+                      alt=""
+                      className="w-full h-full object-cover"
+                    />
                   </button>
                 ))}
               </motion.div>

@@ -1,5 +1,4 @@
 import { tr } from "@/i18n";
-import { motion } from "framer-motion";
 import {
   Layers,
   CheckCircle2,
@@ -59,39 +58,19 @@ const HeroDashboard = () => {
     <div className="relative w-full max-w-[540px]">
       {/* Floating Badges */}
       {floatingBadges.map((badge, i) => (
-        <motion.div
+        <div
           key={i}
-          initial={{ opacity: 0, scale: 0.5, y: 10 }}
-          animate={{ opacity: 1, scale: 1, y: [0, -6, 0] }}
-          transition={{
-            delay: badge.delay,
-            duration: 0.5,
-            type: "spring",
-            stiffness: 150,
-            damping: 15,
-            y: {
-              delay: badge.delay + 0.5,
-              duration: 3,
-              repeat: Infinity,
-              ease: "easeInOut",
-            },
-          }}
           className={`absolute ${badge.position} z-20 flex items-center gap-2 rounded-full border border-[#008080]/30 bg-gradient-to-r from-[#008080]/90 to-[#006666]/90 px-4 py-2 shadow-[0_8px_24px_rgba(0,128,128,0.3)] backdrop-blur-sm`}
         >
           <span className="text-white/90 shrink-0">{badge.icon}</span>
           <span className="text-[11px] font-bold text-white whitespace-nowrap">
             {badge.text}
           </span>
-        </motion.div>
+        </div>
       ))}
 
       {/* Main Dashboard Card */}
-      <motion.div
-        initial={{ opacity: 0, x: 40 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut", delay: 0.3 }}
-        className="relative overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#0c1929] p-5 shadow-[0_30px_80px_rgba(0,0,0,0.4)]"
-      >
+      <div className="relative overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#0c1929] p-5 shadow-[0_30px_80px_rgba(0,0,0,0.4)]">
         {/* Top accent line */}
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#008080]/50 to-transparent" />
 
@@ -106,14 +85,17 @@ const HeroDashboard = () => {
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="text-[13px] font-bold text-white">
-                  {tr("منصة إدارة المشاريع")}</h3>
+                <h2 className="text-[13px] font-bold text-white">
+                  {tr("منصة إدارة المشاريع")}
+                </h2>
                 <span className="text-[10px] text-emerald-300 font-medium">
-                  {tr("مباشر")}</span>
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  {tr("مباشر")}
+                </span>
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
               </div>
-              <p className="mt-0.5 text-[10px] text-slate-500">
-                {tr("آخر تحديث: منذ 5 دقائق")}</p>
+              <p className="mt-0.5 text-[10px] text-slate-400">
+                {tr("آخر تحديث: منذ 5 دقائق")}
+              </p>
             </div>
           </div>
         </div>
@@ -123,11 +105,15 @@ const HeroDashboard = () => {
           {/* Progress */}
           <div className="rounded-xl border border-white/[0.06] bg-white/[0.025] p-3">
             <p className="text-[11px] font-bold text-slate-300 mb-2">
-              {tr("تقدم المشروع")}</p>
+              {tr("تقدم المشروع")}
+            </p>
             <div className="flex items-center gap-3">
               {/* Circle */}
               <div className="relative flex h-[72px] w-[72px] shrink-0 items-center justify-center">
-                <svg className="absolute inset-0 h-full w-full -rotate-90" viewBox="0 0 72 72">
+                <svg
+                  className="absolute inset-0 h-full w-full -rotate-90"
+                  viewBox="0 0 72 72"
+                >
                   <circle
                     cx="36"
                     cy="36"
@@ -136,7 +122,7 @@ const HeroDashboard = () => {
                     stroke="rgba(255,255,255,0.06)"
                     strokeWidth="5"
                   />
-                  <motion.circle
+                  <circle
                     cx="36"
                     cy="36"
                     r="30"
@@ -145,12 +131,16 @@ const HeroDashboard = () => {
                     strokeWidth="5"
                     strokeLinecap="round"
                     strokeDasharray="188.5"
-                    initial={{ strokeDashoffset: 188.5 }}
-                    animate={{ strokeDashoffset: 188.5 * (1 - 0.92) }}
-                    transition={{ duration: 1.5, ease: "easeOut", delay: 0.8 }}
+                    strokeDashoffset={188.5 * (1 - 0.92)}
                   />
                   <defs>
-                    <linearGradient id="progressGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <linearGradient
+                      id="progressGrad"
+                      x1="0%"
+                      y1="0%"
+                      x2="100%"
+                      y2="0%"
+                    >
                       <stop offset="0%" stopColor="#008080" />
                       <stop offset="100%" stopColor="#14b8a6" />
                     </linearGradient>
@@ -162,36 +152,35 @@ const HeroDashboard = () => {
               {/* Details */}
               <div className="flex-1 space-y-1.5">
                 <div className="flex justify-between text-[10px]">
-                  <span className="text-slate-500">{tr("المهام المكتملة")}</span>
+                  <span className="text-slate-400">
+                    {tr("المهام المكتملة")}
+                  </span>
                   <span className="text-white font-bold">46 / 50</span>
                 </div>
                 <div className="h-1 w-full rounded-full bg-white/[0.06] overflow-hidden">
-                  <motion.div
-                    initial={{ width: 0 }}
-                    animate={{ width: "92%" }}
-                    transition={{ duration: 1.2, ease: "easeOut", delay: 1 }}
+                  <div
+                    style={{ width: "92%", transformOrigin: "left" }}
                     className="h-full rounded-full bg-gradient-to-r from-[#008080] to-[#14b8a6]"
                   />
                 </div>
 
                 {/* Mini line chart */}
                 <svg viewBox="0 0 100 20" className="w-full h-4 opacity-40">
-                  <motion.path
+                  <path
                     d="M0 15 Q10 12, 20 14 T40 8 T60 12 T80 5 T100 10"
                     fill="none"
                     stroke="#008080"
                     strokeWidth="1.5"
-                    initial={{ pathLength: 0 }}
-                    animate={{ pathLength: 1 }}
-                    transition={{ duration: 1.5, delay: 1.2 }}
                   />
                 </svg>
 
                 <div className="flex items-center gap-1 text-[10px]">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#14b8a6] animate-pulse" />
-                  <span className="text-slate-500">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#14b8a6]" />
+                  <span className="text-slate-400">
                     {tr("المرحلة الحالية:")}{" "}
-                    <span className="text-slate-300 font-medium">{tr("اختبار نهائي")}</span>
+                    <span className="text-slate-300 font-medium">
+                      {tr("اختبار نهائي")}
+                    </span>
                   </span>
                 </div>
               </div>
@@ -204,7 +193,9 @@ const HeroDashboard = () => {
               <div
                 key={item}
                 className={`flex items-center justify-between py-2 text-[12px] ${
-                  index === checklist.length - 1 ? "" : "border-b border-white/[0.04]"
+                  index === checklist.length - 1
+                    ? ""
+                    : "border-b border-white/[0.04]"
                 }`}
               >
                 <span className="text-slate-300">{item}</span>
@@ -212,7 +203,7 @@ const HeroDashboard = () => {
                   size={14}
                   className={`shrink-0 ${
                     index === checklist.length - 1
-                      ? "text-[#008080] animate-pulse"
+                      ? "text-[#008080]"
                       : "text-emerald-400"
                   }`}
                 />
@@ -228,20 +219,17 @@ const HeroDashboard = () => {
               key={metric.label}
               className="rounded-xl border border-white/[0.06] bg-white/[0.03] p-3 text-center"
             >
-              <p className="text-[10px] text-slate-500">{metric.label}</p>
-              <p className="mt-1 text-lg font-black text-white">{metric.value}</p>
-              <p className="mt-0.5 text-[9px] text-slate-600">{metric.desc}</p>
+              <p className="text-[10px] text-slate-400">{metric.label}</p>
+              <p className="mt-1 text-lg font-black text-white">
+                {metric.value}
+              </p>
+              <p className="mt-0.5 text-[9px] text-slate-400">{metric.desc}</p>
               {/* Mini bar chart */}
               <div className="flex items-end justify-center gap-[2px] mt-2 h-6">
                 {Array.from({ length: 8 }).map((_, j) => (
-                  <motion.div
+                  <div
                     key={j}
-                    initial={{ height: 0 }}
-                    animate={{ height: `${15 + Math.random() * 20}px` }}
-                    transition={{
-                      duration: 0.5,
-                      delay: 1.2 + i * 0.1 + j * 0.05,
-                    }}
+                    style={{ height: `${12 + ((i * 7 + j * 11) % 15)}px` }}
                     className="w-[3px] rounded-sm bg-[#008080]/40"
                   />
                 ))}
@@ -287,7 +275,7 @@ const HeroDashboard = () => {
             <span className="text-slate-400">{"}"});</span>
           </code>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 };

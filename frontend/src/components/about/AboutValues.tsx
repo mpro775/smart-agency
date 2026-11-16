@@ -1,11 +1,8 @@
+import CmsIcon from "../icons/CmsIcon";
 import { tr } from "@/i18n";
 import { motion } from "framer-motion";
 import { FaHandshake } from "react-icons/fa";
 import { FiCheckCircle, FiStar } from "react-icons/fi";
-import { type ComponentType } from "react";
-import * as FiIcons from "react-icons/fi";
-import * as FaIcons from "react-icons/fa";
-import * as RiIcons from "react-icons/ri";
 
 interface Value {
   title: string;
@@ -17,16 +14,9 @@ interface AboutValuesProps {
   values: Value[];
 }
 
-const getIconComponent = (iconName: string, size: number = 24) => {
-  if (!iconName) return null;
-  const icons: Record<string, ComponentType<{ size?: number }>> = {
-    ...FiIcons,
-    ...FaIcons,
-    ...RiIcons,
-  };
-  const Icon = icons[iconName];
-  return Icon ? <Icon size={size} /> : null;
-};
+const getIconComponent = (iconName: string, size = 24) => (
+  <CmsIcon name={iconName} size={size} />
+);
 
 export function AboutValues({ values }: AboutValuesProps) {
   return (
@@ -81,19 +71,23 @@ export function AboutValues({ values }: AboutValuesProps) {
             whileHover={{ scale: 1.05 }}
           >
             <FiStar className="text-primary" size={16} />
-            <span className="text-primary font-bold text-sm">{tr("قيمنا الجوهرية")}</span>
+            <span className="text-primary font-bold text-sm">
+              {tr("قيمنا الجوهرية")}
+            </span>
           </motion.div>
 
           {/* Title */}
           <h2 className="text-5xl md:text-6xl font-black text-gray-900 mb-6 leading-tight">
             <span className="block">{tr("المبادئ التي")}</span>
             <span className="block text-transparent bg-clip-text bg-gradient-to-l from-primary via-primary-dark to-primary">
-              {tr("تقودنا للتميز")}</span>
+              {tr("تقودنا للتميز")}
+            </span>
           </h2>
 
           {/* Subtitle */}
           <p className="mt-6 text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed font-medium">
-            {tr("نؤمن بقيم راسخة تشكل أساس نجاحنا وتميزنا في كل مشروع نقدمه")}</p>
+            {tr("نؤمن بقيم راسخة تشكل أساس نجاحنا وتميزنا في كل مشروع نقدمه")}
+          </p>
 
           {/* Decorative line */}
           <motion.div
@@ -199,7 +193,9 @@ export function AboutValues({ values }: AboutValuesProps) {
                     <div
                       className={`relative w-20 h-20 rounded-2xl flex items-center justify-center text-white shadow-xl group-hover:shadow-2xl transition-all duration-500 bg-gradient-to-br ${variant.iconGradient}`}
                     >
-                      {getIconComponent(value.icon, 36) || <FaHandshake size={36} />}
+                      {getIconComponent(value.icon, 36) || (
+                        <FaHandshake size={36} />
+                      )}
 
                       {/* Icon pulse effect */}
                       <motion.div
@@ -243,7 +239,9 @@ export function AboutValues({ values }: AboutValuesProps) {
                     >
                       <FiCheckCircle className="text-primary-dark" size={20} />
                     </motion.div>
-                    <span className="text-primary-dark">{tr("قيمة أساسية")}</span>
+                    <span className="text-primary-dark">
+                      {tr("قيمة أساسية")}
+                    </span>
                     <div className="flex-1 h-px bg-gradient-to-r from-primary/40 to-transparent ms-2" />
                   </motion.div>
                 </div>

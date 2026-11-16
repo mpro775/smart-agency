@@ -1,5 +1,4 @@
 import { tr } from "@/i18n";
-import { motion } from "framer-motion";
 import { PenTool, Smartphone, Layers } from "lucide-react";
 
 const getValues = () => [
@@ -23,12 +22,7 @@ const getValues = () => [
 const HeroValueBadges = () => {
   const values = getValues();
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.65, ease: "easeOut", delay: 0.9 }}
-      className="flex flex-col sm:flex-row rounded-2xl border border-[#e2e8f0] bg-white/80 backdrop-blur-sm p-1.5 shadow-sm"
-    >
+    <div className="flex flex-col sm:flex-row rounded-2xl border border-[#e2e8f0] bg-white/80 backdrop-blur-sm p-1.5 shadow-sm">
       {values.map((item, index) => (
         <div
           key={item.title}
@@ -48,7 +42,7 @@ const HeroValueBadges = () => {
           )}
         </div>
       ))}
-    </motion.div>
+    </div>
   );
 };
 

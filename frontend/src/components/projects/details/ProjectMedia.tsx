@@ -1,3 +1,4 @@
+import ResponsiveImage from "@/components/ui/ResponsiveImage";
 import { motion } from "framer-motion";
 
 interface ProjectMediaProps {
@@ -14,11 +15,19 @@ function isYoutubeUrl(url?: string) {
 }
 
 function getYoutubeEmbedUrl(url: string) {
-  const match = url.match(/(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/watch\?.+&v=))([\w-]{11})/);
+  const match = url.match(
+    /(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/watch\?.+&v=))([\w-]{11})/,
+  );
   return match ? `https://www.youtube.com/embed/${match[1]}` : null;
 }
 
-export default function ProjectMedia({ videoUrl, title, heroImage, projectUrl, slug }: ProjectMediaProps) {
+export default function ProjectMedia({
+  videoUrl,
+  title,
+  heroImage,
+  projectUrl,
+  slug,
+}: ProjectMediaProps) {
   const hasYoutube = isYoutubeUrl(videoUrl);
 
   return (
@@ -26,7 +35,11 @@ export default function ProjectMedia({ videoUrl, title, heroImage, projectUrl, s
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.9, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+        transition={{
+          duration: 0.9,
+          delay: 0.2,
+          ease: [0.25, 0.46, 0.45, 0.94],
+        }}
         className="relative"
       >
         {/* Browser Mockup Wrapper */}
@@ -62,7 +75,8 @@ export default function ProjectMedia({ videoUrl, title, heroImage, projectUrl, s
                 allowFullScreen
               />
             ) : (
-              <img
+              <ResponsiveImage
+                priority
                 src={heroImage}
                 alt={title}
                 className="w-full h-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.015]"

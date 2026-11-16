@@ -1,0 +1,20 @@
+# Smart Agency
+
+> Smart Agency provides digital products, websites, mobile applications, design, and marketing services. Public content is available in Arabic and English.
+
+## Arabic
+- [Home](https://smartagency-ye.com/ar)
+- [About](https://smartagency-ye.com/ar/about)
+- [Projects](https://smartagency-ye.com/ar/projects)
+- [Articles](https://smartagency-ye.com/ar/blog)
+- [Contact](https://smartagency-ye.com/ar/contact)
+
+## English
+- [Home](https://smartagency-ye.com/en)
+- [About](https://smartagency-ye.com/en/about)
+- [Projects](https://smartagency-ye.com/en/projects)
+- [Articles](https://smartagency-ye.com/en/blog)
+- [Contact](https://smartagency-ye.com/en/contact)
+
+## Discovery
+- [Sitemap](https://smartagency-ye.com/sitemap.xml)

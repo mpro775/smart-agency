@@ -20,21 +20,35 @@ import {
   FiCheck,
 } from "react-icons/fi";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+const MotionLink = motion.create(Link);
+import { useContext, useState } from "react";
+import { SectionAnchorContext } from "./layout/section-anchor";
 import { useQuery } from "@tanstack/react-query";
 import { newsletterService } from "../services/newsletter.service";
+import type { CompanyInfo } from "../services/company-info.service";
 import { companyInfoService } from "../services/company-info.service";
 
-export default function Footer() {
+export default function Footer({
+  initialCompanyInfo,
+  homepagePending = false,
+}: {
+  initialCompanyInfo?: CompanyInfo | null;
+  homepagePending?: boolean;
+}) {
+  const parentAnchor = useContext(SectionAnchorContext);
   const { locale } = useLocale();
   const currentYear = new Date().getFullYear();
 
   // Fetch company info
-  const { data: companyInfo } = useQuery({
+  const { data: fetchedCompanyInfo } = useQuery({
     queryKey: ["company-info", locale],
     queryFn: () => companyInfoService.get(),
+    enabled: initialCompanyInfo === undefined && !homepagePending,
     staleTime: 1000 * 60 * 10, // 10 minutes
   });
+
+  const companyInfo =
+    initialCompanyInfo !== undefined ? initialCompanyInfo : fetchedCompanyInfo;
 
   // Newsletter form state
   const [newsletterEmail, setNewsletterEmail] = useState("");
@@ -148,7 +162,7 @@ export default function Footer() {
             <div className="relative p-8 md:p-12 rounded-3xl bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-sm border border-white/10 overflow-hidden">
               <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
               <div className="absolute bottom-0 left-0 w-48 h-48 bg-primary/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
-              
+
               <div className="relative z-10 text-center">
                 <motion.h2
                   initial={{ opacity: 0, y: 10 }}
@@ -158,7 +172,9 @@ export default function Footer() {
                   className="text-3xl md:text-4xl font-bold text-white mb-4 leading-tight"
                 >
                   {tr("لديك فكرة مشروع؟")}{" "}
-                  <span className="text-primary">{tr("لا تتركها في رأسك.")}</span>
+                  <span className="text-primary">
+                    {tr("لا تتركها في رأسك.")}
+                  </span>
                 </motion.h2>
 
                 <motion.p
@@ -168,7 +184,10 @@ export default function Footer() {
                   viewport={{ once: true }}
                   className="text-white/80 text-base md:text-lg mb-8 max-w-2xl mx-auto"
                 >
-                  {tr("نحن هنا لنجعل أفكارك واقعاً. ابدأ رحلتك الرقمية مع استشارة مجانية من خبرائنا.")}</motion.p>
+                  {tr(
+                    "نحن هنا لنجعل أفكارك واقعاً. ابدأ رحلتك الرقمية مع استشارة مجانية من خبرائنا.",
+                  )}
+                </motion.p>
 
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
@@ -177,17 +196,17 @@ export default function Footer() {
                   viewport={{ once: true }}
                   className="flex flex-col sm:flex-row items-center justify-center gap-4"
                 >
-                  <Link to="/quote">
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="group relative inline-flex items-center px-10 py-4 rounded-2xl bg-gradient-to-r from-primary to-primary-dark text-white font-semibold text-base shadow-xl hover:shadow-2xl hover:shadow-primary/30 transition-all duration-300"
-                    >
-                      <span className="relative z-10 flex items-center gap-3">
-                        {tr("ابدأ استشارتك المجانية")}<FiArrowLeft className="directional-arrow group-hover:translate-x-1 transition-transform duration-300" />
-                      </span>
-                    </motion.button>
-                  </Link>
+                  <MotionLink
+                    to="/quote"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="group relative inline-flex items-center px-10 py-4 rounded-2xl bg-gradient-to-r from-primary to-primary-dark text-white font-semibold text-base shadow-xl hover:shadow-2xl hover:shadow-primary/30 transition-all duration-300"
+                  >
+                    <span className="relative z-10 flex items-center gap-3">
+                      {tr("ابدأ استشارتك المجانية")}
+                      <FiArrowLeft className="directional-arrow group-hover:translate-x-1 transition-transform duration-300" />
+                    </span>
+                  </MotionLink>
 
                   <motion.a
                     href={
@@ -200,7 +219,8 @@ export default function Footer() {
                     className="group inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-white/10 backdrop-blur-md text-white font-semibold text-base border border-white/20 hover:bg-white/20 hover:border-white/40 transition-all duration-300"
                   >
                     <FaPhone className="text-lg" />
-                    {tr("اتصل بنا الآن")}</motion.a>
+                    {tr("اتصل بنا الآن")}
+                  </motion.a>
                 </motion.div>
               </div>
             </div>
@@ -210,11 +230,11 @@ export default function Footer() {
 
       {/* Main Footer */}
       <footer
-        id="footer"
+        id={parentAnchor === "footer" ? undefined : "footer"}
         className="relative text-white pt-20 pb-8 overflow-hidden smart-section-dark"
       >
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent opacity-50" />
-        
+
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-12 mb-16">
             {/* About Section */}
@@ -227,19 +247,25 @@ export default function Footer() {
             >
               <Link to="/" className="inline-flex mb-6 group">
                 <img
-                  src="/logo2.png"
+                  src="/logo2.v1.webp"
+                  width={348}
+                  height={66}
                   alt={tr("وكالة سمارت")}
                   className="h-14 w-auto brightness-0 invert transition-transform duration-300 group-hover:scale-105"
                 />
               </Link>
 
               <p className="text-gray-300 leading-relaxed text-sm mb-8">
-                {tr("نقدم حلولاً رقمية متكاملة تساعد عملك على النمو والازدهار في العصر الرقمي، من خلال فريق من الخبراء المبدعين والمحترفين.")}</p>
+                {tr(
+                  "نقدم حلولاً رقمية متكاملة تساعد عملك على النمو والازدهار في العصر الرقمي، من خلال فريق من الخبراء المبدعين والمحترفين.",
+                )}
+              </p>
 
               <div>
-                <h4 className="text-sm font-semibold text-white mb-5 flex items-center gap-2">
+                <h3 className="text-sm font-semibold text-white mb-5 flex items-center gap-2">
                   <span className="w-8 h-0.5 bg-primary rounded-full" />
-                  {tr("تابعنا على")}</h4>
+                  {tr("تابعنا على")}
+                </h3>
                 <div className="flex flex-wrap gap-3">
                   {socialLinks.map((social, index) => (
                     <motion.a
@@ -275,7 +301,8 @@ export default function Footer() {
             >
               <h3 className="text-base font-bold mb-6 text-white flex items-center gap-2">
                 <span className="w-8 h-0.5 bg-primary rounded-full" />
-                {tr("روابط سريعة")}</h3>
+                {tr("روابط سريعة")}
+              </h3>
               <ul className="space-y-3">
                 {[
                   { label: tr("الرئيسية"), href: "/" },
@@ -295,7 +322,10 @@ export default function Footer() {
                       to={link.href}
                       className="group flex items-center gap-2 text-gray-400 hover:text-white transition-colors duration-300 text-sm"
                     >
-                      <FiChevronLeft className="directional-arrow text-primary opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" size={14} />
+                      <FiChevronLeft
+                        className="directional-arrow text-primary opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300"
+                        size={14}
+                      />
                       <span className="relative">
                         {link.label}
                         <span className="absolute bottom-0 start-0 w-0 h-px bg-primary group-hover:w-full transition-all duration-300" />
@@ -316,7 +346,8 @@ export default function Footer() {
             >
               <h3 className="text-base font-bold mb-6 text-white flex items-center gap-2">
                 <span className="w-8 h-0.5 bg-primary rounded-full" />
-                {tr("تواصل معنا")}</h3>
+                {tr("تواصل معنا")}
+              </h3>
               <div className="space-y-4">
                 {contactInfo.map((info, index) => (
                   <motion.a
@@ -358,7 +389,8 @@ export default function Footer() {
                   <FiMail className="text-primary text-lg" />
                 </div>
                 <h3 className="text-base font-bold text-white">
-                  {tr("النشرة البريدية")}</h3>
+                  {tr("النشرة البريدية")}
+                </h3>
               </div>
 
               {submitSuccess ? (
@@ -377,14 +409,17 @@ export default function Footer() {
                     </div>
                   </motion.div>
                   <p className="text-green-400 text-sm font-semibold">
-                    {tr("تم الاشتراك بنجاح!")}</p>
+                    {tr("تم الاشتراك بنجاح!")}
+                  </p>
                   <p className="text-green-300/80 text-xs mt-1">
-                    {tr("سنرسل لك آخر الأخبار والعروض")}</p>
+                    {tr("سنرسل لك آخر الأخبار والعروض")}
+                  </p>
                 </motion.div>
               ) : (
                 <>
                   <p className="text-gray-300 mb-5 leading-relaxed text-sm">
-                    {tr("اشترك ليصلك جديد التقنية وعروضنا الخاصة")}</p>
+                    {tr("اشترك ليصلك جديد التقنية وعروضنا الخاصة")}
+                  </p>
 
                   <form onSubmit={handleNewsletterSubmit} className="space-y-4">
                     <div className="relative group">
@@ -392,6 +427,9 @@ export default function Footer() {
                       <div className="relative flex items-center gap-2 bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-1 focus-within:border-primary/50 focus-within:bg-white/10 transition-all duration-300">
                         <input
                           type="email"
+                          aria-label={tr("بريدك الإلكتروني")}
+                          autoComplete="email"
+                          name="newsletterEmail"
                           value={newsletterEmail}
                           onChange={(e) => setNewsletterEmail(e.target.value)}
                           placeholder={tr("بريدك الإلكتروني")}
@@ -401,6 +439,7 @@ export default function Footer() {
                         />
                         <motion.button
                           type="submit"
+                          aria-label={tr("اشترك في النشرة البريدية")}
                           disabled={isSubmitting || !newsletterEmail.trim()}
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}
@@ -431,12 +470,13 @@ export default function Footer() {
                         className="flex items-center gap-2 text-red-400 text-xs bg-red-500/10 border border-red-500/20 rounded-lg p-3"
                       >
                         <span>⚠</span>
-                        <span>{submitError}</span>
+                        <span role="alert">{submitError}</span>
                       </motion.div>
                     )}
 
                     <p className="text-gray-500 text-xs">
-                      {tr("نحترم خصوصيتك. لن نشارك بريدك مع أي طرف ثالث.")}</p>
+                      {tr("نحترم خصوصيتك. لن نشارك بريدك مع أي طرف ثالث.")}
+                    </p>
                   </form>
                 </>
               )}
@@ -455,16 +495,20 @@ export default function Footer() {
               {/* Copyright */}
               <div className="flex flex-col items-center lg:items-start gap-2">
                 <div className="text-gray-400 text-sm">
-                  {tr("جميع الحقوق محفوظة &copy;")}{currentYear}
+                  {tr("جميع الحقوق محفوظة &copy;")}
+                  {currentYear}
                   <span className="text-primary font-semibold mx-1">
-                    {tr("وكالة سمارت")}</span>
+                    {tr("وكالة سمارت")}
+                  </span>
                 </div>
                 <div className="flex items-center gap-2 text-xs text-gray-500">
                   <span>Made with</span>
                   <span className="text-red-500">❤</span>
                   <span>in</span>
                   <span className="text-lg">🇾🇪</span>
-                  <span className="text-primary font-medium">{tr("صنعاء، اليمن")}</span>
+                  <span className="text-primary font-medium">
+                    {tr("صنعاء، اليمن")}
+                  </span>
                 </div>
               </div>
 
@@ -474,13 +518,15 @@ export default function Footer() {
                   to="/privacy"
                   className="text-gray-400 hover:text-white transition-colors duration-300 text-sm"
                 >
-                  {tr("سياسة الخصوصية")}</Link>
+                  {tr("سياسة الخصوصية")}
+                </Link>
                 <div className="w-px h-4 bg-gray-700" />
                 <Link
                   to="/terms"
                   className="text-gray-400 hover:text-white transition-colors duration-300 text-sm"
                 >
-                  {tr("شروط الاستخدام")}</Link>
+                  {tr("شروط الاستخدام")}
+                </Link>
               </div>
             </div>
           </motion.div>

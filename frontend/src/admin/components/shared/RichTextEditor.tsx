@@ -124,6 +124,7 @@ export function RichTextEditor({
   const autoSaveRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const editor = useEditor({
+    immediatelyRender: false,
     extensions: [
       StarterKit.configure({
         heading: { levels: [1, 2, 3] },
@@ -233,7 +234,7 @@ export function RichTextEditor({
 
   // Auto-save
   useEffect(() => {
-    if (!editor) return;
+    if (!editor || editor.isDestroyed) return;
     autoSaveRef.current = setInterval(() => {
       const html = editor.getHTML();
       if (html && html !== "<p></p>") {
@@ -248,7 +249,7 @@ export function RichTextEditor({
 
   // Update editor content when value changes externally
   useEffect(() => {
-    if (editor && value !== editor.getHTML()) {
+    if (editor && !editor.isDestroyed && value !== editor.getHTML()) {
       editor.commands.setContent(value || "");
     }
   }, [editor, value]);

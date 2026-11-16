@@ -1,25 +1,15 @@
+import CmsIcon from "../icons/CmsIcon";
 import { tr } from "@/i18n";
 import { motion } from "framer-motion";
-import { type ComponentType } from "react";
-import * as FiIcons from "react-icons/fi";
-import * as FaIcons from "react-icons/fa";
-import * as RiIcons from "react-icons/ri";
 import { type ProcessStep } from "../../services/about.service";
 
 interface AboutProcessProps {
   steps: ProcessStep[];
 }
 
-const getIconComponent = (iconName: string, size: number = 24) => {
-  if (!iconName) return null;
-  const icons: Record<string, ComponentType<{ size?: number }>> = {
-    ...FiIcons,
-    ...FaIcons,
-    ...RiIcons,
-  };
-  const Icon = icons[iconName];
-  return Icon ? <Icon size={size} /> : null;
-};
+const getIconComponent = (iconName: string, size = 24) => (
+  <CmsIcon name={iconName} size={size} />
+);
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
@@ -42,11 +32,14 @@ export function AboutProcess({ steps }: AboutProcessProps) {
           className="text-center mb-20"
         >
           <span className="inline-block px-5 py-2 rounded-full bg-primary/5 border border-primary/15 text-primary text-sm font-bold mb-5 tracking-wide">
-            {tr("طريقة العمل")}</span>
+            {tr("طريقة العمل")}
+          </span>
           <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight">
-            {tr("من الفكرة إلى الإطلاق")}</h2>
+            {tr("من الفكرة إلى الإطلاق")}
+          </h2>
           <p className="mt-6 text-lg text-slate-500 max-w-2xl mx-auto font-medium leading-relaxed">
-            {tr("منهجية واضحة ومجربة لضمان تسليم مشروعك بأعلى جودة")}</p>
+            {tr("منهجية واضحة ومجربة لضمان تسليم مشروعك بأعلى جودة")}
+          </p>
         </motion.div>
 
         <div className="relative">
@@ -69,7 +62,9 @@ export function AboutProcess({ steps }: AboutProcessProps) {
                 {/* Timeline Node Badge */}
                 <div className="absolute start-6 md:start-1/2 w-3 h-3 rounded-full bg-primary border-[3px] border-white shadow-md shadow-primary/20 -translate-x-1/2 rtl:translate-x-1/2 z-10 mt-6" />
 
-                <div className={`ms-12 md:ms-0 md:w-1/2 ${index % 2 === 0 ? "md:pl-12 text-start" : "md:pr-12 text-start"}`}>
+                <div
+                  className={`ms-12 md:ms-0 md:w-1/2 ${index % 2 === 0 ? "md:pl-12 text-start" : "md:pr-12 text-start"}`}
+                >
                   <div className="bg-white rounded-3xl p-7 border border-slate-200/80 hover:border-primary/25 hover:shadow-xl hover:shadow-slate-200/40 transition-all duration-300 relative group">
                     <div className="flex items-center gap-4 mb-4 justify-start">
                       <span className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-primary/5 border border-primary/15 text-primary font-black text-sm">
@@ -82,15 +77,19 @@ export function AboutProcess({ steps }: AboutProcessProps) {
                         {step.title}
                       </h3>
                     </div>
-                    
+
                     <p className="text-slate-500 text-sm leading-[1.8] mb-5 font-medium">
                       {step.description}
                     </p>
-                    
+
                     {step.deliverable && (
                       <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-xl bg-slate-50 text-xs text-slate-600 border border-slate-200">
-                        <span className="font-bold text-primary">{tr("المخرج النهائي:")}</span>
-                        <span className="font-semibold">{step.deliverable}</span>
+                        <span className="font-bold text-primary">
+                          {tr("المخرج النهائي:")}
+                        </span>
+                        <span className="font-semibold">
+                          {step.deliverable}
+                        </span>
                       </div>
                     )}
                   </div>

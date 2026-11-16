@@ -1,3 +1,4 @@
+import ResponsiveImage from "@/components/ui/ResponsiveImage";
 import { tr } from "@/i18n";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
@@ -15,14 +16,16 @@ const fadeUp = {
   transition: { duration: 0.7, ease: [0.215, 0.61, 0.355, 1] as const },
 };
 
-export default function RelatedProjects({ relatedProjects }: RelatedProjectsProps) {
+export default function RelatedProjects({
+  relatedProjects,
+}: RelatedProjectsProps) {
   if (relatedProjects.length === 0) return null;
 
   return (
     <motion.section {...fadeUp} className="mt-20">
       <div className="rounded-3xl border border-slate-200/70 bg-gradient-to-b from-white/70 to-slate-50/50 backdrop-blur-md p-7 md:p-10 shadow-sm relative overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-slate-300 via-slate-200 to-slate-350 opacity-50" />
-        
+
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <h3 className="text-2xl md:text-3xl font-black text-slate-800 flex items-center gap-3">
@@ -35,7 +38,8 @@ export default function RelatedProjects({ relatedProjects }: RelatedProjectsProp
             to="/projects"
             className="hidden md:inline-flex items-center gap-2 text-sm font-extrabold text-teal-600 hover:text-teal-700 transition-colors"
           >
-            {tr("عرض الكل")}<ArrowLeft className="w-4 h-4 directional-arrow" />
+            {tr("عرض الكل")}
+            <ArrowLeft className="w-4 h-4 directional-arrow" />
           </Link>
         </div>
 
@@ -56,21 +60,29 @@ export default function RelatedProjects({ relatedProjects }: RelatedProjectsProp
               >
                 {/* Card Thumbnail */}
                 <div className="h-48 overflow-hidden relative bg-[#f4f8f8]">
-                  <img
-                    src={related.images?.cover || related.images?.gallery?.[0] || "https://via.placeholder.com/800x600"}
+                  <ResponsiveImage
+                    src={
+                      related.images?.cover ||
+                      related.images?.gallery?.[0] ||
+                      "https://via.placeholder.com/800x600"
+                    }
                     alt={related.title}
                     className="h-full w-full object-contain p-3 transition duration-700 group-hover:scale-105"
                     loading="lazy"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900/30 via-transparent to-transparent pointer-events-none" />
-                    {Array.isArray(related.categoryIds) && (
-                      <span className="inline-block px-3 py-1.5 bg-white/20 backdrop-blur-md text-white text-xs font-semibold rounded-xl border border-white/20 shadow-sm">
-                        {related.categoryIds
-                          .map((c) => (typeof c === "object" && c !== null ? (c as { label: string }).label : null))
-                          .filter(Boolean)
-                          .join(" + ")}
-                      </span>
-                    )}
+                  {Array.isArray(related.categoryIds) && (
+                    <span className="inline-block px-3 py-1.5 bg-white/20 backdrop-blur-md text-white text-xs font-semibold rounded-xl border border-white/20 shadow-sm">
+                      {related.categoryIds
+                        .map((c) =>
+                          typeof c === "object" && c !== null
+                            ? (c as { label: string }).label
+                            : null,
+                        )
+                        .filter(Boolean)
+                        .join(" + ")}
+                    </span>
+                  )}
                 </div>
 
                 {/* Card Body */}
@@ -79,9 +91,11 @@ export default function RelatedProjects({ relatedProjects }: RelatedProjectsProp
                     <p className="font-extrabold text-slate-800 group-hover:text-teal-600 transition-colors text-lg line-clamp-1 mb-2">
                       {related.title}
                     </p>
-                    <p className="line-clamp-2 text-sm text-slate-500 leading-relaxed font-semibold">{related.summary}</p>
+                    <p className="line-clamp-2 text-sm text-slate-500 leading-relaxed font-semibold">
+                      {related.summary}
+                    </p>
                   </div>
-                  
+
                   {/* Action link */}
                   <div className="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between text-sm text-teal-600 font-extrabold group-hover:text-[#008080] transition-colors">
                     <span>{tr("عرض تفاصيل المشروع")}</span>
@@ -99,7 +113,8 @@ export default function RelatedProjects({ relatedProjects }: RelatedProjectsProp
             to="/projects"
             className="inline-flex items-center gap-2 text-sm font-extrabold text-teal-600 hover:text-teal-700 transition-colors"
           >
-            {tr("عرض كل المشاريع")}<ArrowLeft className="w-4 h-4 directional-arrow" />
+            {tr("عرض كل المشاريع")}
+            <ArrowLeft className="w-4 h-4 directional-arrow" />
           </Link>
         </div>
       </div>

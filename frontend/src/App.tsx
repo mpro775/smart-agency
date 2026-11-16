@@ -1,147 +1,68 @@
 import "./App.css";
+import { lazy } from "react";
+import { useQuery } from "@tanstack/react-query";
 import Hero from "./components/Hero";
-import Projects from "./components/Projects";
-import Services from "./components/Services";
-import LatestBlogs from "./components/LatestBlogs";
-import Team from "./components/Team";
-import Technologies from "./components/Technologies";
-import Testimonials from "./components/Testimonials";
-import FAQs from "./components/FAQs";
-import HostingPackages from "./components/HostingPackages";
 import Footer from "./components/Footer";
 import FloatingSectionNav from "./components/layout/FloatingSectionNav";
-import { motion } from "framer-motion";
-import { useQuery } from "@tanstack/react-query";
+import DeferredSection from "./components/layout/DeferredSection";
 import { homepageService } from "./services/homepage.service";
 import { useLocale } from "./localization/LocaleLayout";
-import { tr } from "./i18n";
 
-const sectionVariants = {
-  hidden: { opacity: 0, y: 40 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.7, ease: [0.6, 0.05, 0.01, 0.9] as const },
-  },
-};
+const Services = lazy(() => import("./components/Services"));
+const Projects = lazy(() => import("./components/Projects"));
+const Technologies = lazy(() => import("./components/Technologies"));
+const Team = lazy(() => import("./components/Team"));
+const Testimonials = lazy(() => import("./components/Testimonials"));
+const HostingPackages = lazy(() => import("./components/HostingPackages"));
+const FAQs = lazy(() => import("./components/FAQs"));
+const LatestBlogs = lazy(() => import("./components/LatestBlogs"));
 
 function App() {
   const { locale } = useLocale();
-  const {
-    data: homepageData,
-    isLoading: isHomepageLoading,
-    isError: isHomepageError,
-  } = useQuery({
+  const { data, isPending } = useQuery({
     queryKey: ["public-homepage", locale],
     queryFn: homepageService.get,
   });
-
-  const homepageProps = isHomepageError ? undefined : homepageData;
-
   return (
     <div className="relative">
       <FloatingSectionNav />
-
       <main className="relative overflow-hidden">
-        <section id="hero">
-          <Hero />
-        </section>
-
-        {isHomepageLoading ? (
-          <section className="px-4 py-24 text-center text-slate-500">
-            {tr("جاري تحميل محتوى الصفحة الرئيسية...")}
-          </section>
-        ) : (
-          <>
-            <motion.section
-              id="services"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.1 }}
-              variants={sectionVariants}
-            >
-              <Services initialServices={homepageProps?.services} />
-            </motion.section>
-
-            <motion.section
-              id="projects"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.1 }}
-              variants={sectionVariants}
-            >
-              <Projects
-                initialProjects={homepageProps?.featuredProjects}
-                initialCategories={homepageProps?.projectCategories}
-              />
-            </motion.section>
-
-            <motion.section
-              id="technologies"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.1 }}
-              variants={sectionVariants}
-            >
-              <Technologies initialTechnologies={homepageProps?.technologies} />
-            </motion.section>
-
-            <motion.section
-              id="team"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.1 }}
-              variants={sectionVariants}
-            >
-              <Team initialMembers={homepageProps?.teamMembers} />
-            </motion.section>
-
-            <motion.section
-              id="testimonials"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.1 }}
-              variants={sectionVariants}
-            >
-              <Testimonials initialTestimonials={homepageProps?.testimonials} />
-            </motion.section>
-
-            <motion.section
-              id="hosting"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.1 }}
-              variants={sectionVariants}
-            >
-              <HostingPackages initialPackages={homepageProps?.hostingPackages} />
-            </motion.section>
-
-            <motion.section
-              id="faqs"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.1 }}
-              variants={sectionVariants}
-            >
-              <FAQs initialFaqs={homepageProps?.faqs} />
-            </motion.section>
-
-            <motion.section
-              id="blogs"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.1 }}
-              variants={sectionVariants}
-            >
-              <LatestBlogs initialBlogs={homepageProps?.latestBlogs} />
-            </motion.section>
-          </>
-        )}
+        <Hero />
+        <DeferredSection id="services" pending={isPending}>
+          <Services initialServices={data?.services} />
+        </DeferredSection>
+        <DeferredSection id="projects" pending={isPending}>
+          <Projects
+            initialProjects={data?.featuredProjects}
+            initialCategories={data?.projectCategories}
+          />
+        </DeferredSection>
+        <DeferredSection id="technologies" pending={isPending}>
+          <Technologies initialTechnologies={data?.technologies} />
+        </DeferredSection>
+        <DeferredSection id="team" pending={isPending}>
+          <Team initialMembers={data?.teamMembers} />
+        </DeferredSection>
+        <DeferredSection id="testimonials" pending={isPending}>
+          <Testimonials initialTestimonials={data?.testimonials} />
+        </DeferredSection>
+        <DeferredSection id="hosting" pending={isPending}>
+          <HostingPackages initialPackages={data?.hostingPackages} />
+        </DeferredSection>
+        <DeferredSection id="faqs" pending={isPending}>
+          <FAQs initialFaqs={data?.faqs} />
+        </DeferredSection>
+        <DeferredSection id="blogs" pending={isPending}>
+          <LatestBlogs initialBlogs={data?.latestBlogs} />
+        </DeferredSection>
       </main>
-
-      <Footer />
+      <DeferredSection id="footer" pending={isPending}>
+        <Footer
+          initialCompanyInfo={data?.companyInfo}
+          homepagePending={isPending}
+        />
+      </DeferredSection>
     </div>
   );
 }
-
 export default App;

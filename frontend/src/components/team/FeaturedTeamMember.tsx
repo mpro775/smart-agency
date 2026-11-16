@@ -1,6 +1,16 @@
+import ResponsiveImage from "@/components/ui/ResponsiveImage";
 import { tr } from "@/i18n";
 import { motion, AnimatePresence } from "framer-motion";
-import { Briefcase, BarChart3, Mail, Github, Linkedin, Globe, ExternalLink, Lightbulb } from "lucide-react";
+import {
+  Briefcase,
+  BarChart3,
+  Mail,
+  Github,
+  Linkedin,
+  Globe,
+  ExternalLink,
+  Lightbulb,
+} from "lucide-react";
 import type { TeamMember } from "../../services/team.service";
 import { getDepartmentLabel, truncateText } from "./team-utils";
 
@@ -16,7 +26,11 @@ export default function FeaturedTeamMember({ member, onOpenProfile }: Props) {
     { href: member.linkedinUrl, icon: Linkedin, label: "LinkedIn" },
     { href: member.githubUrl, icon: Github, label: "GitHub" },
     { href: member.websiteUrl, icon: Globe, label: "Website" },
-    { href: member.email ? `mailto:${member.email}` : undefined, icon: Mail, label: "Email" },
+    {
+      href: member.email ? `mailto:${member.email}` : undefined,
+      icon: Mail,
+      label: "Email",
+    },
   ].filter((item) => item.href);
 
   return (
@@ -30,16 +44,29 @@ export default function FeaturedTeamMember({ member, onOpenProfile }: Props) {
         className="relative overflow-hidden rounded-2xl sm:rounded-3xl border border-white/10 bg-white/[0.04] backdrop-blur-2xl shadow-2xl shadow-black/30 min-h-0 lg:min-h-[560px]"
       >
         <div className="absolute inset-0 opacity-30 bg-[radial-gradient(circle_at_25%_35%,rgba(34,211,238,0.22),transparent_35%),linear-gradient(to_bottom_right,rgba(255,255,255,0.04),transparent)]" />
-        <div className="absolute inset-0 opacity-[0.07]" style={{ backgroundImage: "linear-gradient(rgba(255,255,255,.18) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.18) 1px, transparent 1px)", backgroundSize: "36px 36px" }} />
+        <div
+          className="absolute inset-0 opacity-[0.07]"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(255,255,255,.18) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.18) 1px, transparent 1px)",
+            backgroundSize: "36px 36px",
+          }}
+        />
 
         <div className="relative z-10 grid lg:grid-cols-12 gap-5 sm:gap-8 p-4 sm:p-6 md:p-8 lg:p-10 h-full">
           <div className="lg:col-span-5 relative h-56 xs:h-64 sm:h-80 lg:h-full min-h-[220px] xs:min-h-[260px] sm:min-h-[320px] lg:min-h-[360px] flex items-end justify-center overflow-hidden rounded-2xl sm:rounded-3xl bg-cyan-400/5 border border-cyan-300/10">
             <div className="absolute w-48 h-48 sm:w-72 sm:h-72 rounded-full border border-cyan-300/30 shadow-[0_0_80px_rgba(34,211,238,0.20)] top-6 sm:top-10" />
             <div className="absolute w-64 h-64 sm:w-96 sm:h-96 rounded-full bg-cyan-400/10 blur-3xl" />
             {member.photo ? (
-              <img src={member.photo} alt={member.fullName} className="relative z-10 w-full h-full object-cover object-top grayscale-0" />
+              <ResponsiveImage
+                src={member.photo}
+                alt={member.fullName}
+                className="relative z-10 w-full h-full object-cover object-top grayscale-0"
+              />
             ) : (
-              <div className="relative z-10 text-6xl sm:text-8xl font-black text-cyan-300/80 my-auto">{member.fullName.charAt(0)}</div>
+              <div className="relative z-10 text-6xl sm:text-8xl font-black text-cyan-300/80 my-auto">
+                {member.fullName.charAt(0)}
+              </div>
             )}
           </div>
 
@@ -53,7 +80,9 @@ export default function FeaturedTeamMember({ member, onOpenProfile }: Props) {
               {member.fullName}
             </h3>
 
-            <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-3 sm:mb-4">{member.role}</p>
+            <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-3 sm:mb-4">
+              {member.role}
+            </p>
 
             {member.bio && (
               <p className="text-xs sm:text-sm md:text-base text-gray-400 leading-6 sm:leading-8 max-w-2xl mb-4 sm:mb-7">
@@ -72,10 +101,15 @@ export default function FeaturedTeamMember({ member, onOpenProfile }: Props) {
 
             {skills.length > 0 && (
               <div className="mb-4 sm:mb-7">
-                <h4 className="text-xs sm:text-sm text-cyan-300 font-semibold mb-2 sm:mb-3">{tr("المهارات الأساسية")}</h4>
+                <h4 className="text-xs sm:text-sm text-cyan-300 font-semibold mb-2 sm:mb-3">
+                  {tr("المهارات الأساسية")}
+                </h4>
                 <div className="flex flex-wrap gap-1.5 sm:gap-2">
                   {skills.map((skill) => (
-                    <span key={skill} className="rounded-lg sm:rounded-xl border border-white/10 bg-white/[0.045] px-2.5 py-1 sm:px-4 sm:py-2 text-xs sm:text-sm text-gray-200">
+                    <span
+                      key={skill}
+                      className="rounded-lg sm:rounded-xl border border-white/10 bg-white/[0.045] px-2.5 py-1 sm:px-4 sm:py-2 text-xs sm:text-sm text-gray-200"
+                    >
                       {skill}
                     </span>
                   ))}
@@ -88,8 +122,12 @@ export default function FeaturedTeamMember({ member, onOpenProfile }: Props) {
                 <div className="rounded-xl sm:rounded-2xl border border-white/10 bg-black/20 px-3 py-2 sm:px-5 sm:py-3 flex items-center gap-2.5 sm:gap-3">
                   <BarChart3 className="text-cyan-300 w-5 h-5 sm:w-6 sm:h-6" />
                   <div>
-                    <div className="text-white font-extrabold text-base sm:text-xl">{member.projectsCount ?? 0}</div>
-                    <div className="text-gray-400 text-[10px] sm:text-xs">{tr("مشروع مكتمل")}</div>
+                    <div className="text-white font-extrabold text-base sm:text-xl">
+                      {member.projectsCount ?? 0}
+                    </div>
+                    <div className="text-gray-400 text-[10px] sm:text-xs">
+                      {tr("مشروع مكتمل")}
+                    </div>
                   </div>
                 </div>
 
@@ -99,7 +137,11 @@ export default function FeaturedTeamMember({ member, onOpenProfile }: Props) {
                       <a
                         key={social.label}
                         href={social.href}
-                        target={social.href?.startsWith("mailto:") ? undefined : "_blank"}
+                        target={
+                          social.href?.startsWith("mailto:")
+                            ? undefined
+                            : "_blank"
+                        }
                         rel="noopener noreferrer"
                         aria-label={social.label}
                         className="h-8 w-8 sm:h-10 sm:w-10 rounded-full border border-white/10 bg-white/[0.04] flex items-center justify-center text-gray-300 hover:text-cyan-300 hover:border-cyan-300/40 transition-colors"

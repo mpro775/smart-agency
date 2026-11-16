@@ -1,10 +1,15 @@
+import ResponsiveImage from "@/components/ui/ResponsiveImage";
 import { tr } from "@/i18n";
 import { useRef } from "react";
 import { motion } from "framer-motion";
 import { FiExternalLink, FiArrowLeft } from "react-icons/fi";
 import { FaSearchPlus } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import type { Project, Technology, ProjectCategoryRef } from "../../admin/types";
+import type {
+  Project,
+  Technology,
+  ProjectCategoryRef,
+} from "../../admin/types";
 import ProjectTechTags from "./ProjectTechTags";
 
 export type CardVariant = "standard" | "wide" | "compact" | "case_study";
@@ -29,7 +34,11 @@ function getProjectImage(project: Project): string {
 function getCategoryLabels(project: Project): string[] {
   if (Array.isArray(project.categoryIds)) {
     return project.categoryIds
-      .map((c) => (typeof c === "object" && c !== null ? (c as ProjectCategoryRef).label : null))
+      .map((c) =>
+        typeof c === "object" && c !== null
+          ? (c as ProjectCategoryRef).label
+          : null,
+      )
       .filter(Boolean) as string[];
   }
   return [];
@@ -68,7 +77,7 @@ export default function ProjectCard({
         data-cursor="hover"
       >
         <div className="relative h-48 overflow-hidden bg-[#f4f8f8]">
-          <img
+          <ResponsiveImage
             src={projectImage}
             alt={project.title}
             className="w-full h-full object-contain p-4 transition-transform duration-500 group-hover:scale-105"
@@ -80,7 +89,9 @@ export default function ProjectCard({
               {project.title}
             </h3>
             {categoryLabels.length > 0 && (
-              <span className="text-white/70 text-xs">{categoryLabels.join(" + ")}</span>
+              <span className="text-white/70 text-xs">
+                {categoryLabels.join(" + ")}
+              </span>
             )}
           </div>
         </div>
@@ -115,8 +126,11 @@ export default function ProjectCard({
 
       <div className="flex flex-col sm:flex-row h-full">
         {/* Image side - fixed width on sm+ screens */}
-        <div className="relative sm:w-[45%] overflow-hidden bg-[#f4f8f8] shrink-0" style={{ minHeight: "200px" }}>
-          <img
+        <div
+          className="relative sm:w-[45%] overflow-hidden bg-[#f4f8f8] shrink-0"
+          style={{ minHeight: "200px" }}
+        >
+          <ResponsiveImage
             src={projectImage}
             alt={project.title}
             className="w-full h-full object-contain p-5 transition-transform duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:scale-105"
@@ -129,10 +143,11 @@ export default function ProjectCard({
           {/* Client Logo */}
           {project.clientLogo && (
             <div className="absolute top-3 left-3 z-10">
-              <img
+              <ResponsiveImage
                 src={project.clientLogo}
                 alt={project.clientName || ""}
-                className="h-7 w-auto bg-white/90 backdrop-blur-sm rounded-lg px-1.5 py-0.5 shadow-sm border border-white/20"
+                style={{ width: 84, height: 28 }}
+                className="h-7 w-auto object-contain bg-white/90 backdrop-blur-sm rounded-lg px-1.5 py-0.5 shadow-sm border border-white/20"
               />
             </div>
           )}
@@ -176,7 +191,7 @@ export default function ProjectCard({
             <div className="flex items-center justify-between gap-2 mb-2">
               <div className="flex items-center gap-1.5 flex-wrap">
                 {categoryLabels.length > 0 && (
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-[var(--smart-primary)]/[0.07] text-[var(--smart-primary)] text-[11px] font-semibold rounded-md border border-[var(--smart-primary)]/15">
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-[var(--smart-primary)]/[0.07] text-[var(--smart-primary-dark)] text-[11px] font-semibold rounded-md border border-[var(--smart-primary)]/15">
                     <span className="w-1.5 h-1.5 rounded-full bg-[var(--smart-primary)]" />
                     {categoryLabels[0]}
                   </span>
@@ -184,10 +199,15 @@ export default function ProjectCard({
               </div>
               {project.isFeatured && (
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-amber-50 text-amber-600 text-[10px] font-semibold rounded-md border border-amber-200 shrink-0">
-                  <svg className="w-2.5 h-2.5" viewBox="0 0 20 20" fill="currentColor">
+                  <svg
+                    className="w-2.5 h-2.5"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                   </svg>
-                  {tr("مميز")}</span>
+                  {tr("مميز")}
+                </span>
               )}
             </div>
 
@@ -210,8 +230,12 @@ export default function ProjectCard({
               <div className="flex flex-wrap gap-3 mb-3">
                 {project.stats.slice(0, 2).map((stat, i) => (
                   <div key={i} className="text-center">
-                    <span className="block text-sm font-bold text-slate-900">{stat.value}</span>
-                    <span className="text-[10px] text-slate-500">{stat.label}</span>
+                    <span className="block text-sm font-bold text-slate-900">
+                      {stat.value}
+                    </span>
+                    <span className="text-[10px] text-slate-500">
+                      {stat.label}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -230,7 +254,8 @@ export default function ProjectCard({
                 to={detailUrl}
                 className="inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--smart-primary)] hover:text-[var(--smart-primary-dark)] transition-colors"
               >
-                {tr("عرض دراسة الحالة")}<FiArrowLeft className="w-3 h-3 directional-arrow" />
+                {tr("عرض دراسة الحالة")}
+                <FiArrowLeft className="w-3 h-3 directional-arrow" />
               </Link>
             </div>
           </div>

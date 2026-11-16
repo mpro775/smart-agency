@@ -1,33 +1,35 @@
+import CmsIcon from "../icons/CmsIcon";
 import { tr } from "@/i18n";
-import { motion, useInView, useMotionValue, useTransform, animate } from "framer-motion";
+import {
+  motion,
+  useInView,
+  useMotionValue,
+  useTransform,
+  animate,
+} from "framer-motion";
 import { useRef, useEffect, useState } from "react";
-import { type ComponentType } from "react";
-import * as FiIcons from "react-icons/fi";
-import * as FaIcons from "react-icons/fa";
-import * as RiIcons from "react-icons/ri";
 import { type StatItem } from "../../services/about.service";
 
 interface AboutProofStatsProps {
   stats: StatItem[];
 }
 
-const getIconComponent = (iconName: string, size: number = 24) => {
-  if (!iconName) return null;
-  const icons: Record<string, ComponentType<{ size?: number }>> = {
-    ...FiIcons,
-    ...FaIcons,
-    ...RiIcons,
-  };
-  const Icon = icons[iconName];
-  return Icon ? <Icon size={size} /> : null;
-};
+const getIconComponent = (iconName: string, size = 24) => (
+  <CmsIcon name={iconName} size={size} />
+);
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
   visible: { opacity: 1, y: 0 },
 };
 
-function AnimatedCounter({ value, suffix }: { value: number; suffix?: string }) {
+function AnimatedCounter({
+  value,
+  suffix,
+}: {
+  value: number;
+  suffix?: string;
+}) {
   const ref = useRef<HTMLSpanElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-50px" });
   const count = useMotionValue(0);
@@ -54,7 +56,9 @@ function AnimatedCounter({ value, suffix }: { value: number; suffix?: string }) 
 
   return (
     <span ref={ref} className="tabular-nums">
-      {plusPrefix}{displayValue}{cleanSuffix}
+      {plusPrefix}
+      {displayValue}
+      {cleanSuffix}
     </span>
   );
 }
@@ -87,9 +91,11 @@ export function AboutProofStats({ stats }: AboutProofStatsProps) {
           className="text-center mb-16"
         >
           <span className="inline-block px-5 py-2 rounded-full bg-primary/5 border border-primary/15 text-primary text-sm font-bold mb-5 tracking-wide">
-            {tr("بالأرقام")}</span>
+            {tr("بالأرقام")}
+          </span>
           <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight">
-            {tr("إنجازاتنا تتحدث عنا")}</h2>
+            {tr("إنجازاتنا تتحدث عنا")}
+          </h2>
         </motion.div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -104,22 +110,26 @@ export function AboutProofStats({ stats }: AboutProofStatsProps) {
               className="group text-center"
             >
               <div className="relative bg-white rounded-3xl p-8 border border-slate-200/80 hover:border-primary/25 transition-all duration-300 overflow-hidden shadow-lg shadow-slate-200/40 flex flex-col justify-between h-full">
-                
                 {/* Accent glow on hover */}
                 <div className="absolute inset-0 bg-gradient-to-b from-primary/3 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                
+
                 <div className="relative z-10">
                   <div className="text-primary flex justify-center mb-5 transition-transform group-hover:scale-110 duration-300">
-                    {getIconComponent(stat.icon, 36) || <FiIcons.FiBriefcase size={36} />}
+                    {getIconComponent(stat.icon, 36)}
                   </div>
-                  
+
                   <div className="text-4xl md:text-5xl font-black mb-2 text-slate-900 tracking-tight">
                     <span className="bg-gradient-to-r from-primary to-primary-dark bg-clip-text text-transparent">
-                      <AnimatedCounter value={stat.value} suffix={stat.suffix} />
+                      <AnimatedCounter
+                        value={stat.value}
+                        suffix={stat.suffix}
+                      />
                     </span>
                   </div>
-                  
-                  <h3 className="text-lg font-bold mb-2 text-slate-800">{stat.label}</h3>
+
+                  <h3 className="text-lg font-bold mb-2 text-slate-800">
+                    {stat.label}
+                  </h3>
                   {stat.description && (
                     <p className="text-slate-500 text-sm leading-relaxed font-medium">
                       {stat.description}
@@ -142,7 +152,6 @@ export function AboutProofStats({ stats }: AboutProofStatsProps) {
                     style={{ width: "60%" }}
                   />
                 </div>
-
               </div>
             </motion.div>
           ))}
